@@ -61,16 +61,16 @@ const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
+        <p className="mt-1 text-md text-slate-600">
           Visão geral das finanças da igreja
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Receitas */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Despesas */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Saldo */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -145,7 +145,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Membros */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
       {/* Charts and Recent Activity */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Financial Summary Chart */}
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white shadow-xl rounded-xl p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             Resumo Financeiro
           </h3>
@@ -182,7 +182,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Member Stats */}
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white shadow-xl rounded-xl p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             Estatísticas dos Membros
           </h3>
@@ -191,7 +191,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white shadow-xl rounded-xl">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">
             Transações Recentes

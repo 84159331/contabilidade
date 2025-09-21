@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+// Define a estrutura dos dados da API
 interface MonthlyData {
   month: string;
   income: number;
@@ -9,19 +11,37 @@ interface MonthlyData {
   balance: number;
 }
 
+// Gera uma lista de anos recentes para o filtro
+const generateYears = () => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let i = 0; i < 5; i++) {
+    years.push(currentYear - i);
+  }
+  return years;
+};
+
 const FinancialSummary: React.FC = () => {
   const [data, setData] = useState<MonthlyData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const availableYears = generateYears();
 
   useEffect(() => {
-    loadCashFlowData();
-  }, []);
+    loadCashFlowData(selectedYear);
+  }, [selectedYear]);
 
-  const loadCashFlowData = async () => {
+  const loadCashFlowData = async (year: number) => {
+    setLoading(true);
     try {
-      const currentYear = new Date().getFullYear();
-      const response = await transactionsAPI.getCashFlow({ year: currentYear });
-      setData(response.data);
+      const response = await transactionsAPI.getCashFlow({ year });
+      // Mapeia os números dos meses para nomes abreviados para o gráfico
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const formattedData = response.data.map((d: any) => ({
+        ...d,
+        month: monthNames[parseInt(d.month) - 1],
+      }));
+      setData(formattedData);
     } catch (error) {
       toast.error('Erro ao carregar dados financeiros');
       console.error('Erro ao carregar fluxo de caixa:', error);
@@ -30,79 +50,49 @@ const FinancialSummary: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
-
-  const monthNames = [
-    'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
-  ];
-
-  const maxAmount = Math.max(
-    ...data.map(d => Math.max(d.income, d.expense))
-  );
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(parseInt(e.target.value, 10));
+  };
 
   return (
     <div className="space-y-4">
-      {data.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">Nenhum dado disponível</p>
-      ) : (
-        <div className="space-y-3">
-          {data.map((month, index) => (
-            <div key={index} className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="font-medium text-gray-700">
-                  {monthNames[parseInt(month.month) - 1]}
-                </span>
-                <span className={`font-medium ${
-                  month.balance >= 0 ? 'text-success-600' : 'text-danger-600'
-                }`}>
-                  R$ {month.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                </span>
-              </div>
-              
-              <div className="space-y-1">
-                {/* Receitas */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-success-500 rounded"></div>
-                  <span className="text-xs text-gray-600">Receitas</span>
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-success-500 h-2 rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${maxAmount > 0 ? (month.income / maxAmount) * 100 : 0}%` 
-                      }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-gray-600">
-                    R$ {month.income.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-                
-                {/* Despesas */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-danger-500 rounded"></div>
-                  <span className="text-xs text-gray-600">Despesas</span>
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-danger-500 h-2 rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${maxAmount > 0 ? (month.expense / maxAmount) * 100 : 0}%` 
-                      }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-gray-600">
-                    R$ {month.expense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-              </div>
-            </div>
+      <div className="flex justify-end">
+        <select
+          value={selectedYear}
+          onChange={handleYearChange}
+          className="block w-32 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
+        >
+          {availableYears.map(year => (
+            <option key={year} value={year}>{year}</option>
           ))}
+        </select>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        </div>
+      ) : data.length === 0 ? (
+        <p className="text-gray-500 text-center py-8">Nenhum dado disponível para o ano selecionado.</p>
+      ) : (
+        <div style={{ width: '100%', height: 300 }}>
+          <ResponsiveContainer>
+            <BarChart
+              data={data}
+              margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="month" fontSize={12} />
+              <YAxis fontSize={12} tickFormatter={(value) => `R$${(value as number / 1000)}k`} />
+              <Tooltip
+                formatter={(value: number) => `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+                cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }}
+              />
+              <Legend wrapperStyle={{ fontSize: '14px' }} />
+              <Bar dataKey="income" name="Receitas" fill="#10B981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" name="Despesas" fill="#EF4444" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       )}
     </div>
