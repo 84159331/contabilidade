@@ -1,0 +1,225 @@
+import React, { useState, useEffect } from 'react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+
+interface Category {
+  id: number;
+  name: string;
+  type: 'income' | 'expense';
+  description?: string;
+  color: string;
+}
+
+interface CategoryFormProps {
+  category?: Category | null;
+  onSave: (data: any) => void;
+  onClose: () => void;
+}
+
+const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'income' as 'income' | 'expense',
+    description: '',
+    color: '#3B82F6'
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const colorOptions = [
+    { name: 'Azul', value: '#3B82F6' },
+    { name: 'Verde', value: '#10B981' },
+    { name: 'Vermelho', value: '#EF4444' },
+    { name: 'Amarelo', value: '#F59E0B' },
+    { name: 'Roxo', value: '#8B5CF6' },
+    { name: 'Rosa', value: '#EC4899' },
+    { name: 'Indigo', value: '#6366F1' },
+    { name: 'Cinza', value: '#6B7280' },
+    { name: 'Laranja', value: '#F97316' },
+    { name: 'Teal', value: '#14B8A6' }
+  ];
+
+  useEffect(() => {
+    if (category) {
+      setFormData({
+        name: category.name || '',
+        type: category.type || 'income',
+        description: category.description || '',
+        color: category.color || '#3B82F6'
+      });
+    }
+  }, [category]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Nome é obrigatório';
+    }
+
+    if (!formData.type) {
+      newErrors.type = 'Tipo é obrigatório';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      onSave(formData);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose}></div>
+
+        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <form onSubmit={handleSubmit}>
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {category ? 'Editar Categoria' : 'Nova Categoria'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Nome e Tipo */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Nome *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      className={`input mt-1 ${errors.name ? 'border-red-500' : ''}`}
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Nome da categoria"
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                      Tipo *
+                    </label>
+                    <select
+                      id="type"
+                      name="type"
+                      className={`input mt-1 ${errors.type ? 'border-red-500' : ''}`}
+                      value={formData.type}
+                      onChange={handleChange}
+                    >
+                      <option value="income">Receita</option>
+                      <option value="expense">Despesa</option>
+                    </select>
+                    {errors.type && (
+                      <p className="mt-1 text-sm text-red-600">{errors.type}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Descrição */}
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                    Descrição
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={3}
+                    className="input mt-1"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Descrição da categoria..."
+                  />
+                </div>
+
+                {/* Cor */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Cor
+                  </label>
+                  <div className="grid grid-cols-5 gap-2">
+                    {colorOptions.map((color) => (
+                      <button
+                        key={color.value}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, color: color.value }))}
+                        className={`w-8 h-8 rounded-full border-2 ${
+                          formData.color === color.value 
+                            ? 'border-gray-900' 
+                            : 'border-gray-300'
+                        }`}
+                        style={{ backgroundColor: color.value }}
+                        title={color.name}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <div 
+                      className="w-4 h-4 rounded border"
+                      style={{ backgroundColor: formData.color }}
+                    ></div>
+                    <span className="text-sm text-gray-600">
+                      Cor selecionada: {formData.color}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                type="submit"
+                className="btn btn-primary sm:ml-3 sm:w-auto w-full"
+              >
+                {category ? 'Atualizar' : 'Criar'}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn btn-secondary mt-3 sm:mt-0 sm:w-auto w-full"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CategoryForm;

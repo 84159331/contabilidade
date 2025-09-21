@@ -1,0 +1,270 @@
+import React, { useState, useEffect } from 'react';
+import { reportsAPI } from '../../services/api';
+import { toast } from 'react-toastify';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
+interface CashFlowData {
+  period: string;
+  income: number;
+  expense: number;
+  balance: number;
+}
+
+const CashFlowReport: React.FC = () => {
+  const [data, setData] = useState<CashFlowData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
+
+  useEffect(() => {
+    // Set default date range to current year
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const endOfYear = new Date(now.getFullYear(), 11, 31);
+    
+    setStartDate(startOfYear.toISOString().split('T')[0]);
+    setEndDate(endOfYear.toISOString().split('T')[0]);
+  }, []);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      loadReport();
+    }
+  }, [startDate, endDate, period]);
+
+  const loadReport = async () => {
+    try {
+      setLoading(true);
+      const response = await reportsAPI.getCashFlow({
+        start_date: startDate,
+        end_date: endDate,
+        period
+      });
+      setData(response.data);
+    } catch (error) {
+      toast.error('Erro ao carregar relatório de fluxo de caixa');
+      console.error('Erro ao carregar relatório:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleExport = () => {
+    // Implementar exportação para PDF/Excel
+    toast.info('Funcionalidade de exportação em desenvolvimento');
+  };
+
+  const formatPeriod = (periodStr: string) => {
+    if (period === 'daily') {
+      return format(new Date(periodStr), 'dd/MM/yyyy', { locale: ptBR });
+    } else if (period === 'weekly') {
+      return `Semana ${periodStr}`;
+    } else {
+      const [year, month] = periodStr.split('-');
+      return format(new Date(parseInt(year), parseInt(month) - 1), 'MMMM yyyy', { locale: ptBR });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  const totalIncome = data.reduce((sum, item) => sum + item.income, 0);
+  const totalExpense = data.reduce((sum, item) => sum + item.expense, 0);
+  const totalBalance = totalIncome - totalExpense;
+
+  return (
+    <div className="space-y-6">
+      {/* Filters */}
+      <div className="flex gap-4 items-end">
+        <div>
+          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
+            Data Início
+          </label>
+          <input
+            type="date"
+            id="start_date"
+            className="input"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-1">
+            Data Fim
+          </label>
+          <input
+            type="date"
+            id="end_date"
+            className="input"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="period" className="block text-sm font-medium text-gray-700 mb-1">
+            Período
+          </label>
+          <select
+            id="period"
+            className="input"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value as 'daily' | 'weekly' | 'monthly')}
+          >
+            <option value="daily">Diário</option>
+            <option value="weekly">Semanal</option>
+            <option value="monthly">Mensal</option>
+          </select>
+        </div>
+        <button
+          onClick={handleExport}
+          className="btn btn-secondary flex items-center gap-2"
+        >
+          <DocumentArrowDownIcon className="h-4 w-4" />
+          Exportar
+        </button>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center">
+                  <span className="text-success-600 font-bold">+</span>
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Total de Receitas
+                  </dt>
+                  <dd className="text-lg font-medium text-gray-900">
+                    R$ {totalIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-danger-100 rounded-full flex items-center justify-center">
+                  <span className="text-danger-600 font-bold">-</span>
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Total de Despesas
+                  </dt>
+                  <dd className="text-lg font-medium text-gray-900">
+                    R$ {totalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  totalBalance >= 0 ? 'bg-success-100' : 'bg-danger-100'
+                }`}>
+                  <span className={`font-bold ${
+                    totalBalance >= 0 ? 'text-success-600' : 'text-danger-600'
+                  }`}>
+                    =
+                  </span>
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Saldo Total
+                  </dt>
+                  <dd className={`text-lg font-medium ${
+                    totalBalance >= 0 ? 'text-success-600' : 'text-danger-600'
+                  }`}>
+                    R$ {totalBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Cash Flow Table */}
+      <div className="bg-white shadow rounded-lg border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-lg font-medium text-gray-900">
+            Fluxo de Caixa - {period === 'daily' ? 'Diário' : period === 'weekly' ? 'Semanal' : 'Mensal'}
+          </h3>
+        </div>
+        
+        {data.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500">Nenhum dado encontrado no período selecionado</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Período
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Receitas
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Despesas
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Saldo
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {data.map((item, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {formatPeriod(item.period)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-success-600">
+                      R$ {item.income.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-danger-600">
+                      R$ {item.expense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-medium ${
+                      item.balance >= 0 ? 'text-success-600' : 'text-danger-600'
+                    }`}>
+                      R$ {item.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CashFlowReport;
