@@ -93,29 +93,6 @@ db.serialize(() => {
     )
   `);
 
-  // Inserir categorias padrão
-  const defaultCategories = [
-    { name: 'Dízimos', type: 'income', description: 'Contribuições regulares dos membros', color: '#10B981' },
-    { name: 'Ofertas', type: 'income', description: 'Ofertas especiais e voluntárias', color: '#059669' },
-    { name: 'Eventos', type: 'income', description: 'Receitas de eventos e festivais', color: '#047857' },
-    { name: 'Doações', type: 'income', description: 'Doações externas e patrocínios', color: '#065F46' },
-    { name: 'Aluguel', type: 'expense', description: 'Aluguel do templo ou salas', color: '#DC2626' },
-    { name: 'Salários', type: 'expense', description: 'Salários e benefícios dos funcionários', color: '#B91C1C' },
-    { name: 'Manutenção', type: 'expense', description: 'Manutenção e reparos', color: '#991B1B' },
-    { name: 'Eventos', type: 'expense', description: 'Custos com eventos e atividades', color: '#7F1D1D' },
-    { name: 'Utilidades', type: 'expense', description: 'Energia, água, telefone, internet', color: '#EF4444' },
-    { name: 'Outros', type: 'expense', description: 'Outras despesas não categorizadas', color: '#6B7280' }
-  ];
-
-  const insertCategory = db.prepare(`
-    INSERT OR IGNORE INTO categories (name, type, description, color) 
-    VALUES (?, ?, ?, ?)
-  `);
-
-  defaultCategories.forEach(category => {
-    insertCategory.run(category.name, category.type, category.description, category.color);
-  });
-
   // Inserir usuário administrador padrão
   const adminPassword = bcrypt.hashSync('admin123', 10);
   db.run(`
@@ -141,12 +118,10 @@ db.serialize(() => {
     insertSetting.run(setting.key, setting.value, setting.description);
   });
 
-  insertCategory.finalize();
   insertSetting.finalize();
 
   console.log('✅ Banco de dados configurado com sucesso!');
   console.log('👤 Usuário padrão: admin / admin123');
-  console.log('📊 Categorias padrão criadas');
   console.log('⚙️ Configurações iniciais definidas');
 });
 

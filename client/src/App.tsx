@@ -7,6 +7,7 @@ import Members from './pages/Members';
 import Transactions from './pages/Transactions';
 import Reports from './pages/Reports';
 import Categories from './pages/Categories';
+import Users from './pages/Users'; // Adicionado
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/users" element={<Users />} /> {/* Adicionado */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Layout>

@@ -7,6 +7,7 @@ interface Category {
   type: 'income' | 'expense';
   description?: string;
   color: string;
+  default_amount?: number; // Adicionado
 }
 
 interface CategoryFormProps {
@@ -20,7 +21,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
     name: '',
     type: 'income' as 'income' | 'expense',
     description: '',
-    color: '#3B82F6'
+    color: '#3B82F6',
+    default_amount: 0, // Adicionado
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,7 +46,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
         name: category.name || '',
         type: category.type || 'income',
         description: category.description || '',
-        color: category.color || '#3B82F6'
+        color: category.color || '#3B82F6',
+        default_amount: category.default_amount || 0, // Adicionado
       });
     }
   }, [category]);
@@ -53,7 +56,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'default_amount' ? parseFloat(value) || 0 : value // Converte para número se for default_amount
     }));
     
     // Clear error when user starts typing
@@ -166,36 +169,37 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                   />
                 </div>
 
+                {/* Valor Padrão (default_amount) */}
+                <div>
+                  <label htmlFor="default_amount" className="block text-sm font-medium text-gray-700">
+                    Valor Padrão (opcional)
+                  </label>
+                  <input
+                    type="number"
+                    id="default_amount"
+                    name="default_amount"
+                    className="input mt-1"
+                    value={formData.default_amount}
+                    onChange={handleChange}
+                    placeholder="Ex: 100.00"
+                    step="0.01" // Permite valores decimais
+                  />
+                </div>
+
                 {/* Cor */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Cor
                   </label>
-                  <div className="grid grid-cols-5 gap-2">
-                    {colorOptions.map((color) => (
-                      <button
-                        key={color.value}
-                        type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, color: color.value }))}
-                        className={`w-8 h-8 rounded-full border-2 ${
-                          formData.color === color.value 
-                            ? 'border-gray-900' 
-                            : 'border-gray-300'
-                        }`}
-                        style={{ backgroundColor: color.value }}
-                        title={color.name}
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <div 
-                      className="w-4 h-4 rounded border"
-                      style={{ backgroundColor: formData.color }}
-                    ></div>
-                    <span className="text-sm text-gray-600">
-                      Cor selecionada: {formData.color}
-                    </span>
-                  </div>
+            <input
+              type="color"
+              name="color"
+              id="color"
+              value={formData.color}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full h-10 w-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+            />
                 </div>
               </div>
             </div>

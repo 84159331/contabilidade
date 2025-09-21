@@ -12,6 +12,7 @@ interface Category {
   type: 'income' | 'expense';
   description?: string;
   color: string;
+  default_amount?: number; // Adicionado
   transaction_count: number;
   total_amount: number;
   created_at: string;

@@ -7,6 +7,7 @@ import {
   CurrencyDollarIcon, 
   ChartBarIcon, 
   TagIcon,
+  ShieldCheckIcon, // Adicionado
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
@@ -45,6 +46,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Categorias', href: '/categories', icon: TagIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/reports', icon: ChartBarIcon },
+    { type: 'heading', name: 'Administração' },
+    { type: 'link', name: 'Usuários', href: '/users', icon: ShieldCheckIcon },
   ];
 
   const isCurrentPath = (path: string) => {

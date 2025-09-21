@@ -35,19 +35,37 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-green-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
         <div className="text-center">
-          {/* Simple Chart Icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-auto text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
+          <a 
+            href="https://www.instagram.com/comunidadecresgate/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block transition-transform transform hover:scale-110"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="mx-auto h-12 w-auto text-gray-800"
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sistema de Contabilidade
+            Comunidade Cristã Resgate
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Faça login para acessar o sistema
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {/* Removed the wrapper div and -space-y-px */}
           <div className="space-y-4">
             <div>
               <label htmlFor="username" className="sr-only">
@@ -89,12 +107,6 @@ const Login: React.FC = () => {
             >
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Usuário padrão: <span className="font-medium">admin</span> / <span className="font-medium">admin123</span>
-            </p>
           </div>
         </form>
       </div>

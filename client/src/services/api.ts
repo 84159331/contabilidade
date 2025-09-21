@@ -125,6 +125,18 @@ export const categoriesAPI = {
     api.get('/categories/stats/overview', { params }),
 };
 
+// API de Usuários
+export const usersAPI = {
+  getUsers: () =>
+    api.get('/users'),
+  
+  createUser: (data: any) =>
+    api.post('/users', data),
+  
+  deleteUser: (id: number) =>
+    api.delete(`/users/${id}`), // Adicionado
+};
+
 // API de relatórios
 export const reportsAPI = {
   getMonthlyBalance: (year: number, month: number) =>

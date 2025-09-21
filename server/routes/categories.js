@@ -27,6 +27,7 @@ router.get('/', (req, res) => {
   db.all(
     `SELECT 
        c.*,
+       c.default_amount, /* Adicionado */
        COUNT(t.id) as transaction_count,
        COALESCE(SUM(t.amount), 0) as total_amount
      FROM categories c
@@ -54,7 +55,7 @@ router.get('/:id', (req, res) => {
   const db = new sqlite3.Database(dbPath);
   
   db.get(
-    'SELECT * FROM categories WHERE id = ?',
+    'SELECT *, default_amount FROM categories WHERE id = ?', /* Adicionado default_amount */
     [id],
     (err, category) => {
       db.close();
@@ -74,7 +75,7 @@ router.get('/:id', (req, res) => {
 
 // Criar nova categoria
 router.post('/', validateCategory, (req, res) => {
-  const { name, type, description, color } = req.body;
+  const { name, type, description, color, default_amount } = req.body; /* Adicionado default_amount */
   
   const db = new sqlite3.Database(dbPath);
   
@@ -95,8 +96,8 @@ router.post('/', validateCategory, (req, res) => {
       
       // Inserir nova categoria
       db.run(
-        'INSERT INTO categories (name, type, description, color) VALUES (?, ?, ?, ?)',
-        [name, type, description || null, color || '#3B82F6'],
+        'INSERT INTO categories (name, type, description, color, default_amount) VALUES (?, ?, ?, ?, ?)', /* Adicionado default_amount */
+        [name, type, description || null, color || '#3B82F6', default_amount || 0], /* Adicionado default_amount */
         function(err) {
           db.close();
           
@@ -117,7 +118,7 @@ router.post('/', validateCategory, (req, res) => {
 // Atualizar categoria
 router.put('/:id', validateCategory, (req, res) => {
   const { id } = req.params;
-  const { name, type, description, color } = req.body;
+  const { name, type, description, color, default_amount } = req.body; /* Adicionado default_amount */
   
   const db = new sqlite3.Database(dbPath);
   
@@ -138,8 +139,8 @@ router.put('/:id', validateCategory, (req, res) => {
       
       // Atualizar categoria
       db.run(
-        'UPDATE categories SET name = ?, type = ?, description = ?, color = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [name, type, description || null, color || '#3B82F6', id],
+        'UPDATE categories SET name = ?, type = ?, description = ?, color = ?, default_amount = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', /* Adicionado default_amount */
+        [name, type, description || null, color || '#3B82F6', default_amount || 0, id], /* Adicionado default_amount */
         function(err) {
           db.close();
           
@@ -233,6 +234,7 @@ router.get('/stats/overview', (req, res) => {
        c.name,
        c.type,
        c.color,
+       c.default_amount, /* Adicionado */
        COUNT(t.id) as transaction_count,
        COALESCE(SUM(t.amount), 0) as total_amount,
        COALESCE(AVG(t.amount), 0) as average_amount
