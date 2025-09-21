@@ -12,7 +12,7 @@ const reportRoutes = require('./routes/reports');
 const categoryRoutes = require('./routes/categories');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware de segurança
 app.use(helmet());

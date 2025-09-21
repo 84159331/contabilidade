@@ -4,6 +4,7 @@
   "description": "Sistema de contabilidade web para igrejas",
   "main": "server/index.js",
   "scripts": {
+    "start": "npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server/index.js",
     "client": "cd client && npm start",
