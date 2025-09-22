@@ -59,11 +59,6 @@ const CategoryReport: React.FC = () => {
     }
   };
 
-  const handleExport = () => {
-    // Implementar exportação para PDF/Excel
-    toast.info('Funcionalidade de exportação em desenvolvimento');
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -103,13 +98,6 @@ const CategoryReport: React.FC = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <button
-          onClick={handleExport}
-          className="btn btn-secondary flex items-center gap-2"
-        >
-          <DocumentArrowDownIcon className="h-4 w-4" />
-          Exportar
-        </button>
       </div>
 
       {/* Summary Stats */}

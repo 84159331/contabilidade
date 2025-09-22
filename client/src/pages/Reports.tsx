@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { ChartBarIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
-import { reportsAPI } from '../services/api';
-import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MonthlyBalanceReport from '../components/reports/MonthlyBalanceReport';
 import YearlyBalanceReport from '../components/reports/YearlyBalanceReport';
 import MemberContributionsReport from '../components/reports/MemberContributionsReport';
 import CategoryReport from '../components/reports/CategoryReport';
 import CashFlowReport from '../components/reports/CashFlowReport';
+import { generatePdf } from '../utils/pdf';
 
 type ReportType = 'monthly' | 'yearly' | 'contributions' | 'categories' | 'cashflow';
 
 const Reports: React.FC = () => {
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
+  const reportContainerRef = useRef<HTMLDivElement>(null);
 
   const reports = [
     {
@@ -47,6 +47,13 @@ const Reports: React.FC = () => {
       icon: ChartBarIcon
     }
   ];
+
+  const handleGeneratePdf = async () => {
+    if (reportContainerRef.current) {
+      const reportName = reports.find(r => r.id === activeReport)?.name || 'relatorio';
+      await generatePdf(reportContainerRef.current, `${reportName}.pdf`);
+    }
+  };
 
   const renderReport = () => {
     switch (activeReport) {
@@ -100,19 +107,30 @@ const Reports: React.FC = () => {
         </div>
 
         <div className="p-6">
-          <div className="mb-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              {reports.find(r => r.id === activeReport)?.name}
-            </h3>
-            <p className="text-sm text-gray-500">
-              {reports.find(r => r.id === activeReport)?.description}
-            </p>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">
+                {reports.find(r => r.id === activeReport)?.name}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {reports.find(r => r.id === activeReport)?.description}
+              </p>
+            </div>
+            <button
+              onClick={handleGeneratePdf}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              <DocumentArrowDownIcon className="h-4 w-4" />
+              Gerar PDF
+            </button>
           </div>
 
           {loading ? (
             <LoadingSpinner />
           ) : (
-            renderReport()
+            <div ref={reportContainerRef}>
+              {renderReport()}
+            </div>
           )}
         </div>
       </div>

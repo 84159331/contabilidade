@@ -52,11 +52,6 @@ const CashFlowReport: React.FC = () => {
     }
   };
 
-  const handleExport = () => {
-    // Implementar exportação para PDF/Excel
-    toast.info('Funcionalidade de exportação em desenvolvimento');
-  };
-
   const formatPeriod = (periodStr: string) => {
     if (period === 'daily') {
       return format(new Date(periodStr), 'dd/MM/yyyy', { locale: ptBR });
@@ -123,13 +118,6 @@ const CashFlowReport: React.FC = () => {
             <option value="monthly">Mensal</option>
           </select>
         </div>
-        <button
-          onClick={handleExport}
-          className="btn btn-secondary flex items-center gap-2"
-        >
-          <DocumentArrowDownIcon className="h-4 w-4" />
-          Exportar
-        </button>
       </div>
 
       {/* Summary Stats */}
