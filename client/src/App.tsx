@@ -1,48 +1,34 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Members from './pages/Members';
-import Transactions from './pages/Transactions';
-import Reports from './pages/Reports';
-import Categories from './pages/Categories';
-import Users from './pages/Users'; // Adicionado
-import Layout from './components/Layout';
-import LoadingSpinner from './components/LoadingSpinner';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PublicLayout from './components/PublicLayout';
+import HomePage from './pages/public/HomePage';
+import AboutPage from './pages/public/AboutPage';
+import EventsPage from './pages/public/EventsPage';
+import ContactPage from './pages/public/ContactPage';
+import VisitPage from './pages/public/VisitPage';
+import ConnectPage from './pages/public/ConnectPage';
+import WatchPage from './pages/public/WatchPage';
+import GivePage from './pages/public/GivePage';
+import LocationsPage from './pages/public/LocationsPage';
+import TesourariaApp from './TesourariaApp';
 
 function App() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (!user) {
-    return (
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </Router>
-    );
-  }
-
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/members" element={<Members />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/users" element={<Users />} /> {/* Adicionado */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/sobre" element={<AboutPage />} />
+          <Route path="/eventos" element={<EventsPage />} />
+          <Route path="/contato" element={<ContactPage />} />
+          <Route path="/visite" element={<VisitPage />} />
+          <Route path="/conecte" element={<ConnectPage />} />
+          <Route path="/assista" element={<WatchPage />} />
+          <Route path="/contribua" element={<GivePage />} />
+          <Route path="/localizacoes" element={<LocationsPage />} />
+        </Route>
+        <Route path="/tesouraria/*" element={<TesourariaApp />} />
+      </Routes>
     </Router>
   );
 }

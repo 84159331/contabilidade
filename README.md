@@ -1,50 +1,33 @@
-# Sistema de Contabilidade para Igreja
+# Comunidade Cristã Resgate - Sistema de Contabilidade
 
-## 📋 Visão Geral
-Sistema web completo para controle financeiro de igrejas, permitindo acesso via internet a qualquer momento.
+Este é um sistema de contabilidade web para a Comunidade Cristã Resgate, desenvolvido para ajudar na gestão financeira de forma transparente e eficiente.
 
-## 🎯 Funcionalidades Principais
+## Pré-requisitos
 
-### 💰 Gestão Financeira
-- **Receitas**: Dízimos, ofertas, eventos, doações
-- **Despesas**: Aluguel, salários, manutenção, eventos
-- **Relatórios**: Balanços mensais, anuais, fluxo de caixa
-- **Categorização**: Organização por categorias e subcategorias
+- Node.js (versão 14 ou superior)
+- npm (geralmente vem com o Node.js)
 
-### 👥 Gestão de Membros
-- **Cadastro**: Dados pessoais e de contato
-- **Contribuições**: Histórico de dízimos e ofertas
-- **Relatórios**: Lista de contribuintes e valores
+## Instalação
 
-### 📊 Dashboard e Relatórios
-- **Visão Geral**: Resumo financeiro atual
-- **Gráficos**: Visualizações de receitas vs despesas
-- **Exportação**: Relatórios em PDF e Excel
-- **Filtros**: Por período, categoria, membro
+1. Clone este repositório para a sua máquina local.
+2. Abra um terminal na pasta raiz do projeto.
+3. Execute o seguinte comando para instalar todas as dependências do servidor e do cliente:
 
-### 🔐 Segurança e Acesso
-- **Login**: Sistema de autenticação seguro
-- **Permissões**: Diferentes níveis de acesso
-- **Backup**: Salvamento automático dos dados
+   ```bash
+   npm run install-all
+   ```
 
-## 🛠️ Tecnologias Utilizadas
-- **Frontend**: React.js com TypeScript
-- **Backend**: Node.js com Express
-- **Banco de Dados**: SQLite (fácil de configurar)
-- **Estilização**: Tailwind CSS
-- **Autenticação**: JWT
+## Como Executar a Aplicação
 
-## 🚀 Como Executar
-1. Instalar dependências: `npm install`
-2. Configurar banco de dados: `npm run setup-db`
-3. Iniciar servidor: `npm run dev`
-4. Acessar: `http://localhost:3000`
+Para iniciar a aplicação em modo de desenvolvimento, execute o seguinte comando na pasta raiz do projeto:
 
-## 📱 Responsivo
-Interface adaptada para desktop, tablet e mobile.
+```bash
+npm run dev
+```
 
-## 🔒 Segurança
-- Senhas criptografadas
-- Sessões seguras
-- Validação de dados
-- Backup automático
+Este comando irá iniciar dois servidores simultaneamente:
+
+- **Servidor do Cliente (Frontend):** Acessível em `http://localhost:3000`
+- **Servidor do Backend (API):** Acessível em `http://localhost:5001`
+
+Abra o seu navegador e acesse `http://localhost:3000` para ver o site.
