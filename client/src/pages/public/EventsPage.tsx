@@ -2,9 +2,9 @@ import React from 'react';
 
 const events = [
   {
-    title: 'Culto de Domingo',
+    title: 'Culto de Celebração',
     date: 'Todos os Domingos',
-    time: '10:00 - 12:00',
+    time: '19:00',
     description: 'Um tempo de louvor, adoração e ensino da Palavra de Deus.',
     image: '/img/Culto de Celebração - 22-01 [thumb].png'
   },

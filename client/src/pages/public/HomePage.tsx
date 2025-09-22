@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <img src="https://via.placeholder.com/800x600" alt="Small Groups" className="w-full h-48 object-cover" />
               <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2">Grupos Pequenos</h3>
+                <h3 className="text-xl font-bold font-heading mb-2">Grupo Celular</h3>
                 <p className="text-gray-darkest mb-4">Encontre comunidade e cresça na fé.</p>
                 <Link to="/conecte" className="text-blue font-bold hover:underline">Encontre um Grupo</Link>
               </div>

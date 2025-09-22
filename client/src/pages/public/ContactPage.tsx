@@ -47,7 +47,7 @@ const ContactPage: React.FC = () => {
                   <strong>Telefone:</strong> (11) 1234-5678
                 </p>
                 <p>
-                  <strong>Email:</strong> contato@comunidaderesgate.com
+                  <strong>Email:</strong> cresgate012@gmail.com
                 </p>
               </div>
               <div className="mt-6">

@@ -8,11 +8,10 @@ const PublicLayout: React.FC = () => {
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold font-heading">
-            Comunidade Cristã Resgate
+            <img src="/img/LOGO NOME.png" alt="Comunidade Cristã Resgate" className="h-10" />
           </Link>
           <div className="hidden md:flex space-x-6 items-center font-heading">
             <Link to="/sobre" className="hover:text-blue">Sobre</Link>
-            <Link to="/visite" className="hover:text-blue">Visite</Link>
             <Link to="/conecte" className="hover:text-blue">Conecte-se</Link>
             <Link to="/eventos" className="hover:text-blue">Eventos</Link>
             <Link to="/assista" className="hover:text-blue">Assista</Link>
@@ -23,9 +22,9 @@ const PublicLayout: React.FC = () => {
             <button className="hover:text-blue">
               <MagnifyingGlassIcon className="h-6 w-6" />
             </button>
-            <Link to="/tesouraria/login" className="btn btn-primary">
+            <a href="/tesouraria/login" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
               Tesouraria
-            </Link>
+            </a>
           </div>
         </div>
       </header>
@@ -45,7 +44,6 @@ const PublicLayout: React.FC = () => {
               <h3 className="text-lg font-bold font-heading mb-4">Navegue</h3>
               <ul className="space-y-2">
                 <li><Link to="/sobre" className="hover:text-blue">Sobre</Link></li>
-                <li><Link to="/visite" className="hover:text-blue">Visite</Link></li>
                 <li><Link to="/conecte" className="hover:text-blue">Conecte-se</Link></li>
                 <li><Link to="/eventos" className="hover:text-blue">Eventos</Link></li>
                 <li><a href="http://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-blue">Assista</a></li>
@@ -57,11 +55,18 @@ const PublicLayout: React.FC = () => {
               <h3 className="text-lg font-bold font-heading mb-4">Contato</h3>
               <p>Quadra 38, Área Especial, Lote E</p>
               <p>Vila São José, Brasília - DF, 72010-010</p>
-              <p className="mt-4">contato@comunidaderesgate.com</p>
+              <p className="mt-4">cresgate012@gmail.com</p>
             </div>
             <div>
               <h3 className="text-lg font-bold font-heading mb-4">Redes Sociais</h3>
-              {/* Add social media icons here */}
+              <div className="flex space-x-4">
+                <a href="https://www.facebook.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue">
+                  <img src="/img/facebook.svg" alt="Facebook" className="h-6 w-6" />
+                </a>
+                <a href="https://www.instagram.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue">
+                  <img src="/img/instagram.svg" alt="Instagram" className="h-6 w-6" />
+                </a>
+              </div>
             </div>
           </div>
           <div className="border-t border-gray-darker pt-8 text-center text-gray-dark">
