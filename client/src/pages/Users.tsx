@@ -69,15 +69,17 @@ const Users: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800">Gerenciamento de Usuários</h1>
-        <p className="mt-1 text-md text-slate-600">
-          Adicione, visualize e gerencie os usuários administradores do sistema.
-        </p>
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800">Gerenciamento de Usuários</h1>
+          <p className="mt-1 text-md text-slate-600">
+            Adicione, visualize e gerencie os usuários administradores do sistema.
+          </p>
+        </div>
+        {/* Formulário para adicionar novo usuário (direto na página) */}
+        <UserForm onSubmit={handleCreateUser} />
       </div>
-
-      {/* Formulário para adicionar novo usuário */}
-      <UserForm onSubmit={handleCreateUser} />
 
       {/* Lista de usuários existentes */}
       {loading ? <LoadingSpinner /> : <UserList users={users} onDelete={handleDeleteUser} />}
