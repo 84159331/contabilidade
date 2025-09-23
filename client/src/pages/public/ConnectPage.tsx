@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const cellGroups = [
   {
@@ -25,6 +25,15 @@ const cellGroups = [
 ];
 
 const ConnectPage: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading data
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <div>
       <h1 className="text-4xl font-bold font-heading text-center mb-4">Conecte-se</h1>
@@ -34,23 +43,29 @@ const ConnectPage: React.FC = () => {
 
       <div className="py-8">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cellGroups.map((group, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                {group.image ? (
-                  <img src={group.image} alt={group.title} className="w-full h-48 object-cover" />
-                ) : (
-                  <div className="bg-gray-200 h-48 flex items-center justify-center">
-                    <p className="text-gray-500">Imagem do Grupo</p>
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {cellGroups.map((group, index) => (
+                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  {group.image ? (
+                    <img src={group.image} alt={group.title} className="w-full h-48 object-cover" />
+                  ) : (
+                    <div className="bg-gray-200 h-48 flex items-center justify-center">
+                      <p className="text-gray-500">Imagem do Grupo</p>
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <h2 className="text-2xl font-bold font-heading mb-2">{group.title}</h2>
+                    <p className="text-gray-darkest mt-2">{group.description}</p>
                   </div>
-                )}
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold font-heading mb-2">{group.title}</h2>
-                  <p className="text-gray-darkest mt-2">{group.description}</p>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

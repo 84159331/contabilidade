@@ -27,8 +27,14 @@ const dailyStudies = [
 const HomePage: React.FC = () => {
   const [currentStudyIndex, setCurrentStudyIndex] = useState(0);
   const [showStudy, setShowStudy] = useState(true);
+  const [loadingStudy, setLoadingStudy] = useState(true);
 
   useEffect(() => {
+    // Simulate loading data
+    setTimeout(() => {
+      setLoadingStudy(false);
+    }, 1000);
+
     const interval = setInterval(() => {
       setShowStudy(false); // Start fade out
       setTimeout(() => {
@@ -70,8 +76,16 @@ const HomePage: React.FC = () => {
       <div className="py-16 bg-gray-light">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold font-heading mb-2">Estudo de Hoje</h2>
-          <h3 className={`text-2xl font-bold font-heading mb-4 text-black transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.title}</h3>
-          <p className={`text-gray-darkest mb-6 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.content}</p>
+          {loadingStudy ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue"></div>
+            </div>
+          ) : (
+            <>
+              <h3 className={`text-2xl font-bold font-heading mb-4 text-black transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.title}</h3>
+              <p className={`text-gray-darkest mb-6 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.content}</p>
+            </>
+          )}
         </div>
       </div>
 
@@ -131,12 +145,12 @@ const HomePage: React.FC = () => {
       {/* Locations Section */}
       <div className="py-16">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold font-heading mb-4">Nossas Localizações</h2>
+          <h2 className="text-3xl font-bold font-heading mb-4">Nossa Localização</h2>
           <p className="max-w-3xl mx-auto text-gray-darkest mb-6">
             Temos várias localizações para melhor servir você. Encontre a mais próxima!
           </p>
           <Link to="/localizacoes" className="btn btn-primary text-lg py-3 px-8">
-            Ver Localizações
+            Ver Localização
           </Link>
         </div>
       </div>
