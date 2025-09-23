@@ -21,8 +21,8 @@ function TesourariaApp() {
   if (!user) {
     return (
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/tesouraria/login" replace />} />
+        <Route path="login" element={<Login />} />
+        <Route path="*" element={<Navigate to="login" replace />} />
       </Routes>
     );
   }
@@ -31,12 +31,12 @@ function TesourariaApp() {
     <Layout>
       <Routes>
         <Route path="/" element={<Navigate to="dashboard" replace />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/members" element={<Members />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="members" element={<Members />} />
+        <Route path="transactions" element={<Transactions />} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="users" element={<Users />} />
         <Route path="*" element={<Navigate to="dashboard" replace />} />
       </Routes>
     </Layout>

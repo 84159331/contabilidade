@@ -15,6 +15,9 @@ const usersRoutes = require('./routes/users'); // Adicionado
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Configurar Express para confiar em cabeçalhos de proxy
+app.set('trust proxy', 1);
+
 // Middleware de segurança
 app.use(helmet());
 
