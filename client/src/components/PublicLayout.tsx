@@ -18,7 +18,7 @@ const PublicLayout: React.FC = () => {
             <Link to="/contribua" className="hover:text-blue">Contribua</Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link to="/localizacoes" className="hidden md:block hover:text-blue font-heading">Localizações</Link>
+            <Link to="/localizacoes" className="hidden md:block hover:text-blue font-heading">Localização</Link>
             <button className="hover:text-blue">
               <MagnifyingGlassIcon className="h-6 w-6" />
             </button>
@@ -48,7 +48,7 @@ const PublicLayout: React.FC = () => {
                 <li><Link to="/eventos" className="hover:text-blue">Eventos</Link></li>
                 <li><a href="http://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-blue">Assista</a></li>
                 <li><Link to="/contribua" className="hover:text-blue">Contribua</Link></li>
-                <li><Link to="/localizacoes" className="hover:text-blue">Localizações</Link></li>
+                <li><Link to="/localizacoes" className="hover:text-blue">Localização</Link></li>
               </ul>
             </div>
             <div>

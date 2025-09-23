@@ -4,6 +4,7 @@ const cellGroups = [
   {
     title: 'Grupo Celular - Família',
     description: 'Um grupo para casais e famílias que buscam crescer juntos na fé e no relacionamento.',
+    image: '/img/family_placeholder.png'
   },
   {
     title: 'Grupo Celular - Jovens',
@@ -36,9 +37,13 @@ const ConnectPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cellGroups.map((group, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="bg-gray-200 h-48 flex items-center justify-center">
-                  <p className="text-gray-500">Imagem do Grupo</p>
-                </div>
+                {group.image ? (
+                  <img src={group.image} alt={group.title} className="w-full h-48 object-cover" />
+                ) : (
+                  <div className="bg-gray-200 h-48 flex items-center justify-center">
+                    <p className="text-gray-500">Imagem do Grupo</p>
+                  </div>
+                )}
                 <div className="p-6">
                   <h2 className="text-2xl font-bold font-heading mb-2">{group.title}</h2>
                   <p className="text-gray-darkest mt-2">{group.description}</p>
