@@ -6,7 +6,6 @@ const AboutPage: React.FC = () => {
       {/* Hero Section */}
       <div
         className="relative h-96 bg-cover bg-center flex items-center justify-center text-white"
-        style={{ backgroundImage: 'url(https://via.placeholder.com/1920x400)' }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center">
@@ -29,13 +28,17 @@ const AboutPage: React.FC = () => {
               </p>
             </div>
             <div>
-              <img src="https://via.placeholder.com/800x600" alt="Church History" className="rounded-lg shadow-md" />
+              <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Imagem da História</p>
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-16">
             <div>
-              <img src="https://via.placeholder.com/800x600" alt="Church Mission" className="rounded-lg shadow-md" />
+              <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Imagem da Missão</p>
+              </div>
             </div>
             <div>
               <h2 className="text-3xl font-bold font-heading mb-4">Nossa Missão e Visão</h2>

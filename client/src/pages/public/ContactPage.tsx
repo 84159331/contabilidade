@@ -6,7 +6,6 @@ const ContactPage: React.FC = () => {
       {/* Hero Section */}
       <div
         className="relative h-96 bg-cover bg-center flex items-center justify-center text-white"
-        style={{ backgroundImage: 'url(https://via.placeholder.com/1920x400)' }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center">
