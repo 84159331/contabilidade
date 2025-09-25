@@ -1,13 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../database');
 const { validateUser } = require('../middleware/validation');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
-const dbPath = path.join(__dirname, '../../database/igreja.db');
 
 // Login
 router.post('/login', async (req, res) => {
@@ -18,14 +16,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Username e senha são obrigatórios' });
     }
 
-    const db = new sqlite3.Database(dbPath);
-    
     db.get(
       'SELECT * FROM users WHERE username = ? OR email = ?',
       [username, username],
       async (err, user) => {
-        db.close();
-        
         if (err) {
           return res.status(500).json({ error: 'Erro interno do servidor' });
         }
@@ -68,20 +62,16 @@ router.post('/register', validateUser, async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    const db = new sqlite3.Database(dbPath);
-    
     // Verificar se username ou email já existem
     db.get(
       'SELECT id FROM users WHERE username = ? OR email = ?',
       [username, email],
       async (err, existingUser) => {
         if (err) {
-          db.close();
           return res.status(500).json({ error: 'Erro interno do servidor' });
         }
         
         if (existingUser) {
-          db.close();
           return res.status(400).json({ error: 'Username ou email já existem' });
         }
         
@@ -93,8 +83,6 @@ router.post('/register', validateUser, async (req, res) => {
           'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
           [username, email, hashedPassword, 'admin'],
           function(err) {
-            db.close();
-            
             if (err) {
               return res.status(500).json({ error: 'Erro ao criar usuário' });
             }
@@ -138,27 +126,22 @@ router.put('/change-password', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Nova senha deve ter pelo menos 6 caracteres' });
     }
     
-    const db = new sqlite3.Database(dbPath);
-    
     // Verificar senha atual
     db.get(
       'SELECT password FROM users WHERE id = ?',
       [req.user.id],
       async (err, user) => {
         if (err) {
-          db.close();
           return res.status(500).json({ error: 'Erro interno do servidor' });
         }
         
         if (!user) {
-          db.close();
           return res.status(404).json({ error: 'Usuário não encontrado' });
         }
         
         const isValidPassword = await bcrypt.compare(currentPassword, user.password);
         
         if (!isValidPassword) {
-          db.close();
           return res.status(401).json({ error: 'Senha atual incorreta' });
         }
         
@@ -170,8 +153,6 @@ router.put('/change-password', authenticateToken, async (req, res) => {
           'UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
           [hashedNewPassword, req.user.id],
           function(err) {
-            db.close();
-            
             if (err) {
               return res.status(500).json({ error: 'Erro ao alterar senha' });
             }

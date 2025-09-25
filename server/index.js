@@ -5,6 +5,8 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 require('dotenv').config();
 
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'my-super-secret-key';
+
 const authRoutes = require('./routes/auth');
 const memberRoutes = require('./routes/members');
 const transactionRoutes = require('./routes/transactions');
@@ -24,13 +26,16 @@ app.use(helmet());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutos
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // máximo 100 requests por IP
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 10000, // Aumentado para 10000 requests por IP
   message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.'
 });
 app.use(limiter);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 

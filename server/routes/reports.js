@@ -1,10 +1,8 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../database');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
-const dbPath = path.join(__dirname, '../../database/igreja.db');
 
 // Aplicar autenticação em todas as rotas
 router.use(authenticateToken);
@@ -17,8 +15,6 @@ router.get('/monthly-balance', (req, res) => {
     return res.status(400).json({ error: 'Ano e mês são obrigatórios' });
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        type,
@@ -30,8 +26,6 @@ router.get('/monthly-balance', (req, res) => {
      GROUP BY type`,
     [year, month],
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -65,8 +59,6 @@ router.get('/yearly-balance', (req, res) => {
     return res.status(400).json({ error: 'Ano é obrigatório' });
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        strftime('%m', transaction_date) as month,
@@ -78,8 +70,6 @@ router.get('/yearly-balance', (req, res) => {
      ORDER BY month`,
     [year],
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -151,8 +141,6 @@ router.get('/member-contributions', (req, res) => {
     params.push(member_id);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        m.id,
@@ -170,8 +158,6 @@ router.get('/member-contributions', (req, res) => {
      ORDER BY total_contributed DESC`,
     params,
     (err, contributions) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -198,8 +184,6 @@ router.get('/income-by-category', (req, res) => {
     params.push(end_date);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        c.id,
@@ -215,8 +199,6 @@ router.get('/income-by-category', (req, res) => {
      ORDER BY total_amount DESC`,
     params,
     (err, categories) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -243,8 +225,6 @@ router.get('/expense-by-category', (req, res) => {
     params.push(end_date);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        c.id,
@@ -260,8 +240,6 @@ router.get('/expense-by-category', (req, res) => {
      ORDER BY total_amount DESC`,
     params,
     (err, categories) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -298,8 +276,6 @@ router.get('/cash-flow', (req, res) => {
       break;
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        ${groupByClause} as period,
@@ -311,8 +287,6 @@ router.get('/cash-flow', (req, res) => {
      ORDER BY ${orderByClause}`,
     [start_date, end_date],
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }
@@ -359,15 +333,16 @@ router.get('/top-contributors', (req, res) => {
   
   params.push(parseInt(limit));
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        m.id,
        m.name,
        m.email,
        COUNT(t.id) as contribution_count,
-       COALESCE(SUM(t.amount), 0) as total_contributed
+       COALESCE(SUM(t.amount), 0) as total_contributed,
+       COALESCE(AVG(t.amount), 0) as average_contribution,
+       MIN(t.transaction_date) as first_contribution,
+       MAX(t.transaction_date) as last_contribution
      FROM members m
      INNER JOIN transactions t ON m.id = t.member_id
      ${whereClause}
@@ -376,8 +351,6 @@ router.get('/top-contributors', (req, res) => {
      LIMIT ?`,
     params,
     (err, contributors) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao gerar relatório' });
       }

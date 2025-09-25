@@ -1,11 +1,9 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../database');
 const { authenticateToken } = require('../middleware/auth');
 const { validateTransaction } = require('../middleware/validation');
 
 const router = express.Router();
-const dbPath = path.join(__dirname, '../../database/igreja.db');
 
 // Aplicar autenticação em todas as rotas
 router.use(authenticateToken);
@@ -53,21 +51,12 @@ router.get('/', (req, res) => {
     params.push(end_date);
   }
   
-  if (search) {
-    whereClause += ' AND (t.description LIKE ? OR t.reference LIKE ?)';
-    const searchTerm = `%${search}%`;
-    params.push(searchTerm, searchTerm);
-  }
-  
-  const db = new sqlite3.Database(dbPath);
-  
   // Contar total de transações
   db.get(
     `SELECT COUNT(*) as total FROM transactions t ${whereClause}`,
     params,
     (err, countResult) => {
       if (err) {
-        db.close();
         return res.status(500).json({ error: 'Erro ao contar transações' });
       }
       
@@ -86,8 +75,6 @@ router.get('/', (req, res) => {
          LIMIT ? OFFSET ?`,
         [...params, limit, offset],
         (err, transactions) => {
-          db.close();
-          
           if (err) {
             return res.status(500).json({ error: 'Erro ao buscar transações' });
           }
@@ -111,8 +98,6 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.get(
     `SELECT 
        t.*,
@@ -125,8 +110,6 @@ router.get('/:id', (req, res) => {
      WHERE t.id = ?`,
     [id],
     (err, transaction) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar transação' });
       }
@@ -154,8 +137,6 @@ router.post('/', validateTransaction, (req, res) => {
     notes
   } = req.body;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.run(
     `INSERT INTO transactions 
      (description, amount, type, category_id, member_id, transaction_date, 
@@ -174,8 +155,6 @@ router.post('/', validateTransaction, (req, res) => {
       req.user.id
     ],
     function(err) {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao criar transação' });
       }
@@ -203,8 +182,6 @@ router.put('/:id', validateTransaction, (req, res) => {
     notes
   } = req.body;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.run(
     `UPDATE transactions SET 
      description = ?, amount = ?, type = ?, category_id = ?, member_id = ?, 
@@ -224,8 +201,6 @@ router.put('/:id', validateTransaction, (req, res) => {
       id
     ],
     function(err) {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao atualizar transação' });
       }
@@ -243,14 +218,10 @@ router.put('/:id', validateTransaction, (req, res) => {
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.run(
     'DELETE FROM transactions WHERE id = ?',
     [id],
     function(err) {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao deletar transação' });
       }
@@ -281,8 +252,6 @@ router.get('/summary/overview', (req, res) => {
     params.push(end_date);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        type,
@@ -293,8 +262,6 @@ router.get('/summary/overview', (req, res) => {
      GROUP BY type`,
     params,
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar resumo' });
       }
@@ -311,8 +278,6 @@ router.get('/summary/overview', (req, res) => {
           count: result.count
         };
       });
-      
-      summary.balance = summary.income.total - summary.expense.total;
       
       res.json(summary);
     }
@@ -341,8 +306,6 @@ router.get('/summary/by-category', (req, res) => {
     params.push(end_date);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        c.id,
@@ -356,8 +319,6 @@ router.get('/summary/by-category', (req, res) => {
      ORDER BY total DESC`,
     params,
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar resumo por categoria' });
       }
@@ -371,8 +332,6 @@ router.get('/summary/by-category', (req, res) => {
 router.get('/summary/cash-flow', (req, res) => {
   const { year = new Date().getFullYear() } = req.query;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        strftime('%m', transaction_date) as month,
@@ -384,8 +343,6 @@ router.get('/summary/cash-flow', (req, res) => {
      ORDER BY month`,
     [year],
     (err, results) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar fluxo de caixa' });
       }
@@ -404,9 +361,9 @@ router.get('/summary/cash-flow', (req, res) => {
       }
       
       results.forEach(result => {
-        const month = result.month;
-        monthlyData[month][result.type] = parseFloat(result.total);
-        monthlyData[month].balance = monthlyData[month].income - monthlyData[month].expense;
+        const currentMonth = result.month;
+        monthlyData[currentMonth][result.type] = parseFloat(result.total);
+        monthlyData[currentMonth].balance = monthlyData[currentMonth].income - monthlyData[currentMonth].expense;
       });
       
       res.json(Object.values(monthlyData));

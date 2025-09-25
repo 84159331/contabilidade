@@ -1,11 +1,9 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../database');
 const { authenticateToken, requireRole } = require('../middleware/auth');
 const { validateMember } = require('../middleware/validation');
 
 const router = express.Router();
-const dbPath = path.join(__dirname, '../../database/igreja.db');
 
 // Aplicar autenticação em todas as rotas
 router.use(authenticateToken);
@@ -29,15 +27,12 @@ router.get('/', (req, res) => {
     params.push(status);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   // Contar total de membros
   db.get(
     `SELECT COUNT(*) as total FROM members ${whereClause}`,
     params,
     (err, countResult) => {
       if (err) {
-        db.close();
         return res.status(500).json({ error: 'Erro ao contar membros' });
       }
       
@@ -46,8 +41,6 @@ router.get('/', (req, res) => {
         `SELECT * FROM members ${whereClause} ORDER BY name ASC LIMIT ? OFFSET ?`,
         [...params, limit, offset],
         (err, members) => {
-          db.close();
-          
           if (err) {
             return res.status(500).json({ error: 'Erro ao buscar membros' });
           }
@@ -71,14 +64,10 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.get(
     'SELECT * FROM members WHERE id = ?',
     [id],
     (err, member) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar membro' });
       }
@@ -96,15 +85,11 @@ router.get('/:id', (req, res) => {
 router.post('/', validateMember, (req, res) => {
   const { name, email, phone, address, birth_date, member_since, status, notes } = req.body;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.run(
     `INSERT INTO members (name, email, phone, address, birth_date, member_since, status, notes) 
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [name, email, phone, address, birth_date, member_since, status || 'active', notes],
     function(err) {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao criar membro' });
       }
@@ -122,8 +107,6 @@ router.put('/:id', validateMember, (req, res) => {
   const { id } = req.params;
   const { name, email, phone, address, birth_date, member_since, status, notes } = req.body;
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.run(
     `UPDATE members SET 
      name = ?, email = ?, phone = ?, address = ?, birth_date = ?, 
@@ -131,8 +114,6 @@ router.put('/:id', validateMember, (req, res) => {
      WHERE id = ?`,
     [name, email, phone, address, birth_date, member_since, status, notes, id],
     function(err) {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao atualizar membro' });
       }
@@ -150,20 +131,16 @@ router.put('/:id', validateMember, (req, res) => {
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
   
-  const db = new sqlite3.Database(dbPath);
-  
   // Verificar se o membro tem transações associadas
   db.get(
     'SELECT COUNT(*) as count FROM transactions WHERE member_id = ?',
     [id],
     (err, result) => {
       if (err) {
-        db.close();
         return res.status(500).json({ error: 'Erro ao verificar transações' });
       }
       
       if (result.count > 0) {
-        db.close();
         return res.status(400).json({ 
           error: 'Não é possível deletar membro com transações associadas' 
         });
@@ -174,8 +151,6 @@ router.delete('/:id', (req, res) => {
         'DELETE FROM members WHERE id = ?',
         [id],
         function(err) {
-          db.close();
-          
           if (err) {
             return res.status(500).json({ error: 'Erro ao deletar membro' });
           }
@@ -193,8 +168,6 @@ router.delete('/:id', (req, res) => {
 
 // Obter estatísticas dos membros
 router.get('/stats/overview', (req, res) => {
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        status,
@@ -202,8 +175,6 @@ router.get('/stats/overview', (req, res) => {
      FROM members 
      GROUP BY status`,
     (err, stats) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar estatísticas' });
       }
@@ -242,8 +213,6 @@ router.get('/:id/contributions', (req, res) => {
     params.push(end_date);
   }
   
-  const db = new sqlite3.Database(dbPath);
-  
   db.all(
     `SELECT 
        t.*,
@@ -255,8 +224,6 @@ router.get('/:id/contributions', (req, res) => {
      ORDER BY t.transaction_date DESC`,
     params,
     (err, contributions) => {
-      db.close();
-      
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar contribuições' });
       }

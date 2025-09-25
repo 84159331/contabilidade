@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../database');
 const bcrypt = require('bcryptjs');
 const { authenticateToken, requireRole } = require('../middleware/auth');
-
-const dbPath = path.join(__dirname, '../../database/igreja.db');
 
 // Middleware para todas as rotas deste arquivo: requer autenticação e papel de 'admin'
 router.use(authenticateToken, requireRole(['admin']));
 
 // Rota para listar todos os usuários
 router.get('/', (req, res) => {
-  const db = new sqlite3.Database(dbPath);
   db.all('SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC', [], (err, rows) => {
-    db.close();
     if (err) {
       return res.status(500).json({ error: 'Erro ao buscar usuários', details: err.message });
     }
@@ -35,12 +30,10 @@ router.post('/', (req, res) => {
   }
 
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const db = new sqlite3.Database(dbPath);
 
   const sql = `INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`;
   db.run(sql, [username, email, hashedPassword, role], function(err) {
     if (err) {
-      db.close();
       // Trata erro de unicidade
       if (err.message.includes('UNIQUE constraint failed')) {
         return res.status(409).json({ error: 'Nome de usuário ou email já cadastrado.' });
@@ -50,7 +43,6 @@ router.post('/', (req, res) => {
     
     // Retorna o usuário recém-criado (sem a senha)
     db.get('SELECT id, username, email, role, created_at FROM users WHERE id = ?', [this.lastID], (err, row) => {
-      db.close();
       if (err) {
         return res.status(500).json({ error: 'Erro ao buscar usuário recém-criado' });
       }
@@ -68,9 +60,7 @@ router.delete('/:id', (req, res) => {
     return res.status(400).json({ error: 'Você não pode deletar seu próprio usuário.' });
   }
 
-  const db = new sqlite3.Database(dbPath);
   db.run('DELETE FROM users WHERE id = ?', [id], function(err) {
-    db.close();
     if (err) {
       return res.status(500).json({ error: 'Erro ao deletar usuário', details: err.message });
     }
