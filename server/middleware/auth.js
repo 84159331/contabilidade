@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../database');
 
@@ -48,7 +49,12 @@ const requireRole = (roles) => {
   };
 };
 
+const hashPassword = async (password) => {
+  return await bcrypt.hash(password, 10);
+};
+
 module.exports = {
   authenticateToken,
-  requireRole
+  requireRole,
+  hashPassword
 };

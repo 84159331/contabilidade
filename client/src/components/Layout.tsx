@@ -39,15 +39,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
   const navigation: NavItem[] = [
-    { type: 'link', name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+    { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Gerenciar' },
-    { type: 'link', name: 'Transações', href: '/transactions', icon: CurrencyDollarIcon },
-    { type: 'link', name: 'Membros', href: '/members', icon: UsersIcon },
-    { type: 'link', name: 'Categorias', href: '/categories', icon: TagIcon },
+    { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
+    { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
+    { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
     { type: 'heading', name: 'Analisar' },
-    { type: 'link', name: 'Relatórios', href: '/reports', icon: ChartBarIcon },
+    { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'heading', name: 'Administração' },
-    { type: 'link', name: 'Usuários', href: '/users', icon: ShieldCheckIcon },
+    { type: 'link', name: 'Usuários', href: '/tesouraria/users', icon: ShieldCheckIcon },
   ];
 
   const isCurrentPath = (path: string) => {

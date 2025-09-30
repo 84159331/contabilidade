@@ -12,7 +12,11 @@ interface CategoryData {
   average_amount: number;
 }
 
-const CategoryReport: React.FC = () => {
+interface Props {
+  onDataLoaded: (data: any[]) => void;
+}
+
+const CategoryReport: React.FC<Props> = ({ onDataLoaded }) => {
   const [incomeData, setIncomeData] = useState<CategoryData[]>([]);
   const [expenseData, setExpenseData] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -51,6 +55,13 @@ const CategoryReport: React.FC = () => {
       
       setIncomeData(incomeResponse.data);
       setExpenseData(expenseResponse.data);
+
+      const combinedData = [
+        ...incomeResponse.data.map((d: any) => ({ ...d, 'Tipo': 'Receita' })),
+        ...expenseResponse.data.map((d: any) => ({ ...d, 'Tipo': 'Despesa' }))
+      ];
+      onDataLoaded(combinedData);
+
     } catch (error) {
       toast.error('Erro ao carregar relatório por categoria');
       console.error('Erro ao carregar relatório:', error);

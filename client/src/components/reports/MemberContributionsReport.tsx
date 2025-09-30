@@ -16,7 +16,11 @@ interface MemberContribution {
   last_contribution: string;
 }
 
-const MemberContributionsReport: React.FC = () => {
+interface Props {
+  onDataLoaded: (data: MemberContribution[]) => void;
+}
+
+const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
   const [data, setData] = useState<MemberContribution[]>([]);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -46,6 +50,7 @@ const MemberContributionsReport: React.FC = () => {
         end_date: endDate
       });
       setData(response.data);
+      onDataLoaded(response.data);
     } catch (error) {
       toast.error('Erro ao carregar relatório de contribuições');
       console.error('Erro ao carregar relatório:', error);

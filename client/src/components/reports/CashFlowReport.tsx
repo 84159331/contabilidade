@@ -12,7 +12,11 @@ interface CashFlowData {
   balance: number;
 }
 
-const CashFlowReport: React.FC = () => {
+interface Props {
+  onDataLoaded: (data: CashFlowData[]) => void;
+}
+
+const CashFlowReport: React.FC<Props> = ({ onDataLoaded }) => {
   const [data, setData] = useState<CashFlowData[]>([]);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -44,6 +48,7 @@ const CashFlowReport: React.FC = () => {
         period
       });
       setData(response.data);
+      onDataLoaded(response.data);
     } catch (error) {
       toast.error('Erro ao carregar relatório de fluxo de caixa');
       console.error('Erro ao carregar relatório:', error);

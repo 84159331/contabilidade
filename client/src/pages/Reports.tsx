@@ -7,12 +7,14 @@ import MemberContributionsReport from '../components/reports/MemberContributions
 import CategoryReport from '../components/reports/CategoryReport';
 import CashFlowReport from '../components/reports/CashFlowReport';
 import { generatePdf } from '../utils/pdf';
+import { exportToCsv } from '../utils/export';
 
 type ReportType = 'monthly' | 'yearly' | 'contributions' | 'categories' | 'cashflow';
 
 const Reports: React.FC = () => {
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
+  const [reportData, setReportData] = useState<any>(null);
   const reportContainerRef = useRef<HTMLDivElement>(null);
 
   const reports = [
@@ -48,6 +50,10 @@ const Reports: React.FC = () => {
     }
   ];
 
+  const handleSetReportData = (data: any) => {
+    setReportData(data);
+  };
+
   const handleGeneratePdf = async () => {
     if (reportContainerRef.current) {
       const reportName = reports.find(r => r.id === activeReport)?.name || 'relatorio';
@@ -55,20 +61,53 @@ const Reports: React.FC = () => {
     }
   };
 
+  const handleGenerateCsv = () => {
+    if (reportData) {
+      const reportName = reports.find(r => r.id === activeReport)?.name || 'relatorio';
+      let dataToExport: any[] = [];
+
+      if (activeReport === 'monthly' && reportData) {
+        dataToExport = [
+          {
+            'Tipo': 'Receitas',
+            'Total': reportData.income.total,
+            'Transações': reportData.income.count
+          },
+          {
+            'Tipo': 'Despesas',
+            'Total': reportData.expense.total,
+            'Transações': reportData.expense.count
+          },
+          {
+            'Tipo': 'Saldo',
+            'Total': reportData.balance,
+            'Transações': reportData.income.count + reportData.expense.count
+          }
+        ];
+      } else if (Array.isArray(reportData)) {
+        dataToExport = reportData;
+      }
+
+      if (dataToExport.length > 0) {
+        exportToCsv(`${reportName}.csv`, dataToExport);
+      }
+    }
+  };
+
   const renderReport = () => {
     switch (activeReport) {
       case 'monthly':
-        return <MonthlyBalanceReport />;
+        return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'yearly':
-        return <YearlyBalanceReport />;
+        return <YearlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'contributions':
-        return <MemberContributionsReport />;
+        return <MemberContributionsReport onDataLoaded={handleSetReportData} />;
       case 'categories':
-        return <CategoryReport />;
+        return <CategoryReport onDataLoaded={handleSetReportData} />;
       case 'cashflow':
-        return <CashFlowReport />;
+        return <CashFlowReport onDataLoaded={handleSetReportData} />;
       default:
-        return <MonthlyBalanceReport />;
+        return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
     }
   };
 
@@ -91,7 +130,10 @@ const Reports: React.FC = () => {
               return (
                 <button
                   key={report.id}
-                  onClick={() => setActiveReport(report.id)}
+                  onClick={() => {
+                    setActiveReport(report.id);
+                    setReportData(null);
+                  }}
                   className={`${
                     activeReport === report.id
                       ? 'border-primary-500 text-primary-600'
@@ -116,13 +158,15 @@ const Reports: React.FC = () => {
                 {reports.find(r => r.id === activeReport)?.description}
               </p>
             </div>
-            <button
-              onClick={handleGeneratePdf}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            >
-              <DocumentArrowDownIcon className="h-4 w-4" />
-              Gerar PDF
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleGeneratePdf}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                <DocumentArrowDownIcon className="h-4 w-4" />
+                Gerar PDF
+              </button>
+            </div>
           </div>
 
           {loading ? (

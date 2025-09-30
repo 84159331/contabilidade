@@ -23,7 +23,11 @@ interface YearlyBalance {
   };
 }
 
-const YearlyBalanceReport: React.FC = () => {
+interface Props {
+  onDataLoaded: (data: MonthlyData[]) => void;
+}
+
+const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const [data, setData] = useState<YearlyBalance | null>(null);
   const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -37,6 +41,7 @@ const YearlyBalanceReport: React.FC = () => {
       setLoading(true);
       const response = await reportsAPI.getYearlyBalance(year);
       setData(response.data);
+      onDataLoaded(response.data.monthlyData);
     } catch (error) {
       toast.error('Erro ao carregar relatório anual');
       console.error('Erro ao carregar relatório:', error);
