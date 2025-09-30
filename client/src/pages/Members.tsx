@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MemberForm from '../components/MemberForm';
 import MemberList from '../components/MemberList';
+import Modal from '../components/Modal';
 
 interface Member {
   id: number;
@@ -74,6 +75,7 @@ const Members: React.FC = () => {
       await membersAPI.updateMember(id, memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
+      setShowForm(false);
       loadMembers();
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Erro ao atualizar membro');
@@ -185,16 +187,20 @@ const Members: React.FC = () => {
       />
 
       {/* Member Form Modal */}
-      {showForm && (
+      <Modal
+        isOpen={showForm}
+        onClose={handleCloseForm}
+        title={editingMember ? 'Editar Membro' : 'Novo Membro'}
+      >
         <MemberForm
           member={editingMember}
           onSave={editingMember ? 
-            (data) => handleUpdateMember(editingMember.id, data) : 
+            (data) => handleUpdateMember(editingMember.id, data) :
             handleCreateMember
           }
           onClose={handleCloseForm}
         />
-      )}
+      </Modal>
     </div>
   );
 };
