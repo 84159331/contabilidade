@@ -52,7 +52,17 @@ const ConnectPage: React.FC = () => {
               {cellGroups.map((group, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
                   {group.image ? (
-                    <img src={group.image} alt={group.title} className="w-full h-48 object-cover" />
+                    <img 
+                      src={group.image} 
+                      alt={group.title} 
+                      className="w-full h-48 object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        if (e.currentTarget.parentElement) {
+                          e.currentTarget.parentElement.innerHTML = '<div class="bg-gray-200 h-48 flex items-center justify-center"><p class="text-gray-500">Imagem do Grupo</p></div>';
+                        }
+                      }}
+                    />
                   ) : (
                     <div className="bg-gray-200 h-48 flex items-center justify-center">
                       <p className="text-gray-500">Imagem do Grupo</p>

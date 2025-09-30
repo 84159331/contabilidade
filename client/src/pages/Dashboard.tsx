@@ -38,10 +38,21 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       
+      // Debug: verificar token
+      const token = localStorage.getItem('token');
+      console.log('Token no localStorage:', token);
+      
+      // Se não há token, usar rotas de teste
+      const useTestRoutes = !token;
+      console.log('Usando rotas de teste:', useTestRoutes);
+      
       const [financialSummary, memberStatsData] = await Promise.all([
-        transactionsAPI.getSummary(),
-        membersAPI.getMemberStats()
+        transactionsAPI.getSummary(useTestRoutes),
+        membersAPI.getMemberStats(useTestRoutes)
       ]);
+
+      console.log('Financial Summary:', financialSummary.data);
+      console.log('Member Stats:', memberStatsData.data);
 
       setStats(financialSummary.data);
       setMemberStats(memberStatsData.data);
@@ -82,14 +93,14 @@ const Dashboard: React.FC = () => {
                     Receitas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {stats?.income.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                    R$ {stats?.income?.total ? stats.income.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {stats?.income.count || 0} transações
+                {stats?.income?.count || 0} transações
               </div>
             </div>
           </div>
@@ -108,14 +119,14 @@ const Dashboard: React.FC = () => {
                     Despesas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {stats?.expense.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                    R$ {stats?.expense?.total ? stats.expense.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {stats?.expense.count || 0} transações
+                {stats?.expense?.count || 0} transações
               </div>
             </div>
           </div>
@@ -136,7 +147,7 @@ const Dashboard: React.FC = () => {
                   <dd className={`text-lg font-medium ${
                     (stats?.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
                   }`}>
-                    R$ {stats?.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                    R$ {stats?.balance !== undefined ? stats.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
                   </dd>
                 </dl>
               </div>

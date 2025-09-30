@@ -51,7 +51,7 @@
   }
   
   .badge-success {
-    @apply bg-green text-white;
+    @apply bg-blue text-white;
   }
   
   .badge-danger {

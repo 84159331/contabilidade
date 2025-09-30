@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
+
+const FaFacebookIcon = FaFacebook as any;
+const FaInstagramIcon = FaInstagram as any;
+const FaYoutubeIcon = FaYoutube as any;
 
 const PublicLayout: React.FC = () => {
   return (
@@ -8,7 +13,11 @@ const PublicLayout: React.FC = () => {
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold font-heading">
-            <img src="/img/LOGO NOME.png" alt="Comunidade Cristã Resgate" className="h-10" />
+            <img 
+              src="/img/LOGO NOME.png" 
+              alt="Comunidade Cristã Resgate" 
+              className="h-10"
+            />
           </Link>
           <div className="hidden md:flex space-x-6 items-center font-heading">
             <Link to="/sobre" className="hover:text-blue">Sobre</Link>
@@ -37,7 +46,14 @@ const PublicLayout: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-bold font-heading mb-4">Comunidade Cristã Resgate</h3>
+              <div className="flex items-center mb-4">
+                <img 
+                  src="/img/LOGO ICONE [BRANCO].png" 
+                  alt="Resgate" 
+                  className="h-8 w-8 mr-3"
+                />
+                <h3 className="text-xl font-bold font-heading">Comunidade Cristã Resgate</h3>
+              </div>
               <p className="text-gray-light">Um lugar de fé, comunidade e transparência.</p>
             </div>
             <div>
@@ -46,7 +62,7 @@ const PublicLayout: React.FC = () => {
                 <li><Link to="/sobre" className="hover:text-blue">Sobre</Link></li>
                 <li><Link to="/conecte" className="hover:text-blue">Conecte-se</Link></li>
                 <li><Link to="/eventos" className="hover:text-blue">Eventos</Link></li>
-                <li><a href="http://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-blue">Assista</a></li>
+                <li><a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-blue">Assista</a></li>
                 <li><Link to="/contribua" className="hover:text-blue">Contribua</Link></li>
                 <li><Link to="/localizacoes" className="hover:text-blue">Localização</Link></li>
               </ul>
@@ -60,11 +76,14 @@ const PublicLayout: React.FC = () => {
             <div>
               <h3 className="text-lg font-bold font-heading mb-4">Redes Sociais</h3>
               <div className="flex space-x-4">
-                <a href="https://www.facebook.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue">
-                  <img src="/img/facebook.svg" alt="Facebook" className="h-6 w-6" />
+                <a href="https://www.facebook.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-white hover:text-blue">
+                  <FaFacebookIcon className="h-6 w-6" />
                 </a>
-                <a href="https://www.instagram.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-blue">
-                  <img src="/img/instagram.svg" alt="Instagram" className="h-6 w-6" />
+                <a href="https://www.instagram.com/comunidadecresgate/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-white hover:text-blue">
+                  <FaInstagramIcon className="h-6 w-6" />
+                </a>
+                <a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-white hover:text-blue">
+                  <FaYoutubeIcon className="h-6 w-6" />
                 </a>
               </div>
             </div>

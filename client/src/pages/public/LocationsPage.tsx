@@ -1,15 +1,30 @@
 import React from 'react';
+import SafeImage from '../../components/SafeImage';
 
 const LocationsPage: React.FC = () => {
   return (
     <div className="py-16">
       <div className="container mx-auto px-6 text-center">
+        <div className="mb-6">
+          <SafeImage 
+            src="/img/ICONE-RESGATE.png" 
+            alt="Localização" 
+            className="mx-auto h-16 w-16 mb-4"
+          />
+        </div>
         <h1 className="text-4xl font-bold font-heading mb-4">Nossa Localização</h1>
         <p className="text-lg text-gray-darkest mb-8">
           Encontre-nos e venha nos visitar!
         </p>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="mb-4">
+            <SafeImage 
+              src="/img/LOGO ICONE.png" 
+              alt="Sede" 
+              className="mx-auto h-12 w-12 mb-4"
+            />
+          </div>
           <h2 className="text-2xl font-bold font-heading mb-4">Comunidade Cristã Resgate - Sede</h2>
           <p className="text-gray-darkest mb-4">
             <strong>Endereço:</strong> Quadra 38, Área Especial, Lote E, Vila São José, Brasília - DF, 72010-010

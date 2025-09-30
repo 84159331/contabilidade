@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SafeImage from '../../components/SafeImage';
 
 const dailyStudies = [
   {
@@ -52,18 +53,17 @@ const HomePage: React.FC = () => {
     <div>
       {/* Hero Section */}
       <div
-        className="relative h-screen flex items-center justify-center text-white overflow-hidden"
+        className="relative h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800"
       >
-        <video
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          src="/img/da5e4f28-834a-48dc-9916-25e205b5d17e.mp4.png"
-          autoPlay
-          loop
-          muted
-          playsInline
-        ></video>
-        <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
+        <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
         <div className="relative z-20 text-center">
+          <div className="mb-6">
+            <SafeImage 
+              src="/img/ICONE-RESGATE.png" 
+              alt="Comunidade Cristã Resgate" 
+              className="mx-auto h-20 w-20 mb-4 opacity-90"
+            />
+          </div>
           <h1 className="text-5xl font-bold font-heading mb-4">Bem-vindo à Comunidade Cristã Resgate</h1>
           <p className="text-xl mb-8">Um lugar para pertencer, acreditar e se tornar.</p>
           <Link to="/sobre" className="btn btn-primary text-lg py-3 px-8">
@@ -95,19 +95,25 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-bold font-heading text-center mb-8">Na Comunidade Cristã Resgate</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gray-200 h-48 flex items-center justify-center">
-                <p className="text-gray-500">Imagem de Mensagens</p>
-              </div>
+              <SafeImage 
+                src="/img/ICONE-RESGATE.png" 
+                alt="Mensagens" 
+                className="h-48 w-full object-cover"
+                fallbackText="Imagem de Mensagens"
+              />
               <div className="p-6">
                 <h3 className="text-xl font-bold font-heading mb-2">Mensagens</h3>
                 <p className="text-gray-darkest mb-4">Assista às nossas mensagens mais recentes.</p>
-                <a href="http://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="text-blue font-bold hover:underline">Assista Agora</a>
+                <a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="text-blue font-bold hover:underline">Assista Agora</a>
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gray-200 h-48 flex items-center justify-center">
-                <p className="text-gray-500">Imagem de Grupo Celular</p>
-              </div>
+              <SafeImage 
+                src="/img/ICONE-RESGATE.png" 
+                alt="Grupo Celular" 
+                className="h-48 w-full object-cover"
+                fallbackText="Imagem de Grupo Celular"
+              />
               <div className="p-6">
                 <h3 className="text-xl font-bold font-heading mb-2">Grupo Celular</h3>
                 <p className="text-gray-darkest mb-4">Encontre comunidade e cresça na fé.</p>
@@ -115,9 +121,12 @@ const HomePage: React.FC = () => {
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gray-200 h-48 flex items-center justify-center">
-                <p className="text-gray-500">Imagem de Eventos</p>
-              </div>
+              <SafeImage 
+                src="/img/ICONE-RESGATE.png" 
+                alt="Eventos" 
+                className="h-48 w-full object-cover"
+                fallbackText="Imagem de Eventos"
+              />
               <div className="p-6">
                 <h3 className="text-xl font-bold font-heading mb-2">Eventos</h3>
                 <p className="text-gray-darkest mb-4">Veja o que está acontecendo em nossa igreja.</p>
@@ -131,6 +140,13 @@ const HomePage: React.FC = () => {
       {/* About Us Section */}
       <div className="py-16 bg-gray-light">
         <div className="container mx-auto px-6 text-center">
+          <div className="mb-6">
+            <SafeImage 
+              src="/img/LOGO ICONE.png" 
+              alt="Comunidade Cristã Resgate" 
+              className="mx-auto h-16 w-16 mb-4"
+            />
+          </div>
           <h2 className="text-3xl font-bold font-heading mb-4">Sobre Nós</h2>
           <p className="max-w-3xl mx-auto text-gray-darkest mb-6">
             A Comunidade Cristã Resgate é uma igreja que ama a Deus e as pessoas. 
@@ -145,6 +161,13 @@ const HomePage: React.FC = () => {
       {/* Locations Section */}
       <div className="py-16">
         <div className="container mx-auto px-6 text-center">
+          <div className="mb-6">
+            <SafeImage 
+              src="/img/LOGO ICONE.png" 
+              alt="Localização" 
+              className="mx-auto h-12 w-12 mb-4"
+            />
+          </div>
           <h2 className="text-3xl font-bold font-heading mb-4">Nossa Localização</h2>
           <p className="max-w-3xl mx-auto text-gray-darkest mb-6">
             Temos várias localizações para melhor servir você. Encontre a mais próxima!

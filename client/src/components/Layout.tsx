@@ -87,7 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-green-200">
+    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-blue-200">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -99,7 +99,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               rel="noopener noreferrer"
               className="flex items-center gap-x-3 group"
             >
-              <UserGroupIcon className="h-6 w-6 text-gray-400 group-hover:text-primary-600 transition-colors" />
+              <img 
+              src="/img/ICONE-RESGATE.png" 
+              alt="Resgate" 
+              className="h-6 w-6 group-hover:opacity-80 transition-opacity"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
               <h1 className="text-lg font-bold text-gray-700 group-hover:text-primary-600 transition-colors">
                 Tesouraria Resgate
               </h1>
@@ -126,7 +133,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             rel="noopener noreferrer"
             className="flex h-16 items-center gap-x-3 px-4 group"
           >
-            <UserGroupIcon className="h-6 w-6 text-gray-400 group-hover:text-primary-600 transition-colors" />
+            <img 
+              src="/img/ICONE-RESGATE.png" 
+              alt="Resgate" 
+              className="h-6 w-6 group-hover:opacity-80 transition-opacity"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
             <h1 className="text-lg font-bold text-gray-700 group-hover:text-primary-600 transition-colors">
               Tesouraria Resgate
             </h1>

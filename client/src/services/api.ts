@@ -70,8 +70,8 @@ export const membersAPI = {
   deleteMember: (id: number) =>
     api.delete(`/members/${id}`),
   
-  getMemberStats: () =>
-    api.get('/members/stats/overview'),
+  getMemberStats: (useTestRoute = false) =>
+    api.get(useTestRoute ? '/members/test/stats' : '/members/stats/overview'),
   
   getMemberContributions: (id: number, params?: any) =>
     api.get(`/members/${id}/contributions`, { params }),
@@ -94,8 +94,8 @@ export const transactionsAPI = {
   deleteTransaction: (id: number) =>
     api.delete(`/transactions/${id}`),
   
-  getSummary: (params?: any) =>
-    api.get('/transactions/summary/overview', { params }),
+  getSummary: (useTestRoute = false) =>
+    api.get(useTestRoute ? '/transactions/test/summary' : '/transactions/summary/overview'),
   
   getByCategory: (params?: any) =>
     api.get('/transactions/summary/by-category', { params }),

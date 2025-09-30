@@ -1,4 +1,5 @@
 import React from 'react';
+import SafeImage from '../../components/SafeImage';
 
 const ContactPage: React.FC = () => {
   return (
@@ -9,6 +10,13 @@ const ContactPage: React.FC = () => {
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center">
+          <div className="mb-6">
+            <SafeImage 
+              src="/img/ICONE-RESGATE.png" 
+              alt="Contato" 
+              className="mx-auto h-20 w-20 mb-4 opacity-90"
+            />
+          </div>
           <h1 className="text-5xl font-bold font-heading">Contato</h1>
         </div>
       </div>
@@ -17,6 +25,13 @@ const ContactPage: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
+              <div className="mb-6">
+                <SafeImage 
+                  src="/img/LOGO ICONE.png" 
+                  alt="Fale Conosco" 
+                  className="h-12 w-12 mb-4"
+                />
+              </div>
               <h2 className="text-3xl font-bold font-heading mb-4">Fale Conosco</h2>
               <form>
                 <div className="mb-4">
@@ -37,6 +52,13 @@ const ContactPage: React.FC = () => {
               </form>
             </div>
             <div>
+              <div className="mb-6">
+                <SafeImage 
+                  src="/img/LOGO ICONE.png" 
+                  alt="Localização" 
+                  className="h-12 w-12 mb-4"
+                />
+              </div>
               <h2 className="text-3xl font-bold font-heading mb-4">Nossa Localização</h2>
               <div className="space-y-4 text-gray-darkest">
                 <p>
