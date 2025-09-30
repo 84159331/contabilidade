@@ -17,6 +17,7 @@ interface User {
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   // Função para carregar os usuários da API
   const loadUsers = useCallback(async () => {
@@ -43,6 +44,7 @@ const Users: React.FC = () => {
       await usersAPI.createUser(formData);
       toast.success('Usuário criado com sucesso!');
       loadUsers(); // Recarrega a lista de usuários
+      setShowForm(false);
     } catch (error: any) {
       const errorMessage = error.response?.data?.error || 'Erro ao criar usuário.';
       toast.error(errorMessage);
@@ -77,12 +79,41 @@ const Users: React.FC = () => {
             Adicione, visualize e gerencie os usuários administradores do sistema.
           </p>
         </div>
-        {/* Formulário para adicionar novo usuário (direto na página) */}
-        <UserForm onSubmit={handleCreateUser} />
+        <button
+          onClick={() => setShowForm(true)}
+          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-700"
+        >
+          Novo Usuário
+        </button>
       </div>
 
       {/* Lista de usuários existentes */}
       {loading ? <LoadingSpinner /> : <UserList users={users} onDelete={handleDeleteUser} />}
+
+      {/* Modal de criação de usuário */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowForm(false)}></div>
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-800">Adicionar Novo Usuário</h2>
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="px-2 py-1 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none"
+                  aria-label="Fechar"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="p-6">
+                <UserForm onSubmit={handleCreateUser} onCancel={() => setShowForm(false)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
