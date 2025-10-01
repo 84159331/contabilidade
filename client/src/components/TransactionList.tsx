@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -235,4 +235,4 @@ const TransactionList: React.FC<TransactionListProps> = ({
   );
 };
 
-export default TransactionList;
+export default memo(TransactionList);

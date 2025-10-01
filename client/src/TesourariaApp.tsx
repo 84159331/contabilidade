@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Members from './pages/Members';
-import Transactions from './pages/Transactions';
-import Reports from './pages/Reports';
-import Categories from './pages/Categories';
-import CellGroupsAdmin from './pages/CellGroupsAdmin';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
+import PageSkeleton from './components/PageSkeleton';
+import SmartLoading from './components/SmartLoading';
+
+// Lazy loading para componentes pesados
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Members = lazy(() => import('./pages/Members'));
+const Transactions = lazy(() => import('./pages/Transactions'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Categories = lazy(() => import('./pages/Categories'));
+const CellGroupsAdmin = lazy(() => import('./pages/CellGroupsAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -29,16 +33,20 @@ function TesourariaApp() {
 
   return (
     <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate to="dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="members" element={<Members />} />
-        <Route path="transactions" element={<Transactions />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="categories" element={<Categories />} />
-        <Route path="cell-groups" element={<CellGroupsAdmin />} />
-        <Route path="*" element={<Navigate to="dashboard" replace />} />
-      </Routes>
+      <Suspense fallback={<PageSkeleton type="dashboard" />}>
+        <SmartLoading>
+          <Routes>
+            <Route path="/" element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="members" element={<Members />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="cell-groups" element={<CellGroupsAdmin />} />
+            <Route path="*" element={<Navigate to="dashboard" replace />} />
+          </Routes>
+        </SmartLoading>
+      </Suspense>
     </Layout>
   );
 }

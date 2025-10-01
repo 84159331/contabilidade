@@ -3,6 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { NotificationCenter } from '../contexts/NotificationContext';
 import ThemeToggle from './ThemeToggle';
+import TabTransition from './TabTransition';
+import { motion } from 'framer-motion';
+import { usePreloadComponents } from '../hooks/usePreloadComponents';
 import { 
   HomeIcon, 
   UsersIcon, 
@@ -40,6 +43,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  
+  // Pré-carrega componentes baseado na navegação
+  usePreloadComponents();
 
   const navigation: NavItem[] = [
     { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
@@ -191,7 +197,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Page content */}
         <main className="py-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {children}
+            <TabTransition key={location.pathname}>
+              {children}
+            </TabTransition>
           </div>
         </main>
       </div>

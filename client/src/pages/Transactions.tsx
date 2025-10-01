@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
+import { useDebounce } from '../hooks/useDebounce';
 
 interface Transaction {
   id: number;
@@ -48,6 +49,9 @@ const Transactions: React.FC = () => {
     start_date: '',
     end_date: ''
   });
+
+  // Debounce da busca para evitar muitas requisições
+  const debouncedSearch = useDebounce(filters.search, 300);
   const [showForm, setShowForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [pagination, setPagination] = useState({
@@ -59,9 +63,16 @@ const Transactions: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, [filters, pagination.page]);
+  }, [loadData]);
 
-  const loadData = async () => {
+  // Efeito separado para busca com debounce
+  useEffect(() => {
+    if (debouncedSearch !== filters.search) {
+      setFilters(prev => ({ ...prev, search: debouncedSearch }));
+    }
+  }, [debouncedSearch, filters.search]);
+
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -85,9 +96,9 @@ const Transactions: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, pagination.page, pagination.limit]);
 
-  const handleCreateTransaction = async (transactionData: any) => {
+  const handleCreateTransaction = useCallback(async (transactionData: any) => {
     try {
       await transactionsAPI.createTransaction(transactionData);
       toast.success('Transação criada com sucesso!');
@@ -96,9 +107,9 @@ const Transactions: React.FC = () => {
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Erro ao criar transação');
     }
-  };
+  }, [loadData]);
 
-  const handleUpdateTransaction = async (id: number, transactionData: any) => {
+  const handleUpdateTransaction = useCallback(async (id: number, transactionData: any) => {
     try {
       await transactionsAPI.updateTransaction(id, transactionData);
       toast.success('Transação atualizada com sucesso!');
@@ -107,7 +118,7 @@ const Transactions: React.FC = () => {
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Erro ao atualizar transação');
     }
-  };
+  }, [loadData]);
 
   const handleDeleteTransaction = async (id: number) => {
     if (window.confirm('Tem certeza que deseja deletar esta transação?')) {
