@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
 
 interface Transaction {
   id: number;
@@ -100,7 +98,7 @@ const RecentTransactions: React.FC = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {format(new Date(transaction.transaction_date), 'dd/MM/yyyy', { locale: ptBR })}
+                  {new Date(transaction.transaction_date).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <span className={`${

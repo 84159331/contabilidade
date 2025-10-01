@@ -1,7 +1,5 @@
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
 
 interface Member {
   id: number;
@@ -113,7 +111,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {member.member_since ? 
-                    format(new Date(member.member_since), 'dd/MM/yyyy', { locale: ptBR }) : 
+                    new Date(member.member_since).toLocaleDateString('pt-BR') : 
                     '-'
                   }
                 </td>

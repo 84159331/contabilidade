@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 
 interface CashFlowData {
@@ -59,12 +57,12 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded }) => {
 
   const formatPeriod = (periodStr: string) => {
     if (period === 'daily') {
-      return format(new Date(periodStr), 'dd/MM/yyyy', { locale: ptBR });
+      return new Date(periodStr).toLocaleDateString('pt-BR');
     } else if (period === 'weekly') {
       return `Semana ${periodStr}`;
     } else {
       const [year, month] = periodStr.split('-');
-      return format(new Date(parseInt(year), parseInt(month) - 1), 'MMMM yyyy', { locale: ptBR });
+      return new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
     }
   };
 

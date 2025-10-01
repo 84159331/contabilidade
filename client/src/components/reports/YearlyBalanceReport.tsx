@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 
 interface MonthlyData {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { DocumentArrowDownIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 
 interface MonthlyBalance {
@@ -58,7 +56,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
     );
   }
 
-  const monthName = format(new Date(year, month - 1), 'MMMM', { locale: ptBR });
+  const monthName = new Date(year, month - 1).toLocaleDateString('pt-BR', { month: 'long' });
   const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
   return (
@@ -97,7 +95,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
           >
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i + 1} value={i + 1}>
-                {format(new Date(year, i), 'MMMM', { locale: ptBR })}
+                {new Date(year, i).toLocaleDateString('pt-BR', { month: 'long' })}
               </option>
             ))}
           </select>

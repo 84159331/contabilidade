@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 
 interface MemberContribution {
@@ -250,10 +248,10 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
                       R$ {member.average_contribution.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {format(new Date(member.first_contribution), 'dd/MM/yyyy', { locale: ptBR })}
+                      {new Date(member.first_contribution).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {format(new Date(member.last_contribution), 'dd/MM/yyyy', { locale: ptBR })}
+                      {new Date(member.last_contribution).toLocaleDateString('pt-BR')}
                     </td>
                   </tr>
                 ))}

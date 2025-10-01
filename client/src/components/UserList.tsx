@@ -1,5 +1,4 @@
 import React from 'react';
-import { format } from 'date-fns';
 import { TrashIcon } from '@heroicons/react/24/outline'; // Adicionado
 
 interface User {
@@ -68,7 +67,7 @@ const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {format(new Date(user.created_at), 'dd/MM/yyyy HH:mm')}
+                    {new Date(user.created_at).toLocaleDateString('pt-BR')} {new Date(user.created_at).toLocaleTimeString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button

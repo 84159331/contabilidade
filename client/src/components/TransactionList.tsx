@@ -1,7 +1,5 @@
 import React, { memo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
 
 interface Transaction {
   id: number;
@@ -121,7 +119,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {format(new Date(transaction.transaction_date), 'dd/MM/yyyy', { locale: ptBR })}
+                  {new Date(transaction.transaction_date).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <span className={`${
