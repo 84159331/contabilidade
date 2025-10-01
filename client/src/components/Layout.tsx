@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { NotificationCenter } from '../contexts/NotificationContext';
 import ThemeToggle from './ThemeToggle';
 import TabTransition from './TabTransition';
-import { motion } from 'framer-motion';
 import { usePreloadComponents } from '../hooks/usePreloadComponents';
 import { 
   HomeIcon, 

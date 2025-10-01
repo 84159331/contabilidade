@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
-import { useDebounce } from '../hooks/useDebounce';
+import useDebounce from '../hooks/useDebounce';
 
 interface Transaction {
   id: number;
@@ -61,17 +61,6 @@ const Transactions: React.FC = () => {
     pages: 0
   });
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  // Efeito separado para busca com debounce
-  useEffect(() => {
-    if (debouncedSearch !== filters.search) {
-      setFilters(prev => ({ ...prev, search: debouncedSearch }));
-    }
-  }, [debouncedSearch, filters.search]);
-
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
@@ -97,6 +86,17 @@ const Transactions: React.FC = () => {
       setLoading(false);
     }
   }, [filters, pagination.page, pagination.limit]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  // Efeito separado para busca com debounce
+  useEffect(() => {
+    if (debouncedSearch !== filters.search) {
+      setFilters(prev => ({ ...prev, search: debouncedSearch }));
+    }
+  }, [debouncedSearch, filters.search]);
 
   const handleCreateTransaction = useCallback(async (transactionData: any) => {
     try {
