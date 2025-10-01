@@ -1,7 +1,7 @@
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale/pt-BR';
+import ptBR from 'date-fns/locale/pt-BR';
 
 interface Member {
   id: number;
@@ -30,6 +30,7 @@ interface MemberListProps {
   pagination: Pagination;
   onEdit: (member: Member) => void;
   onDelete: (id: number) => void;
+  isDeleting?: boolean;
   onPageChange: (page: number) => void;
 }
 
@@ -39,6 +40,7 @@ const MemberList: React.FC<MemberListProps> = ({
   pagination,
   onEdit,
   onDelete,
+  isDeleting = false,
   onPageChange
 }) => {
   if (loading && members.length === 0) {
@@ -133,10 +135,15 @@ const MemberList: React.FC<MemberListProps> = ({
                     </button>
                     <button
                       onClick={() => onDelete(member.id)}
-                      className="text-danger-600 hover:text-danger-900"
+                      disabled={isDeleting}
+                      className={`text-danger-600 hover:text-danger-900 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title="Deletar"
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      {isDeleting ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
+                      ) : (
+                        <TrashIcon className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
                 </td>

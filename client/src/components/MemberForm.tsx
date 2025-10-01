@@ -17,9 +17,10 @@ interface MemberFormProps {
   member?: Member | null;
   onSave: (data: any) => void;
   onClose: () => void;
+  isSaving?: boolean;
 }
 
-const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose }) => {
+const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSaving = false }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -237,6 +238,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose }) => {
         <Button
           type="submit"
           className="sm:ml-3 sm:w-auto w-full"
+          loading={isSaving}
         >
           {member ? 'Atualizar' : 'Criar'}
         </Button>

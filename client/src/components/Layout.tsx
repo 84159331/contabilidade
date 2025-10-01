@@ -10,10 +10,7 @@ import {
   ChartBarIcon, 
   TagIcon,
   ShieldCheckIcon,
-  EnvelopeIcon,
   ChatBubbleLeftRightIcon,
-  CloudArrowUpIcon,
-  CpuChipIcon,
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
@@ -52,12 +49,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
-    { type: 'link', name: 'Relatórios Automáticos', href: '/tesouraria/automated-reports', icon: EnvelopeIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
-    { type: 'link', name: 'Backup', href: '/tesouraria/backup', icon: CloudArrowUpIcon },
-    { type: 'link', name: 'Análise Preditiva', href: '/tesouraria/predictive-analysis', icon: CpuChipIcon },
     { type: 'heading', name: 'Administração' },
     { type: 'link', name: 'Usuários', href: '/tesouraria/users', icon: ShieldCheckIcon },
+    { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
   ];
 
   const isCurrentPath = (path: string) => {

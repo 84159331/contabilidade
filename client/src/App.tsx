@@ -17,7 +17,7 @@ function App() {
   return (
     <ThemeProvider>
       <NotificationProvider>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route element={<PublicLayout />}>
               <Route path="/" element={<HomePage />} />

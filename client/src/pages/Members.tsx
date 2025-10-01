@@ -29,6 +29,9 @@ const Members: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [showForm, setShowForm] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -62,17 +65,21 @@ const Members: React.FC = () => {
 
   const handleCreateMember = async (memberData: any) => {
     try {
+      setIsCreating(true);
       await membersAPI.createMember(memberData);
       toast.success('Membro criado com sucesso!');
       setShowForm(false);
       loadMembers();
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Erro ao criar membro');
+    } finally {
+      setIsCreating(false);
     }
   };
 
   const handleUpdateMember = async (id: number, memberData: any) => {
     try {
+      setIsUpdating(true);
       await membersAPI.updateMember(id, memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
@@ -80,17 +87,22 @@ const Members: React.FC = () => {
       loadMembers();
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Erro ao atualizar membro');
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   const handleDeleteMember = async (id: number) => {
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
+        setIsDeleting(true);
         await membersAPI.deleteMember(id);
         toast.success('Membro deletado com sucesso!');
         loadMembers();
       } catch (error: any) {
         toast.error(error.response?.data?.error || 'Erro ao deletar membro');
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
@@ -128,7 +140,7 @@ const Members: React.FC = () => {
             Gerencie os membros da igreja
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)}>
+        <Button onClick={() => setShowForm(true)} loading={isCreating}>
           <PlusIcon className="h-4 w-4" />
           Novo Membro
         </Button>
@@ -181,6 +193,7 @@ const Members: React.FC = () => {
         pagination={pagination}
         onEdit={handleEditMember}
         onDelete={handleDeleteMember}
+        isDeleting={isDeleting}
         onPageChange={handlePageChange}
       />
 
@@ -197,6 +210,7 @@ const Members: React.FC = () => {
             handleCreateMember
           }
           onClose={handleCloseForm}
+          isSaving={isCreating || isUpdating}
         />
       </Modal>
     </div>

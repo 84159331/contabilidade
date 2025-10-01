@@ -16,8 +16,6 @@ import QuickActions from '../components/QuickActions';
 import { SkeletonCard } from '../components/Skeleton';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
-import AdvancedCharts from '../components/AdvancedCharts';
-import GoalsSystem from '../components/GoalsSystem';
 import MemberStats from '../components/MemberStats';
 import useNotificationDemo from '../hooks/useNotificationDemo';
 
@@ -198,26 +196,6 @@ const Dashboard: React.FC = () => {
             </div>
           </AnimatedCard>
         </div>
-
-        {/* Advanced Interactive Charts */}
-        <AnimatedCard delay={6}>
-          <div className="p-6">
-            <AdvancedCharts />
-          </div>
-        </AnimatedCard>
-
-        {/* Goals System */}
-        <AnimatedCard delay={7}>
-          <div className="p-6">
-            <GoalsSystem 
-              financialData={{
-                totalIncome: stats?.income?.total || 0,
-                totalExpenses: stats?.expense?.total || 0,
-                memberCount: memberStats?.total || 0
-              }}
-            />
-          </div>
-        </AnimatedCard>
 
         {/* Recent Transactions */}
         <AnimatedCard delay={8}>

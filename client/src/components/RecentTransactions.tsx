@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale/pt-BR';
+import ptBR from 'date-fns/locale/pt-BR';
 
 interface Transaction {
   id: number;
