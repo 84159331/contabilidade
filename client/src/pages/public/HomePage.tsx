@@ -73,28 +73,28 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Estudo de Hoje Section */}
-      <div className="py-16 bg-gray-light">
+      <div className="py-16 bg-gray-200 dark:bg-gray-800">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold font-heading mb-2">Estudo de Hoje</h2>
+          <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Estudo de Hoje</h2>
           {loadingStudy ? (
             <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 dark:border-primary-400"></div>
             </div>
           ) : (
             <>
-              <h3 className={`text-2xl font-bold font-heading mb-4 text-black transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.title}</h3>
-              <p className={`text-gray-darkest mb-6 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.content}</p>
+              <h3 className={`text-2xl font-bold font-heading mb-4 text-gray-900 dark:text-white transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.title}</h3>
+              <p className={`text-gray-600 dark:text-gray-300 mb-6 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>{dailyStudy.content}</p>
             </>
           )}
         </div>
       </div>
 
       {/* Around River Valley Section */}
-      <div className="py-16">
+      <div className="py-16 dark:bg-gray-900">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold font-heading text-center mb-8">Na Comunidade Cristã Resgate</h2>
+          <h2 className="text-3xl font-bold font-heading text-center mb-8 dark:text-white">Na Comunidade Cristã Resgate</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
               <SafeImage 
                 src="/img/ICONE-RESGATE.png" 
                 alt="Mensagens" 
@@ -102,12 +102,12 @@ const HomePage: React.FC = () => {
                 fallbackText="Imagem de Mensagens"
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2">Mensagens</h3>
-                <p className="text-gray-darkest mb-4">Assista às nossas mensagens mais recentes.</p>
-                <a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="text-blue font-bold hover:underline">Assista Agora</a>
+                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Mensagens</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">Assista às nossas mensagens mais recentes.</p>
+                <a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Assista Agora</a>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
               <SafeImage 
                 src="/img/ICONE-RESGATE.png" 
                 alt="Grupo Celular" 
@@ -115,12 +115,12 @@ const HomePage: React.FC = () => {
                 fallbackText="Imagem de Grupo Celular"
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2">Grupo Celular</h3>
-                <p className="text-gray-darkest mb-4">Encontre comunidade e cresça na fé.</p>
-                <Link to="/conecte" className="text-blue font-bold hover:underline">Encontre um Grupo</Link>
+                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Grupo Celular</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">Encontre comunidade e cresça na fé.</p>
+                <Link to="/conecte" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Encontre um Grupo</Link>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
               <SafeImage 
                 src="/img/ICONE-RESGATE.png" 
                 alt="Eventos" 
@@ -128,9 +128,9 @@ const HomePage: React.FC = () => {
                 fallbackText="Imagem de Eventos"
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2">Eventos</h3>
-                <p className="text-gray-darkest mb-4">Veja o que está acontecendo em nossa igreja.</p>
-                <Link to="/eventos" className="text-blue font-bold hover:underline">Ver Eventos</Link>
+                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Eventos</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">Veja o que está acontecendo em nossa igreja.</p>
+                <Link to="/eventos" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Ver Eventos</Link>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* About Us Section */}
-      <div className="py-16 bg-gray-light">
+      <div className="py-16 bg-gray-200 dark:bg-gray-800">
         <div className="container mx-auto px-6 text-center">
           <div className="mb-6">
             <SafeImage 
@@ -147,8 +147,8 @@ const HomePage: React.FC = () => {
               className="mx-auto h-16 w-16 mb-4"
             />
           </div>
-          <h2 className="text-3xl font-bold font-heading mb-4">Sobre Nós</h2>
-          <p className="max-w-3xl mx-auto text-gray-darkest mb-6">
+          <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Sobre Nós</h2>
+          <p className="max-w-3xl mx-auto text-gray-600 dark:text-gray-300 mb-6">
             A Comunidade Cristã Resgate é uma igreja que ama a Deus e as pessoas. 
             Nossa paixão é ver vidas transformadas pelo poder do Evangelho.
           </p>
@@ -159,7 +159,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Locations Section */}
-      <div className="py-16">
+      <div className="py-16 dark:bg-gray-900">
         <div className="container mx-auto px-6 text-center">
           <div className="mb-6">
             <SafeImage 
@@ -168,8 +168,8 @@ const HomePage: React.FC = () => {
               className="mx-auto h-12 w-12 mb-4"
             />
           </div>
-          <h2 className="text-3xl font-bold font-heading mb-4">Nossa Localização</h2>
-          <p className="max-w-3xl mx-auto text-gray-darkest mb-6">
+          <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa Localização</h2>
+          <p className="max-w-3xl mx-auto text-gray-600 dark:text-gray-300 mb-6">
             Temos várias localizações para melhor servir você. Encontre a mais próxima!
           </p>
           <Link to="/localizacoes" className="btn btn-primary text-lg py-3 px-8">

@@ -50,16 +50,16 @@ const EventsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="py-16">
+      <div className="py-16 dark:bg-gray-900">
         <div className="container mx-auto px-6">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 dark:border-primary-400"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {events.map((event, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                   {event.image ? (
                     <img 
                       src={event.image} 
@@ -68,19 +68,19 @@ const EventsPage: React.FC = () => {
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         if (e.currentTarget.parentElement) {
-                          e.currentTarget.parentElement.innerHTML = '<div class="bg-gray-200 h-48 flex items-center justify-center"><p class="text-gray-500">Imagem do Evento</p></div>';
+                          e.currentTarget.parentElement.innerHTML = '<div class="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center"><p class="text-gray-500 dark:text-gray-400">Imagem do Evento</p></div>';
                         }
                       }}
                     />
                   ) : (
-                    <div className="bg-gray-200 h-48 flex items-center justify-center">
-                      <p className="text-gray-500">Imagem do Evento</p>
+                    <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center">
+                      <p className="text-gray-500 dark:text-gray-400">Imagem do Evento</p>
                     </div>
                   )}
                   <div className="p-6">
-                    <h2 className="text-2xl font-bold font-heading mb-2">{event.title}</h2>
-                    <p className="text-gray-darkest font-semibold">{event.date} às {event.time}</p>
-                    <p className="text-gray-darkest mt-2">{event.description}</p>
+                    <h2 className="text-2xl font-bold font-heading mb-2 dark:text-white">{event.title}</h2>
+                    <p className="text-gray-600 dark:text-gray-300 font-semibold">{event.date} às {event.time}</p>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">{event.description}</p>
                   </div>
                 </div>
               ))}

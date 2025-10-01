@@ -9,9 +9,17 @@ import {
 import { transactionsAPI, membersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
+import AnimatedCard from '../components/AnimatedCard';
+import StatusIndicator from '../components/StatusIndicator';
+import PageTransition from '../components/PageTransition';
+import QuickActions from '../components/QuickActions';
+import { SkeletonCard } from '../components/Skeleton';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
+import AdvancedCharts from '../components/AdvancedCharts';
+import GoalsSystem from '../components/GoalsSystem';
 import MemberStats from '../components/MemberStats';
+import useNotificationDemo from '../hooks/useNotificationDemo';
 
 interface DashboardStats {
   income: { total: number; count: number };
@@ -29,6 +37,9 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [memberStats, setMemberStats] = useState<MemberStatsData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Hook para demonstração de notificações
+  useNotificationDemo();
 
   useEffect(() => {
     loadDashboardData();
@@ -54,8 +65,8 @@ const Dashboard: React.FC = () => {
       console.log('Financial Summary:', financialSummary.data);
       console.log('Member Stats:', memberStatsData.data);
 
-      setStats(financialSummary.data);
-      setMemberStats(memberStatsData.data);
+      setStats(financialSummary.data?.data);
+      setMemberStats(memberStatsData.data?.data);
     } catch (error) {
       toast.error('Erro ao carregar dados do dashboard');
       console.error('Erro ao carregar dashboard:', error);
@@ -65,15 +76,32 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
+            <p className="mt-1 text-md text-slate-600">
+              Visão geral das finanças da igreja
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[0, 1, 2, 3].map((index) => (
+              <SkeletonCard key={index} delay={index} />
+            ))}
+          </div>
+        </div>
+      </PageTransition>
+    );
   }
 
   return (
-    <div className="space-y-6">
+    <PageTransition>
+      <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
-        <p className="mt-1 text-md text-slate-600">
+        <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+        <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
           Visão geral das finanças da igreja
         </p>
       </div>
@@ -81,136 +109,130 @@ const Dashboard: React.FC = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Receitas */}
-        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
+        <AnimatedCard delay={0}>
           <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ArrowUpIcon className="h-6 w-6 text-success-600" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Receitas
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    R$ {stats?.income?.total ? stats.income.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
-                  </dd>
-                </dl>
-              </div>
-            </div>
+            <StatusIndicator
+              status="positive"
+              value={stats?.income?.total || 0}
+              label="Receitas"
+              icon={<ArrowUpIcon className="h-5 w-5 text-green-600 dark:text-green-400" />}
+              pulse={true}
+            />
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {stats?.income?.count || 0} transações
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedCard>
 
         {/* Despesas */}
-        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
+        <AnimatedCard delay={1}>
           <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ArrowDownIcon className="h-6 w-6 text-danger-600" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Despesas
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    R$ {stats?.expense?.total ? stats.expense.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
-                  </dd>
-                </dl>
-              </div>
-            </div>
+            <StatusIndicator
+              status="negative"
+              value={stats?.expense?.total || 0}
+              label="Despesas"
+              icon={<ArrowDownIcon className="h-5 w-5 text-red-600 dark:text-red-400" />}
+              pulse={true}
+            />
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {stats?.expense?.count || 0} transações
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedCard>
 
         {/* Saldo */}
-        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
+        <AnimatedCard delay={2}>
           <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <CurrencyDollarIcon className="h-6 w-6 text-primary-600" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Saldo
-                  </dt>
-                  <dd className={`text-lg font-medium ${
-                    (stats?.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
-                  }`}>
-                    R$ {stats?.balance !== undefined ? stats.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
-                  </dd>
-                </dl>
-              </div>
-            </div>
+            <StatusIndicator
+              status={(stats?.balance || 0) >= 0 ? "positive" : "negative"}
+              value={stats?.balance || 0}
+              label="Saldo"
+              icon={<CurrencyDollarIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+              pulse={(stats?.balance || 0) >= 0}
+            />
           </div>
-        </div>
+        </AnimatedCard>
 
         {/* Membros */}
-        <div className="bg-white overflow-hidden shadow-xl rounded-xl">
+        <AnimatedCard delay={3}>
           <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <UsersIcon className="h-6 w-6 text-primary-600" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Membros
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {memberStats?.total || 0}
-                  </dd>
-                </dl>
-              </div>
-            </div>
+            <StatusIndicator
+              status="neutral"
+              value={memberStats?.total || 0}
+              label="Membros"
+              icon={<UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />}
+              pulse={false}
+            />
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {memberStats?.active || 0} ativos
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedCard>
       </div>
 
-      {/* Charts and Recent Activity */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Financial Summary Chart */}
-        <div className="bg-white shadow-xl rounded-xl p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Resumo Financeiro
-          </h3>
-          <FinancialSummary />
+        {/* Charts and Recent Activity */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Financial Summary Chart */}
+          <AnimatedCard delay={4}>
+            <div className="p-6">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                Resumo Financeiro
+              </h3>
+              <FinancialSummary />
+            </div>
+          </AnimatedCard>
+
+          {/* Member Stats */}
+          <AnimatedCard delay={5}>
+            <div className="p-6">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                Estatísticas dos Membros
+              </h3>
+              <MemberStats />
+            </div>
+          </AnimatedCard>
         </div>
 
-        {/* Member Stats */}
-        <div className="bg-white shadow-xl rounded-xl p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Estatísticas dos Membros
-          </h3>
-          <MemberStats />
-        </div>
-      </div>
+        {/* Advanced Interactive Charts */}
+        <AnimatedCard delay={6}>
+          <div className="p-6">
+            <AdvancedCharts />
+          </div>
+        </AnimatedCard>
 
-      {/* Recent Transactions */}
-      <div className="bg-white shadow-xl rounded-xl">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
-            Transações Recentes
-          </h3>
-        </div>
-        <RecentTransactions />
+        {/* Goals System */}
+        <AnimatedCard delay={7}>
+          <div className="p-6">
+            <GoalsSystem 
+              financialData={{
+                totalIncome: stats?.income?.total || 0,
+                totalExpenses: stats?.expense?.total || 0,
+                memberCount: memberStats?.total || 0
+              }}
+            />
+          </div>
+        </AnimatedCard>
+
+        {/* Recent Transactions */}
+        <AnimatedCard delay={8}>
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+              Transações Recentes
+            </h3>
+          </div>
+          <RecentTransactions />
+        </AnimatedCard>
+
+        {/* Quick Actions */}
+        <QuickActions />
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

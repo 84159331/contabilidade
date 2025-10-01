@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import MemberForm from '../components/MemberForm';
 import MemberList from '../components/MemberList';
 import Modal from '../components/Modal';
+import Button from '../components/Button';
 
 interface Member {
   id: number;
@@ -127,13 +128,10 @@ const Members: React.FC = () => {
             Gerencie os membros da igreja
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(true)}
-          className="btn btn-primary flex items-center gap-2"
-        >
+        <Button onClick={() => setShowForm(true)}>
           <PlusIcon className="h-4 w-4" />
           Novo Membro
-        </button>
+        </Button>
       </div>
 
       {/* Filters */}
@@ -170,9 +168,9 @@ const Members: React.FC = () => {
               <option value="inactive">Inativos</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <Button type="submit">
             Buscar
-          </button>
+          </Button>
         </form>
       </div>
 

@@ -8,6 +8,7 @@ import CategoryReport from '../components/reports/CategoryReport';
 import CashFlowReport from '../components/reports/CashFlowReport';
 import { generatePdf } from '../utils/pdf';
 import { exportToCsv } from '../utils/export';
+import Button from '../components/Button';
 
 type ReportType = 'monthly' | 'yearly' | 'contributions' | 'categories' | 'cashflow';
 
@@ -159,13 +160,13 @@ const Reports: React.FC = () => {
               </p>
             </div>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={handleGeneratePdf}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                variant="secondary"
               >
                 <DocumentArrowDownIcon className="h-4 w-4" />
                 Gerar PDF
-              </button>
+              </Button>
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
@@ -51,9 +52,14 @@ const MemberStats: React.FC = () => {
     <div className="space-y-4">
       {/* Total de membros */}
       <div className="text-center">
-        <div className="text-3xl font-bold text-gray-900">
+        <motion.div 
+          className="text-3xl font-bold text-gray-900"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+        >
           {stats.total}
-        </div>
+        </motion.div>
         <div className="text-sm text-gray-500">
           Total de Membros
         </div>
@@ -70,10 +76,12 @@ const MemberStats: React.FC = () => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-success-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${activePercentage}%` }}
-            ></div>
+            <motion.div 
+              className="bg-success-500 h-2 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${activePercentage}%` }}
+              transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
+            ></motion.div>
           </div>
         </div>
 
@@ -86,10 +94,12 @@ const MemberStats: React.FC = () => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-gray-400 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${inactivePercentage}%` }}
-            ></div>
+            <motion.div 
+              className="bg-gray-400 h-2 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${inactivePercentage}%` }}
+              transition={{ delay: 0.7, duration: 1, ease: "easeOut" }}
+            ></motion.div>
           </div>
         </div>
       </div>

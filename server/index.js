@@ -12,7 +12,7 @@ const memberRoutes = require('./routes/members');
 const transactionRoutes = require('./routes/transactions');
 const reportRoutes = require('./routes/reports');
 const categoryRoutes = require('./routes/categories');
-const usersRoutes = require('./routes/users'); // Adicionado
+const backupRoutes = require('./routes/backup');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -48,6 +48,7 @@ app.use('/api/members', memberRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/backup', backupRoutes);
 app.use('/api/users', usersRoutes); // Adicionado
 
 // Rota de saúde

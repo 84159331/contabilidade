@@ -36,21 +36,21 @@ const ConnectPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold font-heading text-center mb-4">Conecte-se</h1>
-      <p className="text-lg text-gray-darkest text-center mb-8">
+      <h1 className="text-4xl font-bold font-heading text-center mb-4 dark:text-white">Conecte-se</h1>
+      <p className="text-lg text-gray-600 dark:text-gray-300 text-center mb-8">
         Encontre um grupo celular, sirva na igreja e muito mais.
       </p>
 
-      <div className="py-8">
+      <div className="py-8 dark:bg-gray-900">
         <div className="container mx-auto px-6">
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 dark:border-primary-400"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {cellGroups.map((group, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                   {group.image ? (
                     <img 
                       src={group.image} 
@@ -59,18 +59,18 @@ const ConnectPage: React.FC = () => {
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                         if (e.currentTarget.parentElement) {
-                          e.currentTarget.parentElement.innerHTML = '<div class="bg-gray-200 h-48 flex items-center justify-center"><p class="text-gray-500">Imagem do Grupo</p></div>';
+                          e.currentTarget.parentElement.innerHTML = '<div class="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center"><p class="text-gray-500 dark:text-gray-400">Imagem do Grupo</p></div>';
                         }
                       }}
                     />
                   ) : (
-                    <div className="bg-gray-200 h-48 flex items-center justify-center">
-                      <p className="text-gray-500">Imagem do Grupo</p>
+                    <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center">
+                      <p className="text-gray-500 dark:text-gray-400">Imagem do Grupo</p>
                     </div>
                   )}
                   <div className="p-6">
-                    <h2 className="text-2xl font-bold font-heading mb-2">{group.title}</h2>
-                    <p className="text-gray-darkest mt-2">{group.description}</p>
+                    <h2 className="text-2xl font-bold font-heading mb-2 dark:text-white">{group.title}</h2>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">{group.description}</p>
                   </div>
                 </div>
               ))}

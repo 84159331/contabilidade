@@ -152,7 +152,8 @@ router.get('/member-contributions', (req, res) => {
        MIN(t.transaction_date) as first_contribution,
        MAX(t.transaction_date) as last_contribution
      FROM members m
-     LEFT JOIN transactions t ON m.id = t.member_id ${whereClause}
+     LEFT JOIN transactions t ON m.id = t.member_id
+     ${whereClause}
      GROUP BY m.id, m.name, m.email
      HAVING contribution_count > 0
      ORDER BY total_contributed DESC`,
@@ -171,7 +172,7 @@ router.get('/member-contributions', (req, res) => {
 router.get('/income-by-category', (req, res) => {
   const { start_date, end_date } = req.query;
   
-  let whereClause = 'WHERE t.type = "income"';
+  let whereClause = 'WHERE c.type = "income"';
   let params = [];
   
   if (start_date) {
@@ -193,8 +194,8 @@ router.get('/income-by-category', (req, res) => {
        COALESCE(SUM(t.amount), 0) as total_amount,
        COALESCE(AVG(t.amount), 0) as average_amount
      FROM categories c
-     LEFT JOIN transactions t ON c.id = t.category_id ${whereClause}
-     WHERE c.type = "income"
+     LEFT JOIN transactions t ON c.id = t.category_id
+     ${whereClause}
      GROUP BY c.id, c.name, c.color
      ORDER BY total_amount DESC`,
     params,
@@ -212,7 +213,7 @@ router.get('/income-by-category', (req, res) => {
 router.get('/expense-by-category', (req, res) => {
   const { start_date, end_date } = req.query;
   
-  let whereClause = 'WHERE t.type = "expense"';
+  let whereClause = 'WHERE c.type = "expense"';
   let params = [];
   
   if (start_date) {
@@ -234,8 +235,8 @@ router.get('/expense-by-category', (req, res) => {
        COALESCE(SUM(t.amount), 0) as total_amount,
        COALESCE(AVG(t.amount), 0) as average_amount
      FROM categories c
-     LEFT JOIN transactions t ON c.id = t.category_id ${whereClause}
-     WHERE c.type = "expense"
+     LEFT JOIN transactions t ON c.id = t.category_id
+     ${whereClause}
      GROUP BY c.id, c.name, c.color
      ORDER BY total_amount DESC`,
     params,

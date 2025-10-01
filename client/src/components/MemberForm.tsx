@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Button from './Button';
 
 interface Member {
   id: number;
@@ -233,19 +234,20 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose }) => {
       </div>
 
       <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse mt-6 -mx-6 -mb-6 rounded-b-lg">
-        <button
+        <Button
           type="submit"
-          className="btn btn-primary sm:ml-3 sm:w-auto w-full"
+          className="sm:ml-3 sm:w-auto w-full"
         >
           {member ? 'Atualizar' : 'Criar'}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="secondary"
           onClick={onClose}
-          className="btn btn-secondary mt-3 sm:mt-0 sm:w-auto w-full"
+          className="mt-3 sm:mt-0 sm:w-auto w-full"
         >
           Cancelar
-        </button>
+        </Button>
       </div>
     </form>
   );
