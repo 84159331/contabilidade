@@ -1,7 +1,10 @@
+# Server files (not needed for frontend)
+server/
+database/
+
 # Dependencies
 node_modules
 client/node_modules
-server/node_modules
 
 # Build output
 client/build
@@ -38,4 +41,3 @@ coverage
 # Package locks (will be regenerated)
 package-lock.json
 client/package-lock.json
-server/package-lock.json

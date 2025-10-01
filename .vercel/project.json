@@ -1,5 +1,11 @@
 {
   "projectId": "",
-  "orgId": ""
+  "orgId": "",
+  "settings": {
+    "buildCommand": "cd client && npm run build",
+    "outputDirectory": "client/build",
+    "installCommand": "cd client && npm install",
+    "framework": "create-react-app"
+  }
 }
 
