@@ -14,6 +14,8 @@ const Transactions = lazy(() => import('./pages/Transactions'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CellGroupsAdmin = lazy(() => import('./pages/CellGroupsAdmin'));
+const Users = lazy(() => import('./pages/Users'));
+const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -36,14 +38,16 @@ function TesourariaApp() {
       <Suspense fallback={<PageSkeleton type="dashboard" />}>
         <SmartLoading>
           <Routes>
-            <Route path="/" element={<Navigate to="dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="members" element={<Members />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="reports" element={<Reports />} />
             <Route path="categories" element={<Categories />} />
             <Route path="cell-groups" element={<CellGroupsAdmin />} />
-            <Route path="*" element={<Navigate to="dashboard" replace />} />
+            <Route path="users" element={<Users />} />
+            <Route path="whatsapp" element={<WhatsAppPage />} />
+            <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
           </Routes>
         </SmartLoading>
       </Suspense>

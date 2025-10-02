@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ThemeToggle from './ThemeToggle';
+import SafeImage from './SafeImage';
 import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const FaFacebookIcon = FaFacebook as any;
@@ -13,27 +14,41 @@ const PublicLayout: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold font-heading">
-            <img 
-              src="/img/LOGO NOME.png" 
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="flex items-center hover:opacity-80 transition-opacity"
+            title="Voltar à página inicial"
+          >
+            <SafeImage 
+              src="/img/ICONE-RESGATE.png" 
               alt="Comunidade Cristã Resgate" 
-              className="h-10"
+              className="h-10 w-10"
             />
           </Link>
-          <div className="hidden md:flex space-x-6 items-center font-heading">
-            <Link to="/sobre" className="hover:text-primary-600 dark:hover:text-primary-400">Sobre</Link>
-            <Link to="/conecte" className="hover:text-primary-600 dark:hover:text-primary-400">Conecte-se</Link>
-            <Link to="/eventos" className="hover:text-primary-600 dark:hover:text-primary-400">Eventos</Link>
-            <Link to="/assista" className="hover:text-primary-600 dark:hover:text-primary-400">Assista</Link>
-            <Link to="/contribua" className="hover:text-primary-600 dark:hover:text-primary-400">Contribua</Link>
+
+          {/* Navigation Menu */}
+          <div className="hidden md:flex space-x-8 items-center font-heading">
+            <Link to="/sobre" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre</Link>
+            <Link to="/conecte" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Conecte-se</Link>
+            <Link to="/eventos" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Eventos</Link>
+            <Link to="/assista" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Assista</Link>
+            <Link to="/contribua" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contribua</Link>
+            <Link to="/localizacoes" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Localização</Link>
           </div>
+
+          {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            <Link to="/localizacoes" className="hidden md:block hover:text-primary-600 dark:hover:text-primary-400 font-heading">Localização</Link>
-            <button className="hover:text-primary-600 dark:hover:text-primary-400">
+            <button className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors" title="Buscar">
               <MagnifyingGlassIcon className="h-6 w-6" />
             </button>
             <ThemeToggle />
-            <a href="/tesouraria/login" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <a 
+              href="/tesouraria/login" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
               Tesouraria
             </a>
           </div>

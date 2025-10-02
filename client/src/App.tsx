@@ -10,6 +10,7 @@ import ConnectPage from './pages/public/ConnectPage';
 import WatchPage from './pages/public/WatchPage';
 import GivePage from './pages/public/GivePage';
 import LocationsPage from './pages/public/LocationsPage';
+import BonsEstudosPage from './pages/public/BonsEstudosPage';
 import { NotificationProvider } from './contexts/NotificationContext';
 import TesourariaApp from './TesourariaApp';
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/assista" element={<WatchPage />} />
               <Route path="/contribua" element={<GivePage />} />
               <Route path="/localizacoes" element={<LocationsPage />} />
+              <Route path="/bons-estudos" element={<BonsEstudosPage />} />
             </Route>
             <Route path="/tesouraria/*" element={<TesourariaApp />} />
           </Routes>

@@ -20,10 +20,15 @@ const MemberStats: React.FC = () => {
   const loadMemberStats = async () => {
     try {
       const response = await membersAPI.getMemberStats();
-      setStats(response.data);
+      // eslint-disable-next-line no-console
+      console.log('Resposta da API de estatísticas:', response.data);
+      setStats(response.data.data);
     } catch (error) {
       toast.error('Erro ao carregar estatísticas dos membros');
+      // eslint-disable-next-line no-console
       console.error('Erro ao carregar estatísticas:', error);
+      // eslint-disable-next-line no-console
+      console.error('Detalhes do erro:', (error as any)?.response?.data);
     } finally {
       setLoading(false);
     }

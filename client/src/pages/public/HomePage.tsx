@@ -276,7 +276,7 @@ const HomePage: React.FC = () => {
                 
                 <div className="flex justify-center space-x-4">
                   <Link
-                    to="/biblioteca"
+                    to="/bons-estudos"
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
                   >
                     <BookOpenIcon className="h-5 w-5 mr-2" />

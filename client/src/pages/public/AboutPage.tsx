@@ -1,15 +1,20 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
+import { HeartIcon, UsersIcon, HandRaisedIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const AboutPage: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div
-        className="relative h-96 bg-cover bg-center flex items-center justify-center text-white"
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 text-center">
+      <div className="relative h-96 bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 text-center"
+        >
           <div className="mb-6">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
@@ -17,8 +22,11 @@ const AboutPage: React.FC = () => {
               className="mx-auto h-20 w-20 mb-4 opacity-90"
             />
           </div>
-          <h1 className="text-5xl font-bold font-heading">Sobre Nós</h1>
-        </div>
+          <h1 className="text-5xl font-bold font-heading mb-4">Sobre Nós</h1>
+          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+            Conheça nossa história, missão e valores que nos guiam como comunidade cristã
+          </p>
+        </motion.div>
       </div>
 
       <div className="py-16 dark:bg-gray-900">
@@ -86,18 +94,42 @@ const AboutPage: React.FC = () => {
             </div>
             <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossos Valores</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="p-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow"
+              >
+                <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+                  <HeartIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                </div>
                 <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Fé</h3>
                 <p className="text-gray-600 dark:text-gray-300">Acreditamos no poder de Deus para transformar vidas.</p>
-              </div>
-              <div className="p-6">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow"
+              >
+                <div className="bg-green-100 dark:bg-green-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+                  <UsersIcon className="h-8 w-8 text-green-600 dark:text-green-400" />
+                </div>
                 <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Comunidade</h3>
                 <p className="text-gray-600 dark:text-gray-300">Crescemos juntos em amor e unidade.</p>
-              </div>
-              <div className="p-6">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow"
+              >
+                <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+                  <HandRaisedIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                </div>
                 <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Serviço</h3>
                 <p className="text-gray-600 dark:text-gray-300">Servimos uns aos outros e à nossa cidade com alegria.</p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ const memberRoutes = require('./routes/members');
 const transactionRoutes = require('./routes/transactions');
 const reportRoutes = require('./routes/reports');
 const categoryRoutes = require('./routes/categories');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -32,7 +33,7 @@ app.use(limiter);
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -47,6 +48,7 @@ app.use('/api/members', memberRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/users', userRoutes);
 
 // Rota de saúde
 app.get('/api/health', (req, res) => {

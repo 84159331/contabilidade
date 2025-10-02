@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
 import { 
   UserGroupIcon,
@@ -215,29 +216,35 @@ const ConnectPage: React.FC = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <SafeImage 
-            src="/img/ICONE-RESGATE.png" 
-            alt="Conecte-se" 
-            className="mx-auto h-16 w-16 mb-6 opacity-90"
-          />
-                   <h1 className="text-5xl font-bold font-heading mb-4">Células Resgate</h1>
-                   <p className="text-xl max-w-2xl mx-auto mb-8">
-                     Encontre seu lugar na família de Deus. Participe de uma célula e cresça junto conosco.
-                   </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <div className="flex items-center">
-              <UsersIcon className="h-5 w-5 mr-2" />
-              <span>{cellGroups.length} Células Disponíveis</span>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <SafeImage 
+              src="/img/ICONE-RESGATE.png" 
+              alt="Conecte-se" 
+              className="mx-auto h-16 w-16 mb-6 opacity-90"
+            />
+            <h1 className="text-5xl font-bold font-heading mb-4">Células Resgate</h1>
+            <p className="text-xl max-w-2xl mx-auto mb-8">
+              Encontre seu lugar na família de Deus. Participe de uma célula e cresça junto conosco.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <div className="flex items-center">
+                <UsersIcon className="h-5 w-5 mr-2" />
+                <span>{cellGroups.length} Células Disponíveis</span>
+              </div>
+              <div className="flex items-center">
+                <CalendarIcon className="h-5 w-5 mr-2" />
+                <span>Reuniões Semanais</span>
+              </div>
+              <div className="flex items-center">
+                <HeartIcon className="h-5 w-5 mr-2" />
+                <span>Acolhimento Garantido</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <CalendarIcon className="h-5 w-5 mr-2" />
-              <span>Reuniões Semanais</span>
-            </div>
-            <div className="flex items-center">
-              <HeartIcon className="h-5 w-5 mr-2" />
-              <span>Acolhimento Garantido</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
