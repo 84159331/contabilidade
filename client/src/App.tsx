@@ -11,6 +11,7 @@ import WatchPage from './pages/public/WatchPage';
 import GivePage from './pages/public/GivePage';
 import LocationsPage from './pages/public/LocationsPage';
 import BonsEstudosPage from './pages/public/BonsEstudosPage';
+import BibliotecaPage from './pages/public/BibliotecaPage';
 import { NotificationProvider } from './contexts/NotificationContext';
 import TesourariaApp from './TesourariaApp';
 
@@ -30,6 +31,7 @@ function App() {
               <Route path="/contribua" element={<GivePage />} />
               <Route path="/localizacoes" element={<LocationsPage />} />
               <Route path="/bons-estudos" element={<BonsEstudosPage />} />
+            <Route path="/biblioteca" element={<BibliotecaPage />} />
             </Route>
             <Route path="/tesouraria/*" element={<TesourariaApp />} />
           </Routes>
