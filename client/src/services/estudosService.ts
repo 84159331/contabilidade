@@ -22,7 +22,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "A oração é uma das ferramentas mais poderosas que Deus nos deu. Quando oramos com fé, estamos exercitando nossa confiança no Senhor e abrindo nossos corações para Sua vontade. A oração não é apenas pedir, mas também agradecer, adorar e buscar orientação. Em momentos de dificuldade, a oração nos conecta diretamente com o Pai celestial, que conhece nossas necessidades antes mesmo de as expressarmos.",
     oracao: "Senhor, ensina-me a orar com fé verdadeira. Ajuda-me a confiar em Ti em todas as situações e a buscar sempre a Tua vontade. Que minha vida seja uma oração constante de gratidão e adoração. Fortalece minha fé para que eu possa ver os Teus milagres em minha vida. Amém.",
     data: new Date().toISOString().split('T')[0],
-    autor: "Pastor João",
+    autor: "Apóstolo Isac",
     categoria: "Oração",
     tags: ["oração", "fé", "confiança"]
   },
@@ -34,7 +34,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "O amor de Deus é incomparável e incondicional. Ele nos amou tanto que enviou Seu único Filho para morrer por nós. Este amor não depende de nossos méritos ou ações, mas é puro e eterno. Devemos refletir este amor em nossas vidas, amando uns aos outros como Cristo nos amou. O amor de Deus transforma vidas e quebra barreiras.",
     oracao: "Pai celestial, obrigado pelo Teu amor incondicional. Ajuda-me a compreender a profundidade deste amor e a compartilhá-lo com outros. Que eu seja um instrumento do Teu amor neste mundo, mostrando compaixão e misericórdia a todos que encontro. Amém.",
     data: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    autor: "Pastora Maria",
+    autor: "Apóstola Elaine",
     categoria: "Amor",
     tags: ["amor", "salvação", "sacrifício"]
   },
@@ -46,7 +46,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "A fé verdadeira não é apenas acreditar que Deus pode fazer algo, mas confiar completamente nEle. Quando nossa fé está alinhada com a vontade de Deus, milagres acontecem. A fé remove obstáculos e abre caminhos impossíveis. É através da fé que vemos o invisível e alcançamos o impossível.",
     oracao: "Senhor, fortalece minha fé. Ajuda-me a confiar completamente em Ti, mesmo quando não entendo os Teus caminhos. Que minha fé seja genuína e transformadora, capaz de mover montanhas e realizar milagres em Tua glória. Amém.",
     data: new Date(Date.now() - 172800000).toISOString().split('T')[0],
-    autor: "Pastor Pedro",
+    autor: "Pastor Jadney",
     categoria: "Fé",
     tags: ["fé", "milagres", "confiança"]
   },
@@ -58,7 +58,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "A paz de Deus é diferente da paz do mundo. Enquanto a paz do mundo depende das circunstâncias, a paz de Deus é independente delas. É uma paz que guarda nossos corações e mentes, mesmo em meio às tempestades da vida. Esta paz só pode ser encontrada em Cristo Jesus.",
     oracao: "Senhor, concede-me a Tua paz que excede todo entendimento. Que mesmo em meio às dificuldades, eu possa experimentar a Tua tranquilidade e confiança. Guarda meu coração e minha mente em Cristo Jesus. Amém.",
     data: new Date(Date.now() - 259200000).toISOString().split('T')[0],
-    autor: "Pastora Ana",
+    autor: "Pastora Fran",
     categoria: "Paz",
     tags: ["paz", "tranquilidade", "confiança"]
   },
@@ -70,9 +70,45 @@ const estudosDatabase: Estudo[] = [
     reflexao: "A esperança cristã não é uma ilusão ou um desejo vago, mas uma certeza baseada nas promessas de Deus. É uma esperança que nos enche de gozo e paz, mesmo quando as circunstâncias são difíceis. Esta esperança vem do Espírito Santo e nos sustenta em todos os momentos.",
     oracao: "Deus de esperança, enche-me de todo gozo e paz na minha fé. Que eu possa abundar na esperança pela virtude do Teu Espírito Santo. Ajuda-me a confiar nas Tuas promessas e a viver com expectativa do que Tu farás. Amém.",
     data: new Date(Date.now() - 345600000).toISOString().split('T')[0],
-    autor: "Pastor Carlos",
+    autor: "Pastor Kele",
     categoria: "Esperança",
     tags: ["esperança", "gozo", "paz"]
+  },
+  {
+    id: 6,
+    titulo: "A Comunhão dos Santos",
+    versiculo: "Hebreus 10:24-25",
+    texto: "E consideremo-nos uns aos outros para nos estimularmos ao amor e às boas obras. Não deixando a nossa congregação, como é costume de alguns, antes admoestando-nos uns aos outros; e tanto mais, quanto vedes que se vai aproximando aquele dia.",
+    reflexao: "A comunhão cristã é essencial para nosso crescimento espiritual. Quando nos reunimos como irmãos e irmãs em Cristo, somos fortalecidos, encorajados e edificados. A igreja não é apenas um prédio, mas o corpo de Cristo, onde cada membro tem um papel importante.",
+    oracao: "Senhor, ajuda-me a valorizar a comunhão com meus irmãos na fé. Que eu possa ser um encorajamento para outros e receber encorajamento deles. Fortalece nossa igreja para que sejamos um testemunho do Teu amor. Amém.",
+    data: new Date(Date.now() - 432000000).toISOString().split('T')[0],
+    autor: "Pastor Leomar",
+    categoria: "Comunhão",
+    tags: ["comunhão", "igreja", "encorajamento"]
+  },
+  {
+    id: 7,
+    titulo: "Servindo com Excelência",
+    versiculo: "Colossenses 3:23-24",
+    texto: "E tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor, e não aos homens, sabendo que recebereis do Senhor o galardão da herança, porque a Cristo, o Senhor, servis.",
+    reflexao: "Servir a Deus não é apenas um dever, é um privilégio. Quando servimos com excelência, refletimos o caráter de Cristo e glorificamos o nome do Senhor. Cada ato de serviço, por menor que seja, tem valor eterno no reino de Deus.",
+    oracao: "Senhor, ensina-me a servir com excelência e de todo coração. Que eu possa fazer tudo para a Tua glória, não para agradar aos homens, mas para honrar o Teu nome. Usa-me como instrumento do Teu amor. Amém.",
+    data: new Date(Date.now() - 518400000).toISOString().split('T')[0],
+    autor: "Pastor Elcio",
+    categoria: "Serviço",
+    tags: ["serviço", "excelência", "dedicação"]
+  },
+  {
+    id: 8,
+    titulo: "A Transformação pelo Espírito",
+    versiculo: "2 Coríntios 3:18",
+    texto: "Mas todos nós, com rosto descoberto, refletindo como um espelho a glória do Senhor, somos transformados de glória em glória na mesma imagem, como pelo Espírito do Senhor.",
+    reflexao: "A transformação cristã é um processo contínuo que acontece através do Espírito Santo. À medida que contemplamos a glória do Senhor, somos transformados à Sua imagem. Esta transformação não é apenas externa, mas principalmente interna, moldando nosso caráter e nosso coração.",
+    oracao: "Espírito Santo, transforma-me à imagem de Cristo. Remove tudo que não agrada ao Senhor e molda meu caráter segundo a Sua vontade. Que eu possa refletir a glória de Deus em minha vida. Amém.",
+    data: new Date(Date.now() - 604800000).toISOString().split('T')[0],
+    autor: "Pastora Eneize",
+    categoria: "Transformação",
+    tags: ["transformação", "Espírito Santo", "crescimento"]
   }
 ];
 

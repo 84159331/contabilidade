@@ -146,7 +146,7 @@ Que Deus abençoe e fortaleça você! ✨
       const exampleContacts: WhatsAppContact[] = [
         {
           id: '1',
-          name: 'Pastor João Silva',
+          name: 'Apóstolo Isac',
           phone: '+5511999999999',
           role: 'pastor',
           isActive: true,
@@ -154,17 +154,57 @@ Que Deus abençoe e fortaleça você! ✨
         },
         {
           id: '2',
-          name: 'Tesoureiro Maria',
+          name: 'Apóstola Elaine',
           phone: '+5511888888888',
-          role: 'tesoureiro',
+          role: 'pastor',
           isActive: true,
           createdAt: new Date()
         },
         {
           id: '3',
-          name: 'Admin Sistema',
+          name: 'Pastor Jadney',
           phone: '+5511777777777',
-          role: 'admin',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '4',
+          name: 'Pastor Kele',
+          phone: '+5511666666666',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '5',
+          name: 'Pastor Leomar',
+          phone: '+5511555555555',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '6',
+          name: 'Pastora Fran',
+          phone: '+5511444444444',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '7',
+          name: 'Pastor Elcio',
+          phone: '+5511333333333',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '8',
+          name: 'Pastora Eneize',
+          phone: '+5511222222222',
+          role: 'pastor',
           isActive: true,
           createdAt: new Date()
         }

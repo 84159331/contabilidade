@@ -24,31 +24,49 @@ const dailyStudies = [
     title: "O Poder da Gratidão",
     content: "A gratidão transforma o que temos em suficiente, e mais. Ela pode transformar a negação em aceitação, o caos em ordem, a confusão em clareza. Ela pode transformar uma refeição em um banquete, uma casa em um lar, um estranho em um amigo. A gratidão dá sentido ao nosso passado, traz paz para o hoje e cria uma visão para o amanhã.",
     verse: "1 Tessalonicenses 5:18",
-    author: "Pastor João Silva"
+    author: "Apóstolo Isac"
   },
   {
     title: "Cultivando a Resiliência",
     content: "Resiliência não é sobre não cair, mas sobre a capacidade de se levantar após cada queda. É a força interior que nos permite enfrentar adversidades, aprender com elas e sair mais fortes. Cultive a resiliência aceitando os desafios como oportunidades de crescimento e mantendo uma perspectiva positiva.",
     verse: "Romanos 8:28",
-    author: "Pastora Maria Santos"
+    author: "Apóstola Elaine"
   },
   {
     title: "A Importância da Ação",
     content: "Ação é a chave fundamental para todo o sucesso. Não importa o quão grande seja a sua ideia ou o quão bem elaborado seja o seu plano, sem ação, nada acontece. Comece pequeno, mas comece. Cada passo, por menor que seja, te aproxima do seu objetivo.",
     verse: "Tiago 2:17",
-    author: "Pastor Carlos Oliveira"
+    author: "Pastor Jadney"
   },
   {
     title: "O Valor do Autoconhecimento",
     content: "Conhecer a si mesmo é o começo de toda a sabedoria. Entender suas forças, fraquezas, paixões e medos é crucial para viver uma vida autêntica e com propósito. Dedique tempo para a reflexão e a autoanálise; isso pavimentará o caminho para o seu crescimento pessoal e espiritual.",
     verse: "Provérbios 4:7",
-    author: "Pastora Ana Costa"
+    author: "Pastora Fran"
   },
   {
     title: "Construindo Hábitos Positivos",
     content: "Nós somos o que fazemos repetidamente. Excelência, então, não é um ato, mas um hábito. Pequenas mudanças consistentes em seus hábitos diários podem levar a transformações significativas em sua vida. Comece com um hábito que você deseja desenvolver e pratique-o diariamente até que se torne parte de quem você é.",
     verse: "Filipenses 4:8",
-    author: "Pastor Pedro Lima"
+    author: "Pastor Kele"
+  },
+  {
+    title: "A Força da Comunhão",
+    content: "A comunhão cristã é um dos maiores presentes que Deus nos deu. É através dela que crescemos, aprendemos e somos fortalecidos na fé. Quando nos reunimos como irmãos e irmãs em Cristo, experimentamos o amor de Deus de forma tangível e somos transformados pelo poder do Espírito Santo.",
+    verse: "Hebreus 10:24-25",
+    author: "Pastor Leomar"
+  },
+  {
+    title: "Servindo com Excelência",
+    content: "Servir a Deus não é apenas um dever, é um privilégio. Quando servimos com excelência, refletimos o caráter de Cristo e glorificamos o nome do Senhor. Cada ato de serviço, por menor que seja, tem valor eterno no reino de Deus.",
+    verse: "Colossenses 3:23-24",
+    author: "Pastor Elcio"
+  },
+  {
+    title: "A Esperança que Transforma",
+    content: "A esperança cristã não é uma ilusão, mas uma certeza baseada nas promessas de Deus. Ela nos sustenta nos momentos difíceis e nos impulsiona a viver com propósito. Quando temos esperança, podemos enfrentar qualquer desafio sabendo que Deus está no controle.",
+    verse: "Romanos 15:13",
+    author: "Pastora Eneize"
   },
 ];
 
@@ -115,28 +133,42 @@ const ministries = [
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
     members: 25,
-    leader: "Pastor João"
+    leader: "Pastor Kele"
   },
   {
     name: "Ministério Infantil",
     description: "Cuidamos e ensinamos as crianças no caminho do Senhor",
     icon: UsersIcon,
     members: 15,
-    leader: "Pastora Maria"
+    leader: "Pastora Fran"
   },
   {
     name: "Ministério de Jovens",
     description: "Conectamos jovens com Cristo e uns com os outros",
     icon: CalendarIcon,
     members: 40,
-    leader: "Pastor Carlos"
+    leader: "Pastor Jadney"
   },
   {
     name: "Ministério de Ação Social",
     description: "Servimos nossa comunidade com amor e compaixão",
     icon: GiftIcon,
     members: 30,
-    leader: "Pastora Ana"
+    leader: "Pastora Eneize"
+  },
+  {
+    name: "Ministério de Ensino",
+    description: "Crescimento espiritual através do estudo da Palavra",
+    icon: BookOpenIcon,
+    members: 20,
+    leader: "Pastor Leomar"
+  },
+  {
+    name: "Ministério de Evangelismo",
+    description: "Compartilhando o amor de Cristo com o mundo",
+    icon: ShareIcon,
+    members: 35,
+    leader: "Pastor Elcio"
   }
 ];
 
