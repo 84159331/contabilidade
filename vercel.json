@@ -20,6 +20,11 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://seu-backend.railway.app"
+    "REACT_APP_API_URL": "https://seu-backend.vercel.app"
+  },
+  "functions": {
+    "client/build/static/js/*.js": {
+      "maxDuration": 30
+    }
   }
 }

@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Automático
 
 on:
   push:
@@ -6,29 +6,69 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-vercel:
     runs-on: ubuntu-latest
-
+    name: Deploy no Vercel
+    
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout código
+      uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '18.x'
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Instalar dependências
+      run: |
+        npm install
+        cd client && npm install
 
-    - name: Install client dependencies
-      run: cd client && npm install
-
-    - name: Build application
+    - name: Build da aplicação
       run: npm run build
 
-    - name: Deploy to production
+    - name: Deploy no Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./
+        vercel-args: '--prod'
+
+  deploy-netlify:
+    runs-on: ubuntu-latest
+    name: Deploy no Netlify
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+
+    - name: Instalar dependências
       run: |
-        echo "Deploy to production server"
-        # Add your deployment commands here
-        # Example: rsync, scp, docker push, etc.
+        npm install
+        cd client && npm install
+
+    - name: Build da aplicação
+      run: npm run build
+
+    - name: Deploy no Netlify
+      uses: nwtgck/actions-netlify@v3.0
+      with:
+        publish-dir: './client/build'
+        production-branch: main
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Deploy automático via GitHub Actions"
+        enable-pull-request-comment: false
+        enable-commit-comment: true
+        overwrites-pull-request-comment: true
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
