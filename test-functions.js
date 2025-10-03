@@ -11,7 +11,7 @@ const testNetlifyFunctions = async () => {
     
     // Teste 2: Login
     console.log('2. Testando login...');
-    const loginResponse = await fetch('/.netlify/functions/auth/login', {
+    const loginResponse = await fetch('/.netlify/functions/auth-login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

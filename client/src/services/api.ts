@@ -41,13 +41,13 @@ api.interceptors.response.use(
 // API de autenticação usando Netlify Functions
 export const authAPI = {
   login: (username: string, password: string) =>
-    api.post('/.netlify/functions/auth/login', { username, password }),
+    api.post('/.netlify/functions/auth-login', { username, password }),
   
   register: (username: string, email: string, password: string) =>
     api.post('/auth/register', { username, email, password }),
   
   verifyToken: () =>
-    api.post('/.netlify/functions/auth/verify', { token: localStorage.getItem('token') }),
+    api.post('/.netlify/functions/auth-verify', { token: localStorage.getItem('token') }),
   
   getProfile: () =>
     api.get('/auth/profile'),

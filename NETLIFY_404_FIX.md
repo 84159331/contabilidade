@@ -60,8 +60,8 @@ Se o Netlify continuar com problemas:
 2. Use as URLs do Vercel no frontend
 
 ### 🎯 **URLs das Functions:**
-- **Login**: `/.netlify/functions/auth/login`
-- **Verify**: `/.netlify/functions/auth/verify`
+- **Login**: `/.netlify/functions/auth-login`
+- **Verify**: `/.netlify/functions/auth-verify`
 - **Health**: `/.netlify/functions/health`
 
 ### 💡 **Dicas:**

@@ -66,8 +66,8 @@ netlify/
 
 ### 🔧 URLs das Functions:
 
-- **Login**: `/.netlify/functions/auth/login`
-- **Verify**: `/.netlify/functions/auth/verify`
+- **Login**: `/.netlify/functions/auth-login`
+- **Verify**: `/.netlify/functions/auth-verify`
 - **Health**: `/.netlify/functions/health`
 
 ### 💡 Vantagens:
