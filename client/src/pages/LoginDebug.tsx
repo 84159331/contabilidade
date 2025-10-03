@@ -32,9 +32,9 @@ const LoginDebug: React.FC = () => {
       const healthData = await healthResponse.json();
       addDebugInfo(`Health: ${healthResponse.status} - ${JSON.stringify(healthData)}`);
       
-      // Teste Login
-      addDebugInfo('Testando login...');
-      const loginResponse = await fetch('/.netlify/functions/auth-login', {
+      // Teste Login Debug
+      addDebugInfo('Testando login debug...');
+      const loginResponse = await fetch('/.netlify/functions/auth-login-debug', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,23 @@ const LoginDebug: React.FC = () => {
       });
       
       const loginData = await loginResponse.text();
-      addDebugInfo(`Login: ${loginResponse.status} - ${loginData}`);
+      addDebugInfo(`Login Debug: ${loginResponse.status} - ${loginData}`);
+      
+      // Teste Login Original
+      addDebugInfo('Testando login original...');
+      const loginOriginalResponse = await fetch('/.netlify/functions/auth-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'admin',
+          password: 'password123'
+        })
+      });
+      
+      const loginOriginalData = await loginOriginalResponse.text();
+      addDebugInfo(`Login Original: ${loginOriginalResponse.status} - ${loginOriginalData}`);
       
     } catch (error: any) {
       addDebugInfo(`❌ Erro: ${error.message}`);
