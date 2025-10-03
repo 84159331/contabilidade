@@ -2,10 +2,10 @@
   "name": "contabilidade-backend",
   "version": "1.0.0",
   "description": "Backend do sistema de contabilidade para igreja",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node server/index.js",
+    "start": "node index.js",
+    "dev": "node index.js",
     "build": "echo 'No build step required'",
     "test": "echo 'No tests specified'"
   },
