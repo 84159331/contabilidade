@@ -56,76 +56,76 @@ export const authAPI = {
     api.put('/auth/change-password', { currentPassword, newPassword }),
 };
 
-// API de membros
+// API de membros usando Netlify Functions
 export const membersAPI = {
   getMembers: (params?: any) =>
-    api.get('/members', { params }),
+    api.get('/.netlify/functions/members', { params }),
   
   getMember: (id: number) =>
-    api.get(`/members/${id}`),
+    api.get(`/.netlify/functions/members/${id}`),
   
   createMember: (data: any) =>
-    api.post('/members', data),
+    api.post('/.netlify/functions/members', data),
   
   updateMember: (id: number, data: any) =>
-    api.put(`/members/${id}`, data),
+    api.put(`/.netlify/functions/members/${id}`, data),
   
   deleteMember: (id: number) =>
-    api.delete(`/members/${id}`),
+    api.delete(`/.netlify/functions/members/${id}`),
   
   getMemberStats: (useTestRoute = false) =>
-    api.get(useTestRoute ? '/members/test/stats' : '/members/stats/overview'),
+    api.get(useTestRoute ? '/.netlify/functions/members/test/stats' : '/.netlify/functions/members/stats/overview'),
   
   getMemberContributions: (id: number, params?: any) =>
-    api.get(`/members/${id}/contributions`, { params }),
+    api.get(`/.netlify/functions/members/${id}/contributions`, { params }),
 };
 
-// API de transações
+// API de transações usando Netlify Functions
 export const transactionsAPI = {
   getTransactions: (params?: any) =>
-    api.get('/transactions', { params }),
+    api.get('/.netlify/functions/transactions', { params }),
   
   getTransaction: (id: number) =>
-    api.get(`/transactions/${id}`),
+    api.get(`/.netlify/functions/transactions/${id}`),
   
   createTransaction: (data: any) =>
-    api.post('/transactions', data),
+    api.post('/.netlify/functions/transactions', data),
   
   updateTransaction: (id: number, data: any) =>
-    api.put(`/transactions/${id}`, data),
+    api.put(`/.netlify/functions/transactions/${id}`, data),
   
   deleteTransaction: (id: number) =>
-    api.delete(`/transactions/${id}`),
+    api.delete(`/.netlify/functions/transactions/${id}`),
   
   getSummary: (useTestRoute = false) =>
-    api.get(useTestRoute ? '/transactions/test/summary' : '/transactions/summary/overview'),
+    api.get(useTestRoute ? '/.netlify/functions/financial-summary/test/summary' : '/.netlify/functions/financial-summary'),
   
   getByCategory: (params?: any) =>
-    api.get('/transactions/summary/by-category', { params }),
+    api.get('/.netlify/functions/transactions/summary/by-category', { params }),
   
   getCashFlow: (params?: any) =>
-    api.get('/transactions/summary/cash-flow', { params }),
+    api.get('/.netlify/functions/transactions/summary/cash-flow', { params }),
 };
 
-// API de categorias
+// API de categorias usando Netlify Functions
 export const categoriesAPI = {
   getCategories: (params?: any) =>
-    api.get('/categories', { params }),
+    api.get('/.netlify/functions/categories', { params }),
   
   getCategory: (id: number) =>
-    api.get(`/categories/${id}`),
+    api.get(`/.netlify/functions/categories/${id}`),
   
   createCategory: (data: any) =>
-    api.post('/categories', data),
+    api.post('/.netlify/functions/categories', data),
   
   updateCategory: (id: number, data: any) =>
-    api.put(`/categories/${id}`, data),
+    api.put(`/.netlify/functions/categories/${id}`, data),
   
   deleteCategory: (id: number) =>
-    api.delete(`/categories/${id}`),
+    api.delete(`/.netlify/functions/categories/${id}`),
   
   getCategoryStats: (params?: any) =>
-    api.get('/categories/stats/overview', { params }),
+    api.get('/.netlify/functions/categories/stats/overview', { params }),
 };
 
 // API de Usuários
