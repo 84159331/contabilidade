@@ -33,7 +33,35 @@ app.use(limiter);
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: function (origin, callback) {
+    // Permitir requisições sem origin (ex: mobile apps, Postman)
+    if (!origin) return callback(null, true);
+    
+    // Lista de origens permitidas
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://kaleidoscopic-arithmetic-e795e1.netlify.app',
+      /^https:\/\/.*\.netlify\.app$/,
+      /^https:\/\/.*\.vercel\.app$/
+    ];
+    
+    // Verificar se a origem está permitida
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (typeof allowedOrigin === 'string') {
+        return allowedOrigin === origin;
+      } else if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Não permitido pelo CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
