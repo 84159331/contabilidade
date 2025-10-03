@@ -6,6 +6,9 @@ publish = "client/build"
   NODE_VERSION = "20"
   CI = "false"
   JWT_SECRET = "sua-chave-secreta-super-segura-aqui-2024"
+  SUPABASE_URL = "https://seu-projeto.supabase.co"
+  SUPABASE_ANON_KEY = "sua-chave-anonima"
+  SUPABASE_SERVICE_ROLE_KEY = "sua-chave-service-role"
 
 # Netlify Functions
 [functions]
