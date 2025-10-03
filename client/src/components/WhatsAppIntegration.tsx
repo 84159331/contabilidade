@@ -170,7 +170,7 @@ Que Deus abençoe e fortaleça você! ✨
         },
         {
           id: '4',
-          name: 'Pastor Kele',
+          name: 'Pastora Kele',
           phone: '+5511666666666',
           role: 'pastor',
           isActive: true,
@@ -218,7 +218,7 @@ Que Deus abençoe e fortaleça você! ✨
         },
         {
           id: '10',
-          name: 'Pastor Rany',
+          name: 'Pastora Rany',
           phone: '+5511000000000',
           role: 'pastor',
           isActive: true,

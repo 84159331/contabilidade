@@ -70,7 +70,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "A esperança cristã não é uma ilusão ou um desejo vago, mas uma certeza baseada nas promessas de Deus. É uma esperança que nos enche de gozo e paz, mesmo quando as circunstâncias são difíceis. Esta esperança vem do Espírito Santo e nos sustenta em todos os momentos.",
     oracao: "Deus de esperança, enche-me de todo gozo e paz na minha fé. Que eu possa abundar na esperança pela virtude do Teu Espírito Santo. Ajuda-me a confiar nas Tuas promessas e a viver com expectativa do que Tu farás. Amém.",
     data: new Date(Date.now() - 345600000).toISOString().split('T')[0],
-    autor: "Pastor Kele",
+    autor: "Pastora Kele",
     categoria: "Esperança",
     tags: ["esperança", "gozo", "paz"]
   },
@@ -130,7 +130,7 @@ const estudosDatabase: Estudo[] = [
     reflexao: "O amor de Deus é eterno e nunca falha. Enquanto outras coisas podem passar, o amor permanece para sempre. Este amor nos capacita a amar outros de forma incondicional, mesmo quando é difícil. É através do amor que demonstramos o caráter de Cristo ao mundo.",
     oracao: "Pai celestial, ensina-me a amar como Tu amas. Que meu amor seja genuíno, incondicional e transformador. Ajuda-me a demonstrar Teu amor através de minhas ações e palavras. Que eu seja um instrumento do Teu amor neste mundo. Amém.",
     data: new Date(Date.now() - 777600000).toISOString().split('T')[0],
-    autor: "Pastor Rany",
+    autor: "Pastora Rany",
     categoria: "Amor",
     tags: ["amor", "eternidade", "transformação"]
   }

@@ -49,7 +49,7 @@ const dailyStudies = [
     title: "Construindo Hábitos Positivos",
     content: "Nós somos o que fazemos repetidamente. Excelência, então, não é um ato, mas um hábito. Pequenas mudanças consistentes em seus hábitos diários podem levar a transformações significativas em sua vida. Comece com um hábito que você deseja desenvolver e pratique-o diariamente até que se torne parte de quem você é.",
     verse: "Filipenses 4:8",
-    author: "Pastor Kele"
+    author: "Pastora Kele"
   },
   {
     title: "A Força da Comunhão",
@@ -79,7 +79,7 @@ const dailyStudies = [
     title: "O Amor que Não Falha",
     content: "O amor de Deus é perfeito e nunca falha. Mesmo quando enfrentamos dificuldades, podemos confiar que Ele nos ama incondicionalmente. Este amor nos dá força para amar outros, mesmo quando é difícil, e nos capacita a viver uma vida de propósito e significado.",
     verse: "1 Coríntios 13:8",
-    author: "Pastor Rany"
+    author: "Pastora Rany"
   },
 ];
 
@@ -149,7 +149,7 @@ const ministries = [
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
     members: 25,
-    leader: "Pastor Kele"
+    leader: "Pastora Kele"
   },
   {
     name: "Ministério Infantil",
@@ -198,7 +198,7 @@ const ministries = [
     description: "Fortalecendo relacionamentos e famílias",
     icon: HeartIcon,
     members: 22,
-    leader: "Pastor Rany"
+    leader: "Pastora Rany"
   }
 ];
 
