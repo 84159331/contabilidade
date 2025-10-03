@@ -12,6 +12,7 @@ import GivePage from './pages/public/GivePage';
 import LocationsPage from './pages/public/LocationsPage';
 import BonsEstudosPage from './pages/public/BonsEstudosPage';
 import BibliotecaPage from './pages/public/BibliotecaPage';
+import LoginDebug from './pages/LoginDebug';
 import { NotificationProvider } from './contexts/NotificationContext';
 import TesourariaApp from './TesourariaApp';
 
@@ -33,6 +34,7 @@ function App() {
               <Route path="/bons-estudos" element={<BonsEstudosPage />} />
             <Route path="/biblioteca" element={<BibliotecaPage />} />
             </Route>
+            <Route path="/login-debug" element={<LoginDebug />} />
             <Route path="/tesouraria/*" element={<TesourariaApp />} />
           </Routes>
         </Router>
