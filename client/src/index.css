@@ -175,148 +175,201 @@
     @apply transition-colors duration-300 ease-in-out;
   }
 
-  /* Animações para Hero Section */
-  .hero-gradient {
-    background: linear-gradient(-45deg, #1e40af, #3b82f6, #1d4ed8, #2563eb);
+  /* Animações de entrada suaves */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .fade-in-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeInScale 0.6s ease-out forwards;
+  }
+
+  .slide-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideInLeft 0.7s ease-out forwards;
+  }
+
+  .slide-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slideInRight 0.7s ease-out forwards;
+  }
+
+  /* Animações escalonadas */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-6 { animation-delay: 0.6s; }
+  .stagger-7 { animation-delay: 0.7s; }
+  .stagger-8 { animation-delay: 0.8s; }
+
+  /* Keyframes */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Movimento suave no background */
+  .bg-flow {
+    background-size: 200% 200%;
+    animation: backgroundFlow 20s ease-in-out infinite;
+  }
+
+  .bg-drift {
+    background-size: 300% 300%;
+    animation: backgroundDrift 25s ease-in-out infinite;
+  }
+
+  .bg-wave {
     background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    animation: backgroundWave 30s ease-in-out infinite;
   }
 
-  .particle {
+  /* Efeitos de partículas sutis */
+  .bg-particles {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-particles::before {
+    content: '';
     position: absolute;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    animation: float 20s infinite linear;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px, 60px 60px;
+    animation: particleFloat 40s linear infinite;
+    pointer-events: none;
   }
 
-  .particle:nth-child(1) {
-    width: 4px;
-    height: 4px;
-    left: 10%;
-    animation-delay: 0s;
-    animation-duration: 20s;
+  /* Ondas sutis */
+  .bg-waves {
+    position: relative;
+    overflow: hidden;
   }
 
-  .particle:nth-child(2) {
-    width: 6px;
-    height: 6px;
-    left: 20%;
-    animation-delay: 2s;
-    animation-duration: 25s;
+  .bg-waves::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+    animation: waveMove 15s ease-in-out infinite;
+    pointer-events: none;
   }
 
-  .particle:nth-child(3) {
-    width: 3px;
-    height: 3px;
-    left: 30%;
-    animation-delay: 4s;
-    animation-duration: 18s;
-  }
-
-  .particle:nth-child(4) {
-    width: 5px;
-    height: 5px;
-    left: 40%;
-    animation-delay: 6s;
-    animation-duration: 22s;
-  }
-
-  .particle:nth-child(5) {
-    width: 4px;
-    height: 4px;
-    left: 50%;
-    animation-delay: 8s;
-    animation-duration: 20s;
-  }
-
-  .particle:nth-child(6) {
-    width: 7px;
-    height: 7px;
-    left: 60%;
-    animation-delay: 10s;
-    animation-duration: 24s;
-  }
-
-  .particle:nth-child(7) {
-    width: 3px;
-    height: 3px;
-    left: 70%;
-    animation-delay: 12s;
-    animation-duration: 19s;
-  }
-
-  .particle:nth-child(8) {
-    width: 5px;
-    height: 5px;
-    left: 80%;
-    animation-delay: 14s;
-    animation-duration: 21s;
-  }
-
-  .particle:nth-child(9) {
-    width: 4px;
-    height: 4px;
-    left: 90%;
-    animation-delay: 16s;
-    animation-duration: 23s;
-  }
-
-  .particle:nth-child(10) {
-    width: 6px;
-    height: 6px;
-    left: 95%;
-    animation-delay: 18s;
-    animation-duration: 26s;
-  }
-
-  @keyframes gradientShift {
-    0% {
+  /* Keyframes para movimento */
+  @keyframes backgroundFlow {
+    0%, 100% {
       background-position: 0% 50%;
     }
     50% {
       background-position: 100% 50%;
     }
-    100% {
+  }
+
+  @keyframes backgroundDrift {
+    0%, 100% {
+      background-position: 0% 0%;
+    }
+    25% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%;
+    }
+  }
+
+  @keyframes backgroundWave {
+    0%, 100% {
       background-position: 0% 50%;
     }
+    25% {
+      background-position: 50% 0%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    75% {
+      background-position: 50% 100%;
+    }
   }
 
-  @keyframes float {
+  @keyframes particleFloat {
     0% {
-      transform: translateY(100vh) rotate(0deg);
-      opacity: 0;
+      transform: translateY(0) translateX(0);
     }
-    10% {
-      opacity: 1;
+    25% {
+      transform: translateY(-10px) translateX(5px);
     }
-    90% {
-      opacity: 1;
+    50% {
+      transform: translateY(0) translateX(10px);
+    }
+    75% {
+      transform: translateY(10px) translateX(5px);
     }
     100% {
-      transform: translateY(-100px) rotate(360deg);
-      opacity: 0;
+      transform: translateY(0) translateX(0);
     }
   }
 
-  /* Efeito de brilho sutil */
-  .hero-shine {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-shine::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    animation: shine 8s infinite;
-    pointer-events: none;
-  }
-
-  @keyframes shine {
+  @keyframes waveMove {
     0% {
       transform: translateX(-100%) translateY(-100%) rotate(45deg);
     }

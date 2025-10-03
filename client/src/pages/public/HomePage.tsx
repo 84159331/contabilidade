@@ -260,55 +260,36 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center text-white overflow-hidden hero-gradient hero-shine">
-        {/* Partículas flutuantes */}
-        <div className="absolute inset-0 z-5">
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-        </div>
-        
-        {/* Overlay sutil */}
-        <div className="absolute inset-0 bg-black opacity-20 z-10"></div>
-        
-        {/* Conteúdo principal */}
+      <div
+        className="relative h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles"
+      >
+        <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
         <div className="relative z-20 text-center">
-          <div className="mb-6">
+          <div className="mb-6 fade-in-up">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
               alt="Comunidade Cristã Resgate" 
-              className="mx-auto h-20 w-20 mb-4 opacity-90 animate-fade-in"
+              className="mx-auto h-20 w-20 mb-4 opacity-90"
             />
           </div>
-          <h1 className="text-5xl font-bold font-heading mb-4 animate-slide-up">Bem-vindo à Comunidade Cristã Resgate</h1>
-          <p className="text-xl mb-8 animate-slide-up" style={{animationDelay: '0.2s'}}>Um lugar para pertencer, acreditar e se tornar.</p>
-          <Link 
-            to="/sobre" 
-            className="btn btn-primary text-lg py-3 px-8 animate-scale-in hover:scale-105 transition-transform duration-300"
-            style={{animationDelay: '0.4s'}}
-          >
+          <h1 className="text-5xl font-bold font-heading mb-4 fade-in-up stagger-1">Bem-vindo à Comunidade Cristã Resgate</h1>
+          <p className="text-xl mb-8 fade-in-up stagger-2">Um lugar para pertencer, acreditar e se tornar.</p>
+          <Link to="/sobre" className="btn btn-primary text-lg py-3 px-8 fade-in-scale stagger-3">
             Saiba Mais
           </Link>
         </div>
       </div>
 
       {/* Quick Actions Section */}
-      <div className="py-16 bg-white dark:bg-gray-800">
+      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold font-heading text-center mb-8 dark:text-white">Acesso Rápido</h2>
+          <h2 className="text-3xl font-bold font-heading text-center mb-8 dark:text-white fade-in-up">Acesso Rápido</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {quickActions.map((action, index) => (
               <Link
                 key={index}
                 to={action.link}
-                className={`${action.color} text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+                className={`${action.color} text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-${index + 1}`}
               >
                 <div className="text-center">
                   <action.icon className="h-12 w-12 mx-auto mb-4" />
@@ -322,11 +303,11 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Estudo de Hoje Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800">
+      <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Estudo de Hoje</h2>
-            <p className="text-gray-600 dark:text-gray-300">Reflexão diária para fortalecer sua fé</p>
+            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Estudo de Hoje</h2>
+            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Reflexão diária para fortalecer sua fé</p>
           </div>
           
           {loadingStudy ? (
@@ -335,7 +316,7 @@ const HomePage: React.FC = () => {
             </div>
           ) : (
             <div className="max-w-4xl mx-auto">
-              <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+              <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8 fade-in-scale stagger-2">
                 <div className="text-center mb-6">
                   <h3 className={`text-2xl font-bold font-heading mb-4 text-gray-900 dark:text-white transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
                     {dailyStudy.title}
@@ -375,16 +356,16 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Próximos Eventos Section */}
-      <div className="py-16 bg-white dark:bg-gray-800">
+      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Próximos Eventos</h2>
-            <p className="text-gray-600 dark:text-gray-300">Participe dos nossos eventos e fortaleça sua fé</p>
+            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Próximos Eventos</h2>
+            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Participe dos nossos eventos e fortaleça sua fé</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {upcomingEvents.map((event, index) => (
-              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300">
+              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 fade-in-scale stagger-${index + 2}">
                 <div className="flex items-center justify-between mb-4">
                   <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                     event.type === 'culto' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
@@ -440,16 +421,16 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Ministérios Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800">
+      <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Nossos Ministérios</h2>
-            <p className="text-gray-600 dark:text-gray-300">Encontre seu lugar de serviço na comunidade</p>
+            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Nossos Ministérios</h2>
+            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Encontre seu lugar de serviço na comunidade</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {ministries.map((ministry, index) => (
-              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300">
+              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300 fade-in-scale stagger-${index + 2}">
                 <div className="mb-4">
                   <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
                     <ministry.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -530,7 +511,7 @@ const HomePage: React.FC = () => {
 
 
       {/* Informações de Contato Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800">
+      <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Entre em Contato</h2>
@@ -578,7 +559,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Horários de Culto Section */}
-      <div className="py-16 bg-white dark:bg-gray-800">
+      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Horários de Culto</h2>
@@ -646,22 +627,22 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Call to Action Final */}
-      <div className="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white bg-flow bg-particles">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold font-heading mb-4">Pronto para Começar sua Jornada?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <h2 className="text-4xl font-bold font-heading mb-4 fade-in-up">Pronto para Começar sua Jornada?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90 fade-in-up stagger-1">
             Junte-se à nossa comunidade e descubra o propósito que Deus tem para sua vida
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/conecte"
-              className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2"
             >
               Conectar-se
             </Link>
             <Link
               to="/sobre"
-              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-3"
             >
               Conhecer Mais
             </Link>
