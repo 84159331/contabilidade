@@ -260,21 +260,40 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div
-        className="relative h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800"
-      >
-        <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
+      <div className="relative h-screen flex items-center justify-center text-white overflow-hidden hero-gradient hero-shine">
+        {/* Partículas flutuantes */}
+        <div className="absolute inset-0 z-5">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        
+        {/* Overlay sutil */}
+        <div className="absolute inset-0 bg-black opacity-20 z-10"></div>
+        
+        {/* Conteúdo principal */}
         <div className="relative z-20 text-center">
           <div className="mb-6">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
               alt="Comunidade Cristã Resgate" 
-              className="mx-auto h-20 w-20 mb-4 opacity-90"
+              className="mx-auto h-20 w-20 mb-4 opacity-90 animate-fade-in"
             />
           </div>
-          <h1 className="text-5xl font-bold font-heading mb-4">Bem-vindo à Comunidade Cristã Resgate</h1>
-          <p className="text-xl mb-8">Um lugar para pertencer, acreditar e se tornar.</p>
-          <Link to="/sobre" className="btn btn-primary text-lg py-3 px-8">
+          <h1 className="text-5xl font-bold font-heading mb-4 animate-slide-up">Bem-vindo à Comunidade Cristã Resgate</h1>
+          <p className="text-xl mb-8 animate-slide-up" style={{animationDelay: '0.2s'}}>Um lugar para pertencer, acreditar e se tornar.</p>
+          <Link 
+            to="/sobre" 
+            className="btn btn-primary text-lg py-3 px-8 animate-scale-in hover:scale-105 transition-transform duration-300"
+            style={{animationDelay: '0.4s'}}
+          >
             Saiba Mais
           </Link>
         </div>
