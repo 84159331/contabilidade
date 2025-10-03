@@ -20,7 +20,7 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://seu-backend.vercel.app/api"
+    "REACT_APP_API_URL": "https://contabilidade-backend.onrender.com/api"
   },
   "functions": {
     "client/build/static/js/*.js": {
