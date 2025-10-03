@@ -96,8 +96,8 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
 • Escola Bíblica: Domingo 8h
 
 📱 *Contato:*
-• WhatsApp: (11) 99999-9999
-• Email: contato@resgate.com.br
+• WhatsApp: (11) 1234-5678
+• Email: cresgate012@gmail.com
 
 Que Deus abençoe sua vida! ✨`
     },

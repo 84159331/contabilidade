@@ -585,7 +585,7 @@ const HomePage: React.FC = () => {
                 <PhoneIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Telefone</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">(11) 99999-9999</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">(11) 1234-5678</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Segunda a Sexta: 9h às 18h</p>
             </div>
             
@@ -594,7 +594,7 @@ const HomePage: React.FC = () => {
                 <EnvelopeIcon className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">contato@resgate.com.br</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">cresgate012@gmail.com</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Respondemos em até 24h</p>
             </div>
             
@@ -603,7 +603,7 @@ const HomePage: React.FC = () => {
                 <MapPinIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Endereço</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Rua da Fé, 123<br />Centro - São Paulo, SP</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Quadra 38, Área Especial, Lote E<br />Vila São José, Brasília - DF<br />72010-010</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Estacionamento gratuito</p>
             </div>
           </div>
