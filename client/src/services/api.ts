@@ -47,7 +47,7 @@ export const authAPI = {
     api.post('/auth/register', { username, email, password }),
   
   verifyToken: () =>
-    api.post('/.netlify/functions/auth-verify', { token: localStorage.getItem('token') }),
+    api.post('/.netlify/functions/auth-verify-simple', { token: localStorage.getItem('token') }),
   
   getProfile: () =>
     api.get('/auth/profile'),

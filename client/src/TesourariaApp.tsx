@@ -20,11 +20,15 @@ const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
 function TesourariaApp() {
   const { user, loading } = useAuth();
 
+  console.log('🏦 TesourariaApp renderizado - user:', user, 'loading:', loading);
+
   if (loading) {
+    console.log('⏳ Mostrando LoadingSpinner');
     return <LoadingSpinner />;
   }
 
   if (!user) {
+    console.log('❌ Usuário não logado, redirecionando para login');
     return (
       <Routes>
         <Route path="login" element={<Login />} />
@@ -33,6 +37,7 @@ function TesourariaApp() {
     );
   }
 
+  console.log('✅ Usuário logado, mostrando dashboard');
   return (
     <Layout>
       <Suspense fallback={<PageSkeleton type="dashboard" />}>

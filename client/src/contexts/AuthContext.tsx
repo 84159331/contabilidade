@@ -34,31 +34,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('🔄 AuthContext useEffect executado');
     const token = localStorage.getItem('token');
+    console.log('🔑 Token encontrado no localStorage:', token);
+    
     if (token) {
+      console.log('🔍 Verificando token...');
       authAPI.verifyToken()
         .then((response) => {
+          console.log('✅ Token verificado com sucesso:', response.data);
           setUser(response.data.user);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('❌ Erro na verificação do token:', error);
           localStorage.removeItem('token');
         })
         .finally(() => {
           setLoading(false);
         });
     } else {
+      console.log('❌ Nenhum token encontrado');
       setLoading(false);
     }
   }, []);
 
   const login = async (username: string, password: string) => {
     try {
+      console.log('🔐 Iniciando login para:', username);
       const response = await authAPI.login(username, password);
+      console.log('✅ Resposta do login:', response.data);
+      
       const { token, user: userData } = response.data;
       
       localStorage.setItem('token', token);
+      console.log('💾 Token salvo no localStorage:', token);
       setUser(userData);
+      console.log('👤 Usuário definido:', userData);
     } catch (error: any) {
+      console.error('❌ Erro no login:', error);
       throw new Error(error.response?.data?.error || 'Erro ao fazer login');
     }
   };
