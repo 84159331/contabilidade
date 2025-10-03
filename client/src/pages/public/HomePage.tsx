@@ -82,6 +82,8 @@ const dailyStudies = [
   },
 ];
 
+// Testemunhos - TEMPORARIAMENTE DESABILITADOS
+/*
 const testimonials = [
   {
     name: "Maria Silva",
@@ -108,6 +110,7 @@ const testimonials = [
     rating: 5
   }
 ];
+*/
 
 const upcomingEvents = [
   {
@@ -456,7 +459,8 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Testemunhos Section */}
+      {/* Testemunhos Section - TEMPORARIAMENTE DESABILITADA */}
+      {/* 
       <div className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
@@ -501,6 +505,7 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Around River Valley Section */}
       <div className="py-16 dark:bg-gray-900">
