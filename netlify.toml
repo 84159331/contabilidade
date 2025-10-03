@@ -5,7 +5,7 @@ publish = "client/build"
 [build.environment]
   NODE_VERSION = "20"
   CI = "false"
-  REACT_APP_API_URL = "https://seu-backend.netlify.app/api"
+  REACT_APP_API_URL = "https://contabilidade-backend-production.up.railway.app/api"
 
 # Redirecionamento para SPA (Single Page Application)
 [[redirects]]
