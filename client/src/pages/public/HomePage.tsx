@@ -507,53 +507,6 @@ const HomePage: React.FC = () => {
       </div>
       */}
 
-      {/* Around River Valley Section */}
-      <div className="py-16 dark:bg-gray-900">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold font-heading text-center mb-8 dark:text-white">Na Comunidade Cristã Resgate</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <SafeImage 
-                src="/img/ICONE-RESGATE.png" 
-                alt="Mensagens" 
-                className="h-48 w-full object-cover"
-                fallbackText="Imagem de Mensagens"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Mensagens</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Assista às nossas mensagens mais recentes.</p>
-                <a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Assista Agora</a>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <SafeImage 
-                src="/img/ICONE-RESGATE.png" 
-                alt="Grupo Celular" 
-                className="h-48 w-full object-cover"
-                fallbackText="Imagem de Grupo Celular"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Grupo Celular</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Encontre comunidade e cresça na fé.</p>
-                <Link to="/conecte" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Encontre um Grupo</Link>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <SafeImage 
-                src="/img/ICONE-RESGATE.png" 
-                alt="Eventos" 
-                className="h-48 w-full object-cover"
-                fallbackText="Imagem de Eventos"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Eventos</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Veja o que está acontecendo em nossa igreja.</p>
-                <Link to="/eventos" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Ver Eventos</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* About Us Section */}
       <div className="py-16 bg-gray-200 dark:bg-gray-800">
