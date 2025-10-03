@@ -5,4 +5,8 @@
 command = "cd server && npm install"
 
 [deploy]
-startCommand = "cd server && npm start"
+startCommand = "cd server && node index.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
