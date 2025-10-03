@@ -1,5 +1,5 @@
 [build]
-command = "npm install && cd client && npm install && npm run build"
+command = "npm install && cd client && npm install && npm run build && cd ../netlify/functions && npm install"
 publish = "client/build"
 
 [build.environment]
@@ -13,6 +13,11 @@ publish = "client/build"
 # Netlify Functions
 [functions]
 directory = "netlify/functions"
+node_bundler = "esbuild"
+
+# Plugin para instalar dependências das functions
+[[plugins]]
+package = "@netlify/plugin-functions-install-core"
 
 # Redirecionamento para SPA (Single Page Application)
 [[redirects]]

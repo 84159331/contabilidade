@@ -48,6 +48,22 @@ const LoginDebug: React.FC = () => {
       const loginData = await loginResponse.text();
       addDebugInfo(`Login Debug: ${loginResponse.status} - ${loginData}`);
       
+      // Teste Login Simple
+      addDebugInfo('Testando login simple...');
+      const loginSimpleResponse = await fetch('/.netlify/functions/auth-login-simple', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'admin',
+          password: 'password123'
+        })
+      });
+      
+      const loginSimpleData = await loginSimpleResponse.text();
+      addDebugInfo(`Login Simple: ${loginSimpleResponse.status} - ${loginSimpleData}`);
+      
       // Teste Login Original
       addDebugInfo('Testando login original...');
       const loginOriginalResponse = await fetch('/.netlify/functions/auth-login', {
