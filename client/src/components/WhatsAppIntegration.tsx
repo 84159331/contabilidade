@@ -207,6 +207,22 @@ Que Deus abençoe e fortaleça você! ✨
           role: 'pastor',
           isActive: true,
           createdAt: new Date()
+        },
+        {
+          id: '9',
+          name: 'Pastor Thiago',
+          phone: '+5511111111111',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
+        },
+        {
+          id: '10',
+          name: 'Pastor Rany',
+          phone: '+5511000000000',
+          role: 'pastor',
+          isActive: true,
+          createdAt: new Date()
         }
       ];
       setContacts(exampleContacts);

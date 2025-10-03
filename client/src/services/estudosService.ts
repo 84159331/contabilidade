@@ -109,6 +109,30 @@ const estudosDatabase: Estudo[] = [
     autor: "Pastora Eneize",
     categoria: "Transformação",
     tags: ["transformação", "Espírito Santo", "crescimento"]
+  },
+  {
+    id: 9,
+    titulo: "A Sabedoria que Vem do Alto",
+    versiculo: "Tiago 3:17",
+    texto: "Mas a sabedoria que vem do alto é primeiramente pura, depois pacífica, moderada, tratável, cheia de misericórdia e de bons frutos, sem parcialidade, e sem hipocrisia.",
+    reflexao: "A sabedoria divina é diferente da sabedoria humana. Ela é pura, pacífica e cheia de misericórdia. Quando buscamos esta sabedoria, nossas decisões são guiadas pelo Espírito Santo e refletem o caráter de Cristo. Esta sabedoria nos ajuda a viver em harmonia com outros e a fazer escolhas que glorificam a Deus.",
+    oracao: "Senhor, concede-me a sabedoria que vem do alto. Que eu possa tomar decisões guiadas pelo Teu Espírito e viver de forma que glorifique o Teu nome. Ajuda-me a ser puro, pacífico e misericordioso em todas as minhas ações. Amém.",
+    data: new Date(Date.now() - 691200000).toISOString().split('T')[0],
+    autor: "Pastor Thiago",
+    categoria: "Sabedoria",
+    tags: ["sabedoria", "decisões", "caráter"]
+  },
+  {
+    id: 10,
+    titulo: "O Amor que Não Falha",
+    versiculo: "1 Coríntios 13:8",
+    texto: "O amor nunca falha; mas havendo profecias, serão aniquiladas; havendo línguas, cessarão; havendo ciência, desaparecerá.",
+    reflexao: "O amor de Deus é eterno e nunca falha. Enquanto outras coisas podem passar, o amor permanece para sempre. Este amor nos capacita a amar outros de forma incondicional, mesmo quando é difícil. É através do amor que demonstramos o caráter de Cristo ao mundo.",
+    oracao: "Pai celestial, ensina-me a amar como Tu amas. Que meu amor seja genuíno, incondicional e transformador. Ajuda-me a demonstrar Teu amor através de minhas ações e palavras. Que eu seja um instrumento do Teu amor neste mundo. Amém.",
+    data: new Date(Date.now() - 777600000).toISOString().split('T')[0],
+    autor: "Pastor Rany",
+    categoria: "Amor",
+    tags: ["amor", "eternidade", "transformação"]
   }
 ];
 

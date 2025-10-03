@@ -68,6 +68,18 @@ const dailyStudies = [
     verse: "Romanos 15:13",
     author: "Pastora Eneize"
   },
+  {
+    title: "A Sabedoria que Vem do Alto",
+    content: "A sabedoria verdadeira não vem do conhecimento humano, mas do temor ao Senhor. É uma sabedoria que nos guia em decisões importantes, nos ajuda a discernir entre o certo e o errado, e nos conduz no caminho da vida. Busque esta sabedoria com todo o seu coração.",
+    verse: "Provérbios 9:10",
+    author: "Pastor Thiago"
+  },
+  {
+    title: "O Amor que Não Falha",
+    content: "O amor de Deus é perfeito e nunca falha. Mesmo quando enfrentamos dificuldades, podemos confiar que Ele nos ama incondicionalmente. Este amor nos dá força para amar outros, mesmo quando é difícil, e nos capacita a viver uma vida de propósito e significado.",
+    verse: "1 Coríntios 13:8",
+    author: "Pastor Rany"
+  },
 ];
 
 const testimonials = [
@@ -169,6 +181,20 @@ const ministries = [
     icon: ShareIcon,
     members: 35,
     leader: "Pastor Elcio"
+  },
+  {
+    name: "Ministério de Discipulado",
+    description: "Formando discípulos maduros na fé",
+    icon: UserGroupIcon,
+    members: 28,
+    leader: "Pastor Thiago"
+  },
+  {
+    name: "Ministério de Casais",
+    description: "Fortalecendo relacionamentos e famílias",
+    icon: HeartIcon,
+    members: 22,
+    leader: "Pastor Rany"
   }
 ];
 
