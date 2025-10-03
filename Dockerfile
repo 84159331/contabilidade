@@ -33,7 +33,6 @@ RUN npm install --only=production
 # Copy built application
 COPY --from=builder /app/client/build ./client/build
 COPY --from=builder /app/server ./server
-COPY --from=builder /app/database ./database
 
 # Create uploads directory
 RUN mkdir -p uploads
