@@ -3,7 +3,7 @@ import axios from 'axios';
 // Usar Netlify Functions para autenticação
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? '' // Usar Netlify Functions
-  : 'http://localhost:5001/api';
+  : 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -38,16 +38,16 @@ api.interceptors.response.use(
   }
 );
 
-// API de autenticação usando Netlify Functions
+// API de autenticação - adaptada para ambiente
 export const authAPI = {
   login: (username: string, password: string) =>
-    api.post('/.netlify/functions/auth-login', { username, password }),
+    api.post(process.env.NODE_ENV === 'production' ? '/.netlify/functions/auth-login' : '/auth/login', { username, password }),
   
   register: (username: string, email: string, password: string) =>
     api.post('/auth/register', { username, email, password }),
   
   verifyToken: () =>
-    api.post('/.netlify/functions/auth-verify-simple', { token: localStorage.getItem('token') }),
+    api.post(process.env.NODE_ENV === 'production' ? '/.netlify/functions/auth-verify-simple' : '/auth/verify', { token: localStorage.getItem('token') }),
   
   getProfile: () =>
     api.get('/auth/profile'),

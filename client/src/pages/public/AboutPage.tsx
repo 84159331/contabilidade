@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import SafeImage from '../../components/SafeImage';
 import { HeartIcon, UsersIcon, HandRaisedIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const AboutPage: React.FC = () => {
@@ -15,13 +14,6 @@ const AboutPage: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="relative z-10 text-center"
         >
-          <div className="mb-6">
-            <SafeImage 
-              src="/img/ICONE-RESGATE.png" 
-              alt="Comunidade Cristã Resgate" 
-              className="mx-auto h-20 w-20 mb-4 opacity-90"
-            />
-          </div>
           <h1 className="text-5xl font-bold font-heading mb-4">Sobre Nós</h1>
           <p className="text-xl opacity-90 max-w-2xl mx-auto">
             Conheça nossa história, missão e valores que nos guiam como comunidade cristã
@@ -33,13 +25,6 @@ const AboutPage: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="mb-6">
-                <SafeImage 
-                  src="/img/ICONE-RESGATE.png" 
-                  alt="História" 
-                  className="h-12 w-12 mb-4"
-                />
-              </div>
               <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa História</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 A Comunidade Cristã Resgate foi fundada em 1995 com a missão de ser um farol de esperança e fé na comunidade. 
@@ -64,13 +49,6 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
             <div>
-              <div className="mb-6">
-                <SafeImage 
-                  src="/img/ICONE-RESGATE.png" 
-                  alt="Missão" 
-                  className="h-12 w-12 mb-4"
-                />
-              </div>
               <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa Missão e Visão</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Nossa missão é servir a Deus e à comunidade com amor, dedicação e transparência em todas as nossas ações. 
@@ -85,13 +63,6 @@ const AboutPage: React.FC = () => {
           </div>
 
           <div className="mt-16 text-center">
-            <div className="mb-6">
-              <SafeImage 
-                src="/img/ICONE-RESGATE.png" 
-                alt="Valores" 
-                className="mx-auto h-12 w-12 mb-4"
-              />
-            </div>
             <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossos Valores</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <motion.div 

@@ -573,12 +573,12 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <CalendarIcon className="h-6 w-6 text-blue-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto Dominical</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto de Celebração</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">Culto principal da semana</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">9h e 19h</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">19h</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">Domingo</p>
                   </div>
                 </div>
@@ -587,7 +587,7 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <BookOpenIcon className="h-6 w-6 text-green-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Estudo Bíblico</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto Conectados</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">Crescimento espiritual</p>
                     </div>
                   </div>
@@ -601,23 +601,13 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <UsersIcon className="h-6 w-6 text-purple-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Grupos Pequenos</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Célula Resgate</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">Comunhão e crescimento</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">19h30</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Sexta-feira</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                <div className="flex items-center">
-                  <CheckCircleIcon className="h-6 w-6 text-blue-600 mr-3" />
-                  <div>
-                    <h4 className="font-semibold text-blue-900 dark:text-blue-100">Culto Especial</h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-200">Primeiro domingo de cada mês às 19h</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">20h</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Quarta-feira</p>
                   </div>
                 </div>
               </div>
