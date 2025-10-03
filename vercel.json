@@ -20,7 +20,7 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://seu-backend.vercel.app"
+    "REACT_APP_API_URL": "https://seu-backend.vercel.app/api"
   },
   "functions": {
     "client/build/static/js/*.js": {
