@@ -65,7 +65,7 @@ const PublicLayout: React.FC = () => {
             <div>
               <div className="flex items-center mb-4">
                 <img 
-                  src="/img/LOGO ICONE [BRANCO].png" 
+                  src="/img/ICONE-RESGATE.png" 
                   alt="Resgate" 
                   className="h-8 w-8 mr-3"
                 />

@@ -20,7 +20,7 @@ const LocationsPage: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="mb-4">
             <SafeImage 
-              src="/img/LOGO ICONE.png" 
+              src="/img/ICONE-RESGATE.png" 
               alt="Sede" 
               className="mx-auto h-12 w-12 mb-4"
             />

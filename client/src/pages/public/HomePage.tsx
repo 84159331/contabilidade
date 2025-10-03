@@ -497,7 +497,7 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-6 text-center">
           <div className="mb-6">
             <SafeImage 
-              src="/img/LOGO ICONE.png" 
+              src="/img/ICONE-RESGATE.png" 
               alt="Comunidade Cristã Resgate" 
               className="mx-auto h-16 w-16 mb-4"
             />

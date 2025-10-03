@@ -27,7 +27,7 @@ const ContactPage: React.FC = () => {
             <div>
               <div className="mb-6">
                 <SafeImage 
-                  src="/img/LOGO ICONE.png" 
+                  src="/img/ICONE-RESGATE.png" 
                   alt="Fale Conosco" 
                   className="h-12 w-12 mb-4"
                 />
@@ -54,7 +54,7 @@ const ContactPage: React.FC = () => {
             <div>
               <div className="mb-6">
                 <SafeImage 
-                  src="/img/LOGO ICONE.png" 
+                  src="/img/ICONE-RESGATE.png" 
                   alt="Localização" 
                   className="h-12 w-12 mb-4"
                 />

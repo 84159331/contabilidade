@@ -35,7 +35,7 @@ const AboutPage: React.FC = () => {
             <div>
               <div className="mb-6">
                 <SafeImage 
-                  src="/img/LOGO ICONE.png" 
+                  src="/img/ICONE-RESGATE.png" 
                   alt="História" 
                   className="h-12 w-12 mb-4"
                 />
@@ -66,7 +66,7 @@ const AboutPage: React.FC = () => {
             <div>
               <div className="mb-6">
                 <SafeImage 
-                  src="/img/LOGO ICONE.png" 
+                  src="/img/ICONE-RESGATE.png" 
                   alt="Missão" 
                   className="h-12 w-12 mb-4"
                 />
@@ -87,7 +87,7 @@ const AboutPage: React.FC = () => {
           <div className="mt-16 text-center">
             <div className="mb-6">
               <SafeImage 
-                src="/img/LOGO ICONE.png" 
+                src="/img/ICONE-RESGATE.png" 
                 alt="Valores" 
                 className="mx-auto h-12 w-12 mb-4"
               />
