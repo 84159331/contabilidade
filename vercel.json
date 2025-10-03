@@ -20,7 +20,7 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://contabilidade-backend.onrender.com/api"
+    "REACT_APP_API_URL": "https://contabilidade-backend-production.up.railway.app/api"
   },
   "functions": {
     "client/build/static/js/*.js": {
