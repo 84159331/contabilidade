@@ -509,26 +509,6 @@ const HomePage: React.FC = () => {
       */}
 
 
-      {/* About Us Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800">
-        <div className="container mx-auto px-6 text-center">
-          <div className="mb-6">
-            <SafeImage 
-              src="/img/ICONE-RESGATE.png" 
-              alt="Comunidade Cristã Resgate" 
-              className="mx-auto h-16 w-16 mb-4"
-            />
-          </div>
-          <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Sobre Nós</h2>
-          <p className="max-w-3xl mx-auto text-gray-600 dark:text-gray-300 mb-6">
-            A Comunidade Cristã Resgate é uma igreja que ama a Deus e as pessoas. 
-            Nossa paixão é ver vidas transformadas pelo poder do Evangelho.
-          </p>
-          <Link to="/sobre" className="btn btn-secondary text-lg py-3 px-8">
-            Nossa História
-          </Link>
-        </div>
-      </div>
 
       {/* Informações de Contato Section */}
       <div className="py-16 bg-gray-200 dark:bg-gray-800">
