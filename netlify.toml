@@ -5,3 +5,9 @@ publish = "client/build"
 [build.environment]
   NODE_VERSION = "20"
   CI = "false"
+
+# Redirecionamento para SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
