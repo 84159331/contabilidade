@@ -27,18 +27,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const colorOptions = [
-    { name: 'Azul', value: '#3B82F6' },
-    { name: 'Verde', value: '#10B981' },
-    { name: 'Vermelho', value: '#EF4444' },
-    { name: 'Amarelo', value: '#F59E0B' },
-    { name: 'Roxo', value: '#8B5CF6' },
-    { name: 'Rosa', value: '#EC4899' },
-    { name: 'Indigo', value: '#6366F1' },
-    { name: 'Cinza', value: '#6B7280' },
-    { name: 'Laranja', value: '#F97316' },
-    { name: 'Teal', value: '#14B8A6' }
-  ];
+  // Removido colorOptions não utilizado
 
   useEffect(() => {
     if (category) {

@@ -76,7 +76,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
       newErrors.email = 'Email inválido';
     }
 
-    if (formData.phone && !/^[\d\s\(\)\-\+]+$/.test(formData.phone)) {
+    if (formData.phone && !/^[\d\s()\-+]+$/.test(formData.phone)) {
       newErrors.phone = 'Telefone inválido';
     }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
+// Removido DocumentArrowDownIcon não utilizado
 
 interface MemberContribution {
   id: number;
