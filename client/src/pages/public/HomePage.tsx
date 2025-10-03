@@ -5,6 +5,7 @@ import {
   HeartIcon, 
   BookOpenIcon, 
   UsersIcon, 
+  UserGroupIcon,
   CalendarIcon,
   PlayIcon,
   ShareIcon,

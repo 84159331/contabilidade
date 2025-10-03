@@ -1,6 +1,7 @@
 [build]
-command = "npm install && cd client && npm install && npm run build && cd ../netlify/functions && npm install"
-publish = "client/build"
+  base = "client"
+  command = "npm run build"
+  publish = "build"
 
 [build.environment]
   NODE_VERSION = "20"
