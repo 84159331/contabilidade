@@ -1,0 +1,13 @@
+{
+  "name": "contabilidade-netlify-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions para sistema de contabilidade",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,11 +1,15 @@
 [build]
-command = "npm install && cd client && npm install && npm run build"
+command = "npm install && cd client && npm install && npm run build && cd ../netlify/functions && npm install"
 publish = "client/build"
 
 [build.environment]
   NODE_VERSION = "20"
   CI = "false"
-  REACT_APP_API_URL = "https://contabilidade-backend-production.up.railway.app/api"
+  JWT_SECRET = "sua-chave-secreta-super-segura-aqui-2024"
+
+# Netlify Functions
+[functions]
+directory = "netlify/functions"
 
 # Redirecionamento para SPA (Single Page Application)
 [[redirects]]
