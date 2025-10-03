@@ -1,0 +1,8 @@
+# Railway Configuration
+# Este arquivo indica que o Railway deve fazer deploy da pasta server/
+
+[build]
+command = "cd server && npm install"
+
+[deploy]
+startCommand = "cd server && npm start"
