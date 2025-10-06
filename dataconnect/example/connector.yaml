@@ -26,15 +26,15 @@ generate:
       packageJsonDir: ..\..\functions
       react: false
       angular: false
-    - outputDir: ..\..\contabilidade\src\dataconnect-generated
-      package: "@dataconnect/generated"
-      packageJsonDir: ..\..\contabilidade
-      react: false
-      angular: false
     - outputDir: ..\..\client\src\dataconnect-generated
       package: "@dataconnect/generated"
       packageJsonDir: ..\..\client
       react: true
+      angular: false
+    - outputDir: ..\..\contabilidade\src\dataconnect-generated
+      package: "@dataconnect/generated"
+      packageJsonDir: ..\..\contabilidade
+      react: false
       angular: false
     - outputDir: ..\..\netlify\functions\src\dataconnect-generated
       package: "@dataconnect/generated"
