@@ -11,6 +11,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "@heroicons/react": "^2.0.18",
     "@types/node": "^16.18.68",
     "@types/react": "^18.2.42",
