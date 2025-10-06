@@ -180,7 +180,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ThemeToggle />
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200 dark:bg-gray-700" />
               <div className="flex items-center gap-x-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Olá, {user?.username}</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">Olá, {user?.displayName || user?.email?.split('@')[0] || 'Usuário'}</span>
                 <button
                   onClick={logout}
                   className="flex items-center gap-x-2 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
