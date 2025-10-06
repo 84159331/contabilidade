@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider } from './firebase/AuthContext';
 import PublicLayout from './components/PublicLayout';
 import HomePage from './pages/public/HomePage';
 import AboutPage from './pages/public/AboutPage';
@@ -20,24 +21,26 @@ function App() {
   return (
     <ThemeProvider>
       <NotificationProvider>
-        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/sobre" element={<AboutPage />} />
-              <Route path="/eventos" element={<EventsPage />} />
-              <Route path="/contato" element={<ContactPage />} />
-              <Route path="/conecte" element={<ConnectPage />} />
-              <Route path="/assista" element={<WatchPage />} />
-              <Route path="/contribua" element={<GivePage />} />
-              <Route path="/localizacoes" element={<LocationsPage />} />
-              <Route path="/bons-estudos" element={<BonsEstudosPage />} />
-            <Route path="/biblioteca" element={<BibliotecaPage />} />
-            </Route>
-            <Route path="/login-debug" element={<LoginDebug />} />
-            <Route path="/tesouraria/*" element={<TesourariaApp />} />
-          </Routes>
-        </Router>
+        <AuthProvider>
+          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <Routes>
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/sobre" element={<AboutPage />} />
+                <Route path="/eventos" element={<EventsPage />} />
+                <Route path="/contato" element={<ContactPage />} />
+                <Route path="/conecte" element={<ConnectPage />} />
+                <Route path="/assista" element={<WatchPage />} />
+                <Route path="/contribua" element={<GivePage />} />
+                <Route path="/localizacoes" element={<LocationsPage />} />
+                <Route path="/bons-estudos" element={<BonsEstudosPage />} />
+                <Route path="/biblioteca" element={<BibliotecaPage />} />
+              </Route>
+              <Route path="/login-debug" element={<LoginDebug />} />
+              <Route path="/tesouraria/*" element={<TesourariaApp />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
       </NotificationProvider>
     </ThemeProvider>
   );

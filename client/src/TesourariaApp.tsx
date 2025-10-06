@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import Login from './pages/Login';
+import { useAuth } from './firebase/AuthContext';
+import LoginFirebase from './pages/LoginFirebase';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 import PageSkeleton from './components/PageSkeleton';
@@ -31,7 +31,7 @@ function TesourariaApp() {
     console.log('❌ Usuário não logado, redirecionando para login');
     return (
       <Routes>
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<LoginFirebase />} />
         <Route path="*" element={<Navigate to="login" replace />} />
       </Routes>
     );
