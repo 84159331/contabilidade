@@ -3,7 +3,7 @@ import axios from 'axios';
 // Usar Netlify Functions para autenticação
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? '' // Usar Netlify Functions
-  : 'http://localhost:8080/api';
+  : 'http://localhost:5001/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
