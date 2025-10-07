@@ -182,7 +182,7 @@ const LoginFirebase: React.FC = () => {
             </p>
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                📧 Contato: tesouraria@resgate.com.br
+                📧 Contato: cresgate012@gmail.com
               </p>
             </div>
           </div>
