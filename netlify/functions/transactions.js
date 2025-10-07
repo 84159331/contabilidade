@@ -20,15 +20,9 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    if (event.httpMethod !== 'GET') {
-      return {
-        statusCode: 405,
-        headers,
-        body: JSON.stringify({ error: 'Método não permitido' })
-      };
-    }
-
-    // Dados simulados de transações
+    // Lidar com diferentes métodos HTTP
+    if (event.httpMethod === 'GET') {
+      // Dados simulados de transações
     const transactions = [
       {
         id: 1,
@@ -84,13 +78,75 @@ exports.handler = async (event, context) => {
       }
     ];
 
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          transactions,
+          total: transactions.length
+        })
+      };
+    }
+
+    // Lidar com criação de transações (POST)
+    if (event.httpMethod === 'POST') {
+      const body = JSON.parse(event.body || '{}');
+      const { 
+        description, 
+        amount, 
+        type, 
+        category_id, 
+        member_id, 
+        transaction_date, 
+        payment_method, 
+        reference, 
+        notes 
+      } = body;
+
+      // Validação básica
+      if (!description || !amount || !type || !transaction_date) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Campos obrigatórios: description, amount, type, transaction_date' 
+          })
+        };
+      }
+
+      // Simular criação de transação (em um sistema real, salvaria no banco de dados)
+      const newTransaction = {
+        id: Date.now(), // ID temporário baseado em timestamp
+        description,
+        amount: parseFloat(amount),
+        type,
+        category_id: category_id || null,
+        member_id: member_id || null,
+        transaction_date,
+        payment_method: payment_method || null,
+        reference: reference || null,
+        notes: notes || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('✅ Nova transação criada:', newTransaction);
+
+      return {
+        statusCode: 201,
+        headers,
+        body: JSON.stringify({
+          message: 'Transação criada com sucesso',
+          transaction: newTransaction
+        })
+      };
+    }
+
+    // Método não suportado
     return {
-      statusCode: 200,
+      statusCode: 405,
       headers,
-      body: JSON.stringify({
-        transactions,
-        total: transactions.length
-      })
+      body: JSON.stringify({ error: 'Método não permitido' })
     };
 
   } catch (error) {
