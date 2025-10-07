@@ -173,11 +173,7 @@ const LoginDebug: React.FC = () => {
           </div>
         </div>
 
-        <div className="text-center text-sm text-gray-600">
-          <p><strong>Credenciais de teste:</strong></p>
-          <p>Username: <code>admin</code></p>
-          <p>Password: <code>password123</code></p>
-        </div>
+
       </div>
     </div>
   );
