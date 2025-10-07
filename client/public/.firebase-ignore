@@ -1,0 +1,3 @@
+# Arquivos específicos do Netlify que não devem ser copiados para Firebase
+_headers
+_redirects
