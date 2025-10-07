@@ -1,75 +1,29 @@
 // Dados mock para o dashboard funcionar sem backend
 export const mockDashboardData = {
   financialSummary: {
-    income: { total: 15750.00, count: 23 },
-    expense: { total: 12340.00, count: 18 },
-    balance: 3410.00
+    income: { total: 0, count: 0 },
+    expense: { total: 0, count: 0 },
+    balance: 0
   },
   memberStats: {
-    total: 156,
-    active: 142,
-    inactive: 14
+    total: 0,
+    active: 0,
+    inactive: 0
   },
-  recentTransactions: [
-    {
-      id: 1,
-      description: "Dízimo - João Silva",
-      amount: 500.00,
-      type: "income" as const,
-      transaction_date: "2024-01-15",
-      category_name: "Dízimos",
-      member_name: "João Silva"
-    },
-    {
-      id: 2,
-      description: "Oferta Especial",
-      amount: 200.00,
-      type: "income" as const,
-      transaction_date: "2024-01-14",
-      category_name: "Ofertas",
-      member_name: "Maria Santos"
-    },
-    {
-      id: 3,
-      description: "Conta de Luz",
-      amount: 180.50,
-      type: "expense" as const,
-      transaction_date: "2024-01-13",
-      category_name: "Utilidades",
-      member_name: undefined
-    },
-    {
-      id: 4,
-      description: "Dízimo - Pedro Costa",
-      amount: 300.00,
-      type: "income" as const,
-      transaction_date: "2024-01-12",
-      category_name: "Dízimos",
-      member_name: "Pedro Costa"
-    },
-    {
-      id: 5,
-      description: "Material de Limpeza",
-      amount: 85.00,
-      type: "expense" as const,
-      transaction_date: "2024-01-11",
-      category_name: "Manutenção",
-      member_name: undefined
-    }
-  ],
+  recentTransactions: [],
   cashFlowData: [
-    { month: "1", income: 4500, expense: 3200, balance: 1300 },
-    { month: "2", income: 5200, expense: 3800, balance: 1400 },
-    { month: "3", income: 4800, expense: 3500, balance: 1300 },
-    { month: "4", income: 5500, expense: 4000, balance: 1500 },
-    { month: "5", income: 5100, expense: 3600, balance: 1500 },
-    { month: "6", income: 5800, expense: 4200, balance: 1600 },
-    { month: "7", income: 5300, expense: 3800, balance: 1500 },
-    { month: "8", income: 5600, expense: 4100, balance: 1500 },
-    { month: "9", income: 5400, expense: 3900, balance: 1500 },
-    { month: "10", income: 5700, expense: 4000, balance: 1700 },
-    { month: "11", income: 5200, expense: 3700, balance: 1500 },
-    { month: "12", income: 5900, expense: 4300, balance: 1600 }
+    { month: "1", income: 0, expense: 0, balance: 0 },
+    { month: "2", income: 0, expense: 0, balance: 0 },
+    { month: "3", income: 0, expense: 0, balance: 0 },
+    { month: "4", income: 0, expense: 0, balance: 0 },
+    { month: "5", income: 0, expense: 0, balance: 0 },
+    { month: "6", income: 0, expense: 0, balance: 0 },
+    { month: "7", income: 0, expense: 0, balance: 0 },
+    { month: "8", income: 0, expense: 0, balance: 0 },
+    { month: "9", income: 0, expense: 0, balance: 0 },
+    { month: "10", income: 0, expense: 0, balance: 0 },
+    { month: "11", income: 0, expense: 0, balance: 0 },
+    { month: "12", income: 0, expense: 0, balance: 0 }
   ],
   users: [
     {
@@ -78,20 +32,54 @@ export const mockDashboardData = {
       email: "admin@igreja.com",
       role: "admin",
       created_at: "2024-01-01T00:00:00Z"
+    }
+  ],
+  members: [],
+  transactions: [],
+  categories: [
+    {
+      id: 1,
+      name: "Dízimos",
+      type: "income" as const,
+      description: "Contribuições regulares dos membros",
+      color: "#10B981",
+      transaction_count: 0,
+      total_amount: 0,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z"
     },
     {
       id: 2,
-      username: "tesoureiro",
-      email: "tesoureiro@igreja.com",
-      role: "tesoureiro",
-      created_at: "2024-01-15T00:00:00Z"
+      name: "Ofertas",
+      type: "income" as const, 
+      description: "Ofertas especiais e voluntárias",
+      color: "#3B82F6",
+      transaction_count: 0,
+      total_amount: 0,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z"
     },
     {
       id: 3,
-      username: "secretario",
-      email: "secretario@igreja.com",
-      role: "secretario",
-      created_at: "2024-02-01T00:00:00Z"
+      name: "Utilidades",
+      type: "expense" as const,
+      description: "Contas de água, luz, telefone",
+      color: "#EF4444",
+      transaction_count: 0,
+      total_amount: 0,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: 4,
+      name: "Manutenção",
+      type: "expense" as const,
+      description: "Reparos e manutenção do templo",
+      color: "#F59E0B",
+      transaction_count: 0,
+      total_amount: 0,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z"
     }
   ]
 };

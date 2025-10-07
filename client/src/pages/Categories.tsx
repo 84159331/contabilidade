@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { categoriesAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import CategoryForm from '../components/CategoryForm';
@@ -33,13 +34,31 @@ const Categories: React.FC = () => {
   const loadCategories = async () => {
     try {
       setLoading(true);
-      const response = await categoriesAPI.getCategories({
-        type: typeFilter === 'all' ? undefined : typeFilter
-      });
-      setCategories(response.data);
+      
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(400);
+        
+        // Usar dados mock
+        setCategories(mockDashboardData.categories);
+        console.log('Dados mock de categorias carregados:', mockDashboardData.categories);
+      } else {
+        // Tentar usar API real
+        const response = await categoriesAPI.getCategories({
+          type: typeFilter === 'all' ? undefined : typeFilter
+        });
+        setCategories(response.data);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar categorias');
       console.error('Erro ao carregar categorias:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setCategories(mockDashboardData.categories);
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

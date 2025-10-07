@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TransactionForm from '../components/TransactionForm';
@@ -65,23 +66,56 @@ const Transactions: React.FC = () => {
     try {
       setLoading(true);
       
-      const [transactionsResponse, categoriesResponse, membersResponse] = await Promise.all([
-        transactionsAPI.getTransactions({
-          page: pagination.page,
-          limit: pagination.limit,
-          ...filters
-        }),
-        categoriesAPI.getCategories(),
-        membersAPI.getMembers({ limit: 1000 })
-      ]);
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
       
-      setTransactions(transactionsResponse.data.transactions);
-      setPagination(transactionsResponse.data.pagination);
-      setCategories(categoriesResponse.data);
-      setMembers(membersResponse.data.members);
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        setTransactions(mockDashboardData.transactions);
+        setCategories(mockDashboardData.categories);
+        setMembers(mockDashboardData.members);
+        setPagination({
+          page: 1,
+          limit: 20,
+          total: 0,
+          pages: 0
+        });
+        console.log('Dados mock de transações carregados:', mockDashboardData.transactions);
+      } else {
+        // Tentar usar APIs reais
+        const [transactionsResponse, categoriesResponse, membersResponse] = await Promise.all([
+          transactionsAPI.getTransactions({
+            page: pagination.page,
+            limit: pagination.limit,
+            ...filters
+          }),
+          categoriesAPI.getCategories(),
+          membersAPI.getMembers({ limit: 1000 })
+        ]);
+        
+        setTransactions(transactionsResponse.data.transactions);
+        setPagination(transactionsResponse.data.pagination);
+        setCategories(categoriesResponse.data);
+        setMembers(membersResponse.data.members);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar dados');
       console.error('Erro ao carregar dados:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setTransactions(mockDashboardData.transactions);
+      setCategories(mockDashboardData.categories);
+      setMembers(mockDashboardData.members);
+      setPagination({
+        page: 1,
+        limit: 20,
+        total: 0,
+        pages: 0
+      });
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

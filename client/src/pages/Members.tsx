@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MemberForm from '../components/MemberForm';
@@ -46,18 +47,48 @@ const Members: React.FC = () => {
   const loadMembers = async () => {
     try {
       setLoading(true);
-      const response = await membersAPI.getMembers({
-        page: pagination.page,
-        limit: pagination.limit,
-        search: searchTerm,
-        status: statusFilter
-      });
       
-      setMembers(response.data.members);
-      setPagination(response.data.pagination);
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(500);
+        
+        // Usar dados mock
+        setMembers(mockDashboardData.members);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: 0,
+          pages: 0
+        });
+        console.log('Dados mock de membros carregados:', mockDashboardData.members);
+      } else {
+        // Tentar usar API real
+        const response = await membersAPI.getMembers({
+          page: pagination.page,
+          limit: pagination.limit,
+          search: searchTerm,
+          status: statusFilter
+        });
+        
+        setMembers(response.data.members);
+        setPagination(response.data.pagination);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar membros');
       console.error('Erro ao carregar membros:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setMembers(mockDashboardData.members);
+      setPagination({
+        page: 1,
+        limit: 10,
+        total: 0,
+        pages: 0
+      });
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }
