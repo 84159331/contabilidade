@@ -5,6 +5,12 @@ export const mockDashboardData = {
     expense: { total: 0, count: 0 },
     balance: 0
   },
+  monthlyBalance: {
+    income: { total: 0, count: 0 },
+    expense: { total: 0, count: 0 },
+    balance: 0,
+    period: { year: new Date().getFullYear(), month: new Date().getMonth() + 1 }
+  },
   memberStats: {
     total: 0,
     active: 0,

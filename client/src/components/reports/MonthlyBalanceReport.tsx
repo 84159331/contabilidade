@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
+import { mockDashboardData, simulateApiDelay } from '../../services/mockData';
 import { toast } from 'react-toastify';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
 
@@ -27,12 +28,42 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const loadReport = async () => {
     try {
       setLoading(true);
+      
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay da API
+        await simulateApiDelay();
+        
+        // Usar dados mock
+        const mockData = {
+          ...mockDashboardData.monthlyBalance,
+          period: { year, month }
+        };
+        setData(mockData);
+        onDataLoaded(mockData);
+        console.log('Dados mock de relatório mensal carregados:', mockData);
+        return;
+      }
+      
       const response = await reportsAPI.getMonthlyBalance(year, month);
       setData(response.data);
       onDataLoaded(response.data);
     } catch (error) {
-      toast.error('Erro ao carregar relatório mensal');
       console.error('Erro ao carregar relatório:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      const mockData = {
+        ...mockDashboardData.monthlyBalance,
+        period: { year, month }
+      };
+      setData(mockData);
+      onDataLoaded(mockData);
+      console.log('Usando dados mock como fallback');
+      
+      toast.error('Erro ao carregar relatório mensal');
     } finally {
       setLoading(false);
     }
@@ -119,14 +150,14 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Receitas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {data.income.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.income?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.income.count} transações
+                {data.income?.count || 0} transações
               </div>
             </div>
           </div>
@@ -146,14 +177,14 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Despesas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {data.expense.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.expense?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.expense.count} transações
+                {data.expense?.count || 0} transações
               </div>
             </div>
           </div>
@@ -164,10 +195,10 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  data.balance >= 0 ? 'bg-success-100' : 'bg-danger-100'
+                  (data.balance || 0) >= 0 ? 'bg-success-100' : 'bg-danger-100'
                 }`}>
                   <span className={`font-bold ${
-                    data.balance >= 0 ? 'text-success-600' : 'text-danger-600'
+                    (data.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
                   }`}>
                     =
                   </span>
@@ -179,9 +210,9 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Saldo
                   </dt>
                   <dd className={`text-lg font-medium ${
-                    data.balance >= 0 ? 'text-success-600' : 'text-danger-600'
+                    (data.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
                   }`}>
-                    R$ {data.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.balance || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
