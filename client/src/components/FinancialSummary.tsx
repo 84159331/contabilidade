@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -34,17 +35,45 @@ const FinancialSummary: React.FC = () => {
   const loadCashFlowData = async (year: number) => {
     setLoading(true);
     try {
-      const response = await transactionsAPI.getCashFlow({ year });
-      // Mapeia os números dos meses para nomes abreviados para o gráfico
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const formattedData = mockDashboardData.cashFlowData.map((d: any) => ({
+          ...d,
+          month: monthNames[parseInt(d.month) - 1],
+        }));
+        setData(formattedData);
+        console.log('Dados mock de fluxo de caixa carregados:', formattedData);
+      } else {
+        // Tentar usar API real
+        const response = await transactionsAPI.getCashFlow({ year });
+        // Mapeia os números dos meses para nomes abreviados para o gráfico
+        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const formattedData = response.data.map((d: any) => ({
+          ...d,
+          month: monthNames[parseInt(d.month) - 1],
+        }));
+        setData(formattedData);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar fluxo de caixa:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
       const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-      const formattedData = response.data.map((d: any) => ({
+      const formattedData = mockDashboardData.cashFlowData.map((d: any) => ({
         ...d,
         month: monthNames[parseInt(d.month) - 1],
       }));
       setData(formattedData);
-    } catch (error) {
-      toast.error('Erro ao carregar dados financeiros');
-      console.error('Erro ao carregar fluxo de caixa:', error);
+      
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

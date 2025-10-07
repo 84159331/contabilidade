@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 
 interface MemberStatsData {
@@ -19,16 +20,29 @@ const MemberStats: React.FC = () => {
 
   const loadMemberStats = async () => {
     try {
-      const response = await membersAPI.getMemberStats();
-      // eslint-disable-next-line no-console
-      console.log('Resposta da API de estatísticas:', response.data);
-      setStats(response.data.data);
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(400);
+        
+        // Usar dados mock
+        setStats(mockDashboardData.memberStats);
+        console.log('Dados mock de estatísticas carregados:', mockDashboardData.memberStats);
+      } else {
+        // Tentar usar API real
+        const response = await membersAPI.getMemberStats();
+        console.log('Resposta da API de estatísticas:', response.data);
+        setStats(response.data.data);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar estatísticas dos membros');
-      // eslint-disable-next-line no-console
       console.error('Erro ao carregar estatísticas:', error);
-      // eslint-disable-next-line no-console
-      console.error('Detalhes do erro:', (error as any)?.response?.data);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setStats(mockDashboardData.memberStats);
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

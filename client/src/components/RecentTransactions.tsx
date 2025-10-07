@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 
 interface Transaction {
@@ -22,14 +23,31 @@ const RecentTransactions: React.FC = () => {
 
   const loadRecentTransactions = async () => {
     try {
-      const response = await transactionsAPI.getTransactions({ 
-        page: 1, 
-        limit: 10 
-      });
-      setTransactions(response.data.transactions);
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(500);
+        
+        // Usar dados mock
+        setTransactions(mockDashboardData.recentTransactions);
+        console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
+      } else {
+        // Tentar usar API real
+        const response = await transactionsAPI.getTransactions({ 
+          page: 1, 
+          limit: 10 
+        });
+        setTransactions(response.data.transactions);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar transações recentes');
       console.error('Erro ao carregar transações:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setTransactions(mockDashboardData.recentTransactions);
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

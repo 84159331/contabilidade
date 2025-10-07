@@ -7,6 +7,7 @@ import {
   ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { transactionsAPI, membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AnimatedCard from '../components/AnimatedCard';
@@ -51,23 +52,44 @@ const Dashboard: React.FC = () => {
       const token = localStorage.getItem('token');
       console.log('Token no localStorage:', token);
       
-      // Se não há token, usar rotas de teste
-      const useTestRoutes = !token;
-      console.log('Usando rotas de teste:', useTestRoutes);
+      // Se não há token, usar dados mock
+      const useMockData = !token;
+      console.log('Usando dados mock:', useMockData);
       
-      const [financialSummary, memberStatsData] = await Promise.all([
-        transactionsAPI.getSummary(useTestRoutes),
-        membersAPI.getMemberStats(useTestRoutes)
-      ]);
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(800);
+        
+        // Usar dados mock
+        setStats(mockDashboardData.financialSummary);
+        setMemberStats(mockDashboardData.memberStats);
+        
+        console.log('Dados mock carregados:', {
+          stats: mockDashboardData.financialSummary,
+          memberStats: mockDashboardData.memberStats
+        });
+      } else {
+        // Tentar usar APIs reais
+        const [financialSummary, memberStatsData] = await Promise.all([
+          transactionsAPI.getSummary(false),
+          membersAPI.getMemberStats(false)
+        ]);
 
-      console.log('Financial Summary:', financialSummary.data);
-      console.log('Member Stats:', memberStatsData.data);
+        console.log('Financial Summary:', financialSummary.data);
+        console.log('Member Stats:', memberStatsData.data);
 
-      setStats(financialSummary.data?.data);
-      setMemberStats(memberStatsData.data?.data);
+        setStats(financialSummary.data?.data);
+        setMemberStats(memberStatsData.data?.data);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar dados do dashboard');
       console.error('Erro ao carregar dashboard:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      console.log('Usando dados mock como fallback');
+      setStats(mockDashboardData.financialSummary);
+      setMemberStats(mockDashboardData.memberStats);
+      
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }
