@@ -17,7 +17,7 @@ interface CategoryListProps {
   categories: Category[];
   loading: boolean;
   onEdit: (category: Category) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({
@@ -74,7 +74,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
                 <PencilIcon className="h-4 w-4" />
               </button>
               <button
-                onClick={() => onDelete(category.id)}
+                onClick={() => onDelete(category.id.toString())}
                 className="text-danger-600 hover:text-danger-900"
                 title="Deletar"
               >

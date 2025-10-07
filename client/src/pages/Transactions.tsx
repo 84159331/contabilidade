@@ -94,12 +94,17 @@ const Transactions: React.FC = () => {
             ...filters
           }),
           categoriesAPI.getCategories(),
-          membersAPI.getMembers({ limit: 1000 })
+          membersAPI.getMembers()
         ]);
         
         setTransactions(transactionsResponse.data.transactions);
-        setPagination(transactionsResponse.data.pagination);
-        setCategories(categoriesResponse.data);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: transactionsResponse.data.total,
+          pages: Math.ceil(transactionsResponse.data.total / 10)
+        });
+        setCategories(categoriesResponse.data.categories);
         setMembers(membersResponse.data.members);
       }
     } catch (error) {
@@ -145,7 +150,7 @@ const Transactions: React.FC = () => {
     }
   }, [loadData]);
 
-  const handleUpdateTransaction = useCallback(async (id: number, transactionData: any) => {
+  const handleUpdateTransaction = useCallback(async (id: string, transactionData: any) => {
     try {
       await transactionsAPI.updateTransaction(id, transactionData);
       toast.success('Transação atualizada com sucesso!');
@@ -156,7 +161,7 @@ const Transactions: React.FC = () => {
     }
   }, [loadData]);
 
-  const handleDeleteTransaction = async (id: number) => {
+  const handleDeleteTransaction = async (id: string) => {
     if (window.confirm('Tem certeza que deseja deletar esta transação?')) {
       try {
         await transactionsAPI.deleteTransaction(id);
@@ -367,7 +372,7 @@ const Transactions: React.FC = () => {
           categories={categories}
           members={members}
           onSave={editingTransaction ? 
-            (data) => handleUpdateTransaction(editingTransaction.id, data) : 
+            (data) => handleUpdateTransaction(editingTransaction.id.toString(), data) : 
             handleCreateTransaction
           }
           onClose={handleCloseForm}

@@ -45,8 +45,9 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded }) => {
         end_date: endDate,
         period
       });
-      setData(response.data);
-      onDataLoaded(response.data);
+      const cashFlowData = Array.isArray(response.data) ? response.data : response.data.cashFlow || [];
+      setData(cashFlowData);
+      onDataLoaded(cashFlowData);
     } catch (error) {
       toast.error('Erro ao carregar relatório de fluxo de caixa');
       console.error('Erro ao carregar relatório:', error);

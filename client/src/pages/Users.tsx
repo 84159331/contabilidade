@@ -39,7 +39,7 @@ const Users: React.FC = () => {
       } else {
         // Tentar usar API real
         const response = await usersAPI.getUsers();
-        setUsers(response.data);
+        setUsers(response.data.users);
       }
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
@@ -74,7 +74,7 @@ const Users: React.FC = () => {
   };
 
   // Função para lidar com a exclusão de usuário
-  const handleDeleteUser = async (id: number) => {
+  const handleDeleteUser = async (id: string) => {
     if (window.confirm('Tem certeza que deseja deletar este usuário?')) {
       try {
         await usersAPI.deleteUser(id);

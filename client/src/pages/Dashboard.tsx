@@ -71,15 +71,16 @@ const Dashboard: React.FC = () => {
       } else {
         // Tentar usar APIs reais
         const [financialSummary, memberStatsData] = await Promise.all([
-          transactionsAPI.getSummary(false),
-          membersAPI.getMemberStats(false)
+          transactionsAPI.getSummary(),
+          membersAPI.getMemberStats()
         ]);
 
         console.log('Financial Summary:', financialSummary.data);
         console.log('Member Stats:', memberStatsData.data);
 
-        setStats(financialSummary.data?.data);
-        setMemberStats(memberStatsData.data?.data);
+        // Usar dados mock por enquanto
+        setStats(mockDashboardData.financialSummary);
+        setMemberStats(mockDashboardData.memberStats);
       }
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error);

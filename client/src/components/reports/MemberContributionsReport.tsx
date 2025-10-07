@@ -47,8 +47,9 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
         start_date: startDate,
         end_date: endDate
       });
-      setData(response.data);
-      onDataLoaded(response.data);
+      const contributionsData = Array.isArray(response.data) ? response.data : [];
+      setData(contributionsData);
+      onDataLoaded(contributionsData);
     } catch (error) {
       toast.error('Erro ao carregar relatório de contribuições');
       console.error('Erro ao carregar relatório:', error);

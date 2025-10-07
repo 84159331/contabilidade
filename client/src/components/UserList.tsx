@@ -11,7 +11,7 @@ interface User {
 
 interface UserListProps {
   users: User[];
-  onDelete: (id: number) => void; // Adicionado
+  onDelete: (id: string) => void; // Adicionado
 }
 
 const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
@@ -71,7 +71,7 @@ const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
-                      onClick={() => onDelete(user.id)}
+                      onClick={() => onDelete(user.id.toString())}
                       className="text-danger-600 hover:text-danger-900 ml-4"
                       title="Remover Usuário"
                     >

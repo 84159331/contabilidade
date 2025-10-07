@@ -27,7 +27,7 @@ interface MemberListProps {
   loading: boolean;
   pagination: Pagination;
   onEdit: (member: Member) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
   isDeleting?: boolean;
   onPageChange: (page: number) => void;
 }
@@ -132,7 +132,7 @@ const MemberList: React.FC<MemberListProps> = ({
                       <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(member.id)}
+                      onClick={() => onDelete(member.id.toString())}
                       disabled={isDeleting}
                       className={`text-danger-600 hover:text-danger-900 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title="Deletar"

@@ -56,7 +56,8 @@ const FinancialSummary: React.FC = () => {
         const response = await transactionsAPI.getCashFlow({ year });
         // Mapeia os números dos meses para nomes abreviados para o gráfico
         const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-        const formattedData = response.data.map((d: any) => ({
+        const cashFlowData = Array.isArray(response.data) ? response.data : response.data.cashFlow || [];
+        const formattedData = cashFlowData.map((d: any) => ({
           ...d,
           month: monthNames[parseInt(d.month) - 1],
         }));

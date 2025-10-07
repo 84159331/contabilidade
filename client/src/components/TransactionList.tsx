@@ -30,7 +30,7 @@ interface TransactionListProps {
   loading: boolean;
   pagination: Pagination;
   onEdit: (transaction: Transaction) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
   onPageChange: (page: number) => void;
 }
 
@@ -138,7 +138,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                       <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(transaction.id)}
+                      onClick={() => onDelete(transaction.id.toString())}
                       className="text-danger-600 hover:text-danger-900"
                       title="Deletar"
                     >

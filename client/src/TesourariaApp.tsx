@@ -1,7 +1,6 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './firebase/AuthContext';
-import { initializeFirestore } from './services/firestoreInit';
 import LoginFirebase from './pages/LoginFirebase';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -22,16 +21,6 @@ function TesourariaApp() {
   const { user, loading } = useAuth();
 
   console.log('🏦 TesourariaApp renderizado - user:', user, 'loading:', loading);
-
-  // Inicializar Firestore quando o usuário fizer login
-  useEffect(() => {
-    if (user && !loading) {
-      console.log('🔥 Inicializando Firestore para usuário logado...');
-      initializeFirestore().catch(error => {
-        console.error('❌ Erro ao inicializar Firestore:', error);
-      });
-    }
-  }, [user, loading]);
 
   if (loading) {
     console.log('⏳ Mostrando LoadingSpinner');

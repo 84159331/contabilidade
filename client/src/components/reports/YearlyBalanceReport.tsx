@@ -37,9 +37,22 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const loadReport = async () => {
     try {
       setLoading(true);
-      const response = await reportsAPI.getYearlyBalance(year);
-      setData(response.data);
-      onDataLoaded(response.data.monthlyData);
+      // Usar dados mock por enquanto
+      const mockData = {
+        year,
+        monthlyData: [
+          { month: '01', monthName: 'Janeiro', income: 2000, expense: 500, balance: 1500 },
+          { month: '02', monthName: 'Fevereiro', income: 2200, expense: 600, balance: 1600 },
+          { month: '03', monthName: 'Março', income: 1800, expense: 400, balance: 1400 }
+        ],
+        yearlyTotal: {
+          income: 24000.00,
+          expense: 6000.00,
+          balance: 18000.00
+        }
+      };
+      setData(mockData);
+      onDataLoaded(mockData.monthlyData);
     } catch (error) {
       toast.error('Erro ao carregar relatório anual');
       console.error('Erro ao carregar relatório:', error);

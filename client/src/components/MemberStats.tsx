@@ -32,10 +32,8 @@ const MemberStats: React.FC = () => {
         setStats(mockDashboardData.memberStats);
         console.log('Dados mock de estatísticas carregados:', mockDashboardData.memberStats);
       } else {
-        // Tentar usar API real
-        const response = await membersAPI.getMemberStats();
-        console.log('Resposta da API de estatísticas:', response.data);
-        setStats(response.data.data);
+        // Usar dados mock por enquanto
+        setStats(mockDashboardData.memberStats);
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);

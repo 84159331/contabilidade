@@ -67,15 +67,8 @@ const Members: React.FC = () => {
         console.log('Dados mock de membros carregados:', mockDashboardData.members);
       } else {
         // Tentar usar API real
-        const response = await membersAPI.getMembers({
-          page: pagination.page,
-          limit: pagination.limit,
-          search: searchTerm,
-          status: statusFilter
-        });
-        
+        const response = await membersAPI.getMembers();
         setMembers(response.data.members);
-        setPagination(response.data.pagination);
       }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
@@ -108,7 +101,7 @@ const Members: React.FC = () => {
     }
   };
 
-  const handleUpdateMember = async (id: number, memberData: any) => {
+  const handleUpdateMember = async (id: string, memberData: any) => {
     try {
       setIsUpdating(true);
       await membersAPI.updateMember(id, memberData);
@@ -123,7 +116,7 @@ const Members: React.FC = () => {
     }
   };
 
-  const handleDeleteMember = async (id: number) => {
+  const handleDeleteMember = async (id: string) => {
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
         setIsDeleting(true);
@@ -237,7 +230,7 @@ const Members: React.FC = () => {
         <MemberForm
           member={editingMember}
           onSave={editingMember ? 
-            (data) => handleUpdateMember(editingMember.id, data) :
+            (data) => handleUpdateMember(editingMember.id.toString(), data) :
             handleCreateMember
           }
           onClose={handleCloseForm}

@@ -38,6 +38,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const token = localStorage.getItem('token');
     console.log('🔑 Token encontrado no localStorage:', token);
     
+    // Verificação de token comentada - usando Firebase Auth
+    /*
     if (token) {
       console.log('🔍 Verificando token...');
       authAPI.verifyToken()
@@ -56,24 +58,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('❌ Nenhum token encontrado');
       setLoading(false);
     }
+    */
+    
+    // Usar Firebase Auth em vez de verificação de token
+    setLoading(false);
   }, []);
 
   const login = async (username: string, password: string) => {
-    try {
-      console.log('🔐 Iniciando login para:', username);
-      const response = await authAPI.login(username, password);
-      console.log('✅ Resposta do login:', response.data);
-      
-      const { token, user: userData } = response.data;
-      
-      localStorage.setItem('token', token);
-      console.log('💾 Token salvo no localStorage:', token);
-      setUser(userData);
-      console.log('👤 Usuário definido:', userData);
-    } catch (error: any) {
-      console.error('❌ Erro no login:', error);
-      throw new Error(error.response?.data?.error || 'Erro ao fazer login');
-    }
+    // Login comentado - usando Firebase Auth diretamente
+    throw new Error('Use Firebase Auth diretamente');
   };
 
   const logout = () => {

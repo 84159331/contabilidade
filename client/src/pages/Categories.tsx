@@ -48,10 +48,8 @@ const Categories: React.FC = () => {
         console.log('Dados mock de categorias carregados:', mockDashboardData.categories);
       } else {
         // Tentar usar API real
-        const response = await categoriesAPI.getCategories({
-          type: typeFilter === 'all' ? undefined : typeFilter
-        });
-        setCategories(response.data);
+        const response = await categoriesAPI.getCategories();
+        setCategories(response.data.categories);
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error);
@@ -75,7 +73,7 @@ const Categories: React.FC = () => {
     }
   };
 
-  const handleUpdateCategory = async (id: number, categoryData: any) => {
+  const handleUpdateCategory = async (id: string, categoryData: any) => {
     try {
       await categoriesAPI.updateCategory(id, categoryData);
       toast.success('Categoria atualizada com sucesso!');
@@ -86,7 +84,7 @@ const Categories: React.FC = () => {
     }
   };
 
-  const handleDeleteCategory = async (id: number) => {
+  const handleDeleteCategory = async (id: string) => {
     if (window.confirm('Tem certeza que deseja deletar esta categoria?')) {
       try {
         await categoriesAPI.deleteCategory(id);
@@ -165,7 +163,7 @@ const Categories: React.FC = () => {
         <CategoryForm
           category={editingCategory}
           onSave={editingCategory ? 
-            (data) => handleUpdateCategory(editingCategory.id, data) : 
+            (data) => handleUpdateCategory(editingCategory.id.toString(), data) : 
             handleCreateCategory
           }
           onClose={handleCloseForm}

@@ -53,12 +53,15 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded }) => {
         })
       ]);
       
-      setIncomeData(incomeResponse.data);
-      setExpenseData(expenseResponse.data);
+      const incomeData = Array.isArray(incomeResponse.data) ? incomeResponse.data : incomeResponse.data.income || [];
+      const expenseData = Array.isArray(expenseResponse.data) ? expenseResponse.data : expenseResponse.data.expenses || [];
+      
+      setIncomeData(incomeData);
+      setExpenseData(expenseData);
 
       const combinedData = [
-        ...incomeResponse.data.map((d: any) => ({ ...d, 'Tipo': 'Receita' })),
-        ...expenseResponse.data.map((d: any) => ({ ...d, 'Tipo': 'Despesa' }))
+        ...incomeData.map((d: any) => ({ ...d, 'Tipo': 'Receita' })),
+        ...expenseData.map((d: any) => ({ ...d, 'Tipo': 'Despesa' }))
       ];
       onDataLoaded(combinedData);
 
