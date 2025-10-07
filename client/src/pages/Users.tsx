@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { usersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
 import UserList from '../components/UserList';
 import UserForm from '../components/UserForm';
@@ -23,11 +24,29 @@ const Users: React.FC = () => {
   const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await usersAPI.getUsers();
-      setUsers(response.data);
+      
+      // Verificar se deve usar dados mock
+      const token = localStorage.getItem('token');
+      const useMockData = !token;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        setUsers(mockDashboardData.users);
+        console.log('Dados mock de usuários carregados:', mockDashboardData.users);
+      } else {
+        // Tentar usar API real
+        const response = await usersAPI.getUsers();
+        setUsers(response.data);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar usuários.');
       console.error('Erro ao buscar usuários:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setUsers(mockDashboardData.users);
+      toast.info('Usando dados de demonstração');
     } finally {
       setLoading(false);
     }

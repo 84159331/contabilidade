@@ -70,6 +70,29 @@ export const mockDashboardData = {
     { month: "10", income: 5700, expense: 4000, balance: 1700 },
     { month: "11", income: 5200, expense: 3700, balance: 1500 },
     { month: "12", income: 5900, expense: 4300, balance: 1600 }
+  ],
+  users: [
+    {
+      id: 1,
+      username: "admin",
+      email: "admin@igreja.com",
+      role: "admin",
+      created_at: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: 2,
+      username: "tesoureiro",
+      email: "tesoureiro@igreja.com",
+      role: "tesoureiro",
+      created_at: "2024-01-15T00:00:00Z"
+    },
+    {
+      id: 3,
+      username: "secretario",
+      email: "secretario@igreja.com",
+      role: "secretario",
+      created_at: "2024-02-01T00:00:00Z"
+    }
   ]
 };
 
