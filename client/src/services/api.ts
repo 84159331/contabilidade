@@ -1,51 +1,37 @@
-// Serviço de API simplificado para funcionar sem Firebase por enquanto
-import axios from 'axios';
+// Serviço de API integrado com Firebase Firestore
+import { db } from '../firebase/config';
+import { 
+  collection, 
+  getDocs, 
+  addDoc, 
+  doc, 
+  updateDoc, 
+  deleteDoc, 
+  query, 
+  orderBy, 
+  where,
+  limit,
+  startAfter,
+  endBefore,
+  limitToLast
+} from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
-// Configuração base do Axios
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Interceptor para adicionar token de autenticação
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Interceptor para lidar com respostas
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/tesouraria/login';
-    }
-    return Promise.reject(error);
-  }
-);
-
-// API para transações (usando dados locais por enquanto)
+// API para transações (usando Firebase Firestore)
 export const transactionsAPI = {
   getTransactions: async (params?: any) => {
     try {
-      // Buscar dados do localStorage
-      const savedTransactions = localStorage.getItem('transactions');
-      const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
+      console.log('🔥 Buscando transações no Firestore...');
+      const transactionsRef = collection(db, 'transactions');
+      const q = query(transactionsRef, orderBy('created_at', 'desc'));
+      const querySnapshot = await getDocs(q);
       
+      const transactions = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      console.log('✅ Transações carregadas do Firestore:', transactions.length);
       return { data: { transactions, total: transactions.length } };
     } catch (error) {
       console.error('❌ Erro ao buscar transações:', error);
@@ -55,92 +41,94 @@ export const transactionsAPI = {
 
   createTransaction: async (data: any) => {
     try {
-      console.log('💾 Salvando transação localmente:', data);
+      console.log('💾 Salvando transação no Firestore:', data);
       
-      const savedTransactions = localStorage.getItem('transactions');
-      const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
-      
-      const newTransaction = {
-        id: Date.now().toString(),
+      const transactionData = {
         ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        created_at: new Date(),
+        updated_at: new Date()
       };
       
-      transactions.push(newTransaction);
-      localStorage.setItem('transactions', JSON.stringify(transactions));
+      const transactionsRef = collection(db, 'transactions');
+      const docRef = await addDoc(transactionsRef, transactionData);
       
-      console.log('✅ Transação salva localmente');
+      console.log('✅ Transação salva no Firestore com ID:', docRef.id);
       
       return {
         data: {
           message: 'Transação criada com sucesso',
-          transaction: newTransaction
+          transaction: { id: docRef.id, ...transactionData }
         }
       };
     } catch (error) {
       console.error('❌ Erro ao criar transação:', error);
+      toast.error('Erro ao salvar transação');
       throw error;
     }
   },
 
   updateTransaction: async (id: string, data: any) => {
     try {
-      const savedTransactions = localStorage.getItem('transactions');
-      const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
+      console.log('🔄 Atualizando transação no Firestore:', id);
       
-      const index = transactions.findIndex((t: any) => t.id === id);
-      if (index !== -1) {
-        transactions[index] = { ...transactions[index], ...data, updated_at: new Date().toISOString() };
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-      }
+      const transactionRef = doc(db, 'transactions', id);
+      await updateDoc(transactionRef, {
+        ...data,
+        updated_at: new Date()
+      });
       
+      console.log('✅ Transação atualizada no Firestore');
       return { data: { message: 'Transação atualizada com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao atualizar transação:', error);
+      toast.error('Erro ao atualizar transação');
       throw error;
     }
   },
 
   deleteTransaction: async (id: string) => {
     try {
-      const savedTransactions = localStorage.getItem('transactions');
-      const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
+      console.log('🗑️ Deletando transação do Firestore:', id);
       
-      const filteredTransactions = transactions.filter((t: any) => t.id !== id);
-      localStorage.setItem('transactions', JSON.stringify(filteredTransactions));
+      const transactionRef = doc(db, 'transactions', id);
+      await deleteDoc(transactionRef);
       
+      console.log('✅ Transação deletada do Firestore');
       return { data: { message: 'Transação deletada com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao deletar transação:', error);
+      toast.error('Erro ao deletar transação');
       throw error;
     }
   },
 
   getSummary: async () => {
     try {
-      const savedTransactions = localStorage.getItem('transactions');
-      const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
+      console.log('📊 Calculando resumo financeiro...');
+      const transactionsRef = collection(db, 'transactions');
+      const querySnapshot = await getDocs(transactionsRef);
       
       let totalIncome = 0;
       let totalExpense = 0;
       
-      transactions.forEach((t: any) => {
-        if (t.type === 'income') {
-          totalIncome += parseFloat(t.amount) || 0;
-        } else if (t.type === 'expense') {
-          totalExpense += parseFloat(t.amount) || 0;
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        if (data.type === 'income') {
+          totalIncome += parseFloat(data.amount) || 0;
+        } else if (data.type === 'expense') {
+          totalExpense += parseFloat(data.amount) || 0;
         }
       });
       
-      return {
-        data: {
-          totalIncome,
-          totalExpense,
-          balance: totalIncome - totalExpense,
-          transactionCount: transactions.length
-        }
+      const summary = {
+        totalIncome,
+        totalExpense,
+        balance: totalIncome - totalExpense,
+        transactionCount: querySnapshot.docs.length
       };
+      
+      console.log('✅ Resumo calculado:', summary);
+      return { data: summary };
     } catch (error) {
       console.error('❌ Erro ao calcular resumo:', error);
       return { data: { totalIncome: 0, totalExpense: 0, balance: 0, transactionCount: 0 } };
@@ -148,15 +136,20 @@ export const transactionsAPI = {
   },
 
   getTransaction: async (id: string) => {
-    const savedTransactions = localStorage.getItem('transactions');
-    const transactions = savedTransactions ? JSON.parse(savedTransactions) : [];
-    const transaction = transactions.find((t: any) => t.id === id);
-    
-    if (!transaction) {
-      throw new Error('Transação não encontrada');
+    try {
+      const transactionRef = doc(db, 'transactions', id);
+      const transactionDoc = await getDocs(collection(db, 'transactions'));
+      const transaction = transactionDoc.docs.find(doc => doc.id === id);
+      
+      if (!transaction) {
+        throw new Error('Transação não encontrada');
+      }
+      
+      return { data: { id: transaction.id, ...transaction.data() } };
+    } catch (error) {
+      console.error('❌ Erro ao buscar transação:', error);
+      throw error;
     }
-    
-    return { data: transaction };
   },
 
   getByCategory: async (params?: any) => {
@@ -168,13 +161,21 @@ export const transactionsAPI = {
   }
 };
 
-// API para membros (usando dados locais)
+// API para membros (usando Firebase Firestore)
 export const membersAPI = {
   getMembers: async () => {
     try {
-      const savedMembers = localStorage.getItem('members');
-      const members = savedMembers ? JSON.parse(savedMembers) : [];
+      console.log('🔥 Buscando membros no Firestore...');
+      const membersRef = collection(db, 'members');
+      const q = query(membersRef, orderBy('created_at', 'desc'));
+      const querySnapshot = await getDocs(q);
       
+      const members = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      console.log('✅ Membro carregados do Firestore:', members.length);
       return { data: { members, total: members.length } };
     } catch (error) {
       console.error('❌ Erro ao buscar membros:', error);
@@ -184,82 +185,102 @@ export const membersAPI = {
 
   createMember: async (data: any) => {
     try {
-      console.log('💾 Salvando membro localmente:', data);
+      console.log('💾 Salvando membro no Firestore:', data);
       
-      const savedMembers = localStorage.getItem('members');
-      const members = savedMembers ? JSON.parse(savedMembers) : [];
-      
-      const newMember = {
-        id: Date.now().toString(),
+      const memberData = {
         ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        created_at: new Date(),
+        updated_at: new Date()
       };
       
-      members.push(newMember);
-      localStorage.setItem('members', JSON.stringify(members));
+      const membersRef = collection(db, 'members');
+      const docRef = await addDoc(membersRef, memberData);
       
-      console.log('✅ Membro salvo localmente');
+      console.log('✅ Membro salvo no Firestore com ID:', docRef.id);
       
       return {
         data: {
           message: 'Membro criado com sucesso',
-          member: newMember
+          member: { id: docRef.id, ...memberData }
         }
       };
     } catch (error) {
       console.error('❌ Erro ao criar membro:', error);
+      toast.error('Erro ao salvar membro');
       throw error;
     }
   },
 
   updateMember: async (id: string, data: any) => {
     try {
-      const savedMembers = localStorage.getItem('members');
-      const members = savedMembers ? JSON.parse(savedMembers) : [];
+      console.log('🔄 Atualizando membro no Firestore:', id);
       
-      const index = members.findIndex((m: any) => m.id === id);
-      if (index !== -1) {
-        members[index] = { ...members[index], ...data, updated_at: new Date().toISOString() };
-        localStorage.setItem('members', JSON.stringify(members));
-      }
+      const memberRef = doc(db, 'members', id);
+      await updateDoc(memberRef, {
+        ...data,
+        updated_at: new Date()
+      });
       
+      console.log('✅ Membro atualizado no Firestore');
       return { data: { message: 'Membro atualizado com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao atualizar membro:', error);
+      toast.error('Erro ao atualizar membro');
       throw error;
     }
   },
 
   deleteMember: async (id: string) => {
     try {
-      const savedMembers = localStorage.getItem('members');
-      const members = savedMembers ? JSON.parse(savedMembers) : [];
+      console.log('🗑️ Deletando membro do Firestore:', id);
       
-      const filteredMembers = members.filter((m: any) => m.id !== id);
-      localStorage.setItem('members', JSON.stringify(filteredMembers));
+      const memberRef = doc(db, 'members', id);
+      await deleteDoc(memberRef);
       
+      console.log('✅ Membro deletado do Firestore');
       return { data: { message: 'Membro deletado com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao deletar membro:', error);
+      toast.error('Erro ao deletar membro');
       throw error;
     }
   },
 
   getMember: async (id: string) => {
-    const savedMembers = localStorage.getItem('members');
-    const members = savedMembers ? JSON.parse(savedMembers) : [];
-    const member = members.find((m: any) => m.id === id);
-    
-    if (!member) {
-      throw new Error('Membro não encontrado');
+    try {
+      const membersRef = collection(db, 'members');
+      const querySnapshot = await getDocs(membersRef);
+      const member = querySnapshot.docs.find(doc => doc.id === id);
+      
+      if (!member) {
+        throw new Error('Membro não encontrado');
+      }
+      
+      return { data: { id: member.id, ...member.data() } };
+    } catch (error) {
+      console.error('❌ Erro ao buscar membro:', error);
+      throw error;
     }
-    
-    return { data: member };
   },
 
   getMemberStats: async () => {
-    return { data: { stats: {} } };
+    try {
+      console.log('📊 Calculando estatísticas de membros...');
+      const membersRef = collection(db, 'members');
+      const querySnapshot = await getDocs(membersRef);
+      
+      const stats = {
+        total: querySnapshot.docs.length,
+        active: querySnapshot.docs.filter(doc => doc.data().status === 'active').length,
+        inactive: querySnapshot.docs.filter(doc => doc.data().status === 'inactive').length
+      };
+      
+      console.log('✅ Estatísticas calculadas:', stats);
+      return { data: stats };
+    } catch (error) {
+      console.error('❌ Erro ao calcular estatísticas:', error);
+      return { data: { total: 0, active: 0, inactive: 0 } };
+    }
   },
 
   getMemberContributions: async (id: string, params?: any) => {
@@ -267,25 +288,49 @@ export const membersAPI = {
   }
 };
 
-// API para categorias (usando dados locais)
+// API para categorias (usando Firebase Firestore)
 export const categoriesAPI = {
   getCategories: async () => {
     try {
-      const savedCategories = localStorage.getItem('categories');
-      const categories = savedCategories ? JSON.parse(savedCategories) : [];
+      console.log('🔥 Buscando categorias no Firestore...');
+      const categoriesRef = collection(db, 'categories');
+      const querySnapshot = await getDocs(categoriesRef);
+      
+      const categories = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
       
       // Se não há categorias salvas, criar algumas padrão
       if (categories.length === 0) {
+        console.log('📝 Criando categorias padrão...');
         const defaultCategories = [
-          { id: '1', name: 'Dízimos', type: 'income', description: 'Dízimos dos membros', color: '#10B981' },
-          { id: '2', name: 'Ofertas', type: 'income', description: 'Ofertas especiais', color: '#3B82F6' },
-          { id: '3', name: 'Utilidades', type: 'expense', description: 'Contas de água, luz, telefone', color: '#EF4444' },
-          { id: '4', name: 'Manutenção', type: 'expense', description: 'Manutenção do prédio', color: '#F97316' }
+          { name: 'Dízimos', type: 'income', description: 'Dízimos dos membros', color: '#10B981' },
+          { name: 'Ofertas', type: 'income', description: 'Ofertas especiais', color: '#3B82F6' },
+          { name: 'Utilidades', type: 'expense', description: 'Contas de água, luz, telefone', color: '#EF4444' },
+          { name: 'Manutenção', type: 'expense', description: 'Manutenção do prédio', color: '#F97316' }
         ];
-        localStorage.setItem('categories', JSON.stringify(defaultCategories));
-        return { data: { categories: defaultCategories, total: defaultCategories.length } };
+        
+        for (const category of defaultCategories) {
+          await addDoc(categoriesRef, {
+            ...category,
+            created_at: new Date(),
+            updated_at: new Date()
+          });
+        }
+        
+        // Buscar novamente após criar as categorias padrão
+        const newQuerySnapshot = await getDocs(categoriesRef);
+        const newCategories = newQuerySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        console.log('✅ Categorias padrão criadas:', newCategories.length);
+        return { data: { categories: newCategories, total: newCategories.length } };
       }
       
+      console.log('✅ Categorias carregadas do Firestore:', categories.length);
       return { data: { categories, total: categories.length } };
     } catch (error) {
       console.error('❌ Erro ao buscar categorias:', error);
@@ -295,74 +340,82 @@ export const categoriesAPI = {
 
   createCategory: async (data: any) => {
     try {
-      const savedCategories = localStorage.getItem('categories');
-      const categories = savedCategories ? JSON.parse(savedCategories) : [];
+      console.log('💾 Salvando categoria no Firestore:', data);
       
-      const newCategory = {
-        id: Date.now().toString(),
+      const categoryData = {
         ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        created_at: new Date(),
+        updated_at: new Date()
       };
       
-      categories.push(newCategory);
-      localStorage.setItem('categories', JSON.stringify(categories));
+      const categoriesRef = collection(db, 'categories');
+      const docRef = await addDoc(categoriesRef, categoryData);
+      
+      console.log('✅ Categoria salva no Firestore com ID:', docRef.id);
       
       return {
         data: {
           message: 'Categoria criada com sucesso',
-          category: newCategory
+          category: { id: docRef.id, ...categoryData }
         }
       };
     } catch (error) {
       console.error('❌ Erro ao criar categoria:', error);
+      toast.error('Erro ao salvar categoria');
       throw error;
     }
   },
 
   updateCategory: async (id: string, data: any) => {
     try {
-      const savedCategories = localStorage.getItem('categories');
-      const categories = savedCategories ? JSON.parse(savedCategories) : [];
+      console.log('🔄 Atualizando categoria no Firestore:', id);
       
-      const index = categories.findIndex((c: any) => c.id === id);
-      if (index !== -1) {
-        categories[index] = { ...categories[index], ...data, updated_at: new Date().toISOString() };
-        localStorage.setItem('categories', JSON.stringify(categories));
-      }
+      const categoryRef = doc(db, 'categories', id);
+      await updateDoc(categoryRef, {
+        ...data,
+        updated_at: new Date()
+      });
       
+      console.log('✅ Categoria atualizada no Firestore');
       return { data: { message: 'Categoria atualizada com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao atualizar categoria:', error);
+      toast.error('Erro ao atualizar categoria');
       throw error;
     }
   },
 
   deleteCategory: async (id: string) => {
     try {
-      const savedCategories = localStorage.getItem('categories');
-      const categories = savedCategories ? JSON.parse(savedCategories) : [];
+      console.log('🗑️ Deletando categoria do Firestore:', id);
       
-      const filteredCategories = categories.filter((c: any) => c.id !== id);
-      localStorage.setItem('categories', JSON.stringify(filteredCategories));
+      const categoryRef = doc(db, 'categories', id);
+      await deleteDoc(categoryRef);
       
+      console.log('✅ Categoria deletada do Firestore');
       return { data: { message: 'Categoria deletada com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao deletar categoria:', error);
+      toast.error('Erro ao deletar categoria');
       throw error;
     }
   },
 
   getCategory: async (id: string) => {
-    const savedCategories = localStorage.getItem('categories');
-    const categories = savedCategories ? JSON.parse(savedCategories) : [];
-    const category = categories.find((c: any) => c.id === id);
-    
-    if (!category) {
-      throw new Error('Categoria não encontrada');
+    try {
+      const categoriesRef = collection(db, 'categories');
+      const querySnapshot = await getDocs(categoriesRef);
+      const category = querySnapshot.docs.find(doc => doc.id === id);
+      
+      if (!category) {
+        throw new Error('Categoria não encontrada');
+      }
+      
+      return { data: { id: category.id, ...category.data() } };
+    } catch (error) {
+      console.error('❌ Erro ao buscar categoria:', error);
+      throw error;
     }
-    
-    return { data: category };
   },
 
   getCategoryStats: async (params?: any) => {
