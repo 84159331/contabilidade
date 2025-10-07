@@ -74,7 +74,7 @@ const FinancialSummary: React.FC = () => {
       }));
       setData(formattedData);
       
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

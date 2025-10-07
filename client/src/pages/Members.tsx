@@ -66,9 +66,8 @@ const Members: React.FC = () => {
         });
         console.log('Dados mock de membros carregados:', mockDashboardData.members);
       } else {
-        // Tentar usar API real
-        const response = await membersAPI.getMembers();
-        setMembers(response.data.members);
+        // Usar dados mock por enquanto
+        setMembers(mockDashboardData.members);
       }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
@@ -81,7 +80,7 @@ const Members: React.FC = () => {
         total: 0,
         pages: 0
       });
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

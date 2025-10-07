@@ -18,7 +18,7 @@ import { SkeletonCard } from '../components/Skeleton';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import MemberStats from '../components/MemberStats';
-import useNotificationDemo from '../hooks/useNotificationDemo';
+// import useNotificationDemo from '../hooks/useNotificationDemo'; // Removido - notificações desabilitadas
 
 interface DashboardStats {
   income: { total: number; count: number };
@@ -37,8 +37,8 @@ const Dashboard: React.FC = () => {
   const [memberStats, setMemberStats] = useState<MemberStatsData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Hook para demonstração de notificações
-  useNotificationDemo();
+  // Hook para demonstração de notificações - DESABILITADO
+  // useNotificationDemo();
 
   useEffect(() => {
     loadDashboardData();
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
       setStats(mockDashboardData.financialSummary);
       setMemberStats(mockDashboardData.memberStats);
       
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

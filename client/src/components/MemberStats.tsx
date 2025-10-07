@@ -40,7 +40,7 @@ const MemberStats: React.FC = () => {
       
       // Em caso de erro, usar dados mock como fallback
       setStats(mockDashboardData.memberStats);
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

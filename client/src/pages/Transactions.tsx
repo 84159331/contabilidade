@@ -97,15 +97,16 @@ const Transactions: React.FC = () => {
           membersAPI.getMembers()
         ]);
         
-        setTransactions(transactionsResponse.data.transactions);
+        // Usar dados mock por enquanto
+        setTransactions(mockDashboardData.transactions);
         setPagination({
           page: 1,
           limit: 10,
-          total: transactionsResponse.data.total,
-          pages: Math.ceil(transactionsResponse.data.total / 10)
+          total: mockDashboardData.transactions.length,
+          pages: Math.ceil(mockDashboardData.transactions.length / 10)
         });
-        setCategories(categoriesResponse.data.categories);
-        setMembers(membersResponse.data.members);
+        setCategories(mockDashboardData.categories);
+        setMembers(mockDashboardData.members);
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
@@ -120,7 +121,7 @@ const Transactions: React.FC = () => {
         total: 0,
         pages: 0
       });
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

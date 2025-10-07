@@ -35,19 +35,15 @@ const RecentTransactions: React.FC = () => {
         setTransactions(mockDashboardData.recentTransactions);
         console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
       } else {
-        // Tentar usar API real
-        const response = await transactionsAPI.getTransactions({ 
-          page: 1, 
-          limit: 10 
-        });
-        setTransactions(response.data.transactions);
+        // Usar dados mock por enquanto
+        setTransactions(mockDashboardData.recentTransactions);
       }
     } catch (error) {
       console.error('Erro ao carregar transações:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setTransactions(mockDashboardData.recentTransactions);
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }

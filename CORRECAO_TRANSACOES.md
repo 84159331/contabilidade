@@ -132,3 +132,4 @@ Para um sistema em produção, seria necessário:
 ## Status
 
 ✅ **CORRIGIDO** - O sistema agora registra todas as opções das transações corretamente.
+

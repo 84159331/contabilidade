@@ -47,16 +47,15 @@ const Categories: React.FC = () => {
         setCategories(mockDashboardData.categories);
         console.log('Dados mock de categorias carregados:', mockDashboardData.categories);
       } else {
-        // Tentar usar API real
-        const response = await categoriesAPI.getCategories();
-        setCategories(response.data.categories);
+        // Usar dados mock por enquanto
+        setCategories(mockDashboardData.categories);
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setCategories(mockDashboardData.categories);
-      toast.info('Usando dados de demonstração');
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }
