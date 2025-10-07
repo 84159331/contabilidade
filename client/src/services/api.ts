@@ -42,6 +42,7 @@ export const transactionsAPI = {
   createTransaction: async (data: any) => {
     try {
       console.log('💾 Salvando transação no Firestore:', data);
+      console.log('🔥 Firebase DB instance:', db);
       
       const transactionData = {
         ...data,
@@ -49,9 +50,12 @@ export const transactionsAPI = {
         updated_at: new Date()
       };
       
-      const transactionsRef = collection(db, 'transactions');
-      const docRef = await addDoc(transactionsRef, transactionData);
+      console.log('📝 Dados da transação preparados:', transactionData);
       
+      const transactionsRef = collection(db, 'transactions');
+      console.log('📂 Referência da coleção criada:', transactionsRef);
+      
+      const docRef = await addDoc(transactionsRef, transactionData);
       console.log('✅ Transação salva no Firestore com ID:', docRef.id);
       
       return {
@@ -62,7 +66,9 @@ export const transactionsAPI = {
       };
     } catch (error) {
       console.error('❌ Erro ao criar transação:', error);
-      toast.error('Erro ao salvar transação');
+      console.error('❌ Detalhes do erro:', error.message);
+      console.error('❌ Stack trace:', error.stack);
+      toast.error('Erro ao salvar transação: ' + error.message);
       throw error;
     }
   },
@@ -186,6 +192,7 @@ export const membersAPI = {
   createMember: async (data: any) => {
     try {
       console.log('💾 Salvando membro no Firestore:', data);
+      console.log('🔥 Firebase DB instance:', db);
       
       const memberData = {
         ...data,
@@ -193,9 +200,12 @@ export const membersAPI = {
         updated_at: new Date()
       };
       
-      const membersRef = collection(db, 'members');
-      const docRef = await addDoc(membersRef, memberData);
+      console.log('📝 Dados do membro preparados:', memberData);
       
+      const membersRef = collection(db, 'members');
+      console.log('📂 Referência da coleção criada:', membersRef);
+      
+      const docRef = await addDoc(membersRef, memberData);
       console.log('✅ Membro salvo no Firestore com ID:', docRef.id);
       
       return {
@@ -206,7 +216,9 @@ export const membersAPI = {
       };
     } catch (error) {
       console.error('❌ Erro ao criar membro:', error);
-      toast.error('Erro ao salvar membro');
+      console.error('❌ Detalhes do erro:', error.message);
+      console.error('❌ Stack trace:', error.stack);
+      toast.error('Erro ao salvar membro: ' + error.message);
       throw error;
     }
   },
