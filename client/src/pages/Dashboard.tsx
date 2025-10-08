@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { transactionsAPI, membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AnimatedCard from '../components/AnimatedCard';
@@ -36,6 +37,7 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [memberStats, setMemberStats] = useState<MemberStatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   // Hook para demonstração de notificações - DESABILITADO
   // useNotificationDemo();
@@ -48,12 +50,11 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
       
-      // Debug: verificar token
-      const token = localStorage.getItem('token');
-      console.log('Token no localStorage:', token);
+      // Debug: verificar usuário autenticado
+      console.log('Usuário autenticado:', user ? user.email : 'null');
       
-      // Se não há token, usar dados mock
-      const useMockData = !token;
+      // Se não há usuário autenticado, usar dados mock
+      const useMockData = !user;
       console.log('Usando dados mock:', useMockData);
       
       if (useMockData) {
@@ -69,7 +70,7 @@ const Dashboard: React.FC = () => {
           memberStats: mockDashboardData.memberStats
         });
       } else {
-        // Tentar usar APIs reais
+        // Usar APIs reais do Firestore
         const [financialSummary, memberStatsData] = await Promise.all([
           transactionsAPI.getSummary(),
           membersAPI.getMemberStats()
@@ -78,9 +79,9 @@ const Dashboard: React.FC = () => {
         console.log('Financial Summary:', financialSummary.data);
         console.log('Member Stats:', memberStatsData.data);
 
-        // Usar dados mock por enquanto (problema de tipo)
-        setStats(mockDashboardData.financialSummary);
-        setMemberStats(mockDashboardData.memberStats);
+        // Usar dados reais do Firestore
+        setStats(financialSummary.data);
+        setMemberStats(memberStatsData.data);
       }
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error);

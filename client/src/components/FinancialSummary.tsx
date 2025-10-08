@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -27,6 +28,7 @@ const FinancialSummary: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const availableYears = generateYears();
+  const { user } = useAuth();
 
   useEffect(() => {
     loadCashFlowData(selectedYear);
@@ -36,8 +38,7 @@ const FinancialSummary: React.FC = () => {
     setLoading(true);
     try {
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
+      const useMockData = !user;
       
       if (useMockData) {
         // Simular delay de API

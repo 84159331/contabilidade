@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TransactionForm from '../components/TransactionForm';
@@ -61,14 +62,14 @@ const Transactions: React.FC = () => {
     total: 0,
     pages: 0
   });
+  const { user } = useAuth();
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
+      const useMockData = !user;
       
       if (useMockData) {
         // Simular delay de API

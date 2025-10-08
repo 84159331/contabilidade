@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { transactionsAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 interface Transaction {
@@ -16,6 +17,7 @@ interface Transaction {
 const RecentTransactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     loadRecentTransactions();
@@ -24,8 +26,7 @@ const RecentTransactions: React.FC = () => {
   const loadRecentTransactions = async () => {
     try {
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
+      const useMockData = !user;
       
       if (useMockData) {
         // Simular delay de API

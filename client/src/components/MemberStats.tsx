@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 interface MemberStatsData {
@@ -13,6 +14,7 @@ interface MemberStatsData {
 const MemberStats: React.FC = () => {
   const [stats, setStats] = useState<MemberStatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     loadMemberStats();
@@ -21,8 +23,7 @@ const MemberStats: React.FC = () => {
   const loadMemberStats = async () => {
     try {
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
+      const useMockData = !user;
       
       if (useMockData) {
         // Simular delay de API

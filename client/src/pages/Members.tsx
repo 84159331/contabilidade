@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MemberForm from '../components/MemberForm';
@@ -39,6 +40,7 @@ const Members: React.FC = () => {
     total: 0,
     pages: 0
   });
+  const { user } = useAuth();
 
   useEffect(() => {
     loadMembers();
@@ -48,16 +50,34 @@ const Members: React.FC = () => {
     try {
       setLoading(true);
       
-      // Usar API real do Firestore
-      const response = await membersAPI.getMembers();
-      setMembers(response.data.members);
-      setPagination({
-        page: 1,
-        limit: 10,
-        total: response.data.total,
-        pages: Math.ceil(response.data.total / 10)
-      });
-      console.log('✅ Membros carregados do Firestore:', response.data.members.length);
+      // Verificar se deve usar dados mock
+      const useMockData = !user;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        setMembers(mockDashboardData.members);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: mockDashboardData.members.length,
+          pages: Math.ceil(mockDashboardData.members.length / 10)
+        });
+        console.log('Dados mock de membros carregados:', mockDashboardData.members.length);
+      } else {
+        // Usar API real do Firestore
+        const response = await membersAPI.getMembers();
+        setMembers(response.data.members);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: response.data.total,
+          pages: Math.ceil(response.data.total / 10)
+        });
+        console.log('✅ Membros carregados do Firestore:', response.data.members.length);
+      }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
       
