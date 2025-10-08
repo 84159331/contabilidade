@@ -2,7 +2,7 @@ import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
   email?: string;
   phone?: string;
@@ -27,7 +27,7 @@ interface MemberListProps {
   loading: boolean;
   pagination: Pagination;
   onEdit: (member: Member) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string | number) => void;
   isDeleting?: boolean;
   onPageChange: (page: number) => void;
 }
@@ -132,7 +132,7 @@ const MemberList: React.FC<MemberListProps> = ({
                       <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(member.id.toString())}
+                      onClick={() => onDelete(member.id)}
                       disabled={isDeleting}
                       className={`text-danger-600 hover:text-danger-900 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title="Deletar"

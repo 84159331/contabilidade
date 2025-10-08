@@ -11,7 +11,7 @@ import Modal from '../components/Modal';
 import Button from '../components/Button';
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
   email?: string;
   phone?: string;
@@ -124,11 +124,11 @@ const Members: React.FC = () => {
     }
   };
 
-  const handleDeleteMember = async (id: string) => {
+  const handleDeleteMember = async (id: string | number) => {
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
         setIsDeleting(true);
-        await membersAPI.deleteMember(id);
+        await membersAPI.deleteMember(String(id));
         toast.success('Membro deletado com sucesso!');
         loadMembers();
       } catch (error: any) {

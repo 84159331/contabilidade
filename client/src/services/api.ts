@@ -103,15 +103,20 @@ export const transactionsAPI = {
   deleteTransaction: async (id: string) => {
     try {
       console.log('🗑️ Deletando transação do Firestore:', id);
+      console.log('🔍 Tipo do ID:', typeof id);
+      console.log('🔍 Valor do ID:', id);
       
       const transactionRef = doc(db, 'transactions', id);
+      console.log('📂 Referência criada:', transactionRef);
+      
       await deleteDoc(transactionRef);
       
-      console.log('✅ Transação deletada do Firestore');
+      console.log('✅ Transação deletada do Firestore com sucesso');
       return { data: { message: 'Transação deletada com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao deletar transação:', error);
-      toast.error('Erro ao deletar transação');
+      console.error('❌ Detalhes do erro:', error);
+      toast.error('Erro ao deletar transação: ' + (error as Error).message);
       throw error;
     }
   },
@@ -258,15 +263,20 @@ export const membersAPI = {
   deleteMember: async (id: string) => {
     try {
       console.log('🗑️ Deletando membro do Firestore:', id);
+      console.log('🔍 Tipo do ID:', typeof id);
+      console.log('🔍 Valor do ID:', id);
       
       const memberRef = doc(db, 'members', id);
+      console.log('📂 Referência criada:', memberRef);
+      
       await deleteDoc(memberRef);
       
-      console.log('✅ Membro deletado do Firestore');
+      console.log('✅ Membro deletado do Firestore com sucesso');
       return { data: { message: 'Membro deletado com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao deletar membro:', error);
-      toast.error('Erro ao deletar membro');
+      console.error('❌ Detalhes do erro:', error);
+      toast.error('Erro ao deletar membro: ' + (error as Error).message);
       throw error;
     }
   },

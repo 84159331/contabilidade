@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from './Button';
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
   email?: string;
   phone?: string;
