@@ -10,12 +10,12 @@ import TransactionList from '../components/TransactionList';
 import useDebounce from '../hooks/useDebounce';
 
 interface Transaction {
-  id: number;
+  id: number | string;
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category_id?: number;
-  member_id?: number;
+  category_id?: number | string;
+  member_id?: number | string;
   transaction_date: string;
   payment_method?: string;
   reference?: string;
@@ -27,14 +27,14 @@ interface Transaction {
 }
 
 interface Category {
-  id: number;
+  id: number | string;
   name: string;
   type: 'income' | 'expense';
   color: string;
 }
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -131,7 +131,7 @@ const Transactions: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters, pagination.page, pagination.limit]);
+  }, [filters, pagination.page, pagination.limit, user]);
 
   useEffect(() => {
     loadData();
@@ -168,10 +168,10 @@ const Transactions: React.FC = () => {
     }
   }, [loadData]);
 
-  const handleDeleteTransaction = async (id: string) => {
+  const handleDeleteTransaction = async (id: string | number) => {
     if (window.confirm('Tem certeza que deseja deletar esta transação?')) {
       try {
-        await transactionsAPI.deleteTransaction(id);
+        await transactionsAPI.deleteTransaction(String(id));
         toast.success('Transação deletada com sucesso!');
         loadData();
       } catch (error: any) {
@@ -379,7 +379,7 @@ const Transactions: React.FC = () => {
           categories={categories}
           members={members}
           onSave={editingTransaction ? 
-            (data) => handleUpdateTransaction(editingTransaction.id.toString(), data) : 
+            (data) => handleUpdateTransaction(String(editingTransaction.id), data) : 
             handleCreateTransaction
           }
           onClose={handleCloseForm}

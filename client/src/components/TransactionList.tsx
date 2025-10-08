@@ -2,12 +2,12 @@ import React, { memo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Transaction {
-  id: number;
+  id: number | string;
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category_id?: number;
-  member_id?: number;
+  category_id?: number | string;
+  member_id?: number | string;
   transaction_date: string;
   payment_method?: string;
   reference?: string;
@@ -30,7 +30,7 @@ interface TransactionListProps {
   loading: boolean;
   pagination: Pagination;
   onEdit: (transaction: Transaction) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string | number) => void;
   onPageChange: (page: number) => void;
 }
 
@@ -138,7 +138,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                       <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(transaction.id.toString())}
+                      onClick={() => onDelete(transaction.id)}
                       className="text-danger-600 hover:text-danger-900"
                       title="Deletar"
                     >

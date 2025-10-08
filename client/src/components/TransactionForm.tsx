@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface Transaction {
-  id: number;
+  id: number | string;
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category_id?: number;
-  member_id?: number;
+  category_id?: number | string;
+  member_id?: number | string;
   transaction_date: string;
   payment_method?: string;
   reference?: string;
@@ -15,14 +15,14 @@ interface Transaction {
 }
 
 interface Category {
-  id: number;
+  id: number | string;
   name: string;
   type: 'income' | 'expense';
   color: string;
 }
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -113,11 +113,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       const submitData = {
         ...formData,
         amount: parseFloat(formData.amount),
-        category_id: formData.category_id ? parseInt(formData.category_id) : null,
-        member_id: formData.member_id ? parseInt(formData.member_id) : null
+        category_id: formData.category_id || null,
+        member_id: formData.member_id || null
       };
       
       console.log('📝 Dados do formulário sendo enviados:', submitData);
+      console.log('👥 Membros disponíveis:', members);
+      console.log('🎯 Membro selecionado:', formData.member_id);
       onSave(submitData);
     }
   };
