@@ -81,6 +81,30 @@ const dailyStudies = [
     verse: "1 Coríntios 13:8",
     author: "Pastora Rany"
   },
+  {
+    title: "Confiança Inabalável",
+    content: "A confiança em Deus é a base de uma vida estável e pacífica. Quando nossa mente está firmemente focada em Deus, Ele nos conserva em paz, independentemente das circunstâncias externas. Esta confiança não é passiva, mas ativa - é uma escolha diária de depositar nossa fé no Senhor.",
+    verse: "Isaías 26:3",
+    author: "Pastor Jadney"
+  },
+  {
+    title: "Esperança Renovada",
+    content: "Mesmo nos momentos mais sombrios da vida, as misericórdias de Deus se renovam a cada manhã. Sua fidelidade é grande e constante. Esta verdade nos dá esperança renovada para cada novo dia, sabendo que Deus está sempre presente e ativo em nossa vida.",
+    verse: "Lamentações 3:22-23",
+    author: "Apóstola Elaine"
+  },
+  {
+    title: "Desperte o Gigante Interior",
+    content: "Dentro de cada um de nós existe um potencial ilimitado que só pode ser despertado através da força que vem de Cristo. Não somos limitados por nossas próprias capacidades, mas sim fortalecidos pelo poder de Deus. Quando reconhecemos nossa dependência dEle, descobrimos que podemos fazer muito mais do que imaginávamos.",
+    verse: "Filipenses 4:13",
+    author: "Coach Cristão"
+  },
+  {
+    title: "Consolo para o Coração Ferido",
+    content: "Deus não está distante quando nosso coração está ferido. Ele se aproxima especialmente dos quebrantados e contritos. Sua presença é um bálsamo para nossa dor, e Sua salvação é nossa esperança. Em meio ao sofrimento, podemos encontrar consolo na certeza de que Ele está próximo.",
+    verse: "Salmo 34:18",
+    author: "Ministério de Consolação"
+  },
 ];
 
 // Testemunhos - TEMPORARIAMENTE DESABILITADOS
