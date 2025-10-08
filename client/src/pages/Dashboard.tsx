@@ -80,7 +80,13 @@ const Dashboard: React.FC = () => {
         console.log('Member Stats:', memberStatsData.data);
 
         // Usar dados reais do Firestore
-        setStats(financialSummary.data);
+        const financialData = financialSummary.data;
+        const transformedStats = {
+          income: { total: financialData.totalIncome, count: financialData.transactionCount },
+          expense: { total: financialData.totalExpense, count: financialData.transactionCount },
+          balance: financialData.balance
+        };
+        setStats(transformedStats);
         setMemberStats(memberStatsData.data);
       }
     } catch (error) {
