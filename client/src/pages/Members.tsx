@@ -48,27 +48,16 @@ const Members: React.FC = () => {
     try {
       setLoading(true);
       
-      // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
-      
-      if (useMockData) {
-        // Simular delay de API
-        await simulateApiDelay(500);
-        
-        // Usar dados mock
-        setMembers(mockDashboardData.members);
-        setPagination({
-          page: 1,
-          limit: 10,
-          total: 0,
-          pages: 0
-        });
-        console.log('Dados mock de membros carregados:', mockDashboardData.members);
-      } else {
-        // Usar dados mock por enquanto
-        setMembers(mockDashboardData.members);
-      }
+      // Sempre usar API real do Firestore
+      const response = await membersAPI.getMembers();
+      setMembers(response.data.members);
+      setPagination({
+        page: 1,
+        limit: 10,
+        total: response.data.total,
+        pages: Math.ceil(response.data.total / 10)
+      });
+      console.log('✅ Membros carregados do Firestore:', response.data.members.length);
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
       
@@ -77,10 +66,10 @@ const Members: React.FC = () => {
       setPagination({
         page: 1,
         limit: 10,
-        total: 0,
-        pages: 0
+        total: mockDashboardData.members.length,
+        pages: Math.ceil(mockDashboardData.members.length / 10)
       });
-      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
+      console.log('Usando dados mock como fallback');
     } finally {
       setLoading(false);
     }

@@ -35,8 +35,9 @@ const RecentTransactions: React.FC = () => {
         setTransactions(mockDashboardData.recentTransactions);
         console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
       } else {
-        // Usar dados mock por enquanto
-        setTransactions(mockDashboardData.recentTransactions);
+        // Usar dados reais do Firestore
+        const response = await transactionsAPI.getTransactions({ limit: 5 });
+        setTransactions(response.data.transactions);
       }
     } catch (error) {
       console.error('Erro ao carregar transações:', error);

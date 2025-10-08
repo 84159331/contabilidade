@@ -97,16 +97,21 @@ const Transactions: React.FC = () => {
           membersAPI.getMembers()
         ]);
         
-        // Usar dados mock por enquanto
-        setTransactions(mockDashboardData.transactions);
+        // Usar dados reais do Firestore
+        setTransactions(transactionsResponse.data.transactions);
         setPagination({
           page: 1,
           limit: 10,
-          total: mockDashboardData.transactions.length,
-          pages: Math.ceil(mockDashboardData.transactions.length / 10)
+          total: transactionsResponse.data.total,
+          pages: Math.ceil(transactionsResponse.data.total / 10)
         });
-        setCategories(mockDashboardData.categories);
-        setMembers(mockDashboardData.members);
+        setCategories(categoriesResponse.data.categories);
+        setMembers(membersResponse.data.members);
+        
+        console.log('✅ Dados carregados do Firestore:');
+        console.log('- Transações:', transactionsResponse.data.transactions.length);
+        console.log('- Categorias:', categoriesResponse.data.categories.length);
+        console.log('- Membros:', membersResponse.data.members.length);
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error);

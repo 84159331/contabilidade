@@ -32,8 +32,9 @@ const MemberStats: React.FC = () => {
         setStats(mockDashboardData.memberStats);
         console.log('Dados mock de estatísticas carregados:', mockDashboardData.memberStats);
       } else {
-        // Usar dados mock por enquanto
-        setStats(mockDashboardData.memberStats);
+        // Usar dados reais do Firestore
+        const response = await membersAPI.getMemberStats();
+        setStats(response.data);
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
