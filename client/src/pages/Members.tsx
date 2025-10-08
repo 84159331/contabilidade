@@ -48,15 +48,16 @@ const Members: React.FC = () => {
     try {
       setLoading(true);
       
-      // Usar dados mock por enquanto (problema de tipo)
-      setMembers(mockDashboardData.members);
+      // Usar API real do Firestore
+      const response = await membersAPI.getMembers();
+      setMembers(response.data.members);
       setPagination({
         page: 1,
         limit: 10,
-        total: mockDashboardData.members.length,
-        pages: Math.ceil(mockDashboardData.members.length / 10)
+        total: response.data.total,
+        pages: Math.ceil(response.data.total / 10)
       });
-      console.log('Usando dados mock por enquanto');
+      console.log('✅ Membros carregados do Firestore:', response.data.members.length);
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
       

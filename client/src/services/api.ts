@@ -27,8 +27,16 @@ export const transactionsAPI = {
       const querySnapshot = await getDocs(q);
       
       const transactions = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        description: doc.data().description || 'Descrição não informada',
+        amount: doc.data().amount || 0,
+        type: doc.data().type || 'income',
+        transaction_date: doc.data().transaction_date || new Date(),
+        category_id: doc.data().category_id || '',
+        member_id: doc.data().member_id || '',
+        payment_method: doc.data().payment_method || 'cash',
+        created_at: doc.data().created_at || new Date(),
+        updated_at: doc.data().updated_at || new Date()
       }));
       
       console.log('✅ Transações carregadas do Firestore:', transactions.length);
@@ -177,8 +185,13 @@ export const membersAPI = {
       const querySnapshot = await getDocs(q);
       
       const members = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        name: doc.data().name || 'Nome não informado',
+        email: doc.data().email || '',
+        phone: doc.data().phone || '',
+        status: doc.data().status || 'active',
+        created_at: doc.data().created_at || new Date(),
+        updated_at: doc.data().updated_at || new Date()
       }));
       
       console.log('✅ Membro carregados do Firestore:', members.length);
@@ -309,8 +322,12 @@ export const categoriesAPI = {
       const querySnapshot = await getDocs(categoriesRef);
       
       const categories = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        name: doc.data().name || 'Categoria não informada',
+        type: doc.data().type || 'income',
+        color: doc.data().color || '#3B82F6',
+        created_at: doc.data().created_at || new Date(),
+        updated_at: doc.data().updated_at || new Date()
       }));
       
       // Se não há categorias salvas, criar algumas padrão
@@ -334,8 +351,12 @@ export const categoriesAPI = {
         // Buscar novamente após criar as categorias padrão
         const newQuerySnapshot = await getDocs(categoriesRef);
         const newCategories = newQuerySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
+          id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+          name: doc.data().name || 'Categoria não informada',
+          type: doc.data().type || 'income',
+          color: doc.data().color || '#3B82F6',
+          created_at: doc.data().created_at || new Date(),
+          updated_at: doc.data().updated_at || new Date()
         }));
         
         console.log('✅ Categorias padrão criadas:', newCategories.length);
@@ -497,4 +518,4 @@ export default {
   authAPI,
   usersAPI,
   reportsAPI
-};
+}
