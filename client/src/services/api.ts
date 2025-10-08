@@ -64,7 +64,7 @@ export const transactionsAPI = {
           transaction: { id: docRef.id, ...transactionData }
         }
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erro ao criar transação:', error);
       console.error('❌ Detalhes do erro:', error.message);
       console.error('❌ Stack trace:', error.stack);
@@ -214,7 +214,7 @@ export const membersAPI = {
           member: { id: docRef.id, ...memberData }
         }
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erro ao criar membro:', error);
       console.error('❌ Detalhes do erro:', error.message);
       console.error('❌ Stack trace:', error.stack);
