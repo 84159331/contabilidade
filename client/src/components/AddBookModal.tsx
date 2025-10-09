@@ -88,9 +88,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
     setUploading(true);
     try {
-      // Simular upload dos arquivos
-      const pdfUrl = `/pdfs/${formData.pdfFile.name}`;
-      const capaUrl = `/img/biblioteca/${formData.capaFile.name}`;
+      // Criar URLs para os arquivos (usando FileReader para arquivos locais)
+      const pdfUrl = URL.createObjectURL(formData.pdfFile);
+      const capaUrl = URL.createObjectURL(formData.capaFile);
       
       // Criar objeto do livro
       const novoLivro = {
@@ -107,19 +107,27 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         downloads: 0,
         avaliacao: 0,
-        isNovo: true
+        isNovo: true,
+        // Adicionar informações dos arquivos para referência
+        pdfFile: formData.pdfFile,
+        capaFile: formData.capaFile
       };
 
-      // Simular upload (em produção, enviaria para o servidor)
       // eslint-disable-next-line no-console
-      console.log('Uploading files:', {
-        pdf: formData.pdfFile.name,
-        capa: formData.capaFile.name,
-        livro: novoLivro
+      console.log('Adicionando livro:', {
+        titulo: novoLivro.titulo,
+        autor: novoLivro.autor,
+        categoria: novoLivro.categoria,
+        tamanho: novoLivro.tamanho
       });
 
       // Adicionar livro à biblioteca
       onAddBook(novoLivro);
+      
+      // Salvar no localStorage para persistência
+      const livrosSalvos = JSON.parse(localStorage.getItem('biblioteca-livros') || '[]');
+      livrosSalvos.push(novoLivro);
+      localStorage.setItem('biblioteca-livros', JSON.stringify(livrosSalvos));
       
       // Reset form
       setFormData({
@@ -167,6 +175,20 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
+          </div>
+
+          {/* Instruções */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
+              📚 Como adicionar livros reais:
+            </h3>
+            <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+              <li>• Baixe o PDF do livro da internet</li>
+              <li>• Encontre ou crie uma imagem da capa (JPG, PNG)</li>
+              <li>• Preencha todas as informações do livro</li>
+              <li>• Selecione os arquivos PDF e da capa</li>
+              <li>• Clique em "Adicionar Livro"</li>
+            </ul>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

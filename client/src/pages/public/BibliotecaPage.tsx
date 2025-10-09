@@ -9,7 +9,8 @@ import {
   EyeIcon,
   CalendarIcon,
   StarIcon,
-  PlusIcon
+  PlusIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 interface Livro {
@@ -48,300 +49,17 @@ const categorias = [
 ];
 
 const livros: Livro[] = [
-  {
-    id: '1',
-    titulo: 'A Bíblia de Estudo Pentecostal',
-    autor: 'Donald C. Stamps',
-    descricao: 'Uma das mais completas Bíblias de estudo com comentários pentecostais, notas explicativas e referências cruzadas.',
-    categoria: 'Teologia',
-    capa: '/img/biblia-pentecostal.jpg',
-    pdfUrl: '/pdfs/biblia-pentecostal.pdf',
-    tamanho: '45.2 MB',
-    paginas: 2048,
-    ano: 2020,
-    tags: ['Bíblia', 'Estudo', 'Pentecostal', 'Comentários'],
-    downloads: 1250,
-    avaliacao: 4.9,
-    isDestaque: true
-  },
-  {
-    id: '2',
-    titulo: 'O Peregrino',
-    autor: 'John Bunyan',
-    descricao: 'Clássico da literatura cristã que narra a jornada espiritual de Cristão em busca da Cidade Celestial.',
-    categoria: 'Devocionais',
-    capa: '/img/o-peregrino.jpg',
-    pdfUrl: '/pdfs/o-peregrino.pdf',
-    tamanho: '12.8 MB',
-    paginas: 320,
-    ano: 1678,
-    tags: ['Clássico', 'Jornada', 'Espiritual', 'Alegoria'],
-    downloads: 890,
-    avaliacao: 4.8,
-    isNovo: true
-  },
-  {
-    id: '3',
-    titulo: 'A Vida de Cristo',
-    autor: 'Fulton J. Sheen',
-    descricao: 'Profunda reflexão sobre a vida, morte e ressurreição de Jesus Cristo, com insights teológicos únicos.',
-    categoria: 'Teologia',
-    capa: '/img/vida-cristo.jpg',
-    pdfUrl: '/pdfs/vida-cristo.pdf',
-    tamanho: '28.5 MB',
-    paginas: 650,
-    ano: 1958,
-    tags: ['Cristo', 'Teologia', 'Reflexão', 'Biografia'],
-    downloads: 756,
-    avaliacao: 4.7
-  },
-  {
-    id: '4',
-    titulo: 'Oração: A Chave do Avivamento',
-    autor: 'E. M. Bounds',
-    descricao: 'Clássico sobre a importância da oração no avivamento espiritual e na vida cristã.',
-    categoria: 'Devocionais',
-    capa: '/img/oracao-avivamento.jpg',
-    pdfUrl: '/pdfs/oracao-avivamento.pdf',
-    tamanho: '8.3 MB',
-    paginas: 180,
-    ano: 1927,
-    tags: ['Oração', 'Avivamento', 'Espiritual', 'Crescimento'],
-    downloads: 634,
-    avaliacao: 4.6
-  },
-  {
-    id: '5',
-    titulo: 'Estudos no Sermão do Monte',
-    autor: 'D. Martyn Lloyd-Jones',
-    descricao: 'Análise profunda e prática do mais famoso sermão de Jesus, com aplicações para a vida cristã.',
-    categoria: 'Estudos Bíblicos',
-    capa: '/img/sermao-monte.jpg',
-    pdfUrl: '/pdfs/sermao-monte.pdf',
-    tamanho: '22.1 MB',
-    paginas: 480,
-    ano: 1959,
-    tags: ['Sermão', 'Monte', 'Estudo', 'Prático'],
-    downloads: 542,
-    avaliacao: 4.8
-  },
-  {
-    id: '6',
-    titulo: 'A História da Igreja Cristã',
-    autor: 'Earle E. Cairns',
-    descricao: 'Completa história da igreja desde os tempos apostólicos até os dias atuais.',
-    categoria: 'História da Igreja',
-    capa: '/img/historia-igreja.jpg',
-    pdfUrl: '/pdfs/historia-igreja.pdf',
-    tamanho: '35.7 MB',
-    paginas: 720,
-    ano: 1996,
-    tags: ['História', 'Igreja', 'Cristianismo', 'Apostólico'],
-    downloads: 423,
-    avaliacao: 4.5
-  },
-  // Novos estudos de Fé
-  {
-    id: '7',
-    titulo: 'A Fé que Move Montanhas',
-    autor: 'Apóstolo Isac',
-    descricao: 'Estudo profundo sobre o poder da fé e como ela pode transformar circunstâncias impossíveis.',
-    categoria: 'Fé',
-    capa: '/img/fe-montanhas.jpg',
-    pdfUrl: '/pdfs/fe-montanhas.pdf',
-    tamanho: '15.2 MB',
-    paginas: 280,
-    ano: 2024,
-    tags: ['Fé', 'Milagres', 'Transformação', 'Poder'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '8',
-    titulo: 'Confiança Inabalável',
-    autor: 'Pastor Jadney',
-    descricao: 'Como desenvolver uma fé sólida e inabalável mesmo em meio às tempestades da vida.',
-    categoria: 'Fé',
-    capa: '/img/confianca-inabalavel.jpg',
-    pdfUrl: '/pdfs/confianca-inabalavel.pdf',
-    tamanho: '12.8 MB',
-    paginas: 240,
-    ano: 2024,
-    tags: ['Fé', 'Confiança', 'Perseverança', 'Fortalecimento'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '9',
-    titulo: 'A Fé dos Gigantes',
-    autor: 'Pastora Fran',
-    descricao: 'Estudo sobre os heróis da fé mencionados em Hebreus 11 e suas lições para hoje.',
-    categoria: 'Fé',
-    capa: '/img/fe-gigantes.jpg',
-    pdfUrl: '/pdfs/fe-gigantes.pdf',
-    tamanho: '18.5 MB',
-    paginas: 320,
-    ano: 2024,
-    tags: ['Fé', 'Heróis', 'Hebreus', 'Exemplos'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  // Novos estudos de Esperança
-  {
-    id: '10',
-    titulo: 'Esperança Renovada',
-    autor: 'Apóstola Elaine',
-    descricao: 'Como renovar a esperança em tempos difíceis e encontrar força para continuar.',
-    categoria: 'Esperança',
-    capa: '/img/esperanca-renovada.jpg',
-    pdfUrl: '/pdfs/esperanca-renovada.pdf',
-    tamanho: '14.3 MB',
-    paginas: 260,
-    ano: 2024,
-    tags: ['Esperança', 'Renovação', 'Força', 'Perseverança'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '11',
-    titulo: 'O Amanhã Pertence a Deus',
-    autor: 'Pastor Jadney',
-    descricao: 'Estudo sobre como confiar no futuro e manter a esperança mesmo quando tudo parece incerto.',
-    categoria: 'Esperança',
-    capa: '/img/amanha-deus.jpg',
-    pdfUrl: '/pdfs/amanha-deus.pdf',
-    tamanho: '16.7 MB',
-    paginas: 290,
-    ano: 2024,
-    tags: ['Esperança', 'Futuro', 'Confiança', 'Incerteza'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '12',
-    titulo: 'Esperança em Meio à Tempestade',
-    autor: 'Pastora Fran',
-    descricao: 'Como encontrar esperança e paz mesmo quando enfrentamos as maiores dificuldades da vida.',
-    categoria: 'Esperança',
-    capa: '/img/esperanca-tempestade.jpg',
-    pdfUrl: '/pdfs/esperanca-tempestade.pdf',
-    tamanho: '13.9 MB',
-    paginas: 250,
-    ano: 2024,
-    tags: ['Esperança', 'Dificuldades', 'Paz', 'Superação'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  // Palavras de Coach
-  {
-    id: '13',
-    titulo: 'Desperte o Gigante Interior',
-    autor: 'Coach Cristão',
-    descricao: 'Estratégias práticas para desenvolver seu potencial máximo e alcançar seus objetivos.',
-    categoria: 'Palavras de Coach',
-    capa: '/img/gigante-interior.jpg',
-    pdfUrl: '/pdfs/gigante-interior.pdf',
-    tamanho: '20.1 MB',
-    paginas: 350,
-    ano: 2024,
-    tags: ['Motivação', 'Potencial', 'Objetivos', 'Desenvolvimento'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true,
-    isDestaque: true
-  },
-  {
-    id: '14',
-    titulo: 'Mindset Vencedor',
-    autor: 'Coach Cristão',
-    descricao: 'Como desenvolver uma mentalidade de vencedor e superar limitações mentais.',
-    categoria: 'Palavras de Coach',
-    capa: '/img/mindset-vencedor.jpg',
-    pdfUrl: '/pdfs/mindset-vencedor.pdf',
-    tamanho: '17.8 MB',
-    paginas: 310,
-    ano: 2024,
-    tags: ['Mindset', 'Vencedor', 'Mentalidade', 'Superação'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '15',
-    titulo: 'Liderança Transformadora',
-    autor: 'Coach Cristão',
-    descricao: 'Princípios bíblicos para liderar com excelência e impactar positivamente sua comunidade.',
-    categoria: 'Palavras de Coach',
-    capa: '/img/lideranca-transformadora.jpg',
-    pdfUrl: '/pdfs/lideranca-transformadora.pdf',
-    tamanho: '19.4 MB',
-    paginas: 340,
-    ano: 2024,
-    tags: ['Liderança', 'Transformação', 'Impacto', 'Comunidade'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  // Palavras de Esperança
-  {
-    id: '16',
-    titulo: 'Consolo para o Coração Ferido',
-    autor: 'Ministério de Consolação',
-    descricao: 'Palavras de consolo e esperança para quem está passando por momentos difíceis.',
-    categoria: 'Palavras de Esperança',
-    capa: '/img/consolo-coracao.jpg',
-    pdfUrl: '/pdfs/consolo-coracao.pdf',
-    tamanho: '11.6 MB',
-    paginas: 200,
-    ano: 2024,
-    tags: ['Consolo', 'Esperança', 'Cura', 'Restauração'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '17',
-    titulo: 'Novos Caminhos, Novas Possibilidades',
-    autor: 'Ministério de Consolação',
-    descricao: 'Encorajamento para quem precisa de uma nova direção na vida e renovação de propósitos.',
-    categoria: 'Palavras de Esperança',
-    capa: '/img/novos-caminhos.jpg',
-    pdfUrl: '/pdfs/novos-caminhos.pdf',
-    tamanho: '15.2 MB',
-    paginas: 270,
-    ano: 2024,
-    tags: ['Novos Caminhos', 'Possibilidades', 'Renovação', 'Propósito'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  },
-  {
-    id: '18',
-    titulo: 'Amanhã Será Melhor',
-    autor: 'Ministério de Consolação',
-    descricao: 'Mensagens de esperança e encorajamento para enfrentar cada novo dia com fé e otimismo.',
-    categoria: 'Palavras de Esperança',
-    capa: '/img/amanha-melhor.jpg',
-    pdfUrl: '/pdfs/amanha-melhor.pdf',
-    tamanho: '13.7 MB',
-    paginas: 240,
-    ano: 2024,
-    tags: ['Esperança', 'Encorajamento', 'Fé', 'Otimismo'],
-    downloads: 0,
-    avaliacao: 0,
-    isNovo: true
-  }
+  // A biblioteca começará vazia para que você possa adicionar apenas livros reais
+  // Use o botão "Adicionar Livro" para inserir seus próprios livros
 ];
 
 const BibliotecaPage: React.FC = () => {
-  const [livrosLista, setLivrosLista] = useState<Livro[]>(livros);
-  const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livros);
+  const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
+    // Carregar livros salvos do localStorage
+    const livrosSalvos = localStorage.getItem('biblioteca-livros');
+    return livrosSalvos ? JSON.parse(livrosSalvos) : livros;
+  });
+  const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
@@ -349,7 +67,7 @@ const BibliotecaPage: React.FC = () => {
 
   useEffect(() => {
     filtrarLivros();
-  }, [categoriaSelecionada, termoBusca, ordenacao]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [categoriaSelecionada, termoBusca, ordenacao, livrosLista]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtrarLivros = () => {
     let resultado = livrosLista;
@@ -425,7 +143,12 @@ const BibliotecaPage: React.FC = () => {
   };
 
   const handleAddBook = (novoLivro: Livro) => {
-    setLivrosLista(prev => [novoLivro, ...prev]);
+    setLivrosLista(prev => {
+      const novaLista = [novoLivro, ...prev];
+      // Salvar no localStorage
+      localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+      return novaLista;
+    });
     setShowAddModal(false);
   };
 
@@ -472,13 +195,30 @@ const BibliotecaPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Catálogo de Livros
           </h2>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
-          >
-            <PlusIcon className="h-5 w-5 mr-2" />
-            Adicionar Livro
-          </button>
+          <div className="flex gap-3">
+            {livrosLista.length > 0 && (
+              <button
+                onClick={() => {
+                  if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta ação não pode ser desfeita.')) {
+                    setLivrosLista([]);
+                    localStorage.removeItem('biblioteca-livros');
+                    alert('Biblioteca limpa com sucesso!');
+                  }
+                }}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center"
+              >
+                <TrashIcon className="h-5 w-5 mr-2" />
+                Limpar Biblioteca
+              </button>
+            )}
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+            >
+              <PlusIcon className="h-5 w-5 mr-2" />
+              Adicionar Livro
+            </button>
+          </div>
         </div>
         
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
@@ -635,11 +375,23 @@ const BibliotecaPage: React.FC = () => {
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Nenhum livro encontrado
+              {livrosLista.length === 0 ? 'Biblioteca Vazia' : 'Nenhum livro encontrado'}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Tente ajustar os filtros ou termo de busca
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              {livrosLista.length === 0 
+                ? 'Comece adicionando seus primeiros livros à biblioteca digital!'
+                : 'Tente ajustar os filtros ou termo de busca'
+              }
             </p>
+            {livrosLista.length === 0 && (
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"
+              >
+                <PlusIcon className="h-5 w-5 mr-2" />
+                Adicionar Primeiro Livro
+              </button>
+            )}
           </div>
         )}
       </div>
