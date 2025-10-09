@@ -9,8 +9,7 @@ import {
   CalendarIcon,
   StarIcon,
   PlusIcon,
-  TrashIcon,
-  PencilIcon
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 interface Livro {
@@ -49,12 +48,9 @@ const categorias = [
 ];
 
 const BooksManagement: React.FC = () => {
-  console.log('📚 BooksManagement renderizado');
-  
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
     // Carregar livros salvos do localStorage
     const livrosSalvos = localStorage.getItem('biblioteca-livros');
-    console.log('📚 Livros carregados do localStorage:', livrosSalvos);
     return livrosSalvos ? JSON.parse(livrosSalvos) : [];
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
@@ -62,7 +58,6 @@ const BooksManagement: React.FC = () => {
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
   const [showAddModal, setShowAddModal] = useState(false);
-  const [livroEditando, setLivroEditando] = useState<Livro | null>(null);
 
   useEffect(() => {
     filtrarLivros();
@@ -112,12 +107,10 @@ const BooksManagement: React.FC = () => {
   };
 
   const handleAddBook = (novoLivro: Livro) => {
-    console.log('📚 handleAddBook chamado com:', novoLivro);
     setLivrosLista(prev => {
       const novaLista = [novoLivro, ...prev];
       // Salvar no localStorage
       localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
-      console.log('📚 Nova lista salva no localStorage:', novaLista);
       return novaLista;
     });
     setShowAddModal(false);
@@ -176,10 +169,7 @@ const BooksManagement: React.FC = () => {
                 </button>
               )}
               <button
-                onClick={() => {
-                  console.log('📚 Botão Adicionar Livro clicado!');
-                  setShowAddModal(true);
-                }}
+                onClick={() => setShowAddModal(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
@@ -427,13 +417,9 @@ const BooksManagement: React.FC = () => {
       </div>
 
       {/* Modal para Adicionar Livro */}
-      {console.log('📚 Renderizando modal - showAddModal:', showAddModal)}
       <AddBookModal
         isOpen={showAddModal}
-        onClose={() => {
-          console.log('📚 Fechando modal');
-          setShowAddModal(false);
-        }}
+        onClose={() => setShowAddModal(false)}
         onAddBook={handleAddBook}
       />
     </div>

@@ -60,7 +60,6 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Formulário submetido!');
     
     // Validações
     if (!formData.titulo.trim()) {
@@ -140,7 +139,6 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       alert('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
-      console.error('Erro ao adicionar livro:', error);
       alert('Erro ao adicionar livro. Tente novamente.');
     } finally {
       setUploading(false);

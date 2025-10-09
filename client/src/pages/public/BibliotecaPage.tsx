@@ -54,7 +54,6 @@ const BibliotecaPage: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
     // Carregar livros salvos do localStorage
     const livrosSalvos = localStorage.getItem('biblioteca-livros');
-    console.log('📚 Biblioteca pública - livros carregados:', livrosSalvos);
     return livrosSalvos ? JSON.parse(livrosSalvos) : livros;
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
@@ -72,7 +71,6 @@ const BibliotecaPage: React.FC = () => {
       const livrosSalvos = localStorage.getItem('biblioteca-livros');
       if (livrosSalvos) {
         const novosLivros = JSON.parse(livrosSalvos);
-        console.log('📚 Biblioteca pública - livros atualizados:', novosLivros);
         setLivrosLista(novosLivros);
       }
     };
@@ -86,7 +84,6 @@ const BibliotecaPage: React.FC = () => {
       if (livrosSalvos) {
         const novosLivros = JSON.parse(livrosSalvos);
         if (JSON.stringify(novosLivros) !== JSON.stringify(livrosLista)) {
-          console.log('📚 Biblioteca pública - livros atualizados via interval:', novosLivros);
           setLivrosLista(novosLivros);
         }
       }
