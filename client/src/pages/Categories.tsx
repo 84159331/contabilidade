@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { categoriesAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import CategoryForm from '../components/CategoryForm';
@@ -26,6 +27,7 @@ const Categories: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     loadCategories();
@@ -36,8 +38,10 @@ const Categories: React.FC = () => {
       setLoading(true);
       
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
-      const useMockData = !token;
+      const useMockData = !user;
+      
+      console.log('🔍 Usuário logado:', user ? 'Sim' : 'Não');
+      console.log('🔍 Usando dados mock:', useMockData ? 'Sim' : 'Não');
       
       if (useMockData) {
         // Simular delay de API
@@ -50,6 +54,7 @@ const Categories: React.FC = () => {
         // Usar API real do Firestore
         console.log('🔥 Carregando categorias do Firestore...');
         const response = await categoriesAPI.getCategories();
+        console.log('📊 Resposta da API:', response);
         setCategories(response.data.categories);
         console.log('✅ Categorias carregadas do Firestore:', response.data.categories.length);
       }
@@ -66,16 +71,25 @@ const Categories: React.FC = () => {
 
   const handleCreateCategory = async (categoryData: any) => {
     try {
-      console.log('🔄 Criando categoria:', categoryData);
+      console.log('🔄 Iniciando criação de categoria...');
+      console.log('📝 Dados da categoria:', categoryData);
+      console.log('👤 Usuário logado:', user ? 'Sim' : 'Não');
+      
       const response = await categoriesAPI.createCategory(categoryData);
       console.log('✅ Categoria criada com sucesso:', response);
+      
       toast.success('Categoria criada com sucesso!');
       setShowForm(false);
+      
       console.log('🔄 Recarregando categorias...');
       await loadCategories();
       console.log('✅ Categorias recarregadas');
+      
+      // Verificar se a categoria foi adicionada
+      console.log('📊 Categorias atuais:', categories.length);
     } catch (error: any) {
       console.error('❌ Erro ao criar categoria:', error);
+      console.error('❌ Detalhes do erro:', error.message);
       toast.error(error.response?.data?.error || 'Erro ao criar categoria');
     }
   };

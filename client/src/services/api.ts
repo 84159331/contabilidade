@@ -528,7 +528,9 @@ export const categoriesAPI = {
 
   createCategory: async (data: any) => {
     try {
-      console.log('💾 Salvando categoria no Firestore:', data);
+      console.log('💾 Iniciando salvamento da categoria no Firestore...');
+      console.log('📝 Dados recebidos:', data);
+      console.log('🔥 Firebase DB instance:', db);
       
       const categoryData = {
         ...data,
@@ -536,20 +538,28 @@ export const categoriesAPI = {
         updated_at: new Date()
       };
       
-      const categoriesRef = collection(db, 'categories');
-      const docRef = await addDoc(categoriesRef, categoryData);
+      console.log('📋 Dados preparados para salvamento:', categoryData);
       
+      const categoriesRef = collection(db, 'categories');
+      console.log('📂 Referência da coleção criada:', categoriesRef);
+      
+      const docRef = await addDoc(categoriesRef, categoryData);
       console.log('✅ Categoria salva no Firestore com ID:', docRef.id);
       
-      return {
+      const result = {
         data: {
           message: 'Categoria criada com sucesso',
           category: { id: docRef.id, ...categoryData }
         }
       };
-    } catch (error) {
+      
+      console.log('📤 Retornando resultado:', result);
+      return result;
+    } catch (error: any) {
       console.error('❌ Erro ao criar categoria:', error);
-      toast.error('Erro ao salvar categoria');
+      console.error('❌ Detalhes do erro:', error.message);
+      console.error('❌ Stack trace:', error.stack);
+      toast.error('Erro ao salvar categoria: ' + error.message);
       throw error;
     }
   },
