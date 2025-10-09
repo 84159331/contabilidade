@@ -29,3 +29,4 @@ export interface EventFormData {
     whatsapp?: boolean;
   };
 }
+
