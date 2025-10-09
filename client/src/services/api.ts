@@ -27,7 +27,7 @@ export const transactionsAPI = {
       const querySnapshot = await getDocs(q);
       
       const transactions = querySnapshot.docs.map(doc => ({
-        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        id: doc.id, // Manter como string para compatibilidade com Firebase
         description: doc.data().description || 'Descrição não informada',
         amount: doc.data().amount || 0,
         type: doc.data().type || 'income',

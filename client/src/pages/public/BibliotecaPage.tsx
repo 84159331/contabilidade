@@ -54,6 +54,7 @@ const BibliotecaPage: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
     // Carregar livros salvos do localStorage
     const livrosSalvos = localStorage.getItem('biblioteca-livros');
+    console.log('📚 Biblioteca pública - livros carregados:', livrosSalvos);
     return livrosSalvos ? JSON.parse(livrosSalvos) : livros;
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
@@ -64,6 +65,38 @@ const BibliotecaPage: React.FC = () => {
   useEffect(() => {
     filtrarLivros();
   }, [categoriaSelecionada, termoBusca, ordenacao, livrosLista]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Atualizar lista quando localStorage mudar
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const livrosSalvos = localStorage.getItem('biblioteca-livros');
+      if (livrosSalvos) {
+        const novosLivros = JSON.parse(livrosSalvos);
+        console.log('📚 Biblioteca pública - livros atualizados:', novosLivros);
+        setLivrosLista(novosLivros);
+      }
+    };
+
+    // Escutar mudanças no localStorage
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Verificar mudanças periodicamente (para mudanças na mesma aba)
+    const interval = setInterval(() => {
+      const livrosSalvos = localStorage.getItem('biblioteca-livros');
+      if (livrosSalvos) {
+        const novosLivros = JSON.parse(livrosSalvos);
+        if (JSON.stringify(novosLivros) !== JSON.stringify(livrosLista)) {
+          console.log('📚 Biblioteca pública - livros atualizados via interval:', novosLivros);
+          setLivrosLista(novosLivros);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [livrosLista]);
 
   const filtrarLivros = () => {
     let resultado = livrosLista;
