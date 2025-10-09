@@ -7,6 +7,7 @@ interface StatusIndicatorProps {
   label: string;
   icon?: React.ReactNode;
   pulse?: boolean;
+  formatAsCurrency?: boolean;
 }
 
 const StatusIndicator: React.FC<StatusIndicatorProps> = ({
@@ -14,7 +15,8 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   value,
   label,
   icon,
-  pulse = true
+  pulse = true,
+  formatAsCurrency = true
 }) => {
   const statusConfig = {
     positive: {
@@ -66,7 +68,10 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
             transition={{ delay: 0.2 }}
             className={`text-lg font-medium ${config.color}`}
           >
-            R$ {value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            {formatAsCurrency 
+              ? `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+              : value.toLocaleString('pt-BR')
+            }
           </motion.dd>
         </dl>
       </div>

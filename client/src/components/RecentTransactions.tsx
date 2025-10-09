@@ -5,7 +5,7 @@ import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 interface Transaction {
-  id: number;
+  id: string | number;
   description: string;
   amount: number;
   type: 'income' | 'expense';
@@ -36,15 +36,18 @@ const RecentTransactions: React.FC = () => {
         setTransactions(mockDashboardData.recentTransactions);
         console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
       } else {
-        // Usar dados mock por enquanto (problema de tipo)
-        setTransactions(mockDashboardData.recentTransactions);
+        // Usar API real do Firestore
+        console.log('🔥 Carregando transações recentes do Firestore...');
+        const response = await transactionsAPI.getRecentTransactions(5);
+        setTransactions(response.data);
+        console.log('✅ Transações recentes carregadas do Firestore:', response.data.length);
       }
     } catch (error) {
       console.error('Erro ao carregar transações:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setTransactions(mockDashboardData.recentTransactions);
-      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
+      console.log('Usando dados mock como fallback');
     } finally {
       setLoading(false);
     }

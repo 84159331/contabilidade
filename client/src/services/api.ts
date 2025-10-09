@@ -239,6 +239,58 @@ export const transactionsAPI = {
 
   getCashFlow: async (params?: any) => {
     return { data: { cashFlow: [] } };
+  },
+
+  getRecentTransactions: async (limit: number = 5) => {
+    try {
+      console.log('🔥 Buscando transações recentes no Firestore...');
+      
+      // Buscar transações
+      const transactionsRef = collection(db, 'transactions');
+      const q = query(transactionsRef, orderBy('created_at', 'desc'), limitToLast(limit));
+      const querySnapshot = await getDocs(q);
+      
+      // Buscar categorias
+      const categoriesRef = collection(db, 'categories');
+      const categoriesSnapshot = await getDocs(categoriesRef);
+      const categories = categoriesSnapshot.docs.reduce((acc, doc) => {
+        acc[doc.id] = doc.data().name;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      // Buscar membros
+      const membersRef = collection(db, 'members');
+      const membersSnapshot = await getDocs(membersRef);
+      const members = membersSnapshot.docs.reduce((acc, doc) => {
+        acc[doc.id] = doc.data().name;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      const transactions = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          description: data.description || 'Descrição não informada',
+          amount: data.amount || 0,
+          type: data.type || 'income',
+          transaction_date: data.transaction_date || new Date(),
+          category_id: data.category_id || '',
+          member_id: data.member_id || '',
+          payment_method: data.payment_method || 'cash',
+          created_at: data.created_at || new Date(),
+          updated_at: data.updated_at || new Date(),
+          // Adicionar nomes das categorias e membros
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
+        };
+      });
+      
+      console.log('✅ Transações recentes carregadas do Firestore:', transactions.length);
+      return { data: transactions };
+    } catch (error) {
+      console.error('❌ Erro ao buscar transações recentes:', error);
+      return { data: [] };
+    }
   }
 };
 

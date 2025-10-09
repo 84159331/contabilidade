@@ -16,7 +16,53 @@ export const mockDashboardData = {
     active: 0,
     inactive: 0
   },
-  recentTransactions: [],
+  recentTransactions: [
+    {
+      id: 1,
+      description: 'Dízimo - João Silva',
+      amount: 150.00,
+      type: 'income' as const,
+      transaction_date: new Date().toISOString(),
+      category_name: 'Dízimos',
+      member_name: 'João Silva'
+    },
+    {
+      id: 2,
+      description: 'Oferta Especial',
+      amount: 75.50,
+      type: 'income' as const,
+      transaction_date: new Date(Date.now() - 86400000).toISOString(),
+      category_name: 'Ofertas',
+      member_name: 'Maria Santos'
+    },
+    {
+      id: 3,
+      description: 'Conta de Luz',
+      amount: 320.00,
+      type: 'expense' as const,
+      transaction_date: new Date(Date.now() - 172800000).toISOString(),
+      category_name: 'Utilidades',
+      member_name: ''
+    },
+    {
+      id: 4,
+      description: 'Dízimo - Pedro Oliveira',
+      amount: 200.00,
+      type: 'income' as const,
+      transaction_date: new Date(Date.now() - 259200000).toISOString(),
+      category_name: 'Dízimos',
+      member_name: 'Pedro Oliveira'
+    },
+    {
+      id: 5,
+      description: 'Manutenção do Prédio',
+      amount: 450.00,
+      type: 'expense' as const,
+      transaction_date: new Date(Date.now() - 345600000).toISOString(),
+      category_name: 'Manutenção',
+      member_name: ''
+    }
+  ],
   cashFlowData: [
     { month: "1", income: 0, expense: 0, balance: 0 },
     { month: "2", income: 0, expense: 0, balance: 0 },

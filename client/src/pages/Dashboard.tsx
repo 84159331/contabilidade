@@ -188,16 +188,39 @@ const Dashboard: React.FC = () => {
         {/* Membros */}
         <AnimatedCard delay={3}>
           <div className="p-5">
-            <StatusIndicator
-              status="neutral"
-              value={memberStats?.total || 0}
-              label="Membros"
-              icon={<UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />}
-              pulse={false}
-            />
-            <div className="mt-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {memberStats?.active || 0} ativos
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                  <UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Membros</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {memberStats?.total || 0}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {memberStats?.active || 0} ativos
+                </div>
+                <div className="text-xs text-gray-400 dark:text-gray-500">
+                  {memberStats?.inactive || 0} inativos
+                </div>
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>Status dos Membros</span>
+                <span>{memberStats?.total ? Math.round(((memberStats?.active || 0) / memberStats.total) * 100) : 0}% ativos</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                  style={{ 
+                    width: `${memberStats?.total ? ((memberStats?.active || 0) / memberStats.total) * 100 : 0}%` 
+                  }}
+                ></div>
               </div>
             </div>
           </div>
