@@ -25,6 +25,7 @@ const categorias = [
 ];
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook }) => {
+  console.log('🔍 AddBookModal renderizado - isOpen:', isOpen);
   
   const [formData, setFormData] = useState({
     titulo: '',
