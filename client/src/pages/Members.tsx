@@ -46,9 +46,15 @@ const Members: React.FC = () => {
     loadMembers();
   }, [searchTerm, statusFilter, pagination.page]);
 
-  const loadMembers = async () => {
+  const loadMembers = async (forceReload = false) => {
     try {
       setLoading(true);
+      
+      // Limpar cache se forçado
+      if (forceReload) {
+        console.log('🔄 Forçando recarga dos membros...');
+        setMembers([]);
+      }
       
       // Verificar se deve usar dados mock
       const useMockData = !user;
@@ -68,15 +74,26 @@ const Members: React.FC = () => {
         console.log('Dados mock de membros carregados:', mockDashboardData.members.length);
       } else {
         // Usar API real do Firestore
+        console.log('🔥 Carregando membros do Firestore...');
         const response = await membersAPI.getMembers();
-        setMembers(response.data.members);
+        
+        // Verificar se os IDs são válidos
+        const validMembers = response.data.members.filter(member => {
+          const isValid = typeof member.id === 'string' && member.id.length > 0;
+          if (!isValid) {
+            console.warn('⚠️ Membro com ID inválido encontrado:', member);
+          }
+          return isValid;
+        });
+        
+        setMembers(validMembers);
         setPagination({
           page: 1,
           limit: 10,
-          total: response.data.total,
-          pages: Math.ceil(response.data.total / 10)
+          total: validMembers.length,
+          pages: Math.ceil(validMembers.length / 10)
         });
-        console.log('✅ Membros carregados do Firestore:', response.data.members.length);
+        console.log('✅ Membros válidos carregados do Firestore:', validMembers.length);
       }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
@@ -112,12 +129,14 @@ const Members: React.FC = () => {
   const handleUpdateMember = async (id: string | number, memberData: any) => {
     try {
       setIsUpdating(true);
+      console.log('🔄 Iniciando atualização do membro:', id, 'Tipo:', typeof id);
       await membersAPI.updateMember(String(id), memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
       setShowForm(false);
-      loadMembers();
+      loadMembers(true); // Forçar recarga
     } catch (error: any) {
+      console.error('❌ Erro na atualização:', error);
       toast.error(error.response?.data?.error || 'Erro ao atualizar membro');
     } finally {
       setIsUpdating(false);
@@ -128,10 +147,12 @@ const Members: React.FC = () => {
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
         setIsDeleting(true);
+        console.log('🗑️ Iniciando exclusão do membro:', id, 'Tipo:', typeof id);
         await membersAPI.deleteMember(String(id));
         toast.success('Membro deletado com sucesso!');
-        loadMembers();
+        loadMembers(true); // Forçar recarga
       } catch (error: any) {
+        console.error('❌ Erro na exclusão:', error);
         toast.error(error.response?.data?.error || 'Erro ao deletar membro');
       } finally {
         setIsDeleting(false);

@@ -251,17 +251,22 @@ export const membersAPI = {
       const q = query(membersRef, orderBy('created_at', 'desc'));
       const querySnapshot = await getDocs(q);
       
-      const members = querySnapshot.docs.map(doc => ({
-        id: doc.id, // Manter como string (ID do Firestore)
-        name: doc.data().name || 'Nome não informado',
-        email: doc.data().email || '',
-        phone: doc.data().phone || '',
-        status: doc.data().status || 'active',
-        created_at: doc.data().created_at || new Date(),
-        updated_at: doc.data().updated_at || new Date()
-      }));
+      const members = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        console.log('📄 Documento ID:', doc.id, 'Tipo:', typeof doc.id, 'Dados:', data);
+        return {
+          id: doc.id, // Manter como string (ID do Firestore)
+          name: data.name || 'Nome não informado',
+          email: data.email || '',
+          phone: data.phone || '',
+          status: data.status || 'active',
+          created_at: data.created_at || new Date(),
+          updated_at: data.updated_at || new Date()
+        };
+      });
       
-      console.log('✅ Membro carregados do Firestore:', members.length);
+      console.log('✅ Membros carregados do Firestore:', members.length);
+      console.log('🔍 IDs dos membros:', members.map(m => ({ id: m.id, type: typeof m.id })));
       return { data: { members, total: members.length } };
     } catch (error) {
       console.error('❌ Erro ao buscar membros:', error);
@@ -305,31 +310,51 @@ export const membersAPI = {
 
   updateMember: async (id: string, data: any) => {
     try {
-      console.log('🔄 Atualizando membro no Firestore:', id);
+      console.log('🔄 Atualizando membro no Firestore:');
+      console.log('  - ID recebido:', id, 'Tipo:', typeof id);
+      console.log('  - Dados para atualização:', data);
       
+      // Verificar se o documento existe antes de tentar atualizar
       const memberRef = doc(db, 'members', id);
+      const memberSnap = await getDoc(memberRef);
+      
+      if (!memberSnap.exists()) {
+        console.error('❌ Documento não encontrado no Firestore:', id);
+        throw new Error(`Membro com ID ${id} não encontrado no Firestore`);
+      }
+      
+      console.log('✅ Documento encontrado, procedendo com atualização...');
+      
       await updateDoc(memberRef, {
         ...data,
         updated_at: new Date()
       });
       
-      console.log('✅ Membro atualizado no Firestore');
+      console.log('✅ Membro atualizado no Firestore com sucesso');
       return { data: { message: 'Membro atualizado com sucesso' } };
     } catch (error) {
       console.error('❌ Erro ao atualizar membro:', error);
-      toast.error('Erro ao atualizar membro');
+      console.error('❌ Detalhes do erro:', error);
+      toast.error('Erro ao atualizar membro: ' + (error as Error).message);
       throw error;
     }
   },
 
   deleteMember: async (id: string) => {
     try {
-      console.log('🗑️ Deletando membro do Firestore:', id);
-      console.log('🔍 Tipo do ID:', typeof id);
-      console.log('🔍 Valor do ID:', id);
+      console.log('🗑️ Deletando membro do Firestore:');
+      console.log('  - ID recebido:', id, 'Tipo:', typeof id);
       
+      // Verificar se o documento existe antes de tentar deletar
       const memberRef = doc(db, 'members', id);
-      console.log('📂 Referência criada:', memberRef);
+      const memberSnap = await getDoc(memberRef);
+      
+      if (!memberSnap.exists()) {
+        console.error('❌ Documento não encontrado no Firestore:', id);
+        throw new Error(`Membro com ID ${id} não encontrado no Firestore`);
+      }
+      
+      console.log('✅ Documento encontrado, procedendo com exclusão...');
       
       await deleteDoc(memberRef);
       
@@ -394,7 +419,7 @@ export const categoriesAPI = {
       const querySnapshot = await getDocs(categoriesRef);
       
       const categories = querySnapshot.docs.map(doc => ({
-        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        id: doc.id, // Manter como string (ID do Firestore)
         name: doc.data().name || 'Categoria não informada',
         type: doc.data().type || 'income',
         color: doc.data().color || '#3B82F6',
@@ -423,7 +448,7 @@ export const categoriesAPI = {
         // Buscar novamente após criar as categorias padrão
         const newQuerySnapshot = await getDocs(categoriesRef);
         const newCategories = newQuerySnapshot.docs.map(doc => ({
-          id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+          id: doc.id, // Manter como string (ID do Firestore)
           name: doc.data().name || 'Categoria não informada',
           type: doc.data().type || 'income',
           color: doc.data().color || '#3B82F6',
