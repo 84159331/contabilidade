@@ -109,10 +109,10 @@ const Members: React.FC = () => {
     }
   };
 
-  const handleUpdateMember = async (id: string, memberData: any) => {
+  const handleUpdateMember = async (id: string | number, memberData: any) => {
     try {
       setIsUpdating(true);
-      await membersAPI.updateMember(id, memberData);
+      await membersAPI.updateMember(String(id), memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
       setShowForm(false);

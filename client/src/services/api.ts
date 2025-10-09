@@ -3,6 +3,7 @@ import { db } from '../firebase/config';
 import { 
   collection, 
   getDocs, 
+  getDoc,
   addDoc, 
   doc, 
   updateDoc, 
@@ -22,22 +23,46 @@ export const transactionsAPI = {
   getTransactions: async (params?: any) => {
     try {
       console.log('🔥 Buscando transações no Firestore...');
+      
+      // Buscar transações
       const transactionsRef = collection(db, 'transactions');
       const q = query(transactionsRef, orderBy('created_at', 'desc'));
       const querySnapshot = await getDocs(q);
       
-      const transactions = querySnapshot.docs.map(doc => ({
-        id: doc.id, // Manter como string para compatibilidade com Firebase
-        description: doc.data().description || 'Descrição não informada',
-        amount: doc.data().amount || 0,
-        type: doc.data().type || 'income',
-        transaction_date: doc.data().transaction_date || new Date(),
-        category_id: doc.data().category_id || '',
-        member_id: doc.data().member_id || '',
-        payment_method: doc.data().payment_method || 'cash',
-        created_at: doc.data().created_at || new Date(),
-        updated_at: doc.data().updated_at || new Date()
-      }));
+      // Buscar categorias
+      const categoriesRef = collection(db, 'categories');
+      const categoriesSnapshot = await getDocs(categoriesRef);
+      const categories = categoriesSnapshot.docs.reduce((acc, doc) => {
+        acc[doc.id] = doc.data().name;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      // Buscar membros
+      const membersRef = collection(db, 'members');
+      const membersSnapshot = await getDocs(membersRef);
+      const members = membersSnapshot.docs.reduce((acc, doc) => {
+        acc[doc.id] = doc.data().name;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      const transactions = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id, // Manter como string para compatibilidade com Firebase
+          description: data.description || 'Descrição não informada',
+          amount: data.amount || 0,
+          type: data.type || 'income',
+          transaction_date: data.transaction_date || new Date(),
+          category_id: data.category_id || '',
+          member_id: data.member_id || '',
+          payment_method: data.payment_method || 'cash',
+          created_at: data.created_at || new Date(),
+          updated_at: data.updated_at || new Date(),
+          // Adicionar nomes das categorias e membros
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
+        };
+      });
       
       console.log('✅ Transações carregadas do Firestore:', transactions.length);
       return { data: { transactions, total: transactions.length } };
@@ -164,7 +189,44 @@ export const transactionsAPI = {
         throw new Error('Transação não encontrada');
       }
       
-      return { data: { id: transaction.id, ...transaction.data() } };
+      const data = transaction.data();
+      
+      // Buscar categoria se existir
+      let category_name = '';
+      if (data.category_id) {
+        try {
+          const categoryRef = doc(db, 'categories', data.category_id);
+          const categorySnap = await getDoc(categoryRef);
+          if (categorySnap.exists()) {
+            category_name = categorySnap.data().name;
+          }
+        } catch (error) {
+          console.error('Erro ao buscar categoria:', error);
+        }
+      }
+      
+      // Buscar membro se existir
+      let member_name = '';
+      if (data.member_id) {
+        try {
+          const memberRef = doc(db, 'members', data.member_id);
+          const memberSnap = await getDoc(memberRef);
+          if (memberSnap.exists()) {
+            member_name = memberSnap.data().name;
+          }
+        } catch (error) {
+          console.error('Erro ao buscar membro:', error);
+        }
+      }
+      
+      return { 
+        data: { 
+          id: transaction.id, 
+          ...data,
+          category_name,
+          member_name
+        } 
+      };
     } catch (error) {
       console.error('❌ Erro ao buscar transação:', error);
       throw error;
@@ -190,7 +252,7 @@ export const membersAPI = {
       const querySnapshot = await getDocs(q);
       
       const members = querySnapshot.docs.map(doc => ({
-        id: parseInt(doc.id) || Math.random() * 1000000, // Converter para number
+        id: doc.id, // Manter como string (ID do Firestore)
         name: doc.data().name || 'Nome não informado',
         email: doc.data().email || '',
         phone: doc.data().phone || '',
@@ -283,15 +345,15 @@ export const membersAPI = {
 
   getMember: async (id: string) => {
     try {
-      const membersRef = collection(db, 'members');
-      const querySnapshot = await getDocs(membersRef);
-      const member = querySnapshot.docs.find(doc => doc.id === id);
+      console.log('🔍 Buscando membro no Firestore:', id);
+      const memberRef = doc(db, 'members', id);
+      const memberSnap = await getDoc(memberRef);
       
-      if (!member) {
+      if (!memberSnap.exists()) {
         throw new Error('Membro não encontrado');
       }
       
-      return { data: { id: member.id, ...member.data() } };
+      return { data: { id: memberSnap.id, ...memberSnap.data() } };
     } catch (error) {
       console.error('❌ Erro ao buscar membro:', error);
       throw error;
