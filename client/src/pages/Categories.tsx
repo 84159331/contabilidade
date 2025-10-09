@@ -8,7 +8,7 @@ import CategoryForm from '../components/CategoryForm';
 import CategoryList from '../components/CategoryList';
 
 interface Category {
-  id: number;
+  id: string | number;
   name: string;
   type: 'income' | 'expense';
   description?: string;
@@ -47,15 +47,18 @@ const Categories: React.FC = () => {
         setCategories(mockDashboardData.categories);
         console.log('Dados mock de categorias carregados:', mockDashboardData.categories);
       } else {
-        // Usar dados mock por enquanto
-        setCategories(mockDashboardData.categories);
+        // Usar API real do Firestore
+        console.log('🔥 Carregando categorias do Firestore...');
+        const response = await categoriesAPI.getCategories();
+        setCategories(response.data.categories);
+        console.log('✅ Categorias carregadas do Firestore:', response.data.categories.length);
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setCategories(mockDashboardData.categories);
-      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
+      console.log('Usando dados mock como fallback');
     } finally {
       setLoading(false);
     }
@@ -63,11 +66,16 @@ const Categories: React.FC = () => {
 
   const handleCreateCategory = async (categoryData: any) => {
     try {
-      await categoriesAPI.createCategory(categoryData);
+      console.log('🔄 Criando categoria:', categoryData);
+      const response = await categoriesAPI.createCategory(categoryData);
+      console.log('✅ Categoria criada com sucesso:', response);
       toast.success('Categoria criada com sucesso!');
       setShowForm(false);
-      loadCategories();
+      console.log('🔄 Recarregando categorias...');
+      await loadCategories();
+      console.log('✅ Categorias recarregadas');
     } catch (error: any) {
+      console.error('❌ Erro ao criar categoria:', error);
       toast.error(error.response?.data?.error || 'Erro ao criar categoria');
     }
   };
@@ -151,7 +159,9 @@ const Categories: React.FC = () => {
 
       {/* Categories List */}
       <CategoryList
-        categories={categories}
+        categories={categories.filter(category => 
+          typeFilter === 'all' || category.type === typeFilter
+        )}
         loading={loading}
         onEdit={handleEditCategory}
         onDelete={handleDeleteCategory}
