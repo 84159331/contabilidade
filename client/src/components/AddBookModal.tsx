@@ -115,13 +115,8 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         capaFile: formData.capaFile
       };
 
-      // Adicionar livro à biblioteca
+      // Adicionar livro à biblioteca (a função onAddBook já salva no localStorage)
       onAddBook(novoLivro);
-      
-      // Salvar no localStorage para persistência
-      const livrosSalvos = JSON.parse(localStorage.getItem('biblioteca-livros') || '[]');
-      livrosSalvos.push(novoLivro);
-      localStorage.setItem('biblioteca-livros', JSON.stringify(livrosSalvos));
       
       // Reset form
       setFormData({
