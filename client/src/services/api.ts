@@ -676,11 +676,139 @@ export const reportsAPI = {
   }
 };
 
+// API para eventos (usando Firebase Firestore)
+export const eventsAPI = {
+  getEvents: async () => {
+    try {
+      console.log('🔥 Buscando eventos no Firestore...');
+      
+      const eventsRef = collection(db, 'events');
+      const q = query(eventsRef, orderBy('date', 'asc'));
+      const querySnapshot = await getDocs(q);
+      
+      const events = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title,
+          description: data.description,
+          date: data.date,
+          time: data.time,
+          location: data.location,
+          image: data.image,
+          social_media: data.social_media || {},
+          created_at: data.created_at,
+          updated_at: data.updated_at
+        };
+      });
+      
+      console.log('✅ Eventos carregados:', events.length);
+      return events;
+    } catch (error) {
+      console.error('❌ Erro ao buscar eventos:', error);
+      return [];
+    }
+  },
+
+  createEvent: async (eventData: any) => {
+    try {
+      console.log('🔥 Criando evento no Firestore...');
+      console.log('📝 Dados do evento:', eventData);
+      
+      const eventsRef = collection(db, 'events');
+      const eventToCreate = {
+        ...eventData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      
+      console.log('📝 Dados preparados:', eventToCreate);
+      
+      const docRef = await addDoc(eventsRef, eventToCreate);
+      console.log('✅ Evento criado com ID:', docRef.id);
+      
+      return { id: docRef.id, ...eventToCreate };
+    } catch (error) {
+      console.error('❌ Erro ao criar evento:', error);
+      throw error;
+    }
+  },
+
+  updateEvent: async (id: string, eventData: any) => {
+    try {
+      console.log('🔥 Atualizando evento no Firestore...');
+      console.log('📝 ID do evento:', id);
+      console.log('📝 Dados para atualizar:', eventData);
+      
+      const eventRef = doc(db, 'events', id);
+      
+      // Verificar se o documento existe
+      const eventSnap = await getDoc(eventRef);
+      if (!eventSnap.exists()) {
+        throw new Error('Evento não encontrado');
+      }
+      
+      const updateData = {
+        ...eventData,
+        updated_at: new Date().toISOString()
+      };
+      
+      await updateDoc(eventRef, updateData);
+      console.log('✅ Evento atualizado com sucesso');
+      
+      return { id, ...updateData };
+    } catch (error) {
+      console.error('❌ Erro ao atualizar evento:', error);
+      throw error;
+    }
+  },
+
+  deleteEvent: async (id: string) => {
+    try {
+      console.log('🔥 Deletando evento no Firestore...');
+      console.log('📝 ID do evento:', id);
+      
+      const eventRef = doc(db, 'events', id);
+      
+      // Verificar se o documento existe
+      const eventSnap = await getDoc(eventRef);
+      if (!eventSnap.exists()) {
+        throw new Error('Evento não encontrado');
+      }
+      
+      await deleteDoc(eventRef);
+      console.log('✅ Evento deletado com sucesso');
+      
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao deletar evento:', error);
+      throw error;
+    }
+  },
+
+  uploadEventImage: async (file: File) => {
+    try {
+      console.log('🔥 Fazendo upload da imagem do evento...');
+      
+      // Aqui você pode integrar com Firebase Storage ou outro serviço
+      // Por enquanto, vou retornar uma URL mock
+      const mockImageUrl = `https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=${encodeURIComponent(file.name)}`;
+      
+      console.log('✅ Imagem enviada:', mockImageUrl);
+      return mockImageUrl;
+    } catch (error) {
+      console.error('❌ Erro ao fazer upload da imagem:', error);
+      throw error;
+    }
+  }
+};
+
 export default {
   transactionsAPI,
   membersAPI,
   categoriesAPI,
   authAPI,
   usersAPI,
-  reportsAPI
+  reportsAPI,
+  eventsAPI
 }
