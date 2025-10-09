@@ -25,6 +25,7 @@ const categorias = [
 ];
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook }) => {
+  
   const [formData, setFormData] = useState({
     titulo: '',
     autor: '',
@@ -59,6 +60,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Formulário submetido!');
     
     // Validações
     if (!formData.titulo.trim()) {
@@ -113,14 +115,6 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         capaFile: formData.capaFile
       };
 
-      // eslint-disable-next-line no-console
-      console.log('Adicionando livro:', {
-        titulo: novoLivro.titulo,
-        autor: novoLivro.autor,
-        categoria: novoLivro.categoria,
-        tamanho: novoLivro.tamanho
-      });
-
       // Adicionar livro à biblioteca
       onAddBook(novoLivro);
       
@@ -146,7 +140,6 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       alert('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Erro ao adicionar livro:', error);
       alert('Erro ao adicionar livro. Tente novamente.');
     } finally {
