@@ -149,37 +149,12 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
-      style={{ 
-        zIndex: 9999,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
-      }}
-    >
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
         className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-        style={{ 
-          zIndex: 10000,
-          backgroundColor: 'white',
-          borderRadius: '0.75rem',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          width: '100%',
-          maxWidth: '42rem',
-          maxHeight: '90vh',
-          overflowY: 'auto'
-        }}
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
@@ -329,11 +304,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   <DocumentArrowUpIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                   <input
                     type="file"
+                    name="pdfFile"
                     accept=".pdf"
                     onChange={(e) => handleFileChange(e, 'pdf')}
                     className="hidden"
                     id="pdf-upload"
-                    required
                   />
                   <label htmlFor="pdf-upload" className="cursor-pointer">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -350,11 +325,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   <PhotoIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                   <input
                     type="file"
+                    name="capaFile"
                     accept="image/*"
                     onChange={(e) => handleFileChange(e, 'capa')}
                     className="hidden"
                     id="capa-upload"
-                    required
                   />
                   <label htmlFor="capa-upload" className="cursor-pointer">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
