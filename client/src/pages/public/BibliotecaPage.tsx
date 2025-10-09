@@ -64,6 +64,11 @@ const BibliotecaPage: React.FC = () => {
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
   const [showAddModal, setShowAddModal] = useState(false);
+  
+  // Debug: Log quando showAddModal muda
+  useEffect(() => {
+    console.log('🟢 showAddModal mudou para:', showAddModal);
+  }, [showAddModal]);
 
   useEffect(() => {
     filtrarLivros();
@@ -212,7 +217,12 @@ const BibliotecaPage: React.FC = () => {
               </button>
             )}
             <button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => {
+                console.log('🔵 Botão Adicionar Livro clicado!');
+                console.log('🔵 Estado atual showAddModal:', showAddModal);
+                setShowAddModal(true);
+                console.log('🔵 showAddModal definido como true');
+              }}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
@@ -385,7 +395,12 @@ const BibliotecaPage: React.FC = () => {
             </p>
             {livrosLista.length === 0 && (
               <button
-                onClick={() => setShowAddModal(true)}
+                onClick={() => {
+                  console.log('🔵 Botão Adicionar Primeiro Livro clicado!');
+                  console.log('🔵 Estado atual showAddModal:', showAddModal);
+                  setShowAddModal(true);
+                  console.log('🔵 showAddModal definido como true');
+                }}
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />

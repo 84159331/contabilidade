@@ -154,15 +154,26 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     }
   };
 
-  if (!isOpen) return null;
+  console.log('🟡 AddBookModal renderizado - isOpen:', isOpen);
+  
+  if (!isOpen) {
+    console.log('🟡 Modal não está aberto, retornando null');
+    return null;
+  }
+  
+  console.log('🟡 Modal está aberto, renderizando conteúdo');
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
+      style={{ zIndex: 9999 }}
+    >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
         className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{ zIndex: 10000 }}
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">

@@ -120,10 +120,12 @@
   
   .modal-overlay {
     @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 dark:bg-opacity-70;
+    z-index: 9999 !important;
   }
   
   .modal-content {
     @apply bg-white rounded-lg shadow-xl max-w-md w-full p-6 dark:bg-gray-800;
+    z-index: 10000 !important;
   }
   
   /* Animações personalizadas */
