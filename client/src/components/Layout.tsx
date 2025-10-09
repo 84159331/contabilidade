@@ -198,7 +198,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Page content */}
         <main className="py-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <TabTransition key={location.pathname}>
+            <TabTransition transitionKey={location.pathname}>
               {children}
             </TabTransition>
           </div>

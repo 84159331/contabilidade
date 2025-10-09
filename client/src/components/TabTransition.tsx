@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface TabTransitionProps {
   children: React.ReactNode;
-  key: string;
+  transitionKey: string;
 }
 
-const TabTransition: React.FC<TabTransitionProps> = ({ children, key }) => {
+const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={key}
+        key={transitionKey}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
