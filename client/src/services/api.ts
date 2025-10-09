@@ -475,6 +475,9 @@ export const categoriesAPI = {
         name: doc.data().name || 'Categoria não informada',
         type: doc.data().type || 'income',
         color: doc.data().color || '#3B82F6',
+        description: doc.data().description || '',
+        transaction_count: 0, // Será calculado posteriormente se necessário
+        total_amount: 0, // Será calculado posteriormente se necessário
         created_at: doc.data().created_at || new Date(),
         updated_at: doc.data().updated_at || new Date()
       }));
@@ -504,6 +507,9 @@ export const categoriesAPI = {
           name: doc.data().name || 'Categoria não informada',
           type: doc.data().type || 'income',
           color: doc.data().color || '#3B82F6',
+          description: doc.data().description || '',
+          transaction_count: 0, // Será calculado posteriormente se necessário
+          total_amount: 0, // Será calculado posteriormente se necessário
           created_at: doc.data().created_at || new Date(),
           updated_at: doc.data().updated_at || new Date()
         }));
