@@ -12,6 +12,10 @@ const categorias = [
   'Teologia',
   'Devocionais',
   'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
+  'Palavras de Coach',
+  'Palavras de Esperança',
   'Biografias',
   'História da Igreja',
   'Liderança',
@@ -55,8 +59,30 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.pdfFile || !formData.capaFile) {
-      alert('Por favor, selecione o PDF e a capa do livro');
+    
+    // Validações
+    if (!formData.titulo.trim()) {
+      alert('Por favor, digite o título do livro');
+      return;
+    }
+    
+    if (!formData.autor.trim()) {
+      alert('Por favor, digite o nome do autor');
+      return;
+    }
+    
+    if (!formData.descricao.trim()) {
+      alert('Por favor, digite a descrição do livro');
+      return;
+    }
+    
+    if (!formData.pdfFile) {
+      alert('Por favor, selecione o arquivo PDF do livro');
+      return;
+    }
+    
+    if (!formData.capaFile) {
+      alert('Por favor, selecione a capa do livro');
       return;
     }
 
@@ -69,15 +95,15 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       // Criar objeto do livro
       const novoLivro = {
         id: Date.now().toString(),
-        titulo: formData.titulo,
-        autor: formData.autor,
-        descricao: formData.descricao,
+        titulo: formData.titulo.trim(),
+        autor: formData.autor.trim(),
+        descricao: formData.descricao.trim(),
         categoria: formData.categoria,
         capa: capaUrl,
         pdfUrl: pdfUrl,
         tamanho: `${(formData.pdfFile.size / 1024 / 1024).toFixed(1)} MB`,
-        paginas: formData.paginas,
-        ano: formData.ano,
+        paginas: formData.paginas || 0,
+        ano: formData.ano || new Date().getFullYear(),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         downloads: 0,
         avaliacao: 0,
@@ -88,7 +114,8 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       // eslint-disable-next-line no-console
       console.log('Uploading files:', {
         pdf: formData.pdfFile.name,
-        capa: formData.capaFile.name
+        capa: formData.capaFile.name,
+        livro: novoLivro
       });
 
       // Adicionar livro à biblioteca
@@ -107,6 +134,8 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         capaFile: null
       });
       
+      // Mostrar mensagem de sucesso
+      alert('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
       // eslint-disable-next-line no-console

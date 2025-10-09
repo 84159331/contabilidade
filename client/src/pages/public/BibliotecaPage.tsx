@@ -395,19 +395,33 @@ const BibliotecaPage: React.FC = () => {
   };
 
   const handleDownload = (livro: Livro) => {
-    // Simular download
-    const link = document.createElement('a');
-    link.href = livro.pdfUrl;
-    link.download = `${livro.titulo}.pdf`;
-    link.click();
-    
-    // Atualizar contador de downloads
-    setLivrosLista(prev => prev.map(l => 
-      l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
-    ));
-    
-    // eslint-disable-next-line no-console
-    console.log(`Download iniciado: ${livro.titulo}`);
+    try {
+      // Verificar se o arquivo existe
+      const link = document.createElement('a');
+      link.href = livro.pdfUrl;
+      link.download = `${livro.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      link.target = '_blank';
+      
+      // Adicionar o link ao DOM temporariamente
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Atualizar contador de downloads
+      setLivrosLista(prev => prev.map(l => 
+        l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
+      ));
+      
+      // eslint-disable-next-line no-console
+      console.log(`Download iniciado: ${livro.titulo}`);
+      
+      // Mostrar mensagem de sucesso
+      alert(`Download de "${livro.titulo}" iniciado!`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Erro no download:', error);
+      alert('Erro ao iniciar download. Tente novamente.');
+    }
   };
 
   const handleAddBook = (novoLivro: Livro) => {
@@ -603,7 +617,11 @@ const BibliotecaPage: React.FC = () => {
                     <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
                     Baixar
                   </button>
-                  <button className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                  <button 
+                    onClick={() => window.open(livro.pdfUrl, '_blank')}
+                    className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    title="Visualizar PDF"
+                  >
                     <EyeIcon className="h-5 w-5" />
                   </button>
                 </div>
