@@ -16,7 +16,8 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  BookOpenIcon
 } from '@heroicons/react/24/outline';
 
 // Definindo tipos para os itens de navegação para maior segurança
@@ -52,6 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
     { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
+    { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },

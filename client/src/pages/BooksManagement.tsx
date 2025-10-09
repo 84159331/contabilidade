@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import SafeImage from '../../components/SafeImage';
+import AddBookModal from '../components/AddBookModal';
 import { 
   BookOpenIcon, 
   MagnifyingGlassIcon, 
   DocumentArrowDownIcon,
   EyeIcon,
   CalendarIcon,
-  StarIcon
+  StarIcon,
+  PlusIcon,
+  TrashIcon,
+  PencilIcon
 } from '@heroicons/react/24/outline';
 
 interface Livro {
@@ -45,21 +48,18 @@ const categorias = [
   'Crianças'
 ];
 
-const livros: Livro[] = [
-  // A biblioteca começará vazia para que você possa adicionar apenas livros reais
-  // Use o botão "Adicionar Livro" para inserir seus próprios livros
-];
-
-const BibliotecaPage: React.FC = () => {
+const BooksManagement: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
     // Carregar livros salvos do localStorage
     const livrosSalvos = localStorage.getItem('biblioteca-livros');
-    return livrosSalvos ? JSON.parse(livrosSalvos) : livros;
+    return livrosSalvos ? JSON.parse(livrosSalvos) : [];
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [livroEditando, setLivroEditando] = useState<Livro | null>(null);
 
   useEffect(() => {
     filtrarLivros();
@@ -108,85 +108,82 @@ const BibliotecaPage: React.FC = () => {
     setLivrosFiltrados(resultado);
   };
 
-  const handleDownload = (livro: Livro) => {
-    try {
-      // Verificar se o arquivo existe
-      const link = document.createElement('a');
-      link.href = livro.pdfUrl;
-      link.download = `${livro.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
-      link.target = '_blank';
-      
-      // Adicionar o link ao DOM temporariamente
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Atualizar contador de downloads
-      setLivrosLista(prev => prev.map(l => 
-        l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
-      ));
-      
-      // eslint-disable-next-line no-console
-      console.log(`Download iniciado: ${livro.titulo}`);
-      
-      // Mostrar mensagem de sucesso
-      alert(`Download de "${livro.titulo}" iniciado!`);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Erro no download:', error);
-      alert('Erro ao iniciar download. Tente novamente.');
+  const handleAddBook = (novoLivro: Livro) => {
+    setLivrosLista(prev => {
+      const novaLista = [novoLivro, ...prev];
+      // Salvar no localStorage
+      localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+      return novaLista;
+    });
+    setShowAddModal(false);
+  };
+
+  const handleDeleteBook = (id: string) => {
+    if (window.confirm('Tem certeza que deseja excluir este livro?')) {
+      setLivrosLista(prev => {
+        const novaLista = prev.filter(livro => livro.id !== id);
+        localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+        return novaLista;
+      });
     }
   };
 
+  const handleToggleDestaque = (id: string) => {
+    setLivrosLista(prev => {
+      const novaLista = prev.map(livro => 
+        livro.id === id ? { ...livro, isDestaque: !livro.isDestaque } : livro
+      );
+      localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+      return novaLista;
+    });
+  };
+
+  const handleClearLibrary = () => {
+    if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta ação não pode ser desfeita.')) {
+      setLivrosLista([]);
+      localStorage.removeItem('biblioteca-livros');
+      alert('Biblioteca limpa com sucesso!');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <SafeImage 
-              src="/img/ICONE-RESGATE.png" 
-              alt="Biblioteca Digital" 
-              className="mx-auto h-16 w-16 mb-6 opacity-90"
-            />
-            <h1 className="text-5xl font-bold font-heading mb-4">Biblioteca Digital</h1>
-            <p className="text-xl max-w-2xl mx-auto mb-8">
-              Acesse uma vasta coleção de livros cristãos, estudos bíblicos e recursos espirituais
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center">
-                <BookOpenIcon className="h-5 w-5 mr-2" />
-                <span>{livrosLista.length} Livros Disponíveis</span>
-              </div>
-              <div className="flex items-center">
-                <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
-                <span>Download Gratuito</span>
-              </div>
-              <div className="flex items-center">
-                <StarIcon className="h-5 w-5 mr-2" />
-                <span>Recursos Selecionados</span>
-              </div>
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Gerenciamento de Livros
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Gerencie a biblioteca digital da igreja
+              </p>
             </div>
-          </motion.div>
+            <div className="flex gap-3">
+              {livrosLista.length > 0 && (
+                <button
+                  onClick={handleClearLibrary}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center"
+                >
+                  <TrashIcon className="h-5 w-5 mr-2" />
+                  Limpar Biblioteca
+                </button>
+              )}
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+              >
+                <PlusIcon className="h-5 w-5 mr-2" />
+                Adicionar Livro
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Filtros e Busca */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Catálogo de Livros
-          </h2>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {livrosLista.length} livros disponíveis
-          </div>
-        </div>
-        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Busca */}
@@ -233,6 +230,52 @@ const BibliotecaPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Estatísticas */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex items-center">
+              <BookOpenIcon className="h-8 w-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Livros</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{livrosLista.length}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex items-center">
+              <DocumentArrowDownIcon className="h-8 w-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Downloads</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {livrosLista.reduce((total, livro) => total + livro.downloads, 0)}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex items-center">
+              <StarIcon className="h-8 w-8 text-yellow-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Livros em Destaque</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {livrosLista.filter(livro => livro.isDestaque).length}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex items-center">
+              <CalendarIcon className="h-8 w-8 text-purple-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Novos Este Ano</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {livrosLista.filter(livro => livro.ano === new Date().getFullYear()).length}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Grid de Livros */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {livrosFiltrados.map((livro, index) => (
@@ -243,13 +286,15 @@ const BibliotecaPage: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
-              {/* Badges */}
+              {/* Capa */}
               <div className="relative">
-                <SafeImage 
+                <img 
                   src={livro.capa} 
                   alt={livro.titulo}
                   className="w-full h-64 object-cover"
-                  fallbackText="Capa do Livro"
+                  onError={(e) => {
+                    e.currentTarget.src = '/img/placeholder-book.jpg';
+                  }}
                 />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   {livro.isDestaque && (
@@ -314,21 +359,32 @@ const BibliotecaPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Botões */}
+                {/* Botões de Ação */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleDownload(livro)}
+                    onClick={() => window.open(livro.pdfUrl, '_blank')}
                     className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
                   >
-                    <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
-                    Baixar
+                    <EyeIcon className="h-5 w-5 mr-2" />
+                    Visualizar
                   </button>
-                  <button 
-                    onClick={() => window.open(livro.pdfUrl, '_blank')}
-                    className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                    title="Visualizar PDF"
+                  <button
+                    onClick={() => handleToggleDestaque(livro.id)}
+                    className={`py-2 px-4 rounded-lg font-semibold transition-colors ${
+                      livro.isDestaque 
+                        ? 'bg-yellow-600 text-white hover:bg-yellow-700' 
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    }`}
+                    title={livro.isDestaque ? 'Remover destaque' : 'Adicionar destaque'}
                   >
-                    <EyeIcon className="h-5 w-5" />
+                    <StarIcon className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteBook(livro.id)}
+                    className="bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                    title="Excluir livro"
+                  >
+                    <TrashIcon className="h-5 w-5" />
                   </button>
                 </div>
               </div>
@@ -341,20 +397,35 @@ const BibliotecaPage: React.FC = () => {
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {livrosLista.length === 0 ? 'Biblioteca Vazia' : 'Nenhum livro encontrado'}
+              {livrosLista.length === 0 ? 'Nenhum livro cadastrado' : 'Nenhum livro encontrado'}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {livrosLista.length === 0 
-                ? 'A biblioteca ainda não possui livros disponíveis. Volte em breve!'
+                ? 'Comece adicionando livros à biblioteca digital'
                 : 'Tente ajustar os filtros ou termo de busca'
               }
             </p>
+            {livrosLista.length === 0 && (
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"
+              >
+                <PlusIcon className="h-5 w-5 mr-2" />
+                Adicionar Primeiro Livro
+              </button>
+            )}
           </div>
         )}
       </div>
 
+      {/* Modal para Adicionar Livro */}
+      <AddBookModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAddBook={handleAddBook}
+      />
     </div>
   );
 };
 
-export default BibliotecaPage;
+export default BooksManagement;
