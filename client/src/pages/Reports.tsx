@@ -116,15 +116,15 @@ const Reports: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Visualize e analise os dados financeiros da igreja
         </p>
       </div>
 
       {/* Report Tabs */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="-mb-px flex space-x-8 px-6" aria-label="Tabs">
             {reports.map((report) => {
               const Icon = report.icon;
@@ -137,8 +137,8 @@ const Reports: React.FC = () => {
                   }}
                   className={`${
                     activeReport === report.id
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2`}
                 >
                   <Icon className="h-4 w-4" />
@@ -152,10 +152,10 @@ const Reports: React.FC = () => {
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                 {reports.find(r => r.id === activeReport)?.name}
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {reports.find(r => r.id === activeReport)?.description}
               </p>
             </div>

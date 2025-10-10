@@ -188,8 +188,8 @@ const Members: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Membros</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Membros</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie os membros da igreja
           </p>
         </div>
@@ -200,18 +200,18 @@ const Members: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
         <form onSubmit={handleSearch} className="flex gap-4 items-end">
           <div className="flex-1">
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Buscar
             </label>
             <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 id="search"
-                className="input pl-10"
+                className="input pl-10 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 placeholder="Nome, email ou telefone..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -219,12 +219,12 @@ const Members: React.FC = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Status
             </label>
             <select
               id="status"
-              className="input"
+              className="input dark:bg-gray-700 dark:text-white dark:border-gray-600"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >

@@ -136,8 +136,8 @@ const Categories: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Categorias</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Categorias</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie as categorias de receitas e despesas
           </p>
         </div>
@@ -151,15 +151,15 @@ const Categories: React.FC = () => {
       </div>
 
       {/* Filter */}
-      <div className="bg-white p-4 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
         <div className="flex items-center gap-4">
           <div>
-            <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Tipo
             </label>
             <select
               id="type"
-              className="input"
+              className="input dark:bg-gray-700 dark:text-white dark:border-gray-600"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as 'all' | 'income' | 'expense')}
             >

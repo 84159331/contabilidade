@@ -93,8 +93,8 @@ const Users: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Gerenciamento de Usuários</h1>
-          <p className="mt-1 text-md text-slate-600">
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Gerenciamento de Usuários</h1>
+          <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
             Adicione, visualize e gerencie os usuários administradores do sistema.
           </p>
         </div>
@@ -115,12 +115,12 @@ const Users: React.FC = () => {
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowForm(false)}></div>
             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-800">Adicionar Novo Usuário</h2>
+            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Adicionar Novo Usuário</h2>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="px-2 py-1 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none"
+                  className="px-2 py-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none"
                   aria-label="Fechar"
                 >
                   ×
