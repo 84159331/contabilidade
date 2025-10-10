@@ -35,69 +35,84 @@ const EventsAdmin: React.FC = () => {
       setLoading(true);
       console.log('🔄 Carregando eventos...');
       
-      // Por enquanto usando dados mock, mas você pode integrar com a API real
-      const mockEvents: Event[] = [
-        {
-          id: '1',
-          title: 'Culto de Celebração',
-          description: 'Venha celebrar conosco a presença de Deus em nossas vidas',
-          date: '2024-01-15',
-          time: '19:00',
-          location: 'Igreja Comunidade Resgate',
-          image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+Celebração',
-          social_media: {
-            instagram: true,
-            facebook: true,
-            whatsapp: true
-          },
-          created_at: '2024-01-01T00:00:00Z',
-          updated_at: '2024-01-01T00:00:00Z'
-        },
-        {
-          id: '2',
-          title: 'Conferência de Jovens',
-          description: 'Um encontro especial para jovens com palestras e atividades',
-          date: '2024-01-20',
-          time: '14:00',
-          location: 'Auditório Principal',
-          image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Conferência+de+Jovens',
-          social_media: {
-            instagram: true,
-            facebook: false,
-            whatsapp: true
-          },
-          created_at: '2024-01-01T00:00:00Z',
-          updated_at: '2024-01-01T00:00:00Z'
-        },
-        {
-          id: '3',
-          title: 'Reunião de Oração',
-          description: 'Momento especial de oração e comunhão',
-          date: '2024-01-25',
-          time: '20:00',
-          location: 'Sala de Oração',
-          image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Reunião+de+Oração',
-          social_media: {
-            instagram: false,
-            facebook: true,
-            whatsapp: true
-          },
-          created_at: '2024-01-01T00:00:00Z',
-          updated_at: '2024-01-01T00:00:00Z'
+      // Tentar carregar eventos da API real primeiro
+      try {
+        const eventsData = await eventsAPI.getEvents();
+        console.log('📊 Dados recebidos da API:', eventsData);
+        
+        if (eventsData && eventsData.length > 0) {
+          setEvents(eventsData);
+          console.log('✅ Eventos carregados da API:', eventsData.length);
+        } else {
+          console.log('⚠️ Nenhum evento encontrado na API, usando dados mock');
+          loadMockEvents();
         }
-      ];
-
-      // Simular delay de carregamento
-      setTimeout(() => {
-        setEvents(mockEvents);
-        setLoading(false);
-        console.log('✅ Eventos carregados:', mockEvents.length);
-      }, 1000);
+      } catch (apiError) {
+        console.log('⚠️ Erro na API, usando dados mock:', apiError);
+        loadMockEvents();
+      }
+      
+      setLoading(false);
     } catch (error) {
       console.error('❌ Erro ao carregar eventos:', error);
       toast.error('Erro ao carregar eventos');
       setLoading(false);
     }
+  };
+
+  const loadMockEvents = () => {
+    const mockEvents: Event[] = [
+      {
+        id: '1',
+        title: 'Culto de Celebração',
+        description: 'Venha celebrar conosco a presença de Deus em nossas vidas',
+        date: '2024-01-15',
+        time: '19:00',
+        location: 'Igreja Comunidade Resgate',
+        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+Celebração',
+        social_media: {
+          instagram: true,
+          facebook: true,
+          whatsapp: true
+        },
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z'
+      },
+      {
+        id: '2',
+        title: 'Conferência de Jovens',
+        description: 'Um encontro especial para jovens com palestras e atividades',
+        date: '2024-01-20',
+        time: '14:00',
+        location: 'Auditório Principal',
+        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Conferência+de+Jovens',
+        social_media: {
+          instagram: true,
+          facebook: false,
+          whatsapp: true
+        },
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z'
+      },
+      {
+        id: '3',
+        title: 'Reunião de Oração',
+        description: 'Momento especial de oração e comunhão',
+        date: '2024-01-25',
+        time: '20:00',
+        location: 'Sala de Oração',
+        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Reunião+de+Oração',
+        social_media: {
+          instagram: false,
+          facebook: true,
+          whatsapp: true
+        },
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z'
+      }
+    ];
+    setEvents(mockEvents);
+    console.log('✅ Eventos mock carregados:', mockEvents.length);
   };
 
   const handleCreateEvent = () => {
@@ -123,10 +138,17 @@ const EventsAdmin: React.FC = () => {
   const handleDeleteEvent = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
       try {
-        // Simular exclusão
+        // Tentar excluir via API
+        try {
+          await eventsAPI.deleteEvent(id);
+          console.log('✅ Evento excluído via API:', id);
+        } catch (apiError) {
+          console.log('⚠️ Erro na API, removendo localmente:', apiError);
+        }
+        
+        // Remover da lista local
         setEvents(prev => prev.filter(event => event.id !== id));
         toast.success('Evento excluído com sucesso!');
-        console.log('✅ Evento excluído:', id);
       } catch (error) {
         console.error('❌ Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
@@ -134,28 +156,47 @@ const EventsAdmin: React.FC = () => {
     }
   };
 
-  const handleSaveEvent = (eventData: EventFormData) => {
-    setShowForm(false);
-    setEditingEvent(undefined);
-    
-    if (editingEvent) {
-      // Atualizar evento existente
-      setEvents(prev => prev.map(event => 
-        event.id === editingEvent.id 
-          ? { ...event, ...eventData, updated_at: new Date().toISOString() }
-          : event
-      ));
-      toast.success('Evento atualizado com sucesso!');
-    } else {
-      // Criar novo evento
-      const newEvent: Event = {
-        ...eventData,
-        id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      setEvents(prev => [...prev, newEvent]);
-      toast.success('Evento criado com sucesso!');
+  const handleSaveEvent = async (eventData: EventFormData) => {
+    try {
+      setShowForm(false);
+      setEditingEvent(undefined);
+      
+      if (editingEvent) {
+        // Atualizar evento existente
+        try {
+          await eventsAPI.updateEvent(editingEvent.id!, eventData);
+          console.log('✅ Evento atualizado via API:', editingEvent.id);
+        } catch (apiError) {
+          console.log('⚠️ Erro na API, atualizando localmente:', apiError);
+        }
+        
+        setEvents(prev => prev.map(event => 
+          event.id === editingEvent.id 
+            ? { ...event, ...eventData, updated_at: new Date().toISOString() }
+            : event
+        ));
+        toast.success('Evento atualizado com sucesso!');
+      } else {
+        // Criar novo evento
+        try {
+          const newEventFromAPI = await eventsAPI.createEvent(eventData);
+          console.log('✅ Evento criado via API:', newEventFromAPI);
+          setEvents(prev => [...prev, newEventFromAPI]);
+        } catch (apiError) {
+          console.log('⚠️ Erro na API, criando localmente:', apiError);
+          const newEvent: Event = {
+            ...eventData,
+            id: Date.now().toString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          };
+          setEvents(prev => [...prev, newEvent]);
+        }
+        toast.success('Evento criado com sucesso!');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao salvar evento:', error);
+      toast.error('Erro ao salvar evento');
     }
   };
 

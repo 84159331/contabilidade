@@ -26,7 +26,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
 }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'this-month'>('upcoming');
+  const [filter, setFilter] = useState<'upcoming'>('upcoming');
 
   useEffect(() => {
     loadEvents();
@@ -40,11 +40,13 @@ const EventsSection: React.FC<EventsSectionProps> = ({
       // Tentar carregar eventos da API real primeiro
       try {
         const eventsData = await eventsAPI.getEvents();
+        console.log('📊 Dados recebidos da API:', eventsData);
+        
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
           console.log('✅ Eventos carregados da API:', eventsData.length);
         } else {
-          // Fallback para dados mock se não houver eventos na API
+          console.log('⚠️ Nenhum evento encontrado na API, usando dados mock');
           loadMockEvents();
         }
       } catch (apiError) {
@@ -161,23 +163,16 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const filteredEvents = events.filter(event => {
-    switch (filter) {
-      case 'upcoming':
-        return isUpcoming(event.date);
-      case 'this-month':
-        return isThisMonth(event.date);
-      default:
-        return true;
-    }
+    return isUpcoming(event.date);
   });
 
   if (loading) {
     return (
-      <div className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
+        <div className="container mx-auto px-6">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Carregando eventos...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Carregando eventos...</p>
           </div>
         </div>
       </div>
@@ -185,183 +180,145 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   }
 
   return (
-    <div className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
+      <div className="container mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
             Próximos Eventos
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
             Participe dos nossos eventos e fortaleça sua fé junto conosco
           </p>
-        </div>
-
-        {/* Filtros */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-1">
-            <button
-              onClick={() => setFilter('upcoming')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                filter === 'upcoming'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Próximos
-            </button>
-            <button
-              onClick={() => setFilter('this-month')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                filter === 'this-month'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Este Mês
-            </button>
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Todos
-            </button>
-          </div>
         </div>
 
         {/* Lista de Eventos */}
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12">
             <CalendarIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
+            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
               Nenhum evento encontrado
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Não há eventos para o filtro selecionado.
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Não há eventos próximos no momento.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredEvents.map((event) => (
               <div
                 key={event.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 fade-in-scale"
               >
                 {/* Imagem do Evento */}
                 {event.image && (
-                  <div className="aspect-w-16 aspect-h-9">
+                  <div className="aspect-w-16 aspect-h-9 mb-4">
                     <img
                       src={event.image}
                       alt={event.title}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48 object-cover rounded-lg"
                     />
                   </div>
                 )}
 
                 {/* Conteúdo */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {event.title}
-                    </h3>
-                    {isUpcoming(event.date) && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Próximo
-                      </span>
-                    )}
-                  </div>
-
-                  {event.description && (
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {event.description}
-                    </p>
-                  )}
-
-                  {/* Informações do Evento */}
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <CalendarIcon className="h-4 w-4 mr-2" />
-                      {formatDate(event.date)}
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <ClockIcon className="h-4 w-4 mr-2" />
-                      {formatTime(event.time)}
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <MapPinIcon className="h-4 w-4 mr-2" />
-                      {event.location}
-                    </div>
-                  </div>
-
-                  {/* Redes Sociais */}
-                  {event.social_media && Object.values(event.social_media).some(Boolean) && (
-                    <div className="mb-4">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs text-gray-500">Compartilhar:</span>
-                        {event.social_media.instagram && (
-                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-pink-100 text-pink-800">
-                            Instagram
-                          </span>
-                        )}
-                        {event.social_media.facebook && (
-                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                            Facebook
-                          </span>
-                        )}
-                        {event.social_media.whatsapp && (
-                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
-                            WhatsApp
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Ações para Admin */}
-                  {isAdmin && (
-                    <div className="flex justify-end space-x-2 pt-4 border-t">
-                      {onShare && (
-                        <button
-                          onClick={() => onShare(event)}
-                          className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                          <ShareIcon className="h-3 w-3 mr-1" />
-                          Compartilhar
-                        </button>
-                      )}
-                      {onEdit && (
-                        <button
-                          onClick={() => onEdit(event)}
-                          className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                          <PencilIcon className="h-3 w-3 mr-1" />
-                          Editar
-                        </button>
-                      )}
-                      {onDelete && (
-                        <button
-                          onClick={() => handleDeleteEvent(event.id)}
-                          className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50"
-                        >
-                          <TrashIcon className="h-3 w-3 mr-1" />
-                          Excluir
-                        </button>
-                      )}
-                    </div>
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {event.title}
+                  </h3>
+                  {isUpcoming(event.date) && (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                      Próximo
+                    </span>
                   )}
                 </div>
+
+                {event.description && (
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                    {event.description}
+                  </p>
+                )}
+
+                {/* Informações do Evento */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <CalendarIcon className="h-4 w-4 mr-2" />
+                    {formatDate(event.date)}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <ClockIcon className="h-4 w-4 mr-2" />
+                    {formatTime(event.time)}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <MapPinIcon className="h-4 w-4 mr-2" />
+                    {event.location}
+                  </div>
+                </div>
+
+                {/* Redes Sociais */}
+                {event.social_media && Object.values(event.social_media).some(Boolean) && (
+                  <div className="mb-4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Compartilhar:</span>
+                      {event.social_media.instagram && (
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200">
+                          Instagram
+                        </span>
+                      )}
+                      {event.social_media.facebook && (
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          Facebook
+                        </span>
+                      )}
+                      {event.social_media.whatsapp && (
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                          WhatsApp
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Ações para Admin */}
+                {isAdmin && (
+                  <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    {onShare && (
+                      <button
+                        onClick={() => onShare(event)}
+                        className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-500"
+                      >
+                        <ShareIcon className="h-3 w-3 mr-1" />
+                        Compartilhar
+                      </button>
+                    )}
+                    {onEdit && (
+                      <button
+                        onClick={() => onEdit(event)}
+                        className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-500"
+                      >
+                        <PencilIcon className="h-3 w-3 mr-1" />
+                        Editar
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button
+                        onClick={() => handleDeleteEvent(event.id)}
+                        className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 dark:bg-gray-600 dark:text-red-400 dark:border-red-500"
+                      >
+                        <TrashIcon className="h-3 w-3 mr-1" />
+                        Excluir
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
 
         {/* Call to Action */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
+        <div className="text-center mt-8">
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             Quer saber mais sobre nossos eventos?
           </p>
           <button className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
