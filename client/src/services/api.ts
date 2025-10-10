@@ -681,13 +681,21 @@ export const eventsAPI = {
   getEvents: async () => {
     try {
       console.log('🔥 Buscando eventos no Firestore...');
+      console.log('📊 Database:', db);
       
       const eventsRef = collection(db, 'events');
+      console.log('📊 Events collection ref:', eventsRef);
+      
       const q = query(eventsRef, orderBy('date', 'asc'));
+      console.log('📊 Query:', q);
+      
       const querySnapshot = await getDocs(q);
+      console.log('📊 Query snapshot:', querySnapshot);
+      console.log('📊 Docs count:', querySnapshot.docs.length);
       
       const events = querySnapshot.docs.map(doc => {
         const data = doc.data();
+        console.log('📊 Doc data:', doc.id, data);
         return {
           id: doc.id,
           title: data.title,
@@ -703,9 +711,14 @@ export const eventsAPI = {
       });
       
       console.log('✅ Eventos carregados:', events.length);
+      console.log('📊 Eventos:', events);
       return events;
     } catch (error) {
       console.error('❌ Erro ao buscar eventos:', error);
+      if (error instanceof Error) {
+        console.error('❌ Error details:', error.message);
+        console.error('❌ Error stack:', error.stack);
+      }
       return [];
     }
   },

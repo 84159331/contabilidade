@@ -283,16 +283,16 @@ const EventsAdmin: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <CalendarIcon className="h-6 w-6 mr-2" />
             Administração de Eventos
           </h1>
-          <p className="text-gray-600">Gerencie os eventos que aparecem na página inicial</p>
+          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos que aparecem na página inicial</p>
         </div>
         <div className="flex space-x-3">
           <button
             onClick={() => setViewMode(viewMode === 'admin' ? 'preview' : 'admin')}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <EyeIcon className="h-4 w-4 mr-2" />
             {viewMode === 'admin' ? 'Visualizar' : 'Administrar'}
@@ -308,7 +308,7 @@ const EventsAdmin: React.FC = () => {
       </div>
 
       {/* Filtros */}
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
         <div className="flex space-x-4">
           <button
             onClick={() => setFilter('all')}

@@ -93,8 +93,25 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         setEvents(events);
         console.log('✅ Eventos carregados do cache:', events.length);
       } else {
-        setEvents([]);
-        console.log('⚠️ Nenhum evento no cache');
+        // Se não há cache, criar um evento de teste para debug
+        const testEvent = {
+          id: 'test-1',
+          title: 'Evento de Teste',
+          description: 'Este é um evento de teste para verificar se o sistema está funcionando',
+          date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 dias no futuro
+          time: '19:00',
+          location: 'Igreja Comunidade Resgate',
+          image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Evento+de+Teste',
+          social_media: {
+            instagram: true,
+            facebook: true,
+            whatsapp: true
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        setEvents([testEvent]);
+        console.log('⚠️ Nenhum evento no cache, criando evento de teste');
       }
     } catch (error) {
       console.error('❌ Erro ao carregar do cache:', error);

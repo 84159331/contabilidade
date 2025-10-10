@@ -121,11 +121,11 @@ const Events: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <CalendarIcon className="h-6 w-6 mr-2" />
             Eventos
           </h1>
-          <p className="text-gray-600">Gerencie os eventos da sua igreja</p>
+          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos da sua igreja</p>
         </div>
         <button
           onClick={handleCreateEvent}
@@ -137,14 +137,14 @@ const Events: React.FC = () => {
       </div>
 
       {/* Filtros */}
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
         <div className="flex space-x-4">
           <button
             onClick={() => setFilter('all')}
             className={`px-3 py-1 rounded-full text-sm font-medium ${
               filter === 'all'
-                ? 'bg-blue-100 text-blue-800'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             Todos ({events.length})
@@ -153,8 +153,8 @@ const Events: React.FC = () => {
             onClick={() => setFilter('upcoming')}
             className={`px-3 py-1 rounded-full text-sm font-medium ${
               filter === 'upcoming'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             Próximos ({events.filter(e => new Date(e.date) >= new Date()).length})
@@ -163,8 +163,8 @@ const Events: React.FC = () => {
             onClick={() => setFilter('past')}
             className={`px-3 py-1 rounded-full text-sm font-medium ${
               filter === 'past'
-                ? 'bg-gray-100 text-gray-800'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             Passados ({events.filter(e => new Date(e.date) < new Date()).length})
@@ -173,7 +173,7 @@ const Events: React.FC = () => {
       </div>
 
       {/* Lista de Eventos */}
-      <div className="bg-white rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div className="p-6">
           <EventList
             events={filteredEvents}
