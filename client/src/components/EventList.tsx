@@ -19,6 +19,16 @@ interface EventListProps {
 }
 
 const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare, onAutoShare }) => {
+  console.log('📋 EventList - Renderizando com', events.length, 'eventos');
+  
+  if (events.length > 0) {
+    console.log('🔍 EventList - Primeiro evento:', events[0]);
+    if (events[0].image) {
+      console.log('🖼️ EventList - Primeira imagem:', events[0].image.substring(0, 50) + '...');
+      console.log('🖼️ EventList - É base64?', events[0].image.startsWith('data:'));
+    }
+  }
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR', {
@@ -121,6 +131,8 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               {/* Imagem do evento */}
               {event.image && (
                 <div className="ml-4">
+                  {console.log('🖼️ EventList - Renderizando SafeImage para evento:', event.title)}
+                  {console.log('🖼️ EventList - Imagem src:', event.image.substring(0, 50) + '...')}
                   <SafeImage
                     src={event.image}
                     alt={event.title}

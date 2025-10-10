@@ -72,11 +72,26 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
     try {
       let imageUrl = formData.image;
       
+      console.log('📝 EventForm - Iniciando submit');
+      console.log('📝 EventForm - imageFile:', imageFile ? imageFile.name : 'null');
+      console.log('📝 EventForm - formData.image:', formData.image ? formData.image.substring(0, 50) + '...' : 'vazio');
+      
       // Upload da imagem se houver arquivo
       if (imageFile) {
-        console.log('📤 Fazendo upload da imagem...');
-        imageUrl = await eventsAPI.uploadEventImage(imageFile);
-        console.log('✅ Upload concluído, URL:', imageUrl.substring(0, 50) + '...');
+        console.log('📤 EventForm - Fazendo upload da imagem...');
+        console.log('📤 EventForm - Arquivo:', imageFile.name, imageFile.size, imageFile.type);
+        
+        try {
+          imageUrl = await eventsAPI.uploadEventImage(imageFile);
+          console.log('✅ EventForm - Upload concluído com sucesso');
+          console.log('✅ EventForm - URL gerada:', imageUrl.substring(0, 50) + '...');
+          console.log('✅ EventForm - É base64?', imageUrl.startsWith('data:'));
+        } catch (uploadError) {
+          console.error('❌ EventForm - Erro no upload:', uploadError);
+          throw uploadError;
+        }
+      } else {
+        console.log('ℹ️ EventForm - Nenhum arquivo para upload');
       }
 
       const eventData = {
@@ -84,15 +99,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
         image: imageUrl
       };
 
-      console.log('💾 Salvando evento com imagem:', eventData.image ? 'Sim' : 'Não');
-      console.log('🔍 Dados do evento:', eventData);
+      console.log('💾 EventForm - Dados finais do evento:');
+      console.log('💾 EventForm - Título:', eventData.title);
+      console.log('💾 EventForm - Imagem:', eventData.image ? 'Sim' : 'Não');
+      console.log('💾 EventForm - Imagem é base64?', eventData.image?.startsWith('data:'));
+      console.log('💾 EventForm - Tamanho da imagem:', eventData.image?.length || 0);
 
       if (event?.id) {
+        console.log('🔄 EventForm - Atualizando evento existente:', event.id);
         await eventsAPI.updateEvent(event.id, eventData);
       } else {
+        console.log('➕ EventForm - Criando novo evento');
         await eventsAPI.createEvent(eventData);
       }
 
+      console.log('✅ EventForm - Evento salvo com sucesso');
       onSave(eventData);
       onClose();
     } catch (error) {

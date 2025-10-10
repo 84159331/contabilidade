@@ -29,19 +29,34 @@ const Events: React.FC = () => {
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Carregando eventos...');
+      console.log('🔄 Events.tsx - Carregando eventos...');
       
       if (!user) {
-        console.log('❌ Usuário não autenticado');
+        console.log('❌ Events.tsx - Usuário não autenticado');
         setEvents([]);
         return;
       }
 
+      console.log('📡 Events.tsx - Chamando eventsAPI.getEvents()');
       const eventsData = await eventsAPI.getEvents();
-      console.log('✅ Eventos carregados:', eventsData);
+      console.log('📊 Events.tsx - Dados recebidos da API:', eventsData);
+      console.log('📊 Events.tsx - Quantidade de eventos:', eventsData.length);
+      
+      if (eventsData.length > 0) {
+        console.log('🔍 Events.tsx - Primeiro evento:', eventsData[0]);
+        if (eventsData[0].image) {
+          console.log('🖼️ Events.tsx - Primeira imagem:', eventsData[0].image.substring(0, 50) + '...');
+          console.log('🖼️ Events.tsx - É base64?', eventsData[0].image.startsWith('data:'));
+          console.log('🖼️ Events.tsx - Tamanho da imagem:', eventsData[0].image.length);
+        } else {
+          console.log('⚠️ Events.tsx - Primeiro evento sem imagem');
+        }
+      }
+      
       setEvents(eventsData);
+      console.log('✅ Events.tsx - Eventos definidos no estado');
     } catch (error) {
-      console.error('❌ Erro ao carregar eventos:', error);
+      console.error('❌ Events.tsx - Erro ao carregar eventos:', error);
       toast.error('Erro ao carregar eventos');
     } finally {
       setLoading(false);

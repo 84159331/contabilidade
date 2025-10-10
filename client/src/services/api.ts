@@ -834,22 +834,35 @@ export const eventsAPI = {
   // Função para limpar URLs temporárias antigas e migrar eventos
   migrateEventsImages: () => {
     try {
-      console.log('🔄 Migrando imagens de eventos...');
+      console.log('🔄 migrateEventsImages - Iniciando migração...');
       
       // Carregar eventos do localStorage
       const cachedEvents = localStorage.getItem('cachedEvents');
+      console.log('📦 migrateEventsImages - Cache encontrado:', !!cachedEvents);
+      
       if (!cachedEvents) {
-        console.log('ℹ️ Nenhum evento encontrado no cache');
+        console.log('ℹ️ migrateEventsImages - Nenhum evento encontrado no cache');
         return;
       }
 
       const events = JSON.parse(cachedEvents);
+      console.log('📊 migrateEventsImages - Eventos no cache:', events.length);
+      
+      if (events.length > 0) {
+        console.log('🔍 migrateEventsImages - Primeiro evento:', events[0]);
+        if (events[0].image) {
+          console.log('🖼️ migrateEventsImages - Primeira imagem:', events[0].image.substring(0, 50) + '...');
+          console.log('🖼️ migrateEventsImages - É blob?', events[0].image.startsWith('blob:'));
+          console.log('🖼️ migrateEventsImages - É base64?', events[0].image.startsWith('data:'));
+        }
+      }
+      
       let hasChanges = false;
 
       // Verificar se há eventos com URLs temporárias
       const updatedEvents = events.map((event: any) => {
         if (event.image && event.image.startsWith('blob:')) {
-          console.log('🗑️ Removendo URL temporária do evento:', event.title);
+          console.log('🗑️ migrateEventsImages - Removendo URL temporária do evento:', event.title);
           hasChanges = true;
           return {
             ...event,
@@ -862,16 +875,16 @@ export const eventsAPI = {
       // Salvar eventos atualizados se houver mudanças
       if (hasChanges) {
         localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
-        console.log('✅ Eventos migrados com sucesso');
+        console.log('✅ migrateEventsImages - Eventos migrados com sucesso');
         
         // Disparar evento de sincronização
         window.dispatchEvent(new CustomEvent('eventsUpdated'));
-        console.log('📡 Evento de sincronização disparado');
+        console.log('📡 migrateEventsImages - Evento de sincronização disparado');
       } else {
-        console.log('ℹ️ Nenhuma migração necessária');
+        console.log('ℹ️ migrateEventsImages - Nenhuma migração necessária');
       }
     } catch (error) {
-      console.error('❌ Erro ao migrar eventos:', error);
+      console.error('❌ migrateEventsImages - Erro ao migrar eventos:', error);
     }
   }
 };

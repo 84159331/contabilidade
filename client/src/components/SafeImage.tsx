@@ -19,35 +19,14 @@ const SafeImage: React.FC<SafeImageProps> = ({
 }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentSrc, setCurrentSrc] = useState(src);
+
+  console.log('🖼️ SafeImage renderizado com src:', src ? src.substring(0, 50) + '...' : 'vazio');
+  console.log('🖼️ SafeImage - É base64?', src?.startsWith('data:'));
+  console.log('🖼️ SafeImage - É blob?', src?.startsWith('blob:'));
+  console.log('🖼️ SafeImage - É URL?', src?.startsWith('http'));
 
   const handleError = () => {
-    console.log('❌ Erro ao carregar imagem:', currentSrc);
-    console.log('🔍 Tipo da src:', typeof currentSrc);
-    console.log('🔍 É base64?', currentSrc.startsWith('data:'));
-    console.log('🔍 É blob?', currentSrc.startsWith('blob:'));
-    console.log('🔍 É URL?', currentSrc.startsWith('http'));
-    
-    // Para imagens base64, não tentar fallback
-    if (currentSrc.startsWith('data:')) {
-      console.log('❌ Imagem base64 falhou, mostrando erro');
-      setHasError(true);
-      setIsLoading(false);
-      if (onError) {
-        onError();
-      }
-      return;
-    }
-    
-    // Tentar fallback para placeholder genérico apenas para URLs
-    if (currentSrc !== '/img/placeholder.png') {
-      console.log('🔄 Tentando fallback para placeholder...');
-      setCurrentSrc('/img/placeholder.png');
-      setIsLoading(true);
-      return;
-    }
-    
-    // Se o placeholder também falhar, mostrar erro
+    console.log('❌ SafeImage - Erro ao carregar:', src ? src.substring(0, 50) + '...' : 'vazio');
     setHasError(true);
     setIsLoading(false);
     if (onError) {
@@ -56,17 +35,35 @@ const SafeImage: React.FC<SafeImageProps> = ({
   };
 
   const handleLoad = () => {
+    console.log('✅ SafeImage - Imagem carregada com sucesso');
     setIsLoading(false);
   };
 
   // Reset quando src mudar
   React.useEffect(() => {
-    setCurrentSrc(src);
+    console.log('🔄 SafeImage - src mudou para:', src ? src.substring(0, 50) + '...' : 'vazio');
     setHasError(false);
     setIsLoading(true);
   }, [src]);
 
+  if (!src) {
+    console.log('⚠️ SafeImage - src vazio, mostrando fallback');
+    return (
+      <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
+        <div className="text-center p-4">
+          <div className="text-gray-400 mb-2">
+            <svg className="w-8 h-8 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Sem imagem</p>
+        </div>
+      </div>
+    );
+  }
+
   if (hasError) {
+    console.log('❌ SafeImage - Mostrando erro');
     return (
       <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
         {fallbackElement || (
@@ -91,7 +88,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
         </div>
       )}
       <img
-        src={currentSrc}
+        src={src}
         alt={alt}
         className={`${className} ${isLoading ? 'opacity-0 absolute' : 'opacity-100'}`}
         onError={handleError}
