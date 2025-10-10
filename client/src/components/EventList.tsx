@@ -29,6 +29,13 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
     }
   }
 
+  // Log para cada evento com imagem
+  events.forEach((event, index) => {
+    if (event.image) {
+      console.log(`🖼️ EventList - Evento ${index + 1} (${event.title}):`, event.image.substring(0, 50) + '...');
+    }
+  });
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR', {
@@ -131,8 +138,6 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               {/* Imagem do evento */}
               {event.image && (
                 <div className="ml-4">
-                  {console.log('🖼️ EventList - Renderizando SafeImage para evento:', event.title)}
-                  {console.log('🖼️ EventList - Imagem src:', event.image.substring(0, 50) + '...')}
                   <SafeImage
                     src={event.image}
                     alt={event.title}
