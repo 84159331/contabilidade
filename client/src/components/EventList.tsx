@@ -55,29 +55,29 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
       {events.map((event) => (
         <div
           key={event.id}
-          className={`bg-white rounded-lg shadow-md overflow-hidden ${
-            isUpcoming(event.date) ? 'border-l-4 border-green-500' : 'border-l-4 border-gray-300'
+          className={`bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden ${
+            isUpcoming(event.date) ? 'border-l-4 border-green-500' : 'border-l-4 border-gray-300 dark:border-gray-600'
           }`}
         >
           <div className="p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {event.title}
                   </h3>
                   {isUpcoming(event.date) && (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                       Próximo
                     </span>
                   )}
                 </div>
                 
                 {event.description && (
-                  <p className="text-gray-600 mb-4">{event.description}</p>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">{event.description}</p>
                 )}
 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center">
                     <CalendarIcon className="h-4 w-4 mr-1" />
                     {formatDate(event.date)}
