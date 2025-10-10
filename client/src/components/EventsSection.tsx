@@ -121,7 +121,10 @@ const EventsSection: React.FC<EventsSectionProps> = ({
 
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    // Criar data local sem problemas de fuso horário
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // month é 0-indexed
+    
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: 'long',
@@ -134,9 +137,19 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const isUpcoming = (dateString: string) => {
-    const eventDate = new Date(dateString);
+    // Criar data local sem problemas de fuso horário
+    const [year, month, day] = dateString.split('-').map(Number);
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    
+    console.log('📅 Comparando datas:', {
+      eventDate: eventDate.toLocaleDateString('pt-BR'),
+      today: today.toLocaleDateString('pt-BR'),
+      isUpcoming: eventDate >= today
+    });
+    
     return eventDate >= today;
   };
 

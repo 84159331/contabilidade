@@ -236,7 +236,10 @@ const EventsAdmin: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    // Criar data local sem problemas de fuso horário
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // month é 0-indexed
+    
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -249,14 +252,20 @@ const EventsAdmin: React.FC = () => {
   };
 
   const isUpcoming = (dateString: string) => {
-    const eventDate = new Date(dateString);
+    // Criar data local sem problemas de fuso horário
+    const [year, month, day] = dateString.split('-').map(Number);
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return eventDate >= today;
   };
 
   const filteredEvents = events.filter(event => {
-    const eventDate = new Date(event.date);
+    // Criar data local sem problemas de fuso horário
+    const [year, month, day] = event.date.split('-').map(Number);
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -328,7 +337,13 @@ const EventsAdmin: React.FC = () => {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            Próximos ({events.filter(e => new Date(e.date) >= new Date()).length})
+            Próximos ({events.filter(e => {
+              const [year, month, day] = e.date.split('-').map(Number);
+              const eventDate = new Date(year, month - 1, day);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return eventDate >= today;
+            }).length})
           </button>
           <button
             onClick={() => setFilter('past')}
@@ -338,7 +353,13 @@ const EventsAdmin: React.FC = () => {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            Passados ({events.filter(e => new Date(e.date) < new Date()).length})
+            Passados ({events.filter(e => {
+              const [year, month, day] = e.date.split('-').map(Number);
+              const eventDate = new Date(year, month - 1, day);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return eventDate < today;
+            }).length})
           </button>
         </div>
       </div>
