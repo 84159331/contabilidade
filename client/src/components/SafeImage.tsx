@@ -23,8 +23,23 @@ const SafeImage: React.FC<SafeImageProps> = ({
 
   const handleError = () => {
     console.log('❌ Erro ao carregar imagem:', currentSrc);
+    console.log('🔍 Tipo da src:', typeof currentSrc);
+    console.log('🔍 É base64?', currentSrc.startsWith('data:'));
+    console.log('🔍 É blob?', currentSrc.startsWith('blob:'));
+    console.log('🔍 É URL?', currentSrc.startsWith('http'));
     
-    // Tentar fallback para placeholder genérico
+    // Para imagens base64, não tentar fallback
+    if (currentSrc.startsWith('data:')) {
+      console.log('❌ Imagem base64 falhou, mostrando erro');
+      setHasError(true);
+      setIsLoading(false);
+      if (onError) {
+        onError();
+      }
+      return;
+    }
+    
+    // Tentar fallback para placeholder genérico apenas para URLs
     if (currentSrc !== '/img/placeholder.png') {
       console.log('🔄 Tentando fallback para placeholder...');
       setCurrentSrc('/img/placeholder.png');

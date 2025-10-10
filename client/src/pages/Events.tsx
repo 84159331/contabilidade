@@ -6,6 +6,7 @@ import EventForm from '../components/EventForm';
 import EventList from '../components/EventList';
 import SocialShare from '../components/SocialShare';
 import AutoShareManager from '../components/AutoShareManager';
+import ImageTest from '../components/ImageTest';
 import { toast } from 'react-toastify';
 import { Event, EventFormData } from '../types/Event';
 
@@ -123,6 +124,9 @@ const Events: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Componente de Teste de Imagem */}
+      <ImageTest />
+      
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

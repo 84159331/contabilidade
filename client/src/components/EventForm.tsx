@@ -74,13 +74,18 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
       
       // Upload da imagem se houver arquivo
       if (imageFile) {
+        console.log('📤 Fazendo upload da imagem...');
         imageUrl = await eventsAPI.uploadEventImage(imageFile);
+        console.log('✅ Upload concluído, URL:', imageUrl.substring(0, 50) + '...');
       }
 
       const eventData = {
         ...formData,
         image: imageUrl
       };
+
+      console.log('💾 Salvando evento com imagem:', eventData.image ? 'Sim' : 'Não');
+      console.log('🔍 Dados do evento:', eventData);
 
       if (event?.id) {
         await eventsAPI.updateEvent(event.id, eventData);

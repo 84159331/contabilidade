@@ -93,6 +93,12 @@ const EventsSection: React.FC<EventsSectionProps> = ({
       const cachedEvents = localStorage.getItem('cachedEvents');
       if (cachedEvents) {
         const events = JSON.parse(cachedEvents);
+        console.log('🔍 Eventos do cache:', events);
+        console.log('🔍 Primeiro evento:', events[0]);
+        if (events[0] && events[0].image) {
+          console.log('🔍 Imagem do primeiro evento:', events[0].image.substring(0, 50) + '...');
+          console.log('🔍 É base64?', events[0].image.startsWith('data:'));
+        }
         setEvents(events);
         console.log('✅ Eventos carregados do cache:', events.length);
       } else {

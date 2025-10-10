@@ -809,16 +809,21 @@ export const eventsAPI = {
         const reader = new FileReader();
         reader.onload = () => {
           if (typeof reader.result === 'string') {
+            console.log('✅ Base64 gerado com sucesso, tamanho:', reader.result.length);
+            console.log('🔍 Primeiros 100 caracteres:', reader.result.substring(0, 100));
             resolve(reader.result);
           } else {
             reject(new Error('Falha ao converter imagem para base64'));
           }
         };
-        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.onerror = (error) => {
+          console.error('❌ Erro no FileReader:', error);
+          reject(new Error('Erro ao ler arquivo'));
+        };
         reader.readAsDataURL(file);
       });
       
-      console.log('✅ Imagem convertida para base64:', base64Image.substring(0, 50) + '...');
+      console.log('✅ Imagem convertida para base64, tamanho total:', base64Image.length);
       return base64Image;
     } catch (error) {
       console.error('❌ Erro ao fazer upload da imagem:', error);
