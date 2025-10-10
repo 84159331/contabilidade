@@ -174,7 +174,10 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
                 Editar
               </button>
               <button
-                onClick={() => onDelete(event.id)}
+                onClick={() => {
+                  console.log('🗑️ EventList - Botão excluir clicado para evento:', event.title, 'ID:', event.id);
+                  onDelete(event.id);
+                }}
                 className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50"
               >
                 <TrashIcon className="h-3 w-3 mr-1" />

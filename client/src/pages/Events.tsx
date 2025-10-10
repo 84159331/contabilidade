@@ -84,15 +84,25 @@ const Events: React.FC = () => {
   };
 
   const handleDeleteEvent = async (id: string) => {
+    console.log('🗑️ Events.tsx - Tentando excluir evento com ID:', id);
+    
     if (window.confirm('Tem certeza que deseja excluir este evento?')) {
+      console.log('✅ Events.tsx - Usuário confirmou exclusão');
+      
       try {
+        console.log('📡 Events.tsx - Chamando eventsAPI.deleteEvent...');
         await eventsAPI.deleteEvent(id);
+        console.log('✅ Events.tsx - Evento excluído com sucesso via API');
+        
         toast.success('Evento excluído com sucesso!');
+        console.log('🔄 Events.tsx - Recarregando eventos...');
         loadEvents();
       } catch (error) {
-        console.error('Erro ao excluir evento:', error);
+        console.error('❌ Events.tsx - Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
       }
+    } else {
+      console.log('❌ Events.tsx - Usuário cancelou exclusão');
     }
   };
 

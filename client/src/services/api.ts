@@ -778,23 +778,52 @@ export const eventsAPI = {
 
   deleteEvent: async (id: string) => {
     try {
-      console.log('🔥 Deletando evento no Firestore...');
-      console.log('📝 ID do evento:', id);
+      console.log('🔥 deleteEvent - Deletando evento no Firestore...');
+      console.log('📝 deleteEvent - ID do evento:', id);
+      console.log('📝 deleteEvent - Tipo do ID:', typeof id);
       
       const eventRef = doc(db, 'events', id);
+      console.log('📝 deleteEvent - Referência do documento:', eventRef.path);
       
       // Verificar se o documento existe
+      console.log('🔍 deleteEvent - Verificando se documento existe...');
       const eventSnap = await getDoc(eventRef);
+      console.log('🔍 deleteEvent - Documento existe?', eventSnap.exists());
+      
       if (!eventSnap.exists()) {
+        console.log('❌ deleteEvent - Evento não encontrado no Firestore');
         throw new Error('Evento não encontrado');
       }
       
+      console.log('🗑️ deleteEvent - Deletando documento...');
       await deleteDoc(eventRef);
-      console.log('✅ Evento deletado com sucesso');
+      console.log('✅ deleteEvent - Evento deletado com sucesso do Firestore');
+      
+      // Limpar do cache local também
+      try {
+        console.log('🗑️ deleteEvent - Limpando do cache local...');
+        const cachedEvents = localStorage.getItem('cachedEvents');
+        if (cachedEvents) {
+          const events = JSON.parse(cachedEvents);
+          const updatedEvents = events.filter((event: any) => event.id !== id);
+          localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+          console.log('✅ deleteEvent - Evento removido do cache local');
+          
+          // Disparar evento de sincronização
+          window.dispatchEvent(new CustomEvent('eventsUpdated'));
+          console.log('📡 deleteEvent - Evento de sincronização disparado');
+        }
+      } catch (cacheError) {
+        console.error('⚠️ deleteEvent - Erro ao limpar cache local:', cacheError);
+      }
       
       return true;
     } catch (error) {
-      console.error('❌ Erro ao deletar evento:', error);
+      console.error('❌ deleteEvent - Erro ao deletar evento:', error);
+      if (error instanceof Error) {
+        console.error('❌ deleteEvent - Mensagem de erro:', error.message);
+        console.error('❌ deleteEvent - Stack trace:', error.stack);
+      }
       throw error;
     }
   },
