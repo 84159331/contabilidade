@@ -5,6 +5,7 @@ import {
   getDocs, 
   getDoc,
   addDoc, 
+  setDoc,
   doc, 
   updateDoc, 
   deleteDoc, 
@@ -782,17 +783,69 @@ export const eventsAPI = {
       console.log('📝 deleteEvent - ID do evento:', id);
       console.log('📝 deleteEvent - Tipo do ID:', typeof id);
       
-      const eventRef = doc(db, 'events', id);
-      console.log('📝 deleteEvent - Referência do documento:', eventRef.path);
+      // Tentar diferentes formatos de ID
+      let eventRef;
+      let eventSnap;
       
-      // Verificar se o documento existe
-      console.log('🔍 deleteEvent - Verificando se documento existe...');
-      const eventSnap = await getDoc(eventRef);
-      console.log('🔍 deleteEvent - Documento existe?', eventSnap.exists());
-      
-      if (!eventSnap.exists()) {
-        console.log('❌ deleteEvent - Evento não encontrado no Firestore');
-        throw new Error('Evento não encontrado');
+      // Primeira tentativa: ID como string
+      try {
+        eventRef = doc(db, 'events', id);
+        console.log('📝 deleteEvent - Referência do documento (string):', eventRef.path);
+        
+        eventSnap = await getDoc(eventRef);
+        console.log('🔍 deleteEvent - Documento existe (string)?', eventSnap.exists());
+        
+        if (eventSnap.exists()) {
+          console.log('✅ deleteEvent - Documento encontrado com ID string');
+        } else {
+          throw new Error('Documento não encontrado com ID string');
+        }
+      } catch (stringError) {
+        console.log('⚠️ deleteEvent - Falha com ID string, tentando como número...');
+        
+        // Segunda tentativa: ID como número
+        try {
+          const numericId = parseInt(id);
+          if (!isNaN(numericId)) {
+            eventRef = doc(db, 'events', numericId.toString());
+            console.log('📝 deleteEvent - Referência do documento (número):', eventRef.path);
+            
+            eventSnap = await getDoc(eventRef);
+            console.log('🔍 deleteEvent - Documento existe (número)?', eventSnap.exists());
+            
+            if (eventSnap.exists()) {
+              console.log('✅ deleteEvent - Documento encontrado com ID numérico');
+            } else {
+              throw new Error('Documento não encontrado com ID numérico');
+            }
+          } else {
+            throw new Error('ID não é um número válido');
+          }
+        } catch (numericError) {
+          console.log('⚠️ deleteEvent - Falha com ID numérico, tentando busca por título...');
+          
+          // Terceira tentativa: buscar por título
+          const eventsQuery = query(collection(db, 'events'));
+          const eventsSnapshot = await getDocs(eventsQuery);
+          
+          console.log('🔍 deleteEvent - Buscando em', eventsSnapshot.size, 'documentos...');
+          
+          let foundDoc: any = null;
+          eventsSnapshot.forEach((doc) => {
+            console.log('🔍 deleteEvent - Verificando documento:', doc.id, 'dados:', doc.data());
+            if (doc.id === id || doc.data().title === id) {
+              foundDoc = doc;
+              console.log('✅ deleteEvent - Documento encontrado por busca:', doc.id);
+            }
+          });
+          
+          if (foundDoc) {
+            eventRef = doc(db, 'events', foundDoc.id);
+            eventSnap = foundDoc;
+          } else {
+            throw new Error('Evento não encontrado em nenhuma tentativa');
+          }
+        }
       }
       
       console.log('🗑️ deleteEvent - Deletando documento...');
@@ -857,6 +910,50 @@ export const eventsAPI = {
     } catch (error) {
       console.error('❌ Erro ao fazer upload da imagem:', error);
       throw error;
+    }
+  },
+
+  // Função para testar permissões do Firestore
+  testFirestorePermissions: async () => {
+    try {
+      console.log('🔍 testFirestorePermissions - Testando permissões...');
+      
+      // Testar leitura
+      console.log('📖 testFirestorePermissions - Testando leitura...');
+      const testQuery = query(collection(db, 'events'), limit(1));
+      const testSnapshot = await getDocs(testQuery);
+      console.log('✅ testFirestorePermissions - Leitura OK, documentos encontrados:', testSnapshot.size);
+      
+      // Testar escrita (criar documento temporário)
+      console.log('✍️ testFirestorePermissions - Testando escrita...');
+      const testDocRef = doc(collection(db, 'events'));
+      const testData = {
+        title: 'Teste de Permissão',
+        description: 'Documento temporário para teste',
+        date: new Date().toISOString().split('T')[0],
+        time: '00:00',
+        location: 'Teste',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      
+      await setDoc(testDocRef, testData);
+      console.log('✅ testFirestorePermissions - Escrita OK, documento criado:', testDocRef.id);
+      
+      // Testar exclusão
+      console.log('🗑️ testFirestorePermissions - Testando exclusão...');
+      await deleteDoc(testDocRef);
+      console.log('✅ testFirestorePermissions - Exclusão OK');
+      
+      console.log('✅ testFirestorePermissions - Todas as permissões OK');
+      return true;
+    } catch (error) {
+      console.error('❌ testFirestorePermissions - Erro:', error);
+      if (error instanceof Error) {
+        console.error('❌ testFirestorePermissions - Mensagem:', error.message);
+        console.error('❌ testFirestorePermissions - Código:', (error as any).code);
+      }
+      return false;
     }
   },
 
