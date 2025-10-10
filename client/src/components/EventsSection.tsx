@@ -30,6 +30,18 @@ const EventsSection: React.FC<EventsSectionProps> = ({
 
   useEffect(() => {
     loadEvents();
+    
+    // Listener para mudanças nos eventos (sincronização)
+    const handleStorageChange = () => {
+      console.log('🔄 Eventos atualizados, recarregando...');
+      loadEvents();
+    };
+    
+    window.addEventListener('eventsUpdated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('eventsUpdated', handleStorageChange);
+    };
   }, []);
 
   const loadEvents = async () => {
@@ -44,14 +56,16 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
+          // Salvar no cache local
+          localStorage.setItem('cachedEvents', JSON.stringify(eventsData));
           console.log('✅ Eventos carregados da API:', eventsData.length);
         } else {
-          console.log('⚠️ Nenhum evento encontrado na API, usando dados mock');
-          loadMockEvents();
+          console.log('⚠️ Nenhum evento encontrado na API, verificando cache local');
+          loadFromCache();
         }
       } catch (apiError) {
-        console.log('⚠️ Erro na API, usando dados mock:', apiError);
-        loadMockEvents();
+        console.log('⚠️ Erro na API, verificando cache local:', apiError);
+        loadFromCache();
       }
       
       setLoading(false);
@@ -61,60 +75,23 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     }
   };
 
-  const loadMockEvents = () => {
-    const mockEvents: Event[] = [
-      {
-        id: '1',
-        title: 'Culto de Celebração',
-        description: 'Venha celebrar conosco a presença de Deus em nossas vidas',
-        date: '2024-01-15',
-        time: '19:00',
-        location: 'Igreja Comunidade Resgate',
-        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+Celebração',
-        social_media: {
-          instagram: true,
-          facebook: true,
-          whatsapp: true
-        },
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      {
-        id: '2',
-        title: 'Conferência de Jovens',
-        description: 'Um encontro especial para jovens com palestras e atividades',
-        date: '2024-01-20',
-        time: '14:00',
-        location: 'Auditório Principal',
-        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Conferência+de+Jovens',
-        social_media: {
-          instagram: true,
-          facebook: false,
-          whatsapp: true
-        },
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      {
-        id: '3',
-        title: 'Reunião de Oração',
-        description: 'Momento especial de oração e comunhão',
-        date: '2024-01-25',
-        time: '20:00',
-        location: 'Sala de Oração',
-        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Reunião+de+Oração',
-        social_media: {
-          instagram: false,
-          facebook: true,
-          whatsapp: true
-        },
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
+  const loadFromCache = () => {
+    try {
+      const cachedEvents = localStorage.getItem('cachedEvents');
+      if (cachedEvents) {
+        const events = JSON.parse(cachedEvents);
+        setEvents(events);
+        console.log('✅ Eventos carregados do cache:', events.length);
+      } else {
+        setEvents([]);
+        console.log('⚠️ Nenhum evento no cache');
       }
-    ];
-    setEvents(mockEvents);
-    console.log('✅ Eventos mock carregados:', mockEvents.length);
+    } catch (error) {
+      console.error('❌ Erro ao carregar do cache:', error);
+      setEvents([]);
+    }
   };
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

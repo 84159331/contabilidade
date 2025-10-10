@@ -149,6 +149,8 @@ const EventsAdmin: React.FC = () => {
         // Remover da lista local
         setEvents(prev => prev.filter(event => event.id !== id));
         toast.success('Evento excluído com sucesso!');
+        // Disparar evento de sincronização
+        window.dispatchEvent(new CustomEvent('eventsUpdated'));
       } catch (error) {
         console.error('❌ Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
@@ -164,24 +166,41 @@ const EventsAdmin: React.FC = () => {
       if (editingEvent) {
         // Atualizar evento existente
         try {
-          await eventsAPI.updateEvent(editingEvent.id!, eventData);
-          console.log('✅ Evento atualizado via API:', editingEvent.id);
+          const updatedEvent = await eventsAPI.updateEvent(editingEvent.id!, eventData);
+          console.log('✅ Evento atualizado via API:', updatedEvent);
+          setEvents(prev => prev.map(event => 
+            event.id === editingEvent.id 
+              ? { ...event, ...eventData, updated_at: new Date().toISOString() }
+              : event
+          ));
+          toast.success('Evento atualizado com sucesso!');
+          // Disparar evento de sincronização
+          window.dispatchEvent(new CustomEvent('eventsUpdated'));
         } catch (apiError) {
           console.log('⚠️ Erro na API, atualizando localmente:', apiError);
+          setEvents(prev => prev.map(event => 
+            event.id === editingEvent.id 
+              ? { ...event, ...eventData, updated_at: new Date().toISOString() }
+              : event
+          ));
+          toast.success('Evento atualizado localmente!');
+          // Disparar evento de sincronização
+          window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
-        
-        setEvents(prev => prev.map(event => 
-          event.id === editingEvent.id 
-            ? { ...event, ...eventData, updated_at: new Date().toISOString() }
-            : event
-        ));
-        toast.success('Evento atualizado com sucesso!');
       } else {
         // Criar novo evento
         try {
           const newEventFromAPI = await eventsAPI.createEvent(eventData);
           console.log('✅ Evento criado via API:', newEventFromAPI);
-          setEvents(prev => [...prev, newEventFromAPI]);
+          setEvents(prev => {
+            const updatedEvents = [...prev, newEventFromAPI];
+            // Salvar no cache local
+            localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+            return updatedEvents;
+          });
+          toast.success('Evento criado com sucesso!');
+          // Disparar evento de sincronização
+          window.dispatchEvent(new CustomEvent('eventsUpdated'));
         } catch (apiError) {
           console.log('⚠️ Erro na API, criando localmente:', apiError);
           const newEvent: Event = {
@@ -190,9 +209,16 @@ const EventsAdmin: React.FC = () => {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           };
-          setEvents(prev => [...prev, newEvent]);
+          setEvents(prev => {
+            const updatedEvents = [...prev, newEvent];
+            // Salvar no cache local
+            localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+            return updatedEvents;
+          });
+          toast.success('Evento criado localmente!');
+          // Disparar evento de sincronização
+          window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
-        toast.success('Evento criado com sucesso!');
       }
     } catch (error) {
       console.error('❌ Erro ao salvar evento:', error);
