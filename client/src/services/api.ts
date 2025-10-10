@@ -804,16 +804,69 @@ export const eventsAPI = {
       console.log('🔥 Fazendo upload da imagem do evento...');
       console.log('📁 Arquivo:', file.name, file.size, file.type);
       
-      // Criar URL temporária para preview
-      const tempUrl = URL.createObjectURL(file);
-      console.log('✅ URL temporária criada:', tempUrl);
+      // Converter arquivo para base64 para persistência
+      const base64Image = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            resolve(reader.result);
+          } else {
+            reject(new Error('Falha ao converter imagem para base64'));
+          }
+        };
+        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.readAsDataURL(file);
+      });
       
-      // Por enquanto, retornar URL temporária
-      // TODO: Implementar Firebase Storage quando necessário
-      return tempUrl;
+      console.log('✅ Imagem convertida para base64:', base64Image.substring(0, 50) + '...');
+      return base64Image;
     } catch (error) {
       console.error('❌ Erro ao fazer upload da imagem:', error);
       throw error;
+    }
+  },
+
+  // Função para limpar URLs temporárias antigas e migrar eventos
+  migrateEventsImages: () => {
+    try {
+      console.log('🔄 Migrando imagens de eventos...');
+      
+      // Carregar eventos do localStorage
+      const cachedEvents = localStorage.getItem('cachedEvents');
+      if (!cachedEvents) {
+        console.log('ℹ️ Nenhum evento encontrado no cache');
+        return;
+      }
+
+      const events = JSON.parse(cachedEvents);
+      let hasChanges = false;
+
+      // Verificar se há eventos com URLs temporárias
+      const updatedEvents = events.map((event: any) => {
+        if (event.image && event.image.startsWith('blob:')) {
+          console.log('🗑️ Removendo URL temporária do evento:', event.title);
+          hasChanges = true;
+          return {
+            ...event,
+            image: '' // Remover imagem temporária
+          };
+        }
+        return event;
+      });
+
+      // Salvar eventos atualizados se houver mudanças
+      if (hasChanges) {
+        localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+        console.log('✅ Eventos migrados com sucesso');
+        
+        // Disparar evento de sincronização
+        window.dispatchEvent(new CustomEvent('eventsUpdated'));
+        console.log('📡 Evento de sincronização disparado');
+      } else {
+        console.log('ℹ️ Nenhuma migração necessária');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao migrar eventos:', error);
     }
   }
 };

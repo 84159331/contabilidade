@@ -30,6 +30,8 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const [filter, setFilter] = useState<'upcoming'>('upcoming');
 
   useEffect(() => {
+    // Migrar imagens antigas primeiro
+    eventsAPI.migrateEventsImages();
     loadEvents();
     
     // Listener para mudanças nos eventos (sincronização)

@@ -20,6 +20,8 @@ const Events: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('all');
 
   useEffect(() => {
+    // Migrar imagens antigas primeiro
+    eventsAPI.migrateEventsImages();
     loadEvents();
   }, []);
 

@@ -27,6 +27,8 @@ const EventsAdmin: React.FC = () => {
   const [viewMode, setViewMode] = useState<'admin' | 'preview'>('admin');
 
   useEffect(() => {
+    // Migrar imagens antigas primeiro
+    eventsAPI.migrateEventsImages();
     loadEvents();
   }, []);
 
