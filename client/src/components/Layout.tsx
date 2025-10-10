@@ -169,7 +169,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="lg:pl-72">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white/60 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-gray-700 dark:bg-gray-900/60">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-2 border-b border-gray-200 bg-white/60 backdrop-blur-sm px-3 shadow-sm sm:gap-x-4 sm:px-4 lg:gap-x-6 lg:px-8 dark:border-gray-700 dark:bg-gray-900/60">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden dark:text-gray-300"
@@ -178,20 +178,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Bars3Icon className="h-6 w-6" />
           </button>
 
-          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+          <div className="flex flex-1 gap-x-2 self-stretch sm:gap-x-4 lg:gap-x-6">
             <div className="flex flex-1" />
-            <div className="flex items-center gap-x-4 lg:gap-x-6">
+            <div className="flex items-center gap-x-2 sm:gap-x-4 lg:gap-x-6">
               <NotificationCenter />
               <ThemeToggle />
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200 dark:bg-gray-700" />
-              <div className="flex items-center gap-x-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Olá, {user?.displayName || user?.email?.split('@')[0] || 'Usuário'}</span>
+              <div className="flex items-center gap-x-1 sm:gap-x-2">
+                <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
+                  Olá, {user?.displayName || user?.email?.split('@')[0] || 'Usuário'}
+                </span>
                 <button
                   onClick={logout}
-                  className="flex items-center gap-x-2 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  className="flex items-center gap-x-1 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                  Sair
+                  <span className="hidden sm:inline">Sair</span>
                 </button>
               </div>
             </div>
@@ -199,8 +201,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         {/* Page content */}
-        <main className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <main className="py-4 sm:py-6">
+          <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
             <TabTransition transitionKey={location.pathname}>
               {children}
             </TabTransition>

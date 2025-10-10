@@ -47,7 +47,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {categories.map((category) => (
         <div key={category.id} className="bg-white dark:bg-gray-700 rounded-lg shadow border border-gray-200 dark:border-gray-600 p-6">
           <div className="flex items-start justify-between">

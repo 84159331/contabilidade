@@ -62,54 +62,55 @@ const MemberList: React.FC<MemberListProps> = ({
   }
 
   return (
-    <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+    <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Nome
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Contato
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Membro Desde
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Ações
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {members.map((member) => (
-              <tr key={member.id} className="hover:bg-gray-50">
+              <tr key={member.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">
                       {member.name}
                     </div>
                     {member.address && (
-                      <div className="text-sm text-gray-500 truncate max-w-xs">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                         {member.address}
                       </div>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-white">
                     {member.email && (
                       <div>{member.email}</div>
                     )}
                     {member.phone && (
-                      <div className="text-gray-500">{member.phone}</div>
+                      <div className="text-gray-500 dark:text-gray-400">{member.phone}</div>
                     )}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   {member.member_since ? 
                     new Date(member.member_since).toLocaleDateString('pt-BR') : 
                     '-'
@@ -126,7 +127,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   <div className="flex items-center justify-end space-x-2">
                     <button
                       onClick={() => onEdit(member)}
-                      className="text-primary-600 hover:text-primary-900"
+                      className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                       title="Editar"
                     >
                       <PencilIcon className="h-4 w-4" />
@@ -134,7 +135,7 @@ const MemberList: React.FC<MemberListProps> = ({
                     <button
                       onClick={() => onDelete(member.id)}
                       disabled={isDeleting}
-                      className={`text-danger-600 hover:text-danger-900 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title="Deletar"
                     >
                       {isDeleting ? (
@@ -149,6 +150,80 @@ const MemberList: React.FC<MemberListProps> = ({
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3 p-4">
+        {members.map((member) => (
+          <div key={member.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                  {member.name}
+                </h3>
+                {member.address && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {member.address}
+                  </p>
+                )}
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`badge ${
+                  member.status === 'active' ? 'badge-success' : 'badge-danger'
+                }`}>
+                  {member.status === 'active' ? 'Ativo' : 'Inativo'}
+                </span>
+                <button
+                  onClick={() => onEdit(member)}
+                  className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                  title="Editar"
+                >
+                  <PencilIcon className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => onDelete(member.id)}
+                  disabled={isDeleting}
+                  className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title="Deletar"
+                >
+                  {isDeleting ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
+                  ) : (
+                    <TrashIcon className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-2 text-xs">
+              {member.email && (
+                <div>
+                  <span className="text-gray-500 dark:text-gray-400">Email:</span>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {member.email}
+                  </p>
+                </div>
+              )}
+              {member.phone && (
+                <div>
+                  <span className="text-gray-500 dark:text-gray-400">Telefone:</span>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {member.phone}
+                  </p>
+                </div>
+              )}
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Membro desde:</span>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {member.member_since ? 
+                    new Date(member.member_since).toLocaleDateString('pt-BR') : 
+                    '-'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Pagination */}

@@ -201,7 +201,7 @@ const Members: React.FC = () => {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-        <form onSubmit={handleSearch} className="flex gap-4 items-end">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 items-end">
           <div className="flex-1">
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Buscar

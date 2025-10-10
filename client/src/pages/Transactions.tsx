@@ -242,7 +242,7 @@ const Transactions: React.FC = () => {
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
         <form onSubmit={handleSearch} className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {/* Search */}
             <div>
               <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
