@@ -17,8 +17,6 @@ const CellGroupsAdmin = lazy(() => import('./pages/CellGroupsAdmin'));
 const Users = lazy(() => import('./pages/Users'));
 const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
 const BooksManagement = lazy(() => import('./pages/BooksManagement'));
-const Events = lazy(() => import('./pages/Events'));
-const EventsAdmin = lazy(() => import('./pages/EventsAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();

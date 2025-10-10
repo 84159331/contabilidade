@@ -5,7 +5,6 @@ import { AuthProvider } from './firebase/AuthContext';
 import PublicLayout from './components/PublicLayout';
 import HomePage from './pages/public/HomePage';
 import AboutPage from './pages/public/AboutPage';
-import EventsPage from './pages/public/EventsPage';
 import ContactPage from './pages/public/ContactPage';
 import ConnectPage from './pages/public/ConnectPage';
 import WatchPage from './pages/public/WatchPage';
@@ -29,7 +28,6 @@ function App() {
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/sobre" element={<AboutPage />} />
-                <Route path="/eventos" element={<EventsPage />} />
                 <Route path="/contato" element={<ContactPage />} />
                 <Route path="/conecte" element={<ConnectPage />} />
                 <Route path="/assista" element={<WatchPage />} />
