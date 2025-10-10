@@ -201,6 +201,7 @@ const EventsAdmin: React.FC = () => {
           toast.success('Evento criado com sucesso!');
           // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
+          console.log('📡 Evento de sincronização disparado para página inicial');
         } catch (apiError) {
           console.log('⚠️ Erro na API, criando localmente:', apiError);
           const newEvent: Event = {

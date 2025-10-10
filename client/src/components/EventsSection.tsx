@@ -37,10 +37,20 @@ const EventsSection: React.FC<EventsSectionProps> = ({
       loadEvents();
     };
     
+    // Listener para mudanças no localStorage
+    const handleLocalStorageChange = (e: StorageEvent) => {
+      if (e.key === 'cachedEvents') {
+        console.log('🔄 Cache de eventos atualizado, recarregando...');
+        loadEvents();
+      }
+    };
+    
     window.addEventListener('eventsUpdated', handleStorageChange);
+    window.addEventListener('storage', handleLocalStorageChange);
     
     return () => {
       window.removeEventListener('eventsUpdated', handleStorageChange);
+      window.removeEventListener('storage', handleLocalStorageChange);
     };
   }, []);
 
@@ -167,6 +177,10 @@ const EventsSection: React.FC<EventsSectionProps> = ({
           <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
             Participe dos nossos eventos e fortaleça sua fé junto conosco
           </p>
+          {/* Debug info */}
+          <div className="mt-2 text-xs text-gray-400">
+            {events.length} eventos carregados | {filteredEvents.length} próximos
+          </div>
         </div>
 
         {/* Lista de Eventos */}
@@ -179,6 +193,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Não há eventos próximos no momento.
             </p>
+            {isAdmin && (
+              <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
+                Crie eventos na seção de administração para vê-los aqui.
+              </p>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
