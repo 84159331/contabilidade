@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SafeImage from '../../components/SafeImage';
+import EventsSection from '../../components/EventsSection';
 import { 
   HeartIcon, 
   BookOpenIcon, 
@@ -380,69 +381,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Próximos Eventos Section */}
-      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Próximos Eventos</h2>
-            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Participe dos nossos eventos e fortaleça sua fé</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {upcomingEvents.map((event, index) => (
-              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 fade-in-scale stagger-${index + 2}">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    event.type === 'culto' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                    event.type === 'estudo' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  }`}>
-                    {event.type === 'culto' ? 'Culto' : event.type === 'estudo' ? 'Estudo' : 'Conferência'}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <UsersIcon className="h-4 w-4 mr-1" />
-                    {event.attendees}
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{event.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{event.description}</p>
-                
-                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center">
-                    <CalendarIcon className="h-4 w-4 mr-2" />
-                    {event.date}
-                  </div>
-                  <div className="flex items-center">
-                    <ClockIcon className="h-4 w-4 mr-2" />
-                    {event.time}
-                  </div>
-                  <div className="flex items-center">
-                    <MapPinIcon className="h-4 w-4 mr-2" />
-                    {event.location}
-                  </div>
-                </div>
-                
-                <Link
-                  to="/eventos"
-                  className="mt-4 inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-                >
-                  Ver Detalhes
-                  <ArrowRightIcon className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-8">
-            <Link
-              to="/eventos"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-            >
-              Ver Todos os Eventos
-            </Link>
-          </div>
-        </div>
-      </div>
+      <EventsSection />
 
       {/* Ministérios Section */}
       <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">

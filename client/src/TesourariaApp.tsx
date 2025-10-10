@@ -18,6 +18,7 @@ const Users = lazy(() => import('./pages/Users'));
 const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
 const BooksManagement = lazy(() => import('./pages/BooksManagement'));
 const Events = lazy(() => import('./pages/Events'));
+const EventsAdmin = lazy(() => import('./pages/EventsAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -56,6 +57,7 @@ function TesourariaApp() {
             <Route path="whatsapp" element={<WhatsAppPage />} />
             <Route path="books" element={<BooksManagement />} />
             <Route path="events" element={<Events />} />
+            <Route path="events-admin" element={<EventsAdmin />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
           </Routes>
         </SmartLoading>
