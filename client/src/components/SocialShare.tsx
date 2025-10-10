@@ -6,6 +6,7 @@ import {
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { Event } from '../types/Event';
+import SafeImage from './SafeImage';
 
 interface SocialShareProps {
   event: Event;
@@ -148,10 +149,11 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
               {event.description && <p>{event.description}</p>}
             </div>
             {event.image && (
-              <img
+              <SafeImage
                 src={event.image}
                 alt={event.title}
                 className="mt-3 w-full h-32 object-cover rounded"
+                fallbackText="Imagem do Evento"
               />
             )}
           </div>

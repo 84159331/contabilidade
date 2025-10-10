@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AddBookModal from '../components/AddBookModal';
+import SafeImage from '../components/SafeImage';
 import { 
   BookOpenIcon, 
   MagnifyingGlassIcon, 
@@ -291,13 +292,11 @@ const BooksManagement: React.FC = () => {
             >
               {/* Capa */}
               <div className="relative">
-                <img 
+                <SafeImage 
                   src={livro.capa} 
                   alt={livro.titulo}
                   className="w-full h-64 object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = '/img/placeholder-book.jpg';
-                  }}
+                  fallbackText="Capa do Livro"
                 />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   {livro.isDestaque && (

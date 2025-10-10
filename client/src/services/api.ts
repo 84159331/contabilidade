@@ -802,13 +802,15 @@ export const eventsAPI = {
   uploadEventImage: async (file: File) => {
     try {
       console.log('🔥 Fazendo upload da imagem do evento...');
+      console.log('📁 Arquivo:', file.name, file.size, file.type);
       
-      // Aqui você pode integrar com Firebase Storage ou outro serviço
-      // Por enquanto, vou retornar uma URL mock
-      const mockImageUrl = `https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=${encodeURIComponent(file.name)}`;
+      // Criar URL temporária para preview
+      const tempUrl = URL.createObjectURL(file);
+      console.log('✅ URL temporária criada:', tempUrl);
       
-      console.log('✅ Imagem enviada:', mockImageUrl);
-      return mockImageUrl;
+      // Por enquanto, retornar URL temporária
+      // TODO: Implementar Firebase Storage quando necessário
+      return tempUrl;
     } catch (error) {
       console.error('❌ Erro ao fazer upload da imagem:', error);
       throw error;

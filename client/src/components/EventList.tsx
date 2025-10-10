@@ -8,6 +8,7 @@ import {
   ShareIcon
 } from '@heroicons/react/24/outline';
 import { Event } from '../types/Event';
+import SafeImage from './SafeImage';
 
 interface EventListProps {
   events: Event[];
@@ -120,10 +121,11 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               {/* Imagem do evento */}
               {event.image && (
                 <div className="ml-4">
-                  <img
+                  <SafeImage
                     src={event.image}
                     alt={event.title}
                     className="h-20 w-20 object-cover rounded-lg"
+                    fallbackText="Imagem do Evento"
                   />
                 </div>
               )}

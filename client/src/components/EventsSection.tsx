@@ -8,6 +8,7 @@ import {
   ShareIcon
 } from '@heroicons/react/24/outline';
 import { Event } from '../types/Event';
+import SafeImage from './SafeImage';
 import { eventsAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
@@ -239,10 +240,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                 {/* Imagem do Evento */}
                 {event.image && (
                   <div className="aspect-w-16 aspect-h-9 mb-4">
-                    <img
+                    <SafeImage
                       src={event.image}
                       alt={event.title}
                       className="w-full h-48 object-cover rounded-lg"
+                      fallbackText="Imagem do Evento"
                     />
                   </div>
                 )}
