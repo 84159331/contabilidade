@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AddBookModal from '../components/AddBookModal';
+import EditBookModal from '../components/EditBookModal';
 import SafeImage from '../components/SafeImage';
 import { 
   BookOpenIcon, 
@@ -10,7 +11,8 @@ import {
   CalendarIcon,
   StarIcon,
   PlusIcon,
-  TrashIcon
+  TrashIcon,
+  PencilIcon
 } from '@heroicons/react/24/outline';
 
 interface Livro {
@@ -59,6 +61,8 @@ const BooksManagement: React.FC = () => {
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [livroParaEditar, setLivroParaEditar] = useState<Livro | null>(null);
   
   console.log('🔍 BooksManagement - showAddModal:', showAddModal);
 
@@ -117,6 +121,19 @@ const BooksManagement: React.FC = () => {
       return novaLista;
     });
     setShowAddModal(false);
+  };
+
+  const handleEditBook = (livro: Livro) => {
+    setLivroParaEditar(livro);
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = (livroEditado: Livro) => {
+    setLivrosLista(prev => prev.map(livro => 
+      livro.id === livroEditado.id ? livroEditado : livro
+    ));
+    setShowEditModal(false);
+    setLivroParaEditar(null);
   };
 
   const handleDeleteBook = (id: string) => {
@@ -371,6 +388,13 @@ const BooksManagement: React.FC = () => {
                     Visualizar
                   </button>
                   <button
+                    onClick={() => handleEditBook(livro)}
+                    className="bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                    title="Editar livro"
+                  >
+                    <PencilIcon className="h-5 w-5" />
+                  </button>
+                  <button
                     onClick={() => handleToggleDestaque(livro.id)}
                     className={`py-2 px-4 rounded-lg font-semibold transition-colors ${
                       livro.isDestaque 
@@ -429,6 +453,18 @@ const BooksManagement: React.FC = () => {
         onClose={() => setShowAddModal(false)}
         onAddBook={handleAddBook}
       />
+
+      {/* Modal para Editar Livro */}
+      {livroParaEditar && (
+        <EditBookModal
+          livro={livroParaEditar}
+          onSave={handleSaveEdit}
+          onClose={() => {
+            setShowEditModal(false);
+            setLivroParaEditar(null);
+          }}
+        />
+      )}
     </div>
   );
 };
