@@ -48,7 +48,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     }
   }, [src]);
 
-  const getImageStyle = () => {
+  const getImageStyle = (): React.CSSProperties => {
     if (!imageDimensions) return {};
     
     const { width, height } = imageDimensions;
@@ -59,7 +59,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
       return {
         width: '100%',
         height: '100%',
-        objectFit: 'cover', // Sempre cover para preencher
+        objectFit: 'cover' as const, // Especificar tipo literal
         objectPosition: 'center'
       };
     }
@@ -77,7 +77,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     return {
       width: `${calculatedWidth}px`,
       height: `${calculatedHeight}px`,
-      objectFit
+      objectFit: objectFit as const // Especificar tipo literal
     };
   };
 

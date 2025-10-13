@@ -42,7 +42,7 @@ const CellImage: React.FC<CellImageProps> = ({
     }
   }, [src]);
 
-  const getImageStyle = () => {
+  const getImageStyle = (): React.CSSProperties => {
     if (!imageDimensions) return {};
     
     const { width, height } = imageDimensions;
@@ -53,7 +53,7 @@ const CellImage: React.FC<CellImageProps> = ({
     return {
       width: '100%',
       height: '100%',
-      objectFit: 'cover',
+      objectFit: 'cover' as const, // Especificar tipo literal
       objectPosition: 'center',
       minHeight: `${containerHeight}px`
     };
