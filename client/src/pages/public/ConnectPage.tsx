@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
-import AutoResizeImage from '../../components/AutoResizeImage';
+import PerfectFillImage from '../../components/PerfectFillImage';
 import { 
   UserGroupIcon,
   HeartIcon,
@@ -293,14 +293,14 @@ const ConnectPage: React.FC = () => {
                 )}
 
                 {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <AutoResizeImage 
+                <div className="relative overflow-hidden">
+                  <PerfectFillImage 
                     src={group.image} 
                     alt={group.title}
-                    className="w-full h-full transition-transform duration-300 hover:scale-105"
-                    maxHeight={192}
-                    objectFit="cover"
+                    className="w-full"
+                    containerHeight={192}
                     fallbackText="Imagem da Célula"
+                    borderRadius="rounded-t-xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   

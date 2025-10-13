@@ -8,6 +8,8 @@ interface AutoResizeImageProps {
   fallbackText?: string;
   maxHeight?: number;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  fillContainer?: boolean; // Nova prop para preencher container
+  containerWidth?: number; // Largura do container para cálculo
 }
 
 const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
@@ -16,7 +18,9 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
   className = '',
   fallbackText = 'Imagem não disponível',
   maxHeight = 300,
-  objectFit = 'cover'
+  objectFit = 'cover',
+  fillContainer = false,
+  containerWidth = 400
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -50,13 +54,23 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     const { width, height } = imageDimensions;
     const aspectRatio = width / height;
     
-    // Calcular dimensões baseadas no aspect ratio e altura máxima
+    if (fillContainer) {
+      // Para preencher container completamente
+      return {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover', // Sempre cover para preencher
+        objectPosition: 'center'
+      };
+    }
+    
+    // Cálculo original para dimensionamento proporcional
     let calculatedHeight = maxHeight;
     let calculatedWidth = calculatedHeight * aspectRatio;
     
     // Se a largura for muito grande, ajustar baseado na largura
-    if (calculatedWidth > 600) {
-      calculatedWidth = 600;
+    if (calculatedWidth > containerWidth) {
+      calculatedWidth = containerWidth;
       calculatedHeight = calculatedWidth / aspectRatio;
     }
     
@@ -71,7 +85,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     return (
       <div 
         className={`flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg ${className}`}
-        style={{ height: `${maxHeight}px` }}
+        style={{ height: fillContainer ? '100%' : `${maxHeight}px` }}
       >
         <ExclamationTriangleIcon className="h-8 w-8 text-gray-400 dark:text-gray-500 mb-2" />
         <span className="text-sm text-gray-500 dark:text-gray-400 text-center">
@@ -85,7 +99,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     return (
       <div 
         className={`flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse ${className}`}
-        style={{ height: `${maxHeight}px` }}
+        style={{ height: fillContainer ? '100%' : `${maxHeight}px` }}
       >
         <PhotoIcon className="h-8 w-8 text-gray-400 dark:text-gray-500 mb-2" />
         <span className="text-sm text-gray-500 dark:text-gray-400">
