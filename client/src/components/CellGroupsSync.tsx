@@ -66,7 +66,7 @@ const CellGroupsSync: React.FC = () => {
           title: group.title,
           subtitle: group.subtitle,
           description: group.description,
-          image: group.image,
+          image: group.image || '', // Incluir imagem na sincronização
           icon: group.icon.name || 'UserGroupIcon',
           color: group.color,
           members: 0, // Sempre mostrar 0 para não exibir quantidade

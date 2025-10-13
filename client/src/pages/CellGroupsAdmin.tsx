@@ -16,6 +16,7 @@ import {
   MapPinIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import ImageUpload from '../components/ImageUpload';
 
 interface Member {
   id: string;
@@ -195,7 +196,7 @@ const CellGroupsAdmin: React.FC = () => {
         title: group.title,
         subtitle: group.subtitle,
         description: group.description,
-        image: group.image,
+        image: group.image || '', // Incluir imagem na sincronização
         icon: group.icon,
         color: group.color,
         members: 0, // Sempre mostrar 0 para não exibir quantidade
@@ -486,6 +487,19 @@ const CellGroupsAdmin: React.FC = () => {
               </div>
 
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{group.description}</p>
+
+              {/* Upload de Imagem */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Imagem da Célula:
+                </label>
+                <ImageUpload
+                  currentImage={group.image}
+                  onImageChange={(imageData) => handleLeaderChange(group.id, 'image', imageData || '')}
+                  maxSize={5}
+                  className="w-full"
+                />
+              </div>
 
               {/* Leader Section */}
               <div className="mb-4 space-y-2">
