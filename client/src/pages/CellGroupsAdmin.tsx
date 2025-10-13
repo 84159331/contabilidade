@@ -59,9 +59,40 @@ const CellGroupsAdmin: React.FC = () => {
 
   // Carregar grupos do localStorage
   useEffect(() => {
+    // Limpar dados antigos que possam ter horários incorretos
+    const clearOldData = () => {
+      const savedGroups = localStorage.getItem('cellGroups');
+      if (savedGroups) {
+        const groups = JSON.parse(savedGroups);
+        // Verificar se algum grupo tem horário antigo
+        const hasOldSchedule = groups.some((group: CellGroup) => 
+          group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+        );
+        
+        if (hasOldSchedule) {
+          console.log('🔄 Detectados horários antigos, atualizando...');
+          localStorage.removeItem('cellGroups');
+          localStorage.removeItem('publicCellGroups');
+          localStorage.removeItem('cellGroupsLastSync');
+          return true; // Indica que dados foram limpos
+        }
+      }
+      return false;
+    };
+
+    const dataCleared = clearOldData();
+    
     const savedGroups = localStorage.getItem('cellGroups');
     if (savedGroups) {
-      setGroups(JSON.parse(savedGroups));
+      const groups = JSON.parse(savedGroups);
+      // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+      const updatedGroups = groups.map((group: CellGroup) => ({
+        ...group,
+        meetings: 'Quarta-Feira 20:00hrs',
+        features: [], // Garantir que features esteja vazio
+        updatedAt: new Date().toISOString()
+      }));
+      setGroups(updatedGroups);
     } else {
       // Grupos padrão
       const defaultGroups: CellGroup[] = [
@@ -401,6 +432,19 @@ const CellGroupsAdmin: React.FC = () => {
             className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             {viewMode === 'cards' ? <EyeIcon className="h-5 w-5" /> : <UserGroupIcon className="h-5 w-5" />}
+          </button>
+          <button
+            onClick={() => {
+              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irá restaurar os dados padrão.')) {
+                localStorage.removeItem('cellGroups');
+                localStorage.removeItem('publicCellGroups');
+                localStorage.removeItem('cellGroupsLastSync');
+                window.location.reload();
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white border border-red-600 rounded-lg font-medium hover:bg-red-700"
+          >
+            🔄 Resetar Dados
           </button>
         </div>
       </div>

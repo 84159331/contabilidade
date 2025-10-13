@@ -44,12 +44,47 @@ const ConnectPage: React.FC = () => {
   // Carregar grupos celulares do localStorage (sincronizado com a tesouraria)
   useEffect(() => {
     const loadCellGroups = () => {
+      // Limpar dados antigos que possam ter horários incorretos
+      const clearOldData = () => {
+        const savedGroups = localStorage.getItem('publicCellGroups');
+        if (savedGroups) {
+          try {
+            const groups = JSON.parse(savedGroups);
+            // Verificar se algum grupo tem horário antigo
+            const hasOldSchedule = groups.some((group: PublicCellGroup) => 
+              group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+            );
+            
+            if (hasOldSchedule) {
+              console.log('🔄 Detectados horários antigos na página pública, atualizando...');
+              localStorage.removeItem('publicCellGroups');
+              localStorage.removeItem('cellGroups');
+              localStorage.removeItem('cellGroupsLastSync');
+              return true; // Indica que dados foram limpos
+            }
+          } catch (error) {
+            // Se houver erro ao parsear, limpar dados
+            localStorage.removeItem('publicCellGroups');
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const dataCleared = clearOldData();
+      
       const savedGroups = localStorage.getItem('publicCellGroups');
       if (savedGroups) {
         try {
           const groups = JSON.parse(savedGroups);
+          // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+          const updatedGroups = groups.map((group: PublicCellGroup) => ({
+            ...group,
+            meetings: 'Quarta-Feira 20:00hrs',
+            features: [] // Garantir que features esteja vazio
+          }));
           // Filtrar apenas grupos ativos
-          const activeGroups = groups.filter((group: PublicCellGroup) => group.isActive);
+          const activeGroups = updatedGroups.filter((group: PublicCellGroup) => group.isActive);
           setCellGroups(activeGroups);
         } catch (error) {
           // Fallback para grupos padrão se houver erro
