@@ -305,3 +305,4 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
 };
 
 export default EditBookModal;
+

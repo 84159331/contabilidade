@@ -176,9 +176,15 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               <button
                 onClick={() => {
                   console.log('🗑️ EventList - Botão excluir clicado para evento:', event.title, 'ID:', event.id);
-                  onDelete(event.id);
+                  if (event.id) {
+                    onDelete(event.id);
+                  } else {
+                    console.error('❌ EventList - ID do evento é inválido:', event);
+                  }
                 }}
-                className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50"
+                className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!event.id}
+                title={!event.id ? 'ID do evento inválido' : 'Excluir evento'}
               >
                 <TrashIcon className="h-3 w-3 mr-1" />
                 Excluir

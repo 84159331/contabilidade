@@ -779,82 +779,48 @@ export const eventsAPI = {
 
   deleteEvent: async (id: string) => {
     try {
-      console.log('🔥 deleteEvent - Deletando evento no Firestore...');
-      console.log('📝 deleteEvent - ID do evento:', id);
-      console.log('📝 deleteEvent - Tipo do ID:', typeof id);
+      console.log('🗑️ deleteEvent - Iniciando exclusão do evento:', id);
       
-      // Tentar diferentes formatos de ID
-      let eventRef;
-      let eventSnap;
-      
-      // Primeira tentativa: ID como string
-      try {
-        eventRef = doc(db, 'events', id);
-        console.log('📝 deleteEvent - Referência do documento (string):', eventRef.path);
-        
-        eventSnap = await getDoc(eventRef);
-        console.log('🔍 deleteEvent - Documento existe (string)?', eventSnap.exists());
-        
-        if (eventSnap.exists()) {
-          console.log('✅ deleteEvent - Documento encontrado com ID string');
-        } else {
-          throw new Error('Documento não encontrado com ID string');
-        }
-      } catch (stringError) {
-        console.log('⚠️ deleteEvent - Falha com ID string, tentando como número...');
-        
-        // Segunda tentativa: ID como número
-        try {
-          const numericId = parseInt(id);
-          if (!isNaN(numericId)) {
-            eventRef = doc(db, 'events', numericId.toString());
-            console.log('📝 deleteEvent - Referência do documento (número):', eventRef.path);
-            
-            eventSnap = await getDoc(eventRef);
-            console.log('🔍 deleteEvent - Documento existe (número)?', eventSnap.exists());
-            
-            if (eventSnap.exists()) {
-              console.log('✅ deleteEvent - Documento encontrado com ID numérico');
-            } else {
-              throw new Error('Documento não encontrado com ID numérico');
-            }
-          } else {
-            throw new Error('ID não é um número válido');
-          }
-        } catch (numericError) {
-          console.log('⚠️ deleteEvent - Falha com ID numérico, tentando busca por título...');
-          
-          // Terceira tentativa: buscar por título
-          const eventsQuery = query(collection(db, 'events'));
-          const eventsSnapshot = await getDocs(eventsQuery);
-          
-          console.log('🔍 deleteEvent - Buscando em', eventsSnapshot.size, 'documentos...');
-          
-          let foundDoc: any = null;
-          eventsSnapshot.forEach((doc) => {
-            console.log('🔍 deleteEvent - Verificando documento:', doc.id, 'dados:', doc.data());
-            if (doc.id === id || doc.data().title === id) {
-              foundDoc = doc;
-              console.log('✅ deleteEvent - Documento encontrado por busca:', doc.id);
-            }
-          });
-          
-          if (foundDoc) {
-            eventRef = doc(db, 'events', foundDoc.id);
-            eventSnap = foundDoc;
-          } else {
-            throw new Error('Evento não encontrado em nenhuma tentativa');
-          }
-        }
+      // Verificar se o ID é válido
+      if (!id || id.trim() === '') {
+        throw new Error('ID do evento é inválido');
       }
       
-      console.log('🗑️ deleteEvent - Deletando documento...');
-      await deleteDoc(eventRef);
+      // Criar referência do documento
+      const eventRef = doc(db, 'events', id);
+      console.log('📝 deleteEvent - Referência do documento:', eventRef.path);
+      
+      // Verificar se o documento existe
+      const eventSnap = await getDoc(eventRef);
+      if (!eventSnap.exists()) {
+        console.log('⚠️ deleteEvent - Documento não encontrado, tentando busca alternativa...');
+        
+        // Buscar por ID em todos os documentos
+        const eventsQuery = query(collection(db, 'events'));
+        const eventsSnapshot = await getDocs(eventsQuery);
+        
+        let foundDoc: any = null;
+        eventsSnapshot.forEach((doc) => {
+          if (doc.id === id) {
+            foundDoc = doc;
+          }
+        });
+        
+        if (foundDoc) {
+          console.log('✅ deleteEvent - Documento encontrado por busca:', foundDoc.id);
+          await deleteDoc(doc(db, 'events', foundDoc.id));
+        } else {
+          throw new Error(`Evento com ID ${id} não encontrado`);
+        }
+      } else {
+        console.log('✅ deleteEvent - Documento encontrado, procedendo com exclusão...');
+        await deleteDoc(eventRef);
+      }
+      
       console.log('✅ deleteEvent - Evento deletado com sucesso do Firestore');
       
-      // Limpar do cache local também
+      // Limpar do cache local
       try {
-        console.log('🗑️ deleteEvent - Limpando do cache local...');
         const cachedEvents = localStorage.getItem('cachedEvents');
         if (cachedEvents) {
           const events = JSON.parse(cachedEvents);
@@ -864,7 +830,6 @@ export const eventsAPI = {
           
           // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
-          console.log('📡 deleteEvent - Evento de sincronização disparado');
         }
       } catch (cacheError) {
         console.error('⚠️ deleteEvent - Erro ao limpar cache local:', cacheError);
@@ -875,7 +840,6 @@ export const eventsAPI = {
       console.error('❌ deleteEvent - Erro ao deletar evento:', error);
       if (error instanceof Error) {
         console.error('❌ deleteEvent - Mensagem de erro:', error.message);
-        console.error('❌ deleteEvent - Stack trace:', error.stack);
       }
       throw error;
     }

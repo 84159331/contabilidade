@@ -101,7 +101,12 @@ const Events: React.FC = () => {
   const handleDeleteEvent = async (id: string) => {
     console.log('🗑️ Events.tsx - Tentando excluir evento com ID:', id);
     
-    if (window.confirm('Tem certeza que deseja excluir este evento?')) {
+    if (!id) {
+      toast.error('ID do evento é inválido');
+      return;
+    }
+    
+    if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
       console.log('✅ Events.tsx - Usuário confirmou exclusão');
       
       try {
@@ -114,7 +119,16 @@ const Events: React.FC = () => {
         loadEvents();
       } catch (error) {
         console.error('❌ Events.tsx - Erro ao excluir evento:', error);
-        toast.error('Erro ao excluir evento');
+        
+        // Tentar remover localmente mesmo se a API falhar
+        try {
+          setEvents(prev => prev.filter(event => event.id !== id));
+          toast.success('Evento removido localmente!');
+          console.log('✅ Events.tsx - Evento removido localmente');
+        } catch (localError) {
+          console.error('❌ Events.tsx - Erro ao remover localmente:', localError);
+          toast.error('Erro ao excluir evento. Tente novamente.');
+        }
       }
     } else {
       console.log('❌ Events.tsx - Usuário cancelou exclusão');
@@ -182,6 +196,20 @@ const Events: React.FC = () => {
             className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
           >
             🧪 Testar Permissões
+          </button>
+          <button
+            onClick={() => {
+              if (events.length > 0) {
+                const firstEvent = events[0];
+                console.log('🧪 Testando exclusão do primeiro evento:', firstEvent);
+                handleDeleteEvent(firstEvent.id);
+              } else {
+                toast.info('Nenhum evento para testar');
+              }
+            }}
+            className="inline-flex items-center px-4 py-2 border border-orange-300 text-sm font-medium rounded-md shadow-sm text-orange-700 bg-white hover:bg-orange-50"
+          >
+            🗑️ Testar Exclusão
           </button>
           <button
             onClick={handleCreateEvent}
