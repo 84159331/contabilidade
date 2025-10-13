@@ -174,28 +174,28 @@ const ministries = [
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
     members: 25,
-    leader: "Pastora Kele"
+    leader: "Apóstolo Isac"
   },
   {
     name: "Ministério Infantil",
     description: "Cuidamos e ensinamos as crianças no caminho do Senhor",
     icon: UsersIcon,
     members: 15,
-    leader: "Pastora Fran"
+    leader: "Pastora Eneiza"
   },
   {
     name: "Ministério de Jovens",
     description: "Conectamos jovens com Cristo e uns com os outros",
     icon: CalendarIcon,
     members: 40,
-    leader: "Pastor Jadney"
+    leader: "Prs. Jadney e Kele"
   },
   {
     name: "Ministério de Ação Social",
     description: "Servimos nossa comunidade com amor e compaixão",
     icon: GiftIcon,
     members: 30,
-    leader: "Pastora Eneize"
+    leader: "Obr. Clebson e Hiully"
   },
   {
     name: "Ministério de Ensino",
@@ -216,14 +216,14 @@ const ministries = [
     description: "Formando discípulos maduros na fé",
     icon: UserGroupIcon,
     members: 28,
-    leader: "Pastor Thiago"
+    leader: "Aps. Isac e Elaine"
   },
   {
     name: "Ministério de Casais",
     description: "Fortalecendo relacionamentos e famílias",
     icon: HeartIcon,
     members: 22,
-    leader: "Pastora Rany"
+    leader: "Prs. Leomar e Odília"
   }
 ];
 
