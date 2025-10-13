@@ -173,56 +173,42 @@ const ministries = [
     name: "Ministério de Louvor",
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
-    members: 25,
     leader: "Apóstolo Isac"
   },
   {
     name: "Ministério Infantil",
     description: "Cuidamos e ensinamos as crianças no caminho do Senhor",
     icon: UsersIcon,
-    members: 15,
     leader: "Pastora Eneiza"
   },
   {
     name: "Ministério de Jovens",
     description: "Conectamos jovens com Cristo e uns com os outros",
     icon: CalendarIcon,
-    members: 40,
     leader: "Prs. Jadney e Kele"
   },
   {
     name: "Ministério de Ação Social",
     description: "Servimos nossa comunidade com amor e compaixão",
     icon: GiftIcon,
-    members: 30,
     leader: "Obr. Clebson e Hiully"
   },
   {
     name: "Ministério de Ensino",
     description: "Crescimento espiritual através do estudo da Palavra",
     icon: BookOpenIcon,
-    members: 20,
     leader: "Pastor Leomar"
-  },
-  {
-    name: "Ministério de Evangelismo",
-    description: "Compartilhando o amor de Cristo com o mundo",
-    icon: ShareIcon,
-    members: 35,
-    leader: "Pastor Elcio"
   },
   {
     name: "Ministério de Discipulado",
     description: "Formando discípulos maduros na fé",
     icon: UserGroupIcon,
-    members: 28,
     leader: "Aps. Isac e Elaine"
   },
   {
     name: "Ministério de Casais",
     description: "Fortalecendo relacionamentos e famílias",
     icon: HeartIcon,
-    members: 22,
     leader: "Prs. Leomar e Odília"
   }
 ];
@@ -403,20 +389,12 @@ const HomePage: React.FC = () => {
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{ministry.name}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{ministry.description}</p>
                 
-                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center justify-center">
-                    <UsersIcon className="h-4 w-4 mr-1" />
-                    {ministry.members} membros
-                  </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center justify-center">
                     <StarIcon className="h-4 w-4 mr-1" />
                     Líder: {ministry.leader}
                   </div>
                 </div>
-                
-                <button className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                  Participar
-                </button>
               </div>
             ))}
           </div>
