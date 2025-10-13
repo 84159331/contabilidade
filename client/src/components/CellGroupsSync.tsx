@@ -69,11 +69,11 @@ const CellGroupsSync: React.FC = () => {
           image: group.image,
           icon: group.icon.name || 'UserGroupIcon',
           color: group.color,
-          members: group.members.length,
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
           meetings: group.meetings,
           location: group.location,
           leader: group.leader,
-          features: group.features,
+          features: [], // Sempre array vazio para não exibir atividades
           isPopular: group.isPopular,
           isActive: group.isActive,
           maxMembers: group.maxMembers,

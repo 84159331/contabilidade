@@ -76,10 +76,10 @@ const ConnectPage: React.FC = () => {
       icon: 'HomeIcon',
       color: 'blue',
       members: 0,
-      meetings: 'Quartas às 20h',
-      location: 'Casas dos membros',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos bíblicos', 'Oração em família', 'Atividades para crianças', 'Comunhão'],
+      features: [],
       isPopular: true,
       isActive: true,
       maxMembers: 15
@@ -91,12 +91,12 @@ const ConnectPage: React.FC = () => {
       description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
       image: '/img/youth-group.jpg',
       icon: 'SparklesIcon',
-      color: 'purple',
+      color: 'blue',
       members: 0,
-      meetings: 'Quartas às 20h',
-      location: 'Igreja - Sala dos Jovens',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Temas atuais', 'Adoração jovem', 'Missões', 'Networking cristão'],
+      features: [],
       isPopular: true,
       isActive: true,
       maxMembers: 20
@@ -108,12 +108,12 @@ const ConnectPage: React.FC = () => {
       description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
       image: '/img/women-group.jpg',
       icon: 'HeartIcon',
-      color: 'pink',
+      color: 'green',
       members: 0,
-      meetings: 'Quartas às 20h',
-      location: 'Casa da Líder',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos femininos', 'Oração', 'Apoio mútuo', 'Café da manhã'],
+      features: [],
       isPopular: false,
       isActive: true,
       maxMembers: 12
@@ -127,10 +127,10 @@ const ConnectPage: React.FC = () => {
       icon: 'UserGroupIcon',
       color: 'green',
       members: 0,
-      meetings: 'Quartas às 20h',
-      location: 'Igreja - Sala dos Homens',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos masculinos', 'Responsabilidade', 'Liderança', 'Camaradagem'],
+      features: [],
       isPopular: false,
       isActive: true,
       maxMembers: 15
@@ -157,35 +157,11 @@ const ConnectPage: React.FC = () => {
         text: 'text-blue-600 dark:text-blue-400',
         border: 'border-blue-200 dark:border-blue-700'
       },
-      purple: {
-        bg: 'bg-purple-500',
-        light: 'bg-purple-50 dark:bg-purple-900',
-        text: 'text-purple-600 dark:text-purple-400',
-        border: 'border-purple-200 dark:border-purple-700'
-      },
-      pink: {
-        bg: 'bg-pink-500',
-        light: 'bg-pink-50 dark:bg-pink-900',
-        text: 'text-pink-600 dark:text-pink-400',
-        border: 'border-pink-200 dark:border-pink-700'
-      },
       green: {
         bg: 'bg-green-500',
         light: 'bg-green-50 dark:bg-green-900',
         text: 'text-green-600 dark:text-green-400',
         border: 'border-green-200 dark:border-green-700'
-      },
-      yellow: {
-        bg: 'bg-yellow-500',
-        light: 'bg-yellow-50 dark:bg-yellow-900',
-        text: 'text-yellow-600 dark:text-yellow-400',
-        border: 'border-yellow-200 dark:border-yellow-700'
-      },
-      indigo: {
-        bg: 'bg-indigo-500',
-        light: 'bg-indigo-50 dark:bg-indigo-900',
-        text: 'text-indigo-600 dark:text-indigo-400',
-        border: 'border-indigo-200 dark:border-indigo-700'
       }
     };
     return colors[color as keyof typeof colors] || colors.blue;
@@ -299,7 +275,7 @@ const ConnectPage: React.FC = () => {
                   {/* Members Count */}
                   <div className="absolute bottom-4 right-4 bg-white/90 dark:bg-gray-800/90 px-3 py-1 rounded-full">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                      {group.members}/{group.maxMembers} membros
+                      Célula Ativa
                     </span>
                   </div>
                 </div>
@@ -328,7 +304,7 @@ const ConnectPage: React.FC = () => {
                       </div>
                       <div className="flex items-center">
                         <MapPinIcon className={`h-4 w-4 mr-2 ${colors.text}`} />
-                        <span className="text-gray-700 dark:text-gray-300">{group.location}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{group.location || 'Local a ser definido'}</span>
                       </div>
                       {group.leader && (
                         <div className="flex items-center">
@@ -338,42 +314,6 @@ const ConnectPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-
-                  {/* Features */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                      Atividades:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {group.features.map((feature, index) => (
-                        <span 
-                          key={index}
-                          className={`text-xs px-2 py-1 rounded-full ${colors.light} ${colors.text}`}
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Join Button */}
-                  <button
-                    onClick={() => handleJoinGroup(group.id)}
-                    disabled={selectedGroup === group.id}
-                    className={`w-full ${colors.bg} text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 flex items-center justify-center disabled:opacity-50`}
-                  >
-                    {selectedGroup === group.id ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Processando...
-                      </>
-                    ) : (
-                      <>
-                        <ArrowRightIcon className="h-5 w-5 mr-2" />
-                                 Participar da Célula
-                      </>
-                    )}
-                  </button>
                 </div>
               </div>
             );
