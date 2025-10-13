@@ -77,7 +77,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
     return {
       width: `${calculatedWidth}px`,
       height: `${calculatedHeight}px`,
-      objectFit: objectFit as const // Especificar tipo literal
+      objectFit: objectFit // Usar diretamente o valor da prop
     };
   };
 
