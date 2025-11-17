@@ -1,7 +1,6 @@
 import React from 'react';
 import SafeImage from '../../components/SafeImage';
 import {
-import {
   CreditCardIcon, 
   QrCodeIcon, 
   DocumentTextIcon,
