@@ -10,7 +10,8 @@ export { default as ToastContainer } from './ToastContainer';
 export { default as LoadingSpinner } from './LoadingSpinner';
 
 // Componentes de skeleton
-export { Skeleton, SkeletonCard, SkeletonTable } from './Skeleton';
+export { default as Skeleton, SkeletonCard } from './Skeleton';
+export { default as SkeletonLoader } from './SkeletonLoader';
 
 // Componentes existentes
 export { default as FinancialSummary } from './FinancialSummary';

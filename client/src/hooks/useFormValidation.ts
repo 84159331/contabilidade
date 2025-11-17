@@ -138,12 +138,16 @@ export const useFormValidation = <T extends Record<string, any>>(
       if (validate()) {
         try {
           await onSubmit(values);
-        } catch (error) {
-          if (error instanceof ValidationError && error.context?.field) {
-            setErrors(prev => ({
-              ...prev,
-              [error.context.field as string]: error.message
-            }));
+        } catch (error: unknown) {
+          if (error instanceof ValidationError) {
+            const validationError = error as ValidationError;
+            const field = validationError.context?.field;
+            if (field) {
+              setErrors(prev => ({
+                ...prev,
+                [field as string]: validationError.message
+              }));
+            }
           }
           throw error;
         }

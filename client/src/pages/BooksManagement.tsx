@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import AddBookModal from '../components/AddBookModal';
 import EditBookModal from '../components/EditBookModal';
 import SafeImage from '../components/SafeImage';
+import storage from '../utils/storage';
 import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
@@ -50,8 +51,6 @@ const categorias = [
   'Jovens',
   'Crianças'
 ];
-
-import storage from '../utils/storage';
 
 const BooksManagement: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {

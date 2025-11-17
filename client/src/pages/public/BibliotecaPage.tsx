@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
+import storage from '../../utils/storage';
 import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
@@ -50,8 +51,6 @@ const livros: Livro[] = [
   // A biblioteca começará vazia para que você possa adicionar apenas livros reais
   // Use o botão "Adicionar Livro" para inserir seus próprios livros
 ];
-
-import storage from '../../utils/storage';
 
 const BibliotecaPage: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
