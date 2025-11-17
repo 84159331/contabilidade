@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { ErrorHandler } from '../utils/errors';
+import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 
 interface Livro {
   id: string;
@@ -77,7 +80,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
     e.preventDefault();
     
     if (!formData.titulo.trim() || !formData.autor.trim() || !formData.descricao.trim()) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+      toast.warn('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
@@ -98,18 +101,17 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
         isDestaque: formData.isDestaque
       };
 
-      // Salvar no localStorage
-      const livrosExistentes = JSON.parse(localStorage.getItem('biblioteca') || '[]');
+      // Salvar no armazenamento local
+      const livrosExistentes = storage.getJSON<Livro[]>('biblioteca', []) ?? [];
       const livrosAtualizados = livrosExistentes.map((l: Livro) => 
         l.id === livro.id ? livroAtualizado : l
       );
-      localStorage.setItem('biblioteca', JSON.stringify(livrosAtualizados));
+      storage.setJSON('biblioteca', livrosAtualizados);
 
       onSave(livroAtualizado);
       onClose();
     } catch (error) {
-      console.error('Erro ao atualizar livro:', error);
-      alert('Erro ao atualizar livro. Tente novamente.');
+      ErrorHandler.handle(error);
     } finally {
       setUploading(false);
     }
@@ -305,5 +307,6 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
 };
 
 export default EditBookModal;
+
 
 

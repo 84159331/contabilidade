@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { usersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 import UserList from '../components/UserList';
 import UserForm from '../components/UserForm';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -26,7 +27,7 @@ const Users: React.FC = () => {
       setLoading(true);
       
       // Verificar se deve usar dados mock
-      const token = localStorage.getItem('token');
+      const token = storage.getString('token');
       const useMockData = !token;
       
       if (useMockData) {

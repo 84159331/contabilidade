@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import ImageUpload from '../components/ImageUpload';
+import storage from '../utils/storage';
 
 interface Member {
   id: string;
@@ -58,23 +59,22 @@ const CellGroupsAdmin: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
 
-  // Carregar grupos do localStorage
+// Carregar grupos do armazenamento local
   useEffect(() => {
     // Limpar dados antigos que possam ter horários incorretos
     const clearOldData = () => {
-      const savedGroups = localStorage.getItem('cellGroups');
-      if (savedGroups) {
-        const groups = JSON.parse(savedGroups);
+      const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
+      if (savedGroups && Array.isArray(savedGroups)) {
         // Verificar se algum grupo tem horário antigo
-        const hasOldSchedule = groups.some((group: CellGroup) => 
-          group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+        const hasOldSchedule = savedGroups.some(
+          (group: CellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
         );
-        
+
         if (hasOldSchedule) {
           console.log('🔄 Detectados horários antigos, atualizando...');
-          localStorage.removeItem('cellGroups');
-          localStorage.removeItem('publicCellGroups');
-          localStorage.removeItem('cellGroupsLastSync');
+          storage.remove('cellGroups');
+          storage.remove('publicCellGroups');
+          storage.remove('cellGroupsLastSync');
           return true; // Indica que dados foram limpos
         }
       }
@@ -83,11 +83,10 @@ const CellGroupsAdmin: React.FC = () => {
 
     const dataCleared = clearOldData();
     
-    const savedGroups = localStorage.getItem('cellGroups');
-    if (savedGroups) {
-      const groups = JSON.parse(savedGroups);
+    const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
+    if (savedGroups && Array.isArray(savedGroups)) {
       // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
-      const updatedGroups = groups.map((group: CellGroup) => ({
+      const updatedGroups = savedGroups.map((group: CellGroup) => ({
         ...group,
         meetings: 'Quarta-Feira 20:00hrs',
         features: [], // Garantir que features esteja vazio
@@ -186,28 +185,31 @@ const CellGroupsAdmin: React.FC = () => {
     }
   }, []);
 
-  // Salvar grupos no localStorage sempre que houver mudanças
+  // Salvar grupos no armazenamento local sempre que houver mudanças
   useEffect(() => {
     if (groups.length > 0) {
-      localStorage.setItem('cellGroups', JSON.stringify(groups));
+      storage.setJSON('cellGroups', groups);
       // Também salvar uma versão pública para o site
-      localStorage.setItem('publicCellGroups', JSON.stringify(groups.map(group => ({
-        id: group.id,
-        title: group.title,
-        subtitle: group.subtitle,
-        description: group.description,
-        image: group.image || '', // Incluir imagem na sincronização
-        icon: group.icon,
-        color: group.color,
-        members: 0, // Sempre mostrar 0 para não exibir quantidade
-        meetings: group.meetings,
-        location: group.location,
-        leader: group.leader,
-        features: [], // Sempre array vazio para não exibir atividades
-        isPopular: group.isPopular,
-        isActive: group.isActive,
-        maxMembers: group.maxMembers
-      }))));
+      storage.setJSON(
+        'publicCellGroups',
+        groups.map(group => ({
+          id: group.id,
+          title: group.title,
+          subtitle: group.subtitle,
+          description: group.description,
+          image: group.image || '', // Incluir imagem na sincronização
+          icon: group.icon,
+          color: group.color,
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
+          meetings: group.meetings,
+          location: group.location,
+          leader: group.leader,
+          features: [], // Sempre array vazio para não exibir atividades
+          isPopular: group.isPopular,
+          isActive: group.isActive,
+          maxMembers: group.maxMembers
+        }))
+      );
     }
   }, [groups]);
 
@@ -437,9 +439,9 @@ const CellGroupsAdmin: React.FC = () => {
           <button
             onClick={() => {
               if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irá restaurar os dados padrão.')) {
-                localStorage.removeItem('cellGroups');
-                localStorage.removeItem('publicCellGroups');
-                localStorage.removeItem('cellGroupsLastSync');
+                storage.remove('cellGroups');
+                storage.remove('publicCellGroups');
+                storage.remove('cellGroupsLastSync');
                 window.location.reload();
               }
             }}

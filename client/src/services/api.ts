@@ -18,6 +18,7 @@ import {
   limitToLast
 } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 
 // API para transações (usando Firebase Firestore)
 export const transactionsAPI = {
@@ -821,11 +822,10 @@ export const eventsAPI = {
       
       // Limpar do cache local
       try {
-        const cachedEvents = localStorage.getItem('cachedEvents');
-        if (cachedEvents) {
-          const events = JSON.parse(cachedEvents);
-          const updatedEvents = events.filter((event: any) => event.id !== id);
-          localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+        const cachedEvents = storage.getJSON<any[]>('cachedEvents');
+        if (cachedEvents && Array.isArray(cachedEvents)) {
+          const updatedEvents = cachedEvents.filter((event: any) => event.id !== id);
+          storage.setJSON('cachedEvents', updatedEvents);
           console.log('✅ deleteEvent - Evento removido do cache local');
           
           // Disparar evento de sincronização
@@ -926,16 +926,16 @@ export const eventsAPI = {
     try {
       console.log('🔄 migrateEventsImages - Iniciando migração...');
       
-      // Carregar eventos do localStorage
-      const cachedEvents = localStorage.getItem('cachedEvents');
+      // Carregar eventos do armazenamento local
+      const cachedEvents = storage.getJSON<any[]>('cachedEvents');
       console.log('📦 migrateEventsImages - Cache encontrado:', !!cachedEvents);
       
-      if (!cachedEvents) {
+      if (!cachedEvents || !Array.isArray(cachedEvents)) {
         console.log('ℹ️ migrateEventsImages - Nenhum evento encontrado no cache');
         return;
       }
 
-      const events = JSON.parse(cachedEvents);
+      const events = cachedEvents;
       console.log('📊 migrateEventsImages - Eventos no cache:', events.length);
       
       if (events.length > 0) {
@@ -951,7 +951,7 @@ export const eventsAPI = {
 
       // Verificar se há eventos com URLs temporárias
       const updatedEvents = events.map((event: any) => {
-        if (event.image && event.image.startsWith('blob:')) {
+        if (event.image && typeof event.image === 'string' && event.image.startsWith('blob:')) {
           console.log('🗑️ migrateEventsImages - Removendo URL temporária do evento:', event.title);
           hasChanges = true;
           return {
@@ -964,7 +964,7 @@ export const eventsAPI = {
 
       // Salvar eventos atualizados se houver mudanças
       if (hasChanges) {
-        localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+        storage.setJSON('cachedEvents', updatedEvents);
         console.log('✅ migrateEventsImages - Eventos migrados com sucesso');
         
         // Disparar evento de sincronização

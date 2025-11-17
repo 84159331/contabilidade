@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, ArrowLeftIcon, HomeIcon } from '@heroicons/react/24/outline';
+import storage from '../utils/storage';
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     // Limpar qualquer token ou dados de sessão que possam ter ficado
-    localStorage.removeItem('token');
+    storage.remove('token');
     sessionStorage.clear();
     
     // Redirecionar automaticamente para login após 5 segundos

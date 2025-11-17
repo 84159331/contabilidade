@@ -1,6 +1,7 @@
 import React from 'react';
 import SafeImage from '../../components/SafeImage';
-import { 
+import {
+import {
   CreditCardIcon, 
   QrCodeIcon, 
   DocumentTextIcon,
@@ -13,11 +14,16 @@ import {
   ShareIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 const GivePage: React.FC = () => {
-  const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    alert(`${label} copiado para a área de transferência!`);
+  const copyToClipboard = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${label} copiado para a área de transferência!`);
+    } catch (error) {
+      toast.error('Não foi possível copiar o conteúdo. Tente novamente.');
+    }
   };
 
   const formatCurrency = (amount: number) => {

@@ -17,34 +17,37 @@ import Logout from './pages/Logout';
 import LoginDebug from './pages/LoginDebug';
 import { NotificationProvider } from './contexts/NotificationContext';
 import TesourariaApp from './TesourariaApp';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
-    <ThemeProvider>
-      <NotificationProvider>
-        <AuthProvider>
-          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <Routes>
-              <Route element={<PublicLayout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/sobre" element={<AboutPage />} />
-                <Route path="/contato" element={<ContactPage />} />
-                <Route path="/conecte" element={<ConnectPage />} />
-                <Route path="/assista" element={<WatchPage />} />
-                <Route path="/contribua" element={<GivePage />} />
-                <Route path="/localizacoes" element={<LocationsPage />} />
-                <Route path="/bons-estudos" element={<BonsEstudosPage />} />
-                <Route path="/biblioteca" element={<BibliotecaPage />} />
-              </Route>
-              <Route path="/login-debug" element={<LoginDebug />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="/tesouraria/*" element={<TesourariaApp />} />
-            </Routes>
-          </Router>
-        </AuthProvider>
-      </NotificationProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <NotificationProvider>
+          <AuthProvider>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <Routes>
+                <Route element={<PublicLayout />}>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/sobre" element={<AboutPage />} />
+                  <Route path="/contato" element={<ContactPage />} />
+                  <Route path="/conecte" element={<ConnectPage />} />
+                  <Route path="/assista" element={<WatchPage />} />
+                  <Route path="/contribua" element={<GivePage />} />
+                  <Route path="/localizacoes" element={<LocationsPage />} />
+                  <Route path="/bons-estudos" element={<BonsEstudosPage />} />
+                  <Route path="/biblioteca" element={<BibliotecaPage />} />
+                </Route>
+                <Route path="/login-debug" element={<LoginDebug />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/tesouraria/*" element={<TesourariaApp />} />
+              </Routes>
+            </Router>
+          </AuthProvider>
+        </NotificationProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import SkeletonLoader from './SkeletonLoader';
+import LoadingSpinner from './LoadingSpinner';
 
 interface Member {
   id: number | string;
@@ -41,12 +43,12 @@ const MemberList: React.FC<MemberListProps> = ({
   isDeleting = false,
   onPageChange
 }) => {
+  const memoizedMembers = useMemo(() => members, [members]);
+
   if (loading && members.length === 0) {
     return (
-      <div className="bg-white shadow rounded-lg">
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-        </div>
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <SkeletonLoader type="table" count={5} />
       </div>
     );
   }
@@ -86,7 +88,7 @@ const MemberList: React.FC<MemberListProps> = ({
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {members.map((member) => (
+            {memoizedMembers.map((member) => (
               <tr key={member.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
@@ -307,4 +309,4 @@ const MemberList: React.FC<MemberListProps> = ({
   );
 };
 
-export default MemberList;
+export default memo(MemberList);

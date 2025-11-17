@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { XMarkIcon, DocumentArrowUpIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 interface AddBookModalProps {
   isOpen: boolean;
@@ -64,27 +65,27 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     
     // Validações
     if (!formData.titulo.trim()) {
-      alert('Por favor, digite o título do livro');
+      toast.warn('Por favor, digite o título do livro');
       return;
     }
     
     if (!formData.autor.trim()) {
-      alert('Por favor, digite o nome do autor');
+      toast.warn('Por favor, digite o nome do autor');
       return;
     }
     
     if (!formData.descricao.trim()) {
-      alert('Por favor, digite a descrição do livro');
+      toast.warn('Por favor, digite a descrição do livro');
       return;
     }
     
     if (!formData.pdfFile) {
-      alert('Por favor, selecione o arquivo PDF do livro');
+      toast.warn('Por favor, selecione o arquivo PDF do livro');
       return;
     }
     
     if (!formData.capaFile) {
-      alert('Por favor, selecione a capa do livro');
+      toast.warn('Por favor, selecione a capa do livro');
       return;
     }
 
@@ -115,7 +116,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         capaFile: formData.capaFile
       };
 
-      // Adicionar livro à biblioteca (a função onAddBook já salva no localStorage)
+      // Adicionar livro à biblioteca (a função onAddBook já salva no armazenamento local)
       onAddBook(novoLivro);
       
       // Reset form
@@ -132,10 +133,10 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       });
       
       // Mostrar mensagem de sucesso
-      alert('Livro adicionado com sucesso à biblioteca!');
+      toast.success('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
-      alert('Erro ao adicionar livro. Tente novamente.');
+      toast.error('Erro ao adicionar livro. Tente novamente.');
     } finally {
       setUploading(false);
     }

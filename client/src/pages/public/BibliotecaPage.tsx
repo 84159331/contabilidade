@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
-import { 
+import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
   DocumentArrowDownIcon,
@@ -50,11 +51,13 @@ const livros: Livro[] = [
   // Use o botão "Adicionar Livro" para inserir seus próprios livros
 ];
 
+import storage from '../../utils/storage';
+
 const BibliotecaPage: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
-    // Carregar livros salvos do localStorage
-    const livrosSalvos = localStorage.getItem('biblioteca-livros');
-    return livrosSalvos ? JSON.parse(livrosSalvos) : livros;
+    // Carregar livros salvos do armazenamento local
+    const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros', livros);
+    return livrosSalvos ?? livros;
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
@@ -65,27 +68,23 @@ const BibliotecaPage: React.FC = () => {
     filtrarLivros();
   }, [categoriaSelecionada, termoBusca, ordenacao, livrosLista]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Atualizar lista quando localStorage mudar
+  // Atualizar lista quando o armazenamento local mudar
   useEffect(() => {
     const handleStorageChange = () => {
-      const livrosSalvos = localStorage.getItem('biblioteca-livros');
+      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
       if (livrosSalvos) {
-        const novosLivros = JSON.parse(livrosSalvos);
-        setLivrosLista(novosLivros);
+        setLivrosLista(livrosSalvos);
       }
     };
 
-    // Escutar mudanças no localStorage
+    // Escutar mudanças no armazenamento local
     window.addEventListener('storage', handleStorageChange);
     
     // Verificar mudanças periodicamente (para mudanças na mesma aba)
     const interval = setInterval(() => {
-      const livrosSalvos = localStorage.getItem('biblioteca-livros');
-      if (livrosSalvos) {
-        const novosLivros = JSON.parse(livrosSalvos);
-        if (JSON.stringify(novosLivros) !== JSON.stringify(livrosLista)) {
-          setLivrosLista(novosLivros);
-        }
+      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
+      if (livrosSalvos && JSON.stringify(livrosSalvos) !== JSON.stringify(livrosLista)) {
+        setLivrosLista(livrosSalvos);
       }
     }, 1000);
 
@@ -152,19 +151,23 @@ const BibliotecaPage: React.FC = () => {
       document.body.removeChild(link);
       
       // Atualizar contador de downloads
-      setLivrosLista(prev => prev.map(l => 
-        l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
-      ));
+      setLivrosLista(prev => {
+        const atualizados = prev.map(l => 
+          l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
+        );
+        storage.setJSON('biblioteca-livros', atualizados);
+        return atualizados;
+      });
       
       // eslint-disable-next-line no-console
       console.log(`Download iniciado: ${livro.titulo}`);
       
       // Mostrar mensagem de sucesso
-      alert(`Download de "${livro.titulo}" iniciado!`);
+      toast.success(`Download de "${livro.titulo}" iniciado!`);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Erro no download:', error);
-      alert('Erro ao iniciar download. Tente novamente.');
+      toast.error('Erro ao iniciar download. Tente novamente.');
     }
   };
 

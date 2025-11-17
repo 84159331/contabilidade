@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import storage from '../utils/storage';
 
 type Theme = 'light' | 'dark' | 'auto';
 
@@ -25,7 +26,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('theme');
+    const saved = storage.getString('theme');
     return (saved as Theme) || 'auto';
   });
 
@@ -42,7 +43,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     };
 
     updateTheme();
-    localStorage.setItem('theme', theme);
+    storage.setString('theme', theme);
 
     // Listen for system theme changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

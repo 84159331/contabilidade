@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { 
+import {
   User, 
   signInWithEmailAndPassword, 
   signOut, 
@@ -8,6 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { auth } from './config';
+import storage from '../utils/storage';
 
 interface AuthContextType {
   user: User | null;
@@ -74,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('✅ Logout Firebase realizado com sucesso');
       
       // Limpar dados locais
-      localStorage.removeItem('token');
+      storage.remove('token');
       sessionStorage.clear();
       
       // Redirecionar para página de logout

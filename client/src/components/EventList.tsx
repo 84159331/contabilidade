@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo, useCallback } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -19,42 +19,27 @@ interface EventListProps {
 }
 
 const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare, onAutoShare }) => {
-  console.log('📋 EventList - Renderizando com', events.length, 'eventos');
-  
-  if (events.length > 0) {
-    console.log('🔍 EventList - Primeiro evento:', events[0]);
-    if (events[0].image) {
-      console.log('🖼️ EventList - Primeira imagem:', events[0].image.substring(0, 50) + '...');
-      console.log('🖼️ EventList - É base64?', events[0].image.startsWith('data:'));
-    }
-  }
+  const memoizedEvents = useMemo(() => events, [events]);
 
-  // Log para cada evento com imagem
-  events.forEach((event, index) => {
-    if (event.image) {
-      console.log(`🖼️ EventList - Evento ${index + 1} (${event.title}):`, event.image.substring(0, 50) + '...');
-    }
-  });
-
-  const formatDate = (dateString: string) => {
+  const formatDate = useCallback((dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
     });
-  };
+  }, []);
 
-  const formatTime = (timeString: string) => {
+  const formatTime = useCallback((timeString: string) => {
     return timeString;
-  };
+  }, []);
 
-  const isUpcoming = (dateString: string) => {
+  const isUpcoming = useCallback((dateString: string) => {
     const eventDate = new Date(dateString);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return eventDate >= today;
-  };
+  }, []);
 
   if (events.length === 0) {
     return (
@@ -70,7 +55,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
 
   return (
     <div className="space-y-6">
-      {events.map((event) => (
+      {memoizedEvents.map((event) => (
         <div
           key={event.id}
           className={`bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden ${
@@ -197,4 +182,4 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
   );
 };
 
-export default EventList;
+export default memo(EventList);

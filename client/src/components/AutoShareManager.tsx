@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   ClockIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -8,6 +8,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { eventsAPI } from '../services/api';
 import { Event } from '../types/Event';
+import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 
 interface AutoShareSettings {
   enabled: boolean;
@@ -41,10 +43,10 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
   const [timeUntilShare, setTimeUntilShare] = useState<string>('');
 
   useEffect(() => {
-    // Carregar configurações salvas do localStorage
-    const savedSettings = localStorage.getItem(`autoShare_${event.id}`);
+    // Carregar configurações salvas do armazenamento local
+    const savedSettings = storage.getJSON<AutoShareSettings>(`autoShare_${event.id}`);
     if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
+      setSettings(savedSettings);
     }
 
     // Calcular tempo até o compartilhamento
@@ -139,7 +141,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
   };
 
   const handleSaveSettings = () => {
-    localStorage.setItem(`autoShare_${event.id}`, JSON.stringify(settings));
+    storage.setJSON(`autoShare_${event.id}`, settings);
     onClose();
   };
 
@@ -155,7 +157,12 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
 
   const handleTestShare = () => {
     const message = generateMessage();
-    alert(`Preview da mensagem:\n\n${message}`);
+    toast.info(
+      <div className="whitespace-pre-line text-sm">
+        {`Preview da mensagem:\n\n${message}`}
+      </div>,
+      { autoClose: 5000 }
+    );
   };
 
   return (

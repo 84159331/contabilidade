@@ -11,6 +11,8 @@ import { Event } from '../types/Event';
 import SafeImage from './SafeImage';
 import { eventsAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import storage from '../utils/storage';
+import SkeletonLoader from './SkeletonLoader';
 
 interface EventsSectionProps {
   isAdmin?: boolean;
@@ -40,7 +42,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
       loadEvents();
     };
     
-    // Listener para mudanças no localStorage
+    // Listener para mudanças no armazenamento local
     const handleLocalStorageChange = (e: StorageEvent) => {
       if (e.key === 'cachedEvents') {
         console.log('🔄 Cache de eventos atualizado, recarregando...');
@@ -70,7 +72,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
           // Salvar no cache local
-          localStorage.setItem('cachedEvents', JSON.stringify(eventsData));
+          storage.setJSON('cachedEvents', eventsData);
           console.log('✅ Eventos carregados da API:', eventsData.length);
         } else {
           console.log('⚠️ Nenhum evento encontrado na API, verificando cache local');
@@ -90,17 +92,16 @@ const EventsSection: React.FC<EventsSectionProps> = ({
 
   const loadFromCache = () => {
     try {
-      const cachedEvents = localStorage.getItem('cachedEvents');
-      if (cachedEvents) {
-        const events = JSON.parse(cachedEvents);
-        console.log('🔍 Eventos do cache:', events);
-        console.log('🔍 Primeiro evento:', events[0]);
-        if (events[0] && events[0].image) {
-          console.log('🔍 Imagem do primeiro evento:', events[0].image.substring(0, 50) + '...');
-          console.log('🔍 É base64?', events[0].image.startsWith('data:'));
+      const cachedEvents = storage.getJSON<Event[]>('cachedEvents');
+      if (cachedEvents && Array.isArray(cachedEvents) && cachedEvents.length > 0) {
+        console.log('🔍 Eventos do cache:', cachedEvents);
+        console.log('🔍 Primeiro evento:', cachedEvents[0]);
+        if (cachedEvents[0] && cachedEvents[0].image) {
+          console.log('🔍 Imagem do primeiro evento:', cachedEvents[0].image.substring(0, 50) + '...');
+          console.log('🔍 É base64?', cachedEvents[0].image.startsWith('data:'));
         }
-        setEvents(events);
-        console.log('✅ Eventos carregados do cache:', events.length);
+        setEvents(cachedEvents);
+        console.log('✅ Eventos carregados do cache:', cachedEvents.length);
       } else {
         // Se não há cache, criar um evento de teste para debug
         const testEvent = {
@@ -196,10 +197,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     return (
       <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-6">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-300">Carregando eventos...</p>
-          </div>
+          <SkeletonLoader type="card" count={3} />
         </div>
       </div>
     );

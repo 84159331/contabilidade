@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import AddBookModal from '../components/AddBookModal';
 import EditBookModal from '../components/EditBookModal';
 import SafeImage from '../components/SafeImage';
-import { 
+import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
   DocumentArrowDownIcon,
@@ -50,11 +51,13 @@ const categorias = [
   'Crianças'
 ];
 
+import storage from '../utils/storage';
+
 const BooksManagement: React.FC = () => {
   const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
-    // Carregar livros salvos do localStorage
-    const livrosSalvos = localStorage.getItem('biblioteca-livros');
-    return livrosSalvos ? JSON.parse(livrosSalvos) : [];
+    // Carregar livros salvos do armazenamento local
+    const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros', []);
+    return livrosSalvos ?? [];
   });
   const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
@@ -116,8 +119,8 @@ const BooksManagement: React.FC = () => {
   const handleAddBook = (novoLivro: Livro) => {
     setLivrosLista(prev => {
       const novaLista = [novoLivro, ...prev];
-      // Salvar no localStorage
-      localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+      // Salvar no armazenamento local
+      storage.setJSON('biblioteca-livros', novaLista);
       return novaLista;
     });
     setShowAddModal(false);
@@ -140,7 +143,7 @@ const BooksManagement: React.FC = () => {
     if (window.confirm('Tem certeza que deseja excluir este livro?')) {
       setLivrosLista(prev => {
         const novaLista = prev.filter(livro => livro.id !== id);
-        localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+        storage.setJSON('biblioteca-livros', novaLista);
         return novaLista;
       });
     }
@@ -151,7 +154,7 @@ const BooksManagement: React.FC = () => {
       const novaLista = prev.map(livro => 
         livro.id === id ? { ...livro, isDestaque: !livro.isDestaque } : livro
       );
-      localStorage.setItem('biblioteca-livros', JSON.stringify(novaLista));
+      storage.setJSON('biblioteca-livros', novaLista);
       return novaLista;
     });
   };
@@ -159,8 +162,8 @@ const BooksManagement: React.FC = () => {
   const handleClearLibrary = () => {
     if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta ação não pode ser desfeita.')) {
       setLivrosLista([]);
-      localStorage.removeItem('biblioteca-livros');
-      alert('Biblioteca limpa com sucesso!');
+      storage.remove('biblioteca-livros');
+      toast.success('Biblioteca limpa com sucesso!');
     }
   };
 

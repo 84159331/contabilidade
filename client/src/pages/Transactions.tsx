@@ -5,6 +5,7 @@ import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SkeletonLoader from '../components/SkeletonLoader';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
 import useDebounce from '../hooks/useDebounce';
@@ -217,7 +218,11 @@ const Transactions: React.FC = () => {
   };
 
   if (loading && transactions.length === 0) {
-    return <LoadingSpinner />;
+    return (
+      <div className="space-y-6">
+        <SkeletonLoader type="table" count={5} />
+      </div>
+    );
   }
 
   return (

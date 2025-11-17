@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   ShareIcon,
   PhotoIcon,
   LinkIcon,
@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { Event } from '../types/Event';
 import SafeImage from './SafeImage';
+import { toast } from 'react-toastify';
 
 interface SocialShareProps {
   event: Event;
@@ -59,7 +60,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
 
   const handleShare = async () => {
     if (selectedPlatforms.length === 0) {
-      alert('Selecione pelo menos uma plataforma para compartilhar');
+      toast.warn('Selecione pelo menos uma plataforma para compartilhar');
       return;
     }
 
@@ -120,7 +121,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
   const copyToClipboard = async () => {
     const shareText = generateShareText();
     await navigator.clipboard.writeText(shareText);
-    alert('Texto copiado para a área de transferência!');
+    toast.success('Texto copiado para a área de transferência!');
   };
 
   return (

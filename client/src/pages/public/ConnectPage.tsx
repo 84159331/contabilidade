@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
 import PerfectFillImage from '../../components/PerfectFillImage';
-import { 
+import {
   UserGroupIcon,
   HeartIcon,
   AcademicCapIcon,
@@ -18,6 +19,7 @@ import {
   ArrowRightIcon,
   BookOpenIcon
 } from '@heroicons/react/24/outline';
+import storage from '../../utils/storage';
 
 interface PublicCellGroup {
   id: string;
@@ -42,31 +44,24 @@ const ConnectPage: React.FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [cellGroups, setCellGroups] = useState<PublicCellGroup[]>([]);
 
-  // Carregar grupos celulares do localStorage (sincronizado com a tesouraria)
+  // Carregar grupos celulares do armazenamento local (sincronizado com a tesouraria)
   useEffect(() => {
     const loadCellGroups = () => {
       // Limpar dados antigos que possam ter horários incorretos
       const clearOldData = () => {
-        const savedGroups = localStorage.getItem('publicCellGroups');
-        if (savedGroups) {
-          try {
-            const groups = JSON.parse(savedGroups);
-            // Verificar se algum grupo tem horário antigo
-            const hasOldSchedule = groups.some((group: PublicCellGroup) => 
-              group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
-            );
-            
-            if (hasOldSchedule) {
-              console.log('🔄 Detectados horários antigos na página pública, atualizando...');
-              localStorage.removeItem('publicCellGroups');
-              localStorage.removeItem('cellGroups');
-              localStorage.removeItem('cellGroupsLastSync');
-              return true; // Indica que dados foram limpos
-            }
-          } catch (error) {
-            // Se houver erro ao parsear, limpar dados
-            localStorage.removeItem('publicCellGroups');
-            return true;
+        const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
+        if (savedGroups && Array.isArray(savedGroups)) {
+          // Verificar se algum grupo tem horário antigo
+          const hasOldSchedule = savedGroups.some(
+            (group: PublicCellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+          );
+
+          if (hasOldSchedule) {
+            console.log('🔄 Detectados horários antigos na página pública, atualizando...');
+            storage.remove('publicCellGroups');
+            storage.remove('cellGroups');
+            storage.remove('cellGroupsLastSync');
+            return true; // Indica que dados foram limpos
           }
         }
         return false;
@@ -74,23 +69,17 @@ const ConnectPage: React.FC = () => {
 
       const dataCleared = clearOldData();
       
-      const savedGroups = localStorage.getItem('publicCellGroups');
-      if (savedGroups) {
-        try {
-          const groups = JSON.parse(savedGroups);
-          // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
-          const updatedGroups = groups.map((group: PublicCellGroup) => ({
-            ...group,
-            meetings: 'Quarta-Feira 20:00hrs',
-            features: [] // Garantir que features esteja vazio
-          }));
-          // Filtrar apenas grupos ativos
-          const activeGroups = updatedGroups.filter((group: PublicCellGroup) => group.isActive);
-          setCellGroups(activeGroups);
-        } catch (error) {
-          // Fallback para grupos padrão se houver erro
-          setCellGroups(getDefaultGroups());
-        }
+      const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
+      if (savedGroups && Array.isArray(savedGroups)) {
+        // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+        const updatedGroups = savedGroups.map((group: PublicCellGroup) => ({
+          ...group,
+          meetings: 'Quarta-Feira 20:00hrs',
+          features: [] // Garantir que features esteja vazio
+        }));
+        // Filtrar apenas grupos ativos
+        const activeGroups = updatedGroups.filter((group: PublicCellGroup) => group.isActive);
+        setCellGroups(activeGroups);
       } else {
         // Se não há dados salvos, usar grupos padrão
         setCellGroups(getDefaultGroups());
@@ -207,7 +196,7 @@ const ConnectPage: React.FC = () => {
     setSelectedGroup(groupId);
     // Simular processo de inscrição
     setTimeout(() => {
-      alert('Inscrição realizada com sucesso! Você receberá um contato em breve.');
+      toast.success('Inscrição realizada com sucesso! Você receberá um contato em breve.');
       setSelectedGroup(null);
     }, 2000);
   };

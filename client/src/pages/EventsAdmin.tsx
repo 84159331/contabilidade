@@ -15,6 +15,7 @@ import EventForm from '../components/EventForm';
 import SocialShare from '../components/SocialShare';
 import AutoShareManager from '../components/AutoShareManager';
 import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 
 const EventsAdmin: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -197,7 +198,7 @@ const EventsAdmin: React.FC = () => {
           setEvents(prev => {
             const updatedEvents = [...prev, newEventFromAPI];
             // Salvar no cache local
-            localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+            storage.setJSON('cachedEvents', updatedEvents);
             return updatedEvents;
           });
           toast.success('Evento criado com sucesso!');
@@ -215,7 +216,7 @@ const EventsAdmin: React.FC = () => {
           setEvents(prev => {
             const updatedEvents = [...prev, newEvent];
             // Salvar no cache local
-            localStorage.setItem('cachedEvents', JSON.stringify(updatedEvents));
+            storage.setJSON('cachedEvents', updatedEvents);
             return updatedEvents;
           });
           toast.success('Evento criado localmente!');

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authAPI } from '../services/api';
+import storage from '../utils/storage';
 
 interface User {
   id: number;
@@ -35,8 +36,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     console.log('🔄 AuthContext useEffect executado');
-    const token = localStorage.getItem('token');
-    console.log('🔑 Token encontrado no localStorage:', token);
+    const token = storage.getString('token');
+    console.log('🔑 Token encontrado no armazenamento local:', token);
     
     // Verificação de token comentada - usando Firebase Auth
     /*
@@ -49,7 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         })
         .catch((error) => {
           console.error('❌ Erro na verificação do token:', error);
-          localStorage.removeItem('token');
+          storage.remove('token');
         })
         .finally(() => {
           setLoading(false);
@@ -70,7 +71,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    storage.remove('token');
     setUser(null);
   };
 
