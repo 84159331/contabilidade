@@ -94,14 +94,23 @@ export const useDashboardData = (forceRefresh = false) => {
       if (useCache && !forceRefresh) {
         const cached = loadFromCache();
         if (cached && cached.stats && cached.memberStats) {
+          // Mostrar dados do cache imediatamente (sem delay)
           setData(cached);
           setLoading(false);
-          // Carregar dados frescos em background (mais agressivo)
-          setTimeout(() => {
+          
+          // Carregar dados frescos em background (sem bloquear UI)
+          // Usar requestIdleCallback se disponível para não bloquear a UI
+          const refreshData = () => {
             if (isMountedRef.current && !signal.aborted) {
               loadData(false); // Recarregar sem mostrar loading
             }
-          }, 500);
+          };
+          
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(refreshData, { timeout: 1000 });
+          } else {
+            setTimeout(refreshData, 100); // Fallback mais rápido
+          }
           return;
         }
       }
@@ -110,8 +119,8 @@ export const useDashboardData = (forceRefresh = false) => {
       const useMockData = !user;
 
       if (useMockData) {
-        // Simular delay de API
-        await simulateApiDelay(800);
+        // Simular delay de API (reduzido para melhor UX)
+        await simulateApiDelay(300);
 
         if (signal.aborted || !isMountedRef.current) return;
 
@@ -237,12 +246,8 @@ export const useDashboardData = (forceRefresh = false) => {
     // Carregar dados quando auth termina ou quando precisa recarregar
     if (!hasLoadedRef.current) {
       hasLoadedRef.current = true;
-      // Pequeno delay para garantir que tudo está pronto
-      setTimeout(() => {
-        if (isMountedRef.current) {
-          loadData(true);
-        }
-      }, 100);
+      // Carregar imediatamente (sem delay desnecessário)
+      loadData(true);
     }
   }, [authLoading, loadData]);
 

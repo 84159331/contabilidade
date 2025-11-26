@@ -97,13 +97,16 @@ const Transactions: React.FC = () => {
         });
         console.log('Dados mock de transações carregados:', mockDashboardData.transactions);
       } else {
-        // Tentar usar APIs reais
-        const [transactionsResponse, categoriesResponse, membersResponse] = await Promise.all([
-          transactionsAPI.getTransactions({
-            page: pagination.page,
-            limit: pagination.limit,
-            ...filters
-          }),
+        // Tentar usar APIs reais - otimizar carregamento
+        // Carregar transações primeiro (mais importante), depois o resto em paralelo
+        const transactionsResponse = await transactionsAPI.getTransactions({
+          page: pagination.page,
+          limit: pagination.limit,
+          ...filters
+        });
+        
+        // Carregar categorias e membros em paralelo (menos crítico)
+        const [categoriesResponse, membersResponse] = await Promise.all([
           categoriesAPI.getCategories(),
           membersAPI.getMembers()
         ]);
@@ -168,10 +171,8 @@ const Transactions: React.FC = () => {
     // Forçar recarregamento se ainda não carregou ou se a rota mudou
     if (!hasLoadedRef.current) {
       hasLoadedRef.current = true;
-      // Pequeno delay para garantir que tudo está pronto
-      setTimeout(() => {
-        loadData();
-      }, 100);
+      // Carregar imediatamente (sem delay desnecessário)
+      loadData();
     }
   }, [loadData, authLoading, location.pathname]);
 

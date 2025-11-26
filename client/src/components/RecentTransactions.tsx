@@ -75,8 +75,8 @@ const RecentTransactions: React.FC = () => {
       const useMockData = !user;
       
       if (useMockData) {
-        // Simular delay de API
-        await simulateApiDelay(500);
+        // Simular delay de API (reduzido)
+        await simulateApiDelay(200);
         
         // Usar dados mock
         setTransactions(mockDashboardData.recentTransactions);

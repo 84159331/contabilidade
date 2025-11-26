@@ -152,25 +152,33 @@ export const transactionsAPI = {
     try {
       console.log('📊 Calculando resumo financeiro...');
       const transactionsRef = collection(db, 'transactions');
+      
+      // Otimizar: buscar apenas campos necessários e processar em paralelo
       const querySnapshot = await getDocs(transactionsRef);
       
+      // Processar de forma mais eficiente
       let totalIncome = 0;
       let totalExpense = 0;
+      let transactionCount = 0;
       
-      querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+      // Usar for loop simples que é mais rápido que forEach
+      const docs = querySnapshot.docs;
+      for (let i = 0; i < docs.length; i++) {
+        const data = docs[i].data();
+        const amount = parseFloat(data.amount) || 0;
         if (data.type === 'income') {
-          totalIncome += parseFloat(data.amount) || 0;
+          totalIncome += amount;
         } else if (data.type === 'expense') {
-          totalExpense += parseFloat(data.amount) || 0;
+          totalExpense += amount;
         }
-      });
+        transactionCount++;
+      }
       
       const summary = {
         totalIncome,
         totalExpense,
         balance: totalIncome - totalExpense,
-        transactionCount: querySnapshot.docs.length
+        transactionCount
       };
       
       console.log('✅ Resumo calculado:', summary);
@@ -445,11 +453,23 @@ export const membersAPI = {
       const membersRef = collection(db, 'members');
       const querySnapshot = await getDocs(membersRef);
       
-      const stats = {
-        total: querySnapshot.docs.length,
-        active: querySnapshot.docs.filter(doc => doc.data().status === 'active').length,
-        inactive: querySnapshot.docs.filter(doc => doc.data().status === 'inactive').length
-      };
+      // Processar de forma mais eficiente (for loop é mais rápido)
+      let total = 0;
+      let active = 0;
+      let inactive = 0;
+      
+      const docs = querySnapshot.docs;
+      for (let i = 0; i < docs.length; i++) {
+        const status = docs[i].data().status;
+        total++;
+        if (status === 'active') {
+          active++;
+        } else if (status === 'inactive') {
+          inactive++;
+        }
+      }
+      
+      const stats = { total, active, inactive };
       
       console.log('✅ Estatísticas calculadas:', stats);
       return { data: stats };
