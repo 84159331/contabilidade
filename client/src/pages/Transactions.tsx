@@ -63,9 +63,14 @@ const Transactions: React.FC = () => {
     total: 0,
     pages: 0
   });
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const loadData = useCallback(async () => {
+    // Aguardar autenticação terminar antes de carregar
+    if (authLoading) {
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -132,11 +137,14 @@ const Transactions: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters, pagination.page, pagination.limit, user]);
+  }, [filters, pagination.page, pagination.limit, user, authLoading]);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    // Só carregar dados quando auth terminar
+    if (!authLoading) {
+      loadData();
+    }
+  }, [loadData, authLoading]);
 
   // Efeito separado para busca com debounce
   useEffect(() => {

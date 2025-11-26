@@ -8,6 +8,7 @@ import {
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import { useDashboardData } from '../hooks/useDashboardData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import AnimatedCard from '../components/AnimatedCard';
 import StatusIndicator from '../components/StatusIndicator';
@@ -20,6 +21,7 @@ import MemberStats from '../components/MemberStats';
 
 const Dashboard: React.FC = () => {
   const { stats, memberStats, loading, error, refresh } = useDashboardData();
+  const { loading: authLoading } = useAuth();
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
@@ -38,7 +40,7 @@ const Dashboard: React.FC = () => {
     }
   }, [error]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <PageTransition>
         <div className="space-y-6">

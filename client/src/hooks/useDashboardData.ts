@@ -33,9 +33,10 @@ export const useDashboardData = (forceRefresh = false) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const abortControllerRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
+  const hasLoadedRef = useRef(false);
 
   // Função para carregar dados do cache
   const loadFromCache = useCallback((): DashboardData | null => {
@@ -186,14 +187,39 @@ export const useDashboardData = (forceRefresh = false) => {
     }
   }, [user, forceRefresh, loadFromCache, saveToCache]);
 
-  // Carregar dados quando o hook é montado ou quando user muda
+  // Carregar dados quando auth termina de carregar
   useEffect(() => {
     isMountedRef.current = true;
-    loadData(true);
+    
+    // Aguardar a autenticação terminar antes de tentar carregar dados
+    if (authLoading) {
+      setLoading(true);
+      return;
+    }
 
-    // Atualizar dados quando a janela/tab ganha foco novamente
+    // Carregar dados quando auth termina de carregar
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadData(true);
+    }
+  }, [authLoading, loadData]);
+
+  // Recarregar quando user mudar (após auth terminar)
+  useEffect(() => {
+    if (!authLoading && user !== null) {
+      // Se já carregamos antes mas não temos dados, recarregar
+      if (hasLoadedRef.current && !data.stats) {
+        loadData(true);
+      }
+    }
+  }, [user, authLoading, data.stats, loadData]);
+
+  // Atualizar dados quando a janela/tab ganha foco novamente
+  useEffect(() => {
+    if (authLoading) return;
+
     const handleFocus = () => {
-      if (isMountedRef.current) {
+      if (isMountedRef.current && !authLoading) {
         const cached = loadFromCache();
         const now = Date.now();
         // Se o cache tem mais de 30 segundos, atualizar
@@ -205,15 +231,18 @@ export const useDashboardData = (forceRefresh = false) => {
 
     window.addEventListener('focus', handleFocus);
 
-    // Cleanup
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [authLoading, loadFromCache, loadData]);
+
+  // Reset hasLoaded quando o componente desmonta ou quando muda de rota
+  useEffect(() => {
     return () => {
       isMountedRef.current = false;
-      window.removeEventListener('focus', handleFocus);
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      hasLoadedRef.current = false;
     };
-  }, [loadData, loadFromCache]);
+  }, []);
 
   // Função para forçar refresh
   const refresh = useCallback(() => {
