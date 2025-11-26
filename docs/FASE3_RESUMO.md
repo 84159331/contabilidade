@@ -193,3 +193,4 @@ Para verificar melhorias de performance:
 - [useCallback](https://react.dev/reference/react/useCallback)
 - [React Performance Optimization](https://react.dev/learn/render-and-commit)
 
+
