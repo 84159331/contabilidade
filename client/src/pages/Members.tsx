@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
@@ -40,13 +41,26 @@ const Members: React.FC = () => {
     total: 0,
     pages: 0
   });
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
+  const lastRouteRef = useRef<string>(location.pathname);
+  const hasLoadedRef = useRef(false);
 
+  // Resetar quando a rota mudar
   useEffect(() => {
-    loadMembers();
-  }, [searchTerm, statusFilter, pagination.page]);
+    if (lastRouteRef.current !== location.pathname) {
+      hasLoadedRef.current = false;
+      lastRouteRef.current = location.pathname;
+      console.log('🔄 Rota mudou em Members, resetando estado');
+    }
+  }, [location.pathname]);
 
-  const loadMembers = async (forceReload = false) => {
+  const loadMembers = useCallback(async (forceReload = false) => {
+    // Aguardar autenticação terminar
+    if (authLoading) {
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -110,7 +124,23 @@ const Members: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, authLoading]);
+
+  useEffect(() => {
+    // Aguardar auth terminar
+    if (authLoading) {
+      return;
+    }
+
+    // Carregar apenas se ainda não carregou ou se filtros mudaram
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadMembers();
+    } else if (searchTerm || statusFilter || pagination.page > 1) {
+      // Se já carregou, só recarregar se filtros mudaram
+      loadMembers();
+    }
+  }, [searchTerm, statusFilter, pagination.page, authLoading, location.pathname, loadMembers]);
 
   const handleCreateMember = async (memberData: any) => {
     try {

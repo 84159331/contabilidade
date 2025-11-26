@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
@@ -64,6 +65,9 @@ const Transactions: React.FC = () => {
     pages: 0
   });
   const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
+  const lastRouteRef = useRef<string>(location.pathname);
+  const hasLoadedRef = useRef(false);
 
   const loadData = useCallback(async () => {
     // Aguardar autenticação terminar antes de carregar
@@ -139,12 +143,37 @@ const Transactions: React.FC = () => {
     }
   }, [filters, pagination.page, pagination.limit, user, authLoading]);
 
+  // Resetar e limpar cache quando a rota mudar
+  useEffect(() => {
+    if (lastRouteRef.current !== location.pathname) {
+      hasLoadedRef.current = false;
+      lastRouteRef.current = location.pathname;
+      // Limpar cache ao mudar de rota
+      try {
+        sessionStorage.removeItem('transactions_cache');
+      } catch (e) {
+        // Ignorar erro
+      }
+      console.log('🔄 Rota mudou em Transactions, limpando cache e resetando');
+    }
+  }, [location.pathname]);
+
+  // Carregar dados quando monta ou quando auth/user/rota muda
   useEffect(() => {
     // Só carregar dados quando auth terminar
-    if (!authLoading) {
-      loadData();
+    if (authLoading) {
+      return;
     }
-  }, [loadData, authLoading]);
+
+    // Forçar recarregamento se ainda não carregou ou se a rota mudou
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      // Pequeno delay para garantir que tudo está pronto
+      setTimeout(() => {
+        loadData();
+      }, 100);
+    }
+  }, [loadData, authLoading, location.pathname]);
 
   // Efeito separado para busca com debounce
   useEffect(() => {

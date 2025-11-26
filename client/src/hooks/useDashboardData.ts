@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { transactionsAPI, membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
+import { User } from 'firebase/auth';
 
 interface DashboardStats {
   income: { total: number; count: number };
@@ -22,7 +24,7 @@ interface DashboardData {
 }
 
 const CACHE_KEY = 'dashboard_cache';
-const CACHE_DURATION = 60000; // 1 minuto em milissegundos
+const CACHE_DURATION = 30000; // 30 segundos em milissegundos (reduzido para melhor performance)
 
 // Hook para gerenciar dados do dashboard com cache inteligente
 export const useDashboardData = (forceRefresh = false) => {
@@ -34,9 +36,12 @@ export const useDashboardData = (forceRefresh = false) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
   const abortControllerRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
   const hasLoadedRef = useRef(false);
+  const lastUserRef = useRef<User | null>(null);
+  const lastRouteRef = useRef<string>(location.pathname);
 
   // Função para carregar dados do cache
   const loadFromCache = useCallback((): DashboardData | null => {
@@ -85,16 +90,18 @@ export const useDashboardData = (forceRefresh = false) => {
       setLoading(true);
       setError(null);
 
-      // Tentar carregar do cache primeiro
-      if (useCache) {
+      // Tentar carregar do cache primeiro (apenas se não forçar refresh)
+      if (useCache && !forceRefresh) {
         const cached = loadFromCache();
         if (cached && cached.stats && cached.memberStats) {
           setData(cached);
           setLoading(false);
-          // Carregar dados frescos em background
-          if (!forceRefresh) {
-            loadData(false); // Recarregar sem mostrar loading
-          }
+          // Carregar dados frescos em background (mais agressivo)
+          setTimeout(() => {
+            if (isMountedRef.current && !signal.aborted) {
+              loadData(false); // Recarregar sem mostrar loading
+            }
+          }, 500);
           return;
         }
       }
@@ -187,6 +194,36 @@ export const useDashboardData = (forceRefresh = false) => {
     }
   }, [user, forceRefresh, loadFromCache, saveToCache]);
 
+  // Resetar estado quando rota ou usuário muda e forçar recarregamento
+  useEffect(() => {
+    const routeChanged = lastRouteRef.current !== location.pathname;
+    const userChanged = lastUserRef.current !== user;
+
+    if (routeChanged) {
+      lastRouteRef.current = location.pathname;
+      hasLoadedRef.current = false;
+      // Limpar cache da rota anterior
+      try {
+        sessionStorage.removeItem(CACHE_KEY);
+      } catch (e) {
+        // Ignorar erro
+      }
+      console.log('🔄 Rota mudou, limpando cache e resetando:', location.pathname);
+    }
+
+    if (userChanged && user !== null) {
+      lastUserRef.current = user;
+      hasLoadedRef.current = false;
+      // Limpar cache quando usuário muda
+      try {
+        sessionStorage.removeItem(CACHE_KEY);
+      } catch (e) {
+        // Ignorar erro
+      }
+      console.log('👤 Usuário mudou, limpando cache e resetando');
+    }
+  }, [location.pathname, user]);
+
   // Carregar dados quando auth termina de carregar
   useEffect(() => {
     isMountedRef.current = true;
@@ -197,20 +234,31 @@ export const useDashboardData = (forceRefresh = false) => {
       return;
     }
 
-    // Carregar dados quando auth termina de carregar
+    // Carregar dados quando auth termina ou quando precisa recarregar
     if (!hasLoadedRef.current) {
       hasLoadedRef.current = true;
-      loadData(true);
+      // Pequeno delay para garantir que tudo está pronto
+      setTimeout(() => {
+        if (isMountedRef.current) {
+          loadData(true);
+        }
+      }, 100);
     }
   }, [authLoading, loadData]);
 
-  // Recarregar quando user mudar (após auth terminar)
+  // Recarregar quando não há dados mas deveria ter (com retry)
   useEffect(() => {
-    if (!authLoading && user !== null) {
-      // Se já carregamos antes mas não temos dados, recarregar
-      if (hasLoadedRef.current && !data.stats) {
-        loadData(true);
+    if (!authLoading && user !== null && !data.stats && hasLoadedRef.current) {
+      // Se já tentamos carregar mas não temos dados, tentar novamente
+      console.log('🔄 Recarregando - sem dados disponíveis após carregamento');
+      hasLoadedRef.current = false;
+      // Limpar cache e tentar novamente
+      try {
+        sessionStorage.removeItem(CACHE_KEY);
+      } catch (e) {
+        // Ignorar erro
       }
+      setTimeout(() => loadData(false), 200); // Forçar sem cache
     }
   }, [user, authLoading, data.stats, loadData]);
 
@@ -222,8 +270,8 @@ export const useDashboardData = (forceRefresh = false) => {
       if (isMountedRef.current && !authLoading) {
         const cached = loadFromCache();
         const now = Date.now();
-        // Se o cache tem mais de 30 segundos, atualizar
-        if (!cached || !cached.lastFetch || (now - cached.lastFetch) > 30000) {
+        // Se o cache tem mais de 15 segundos, atualizar (mais agressivo)
+        if (!cached || !cached.lastFetch || (now - cached.lastFetch) > 15000) {
           loadData(false); // Atualizar em background
         }
       }
@@ -236,17 +284,26 @@ export const useDashboardData = (forceRefresh = false) => {
     };
   }, [authLoading, loadFromCache, loadData]);
 
-  // Reset hasLoaded quando o componente desmonta ou quando muda de rota
+  // Reset hasLoaded quando o componente desmonta
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
       hasLoadedRef.current = false;
+      // Limpar cache ao desmontar se forçado
+      if (forceRefresh) {
+        try {
+          sessionStorage.removeItem(CACHE_KEY);
+        } catch (e) {
+          console.warn('Erro ao limpar cache:', e);
+        }
+      }
     };
-  }, []);
+  }, [forceRefresh]);
 
-  // Função para forçar refresh
+  // Função para forçar refresh (sempre ignora cache)
   const refresh = useCallback(() => {
-    loadData(false);
+    hasLoadedRef.current = false; // Resetar para forçar recarregamento
+    loadData(false); // Sem cache
   }, [loadData]);
 
   // Limpar cache

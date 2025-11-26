@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { categoriesAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
@@ -27,13 +28,39 @@ const Categories: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
+  const lastRouteRef = useRef<string>(location.pathname);
+  const hasLoadedRef = useRef(false);
+
+  // Resetar quando a rota mudar
+  useEffect(() => {
+    if (lastRouteRef.current !== location.pathname) {
+      hasLoadedRef.current = false;
+      lastRouteRef.current = location.pathname;
+      console.log('🔄 Rota mudou em Categories, resetando estado');
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
-    loadCategories();
-  }, [typeFilter]);
+    // Aguardar auth terminar
+    if (authLoading) {
+      return;
+    }
+
+    // Carregar apenas se ainda não carregou ou se o filtro mudou
+    if (!hasLoadedRef.current || typeFilter) {
+      hasLoadedRef.current = true;
+      loadCategories();
+    }
+  }, [typeFilter, authLoading, location.pathname]);
 
   const loadCategories = async () => {
+    // Aguardar autenticação terminar
+    if (authLoading) {
+      return;
+    }
+
     try {
       setLoading(true);
       

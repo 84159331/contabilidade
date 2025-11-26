@@ -25,6 +25,15 @@ const Dashboard: React.FC = () => {
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
+  // Força recarregamento quando a rota muda ou quando necessário
+  useEffect(() => {
+    // Se não há dados mas o loading terminou, forçar refresh
+    if (!loading && !authLoading && !stats) {
+      console.log('🔄 Dashboard sem dados, forçando refresh...');
+      refresh();
+    }
+  }, [loading, authLoading, stats, refresh]);
+
   // Marcar como renderizado
   useEffect(() => {
     hasRenderedRef.current = true;
