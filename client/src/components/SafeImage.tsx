@@ -20,13 +20,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log('🖼️ SafeImage renderizado com src:', src ? src.substring(0, 50) + '...' : 'vazio');
-  console.log('🖼️ SafeImage - É base64?', src?.startsWith('data:'));
-  console.log('🖼️ SafeImage - É blob?', src?.startsWith('blob:'));
-  console.log('🖼️ SafeImage - É URL?', src?.startsWith('http'));
-
   const handleError = () => {
-    console.log('❌ SafeImage - Erro ao carregar:', src ? src.substring(0, 50) + '...' : 'vazio');
     setHasError(true);
     setIsLoading(false);
     if (onError) {
@@ -35,19 +29,16 @@ const SafeImage: React.FC<SafeImageProps> = ({
   };
 
   const handleLoad = () => {
-    console.log('✅ SafeImage - Imagem carregada com sucesso');
     setIsLoading(false);
   };
 
   // Reset quando src mudar
   React.useEffect(() => {
-    console.log('🔄 SafeImage - src mudou para:', src ? src.substring(0, 50) + '...' : 'vazio');
     setHasError(false);
     setIsLoading(true);
   }, [src]);
 
   if (!src) {
-    console.log('⚠️ SafeImage - src vazio, mostrando fallback');
     return (
       <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
         <div className="text-center p-4">
@@ -63,7 +54,6 @@ const SafeImage: React.FC<SafeImageProps> = ({
   }
 
   if (hasError) {
-    console.log('❌ SafeImage - Mostrando erro');
     return (
       <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
         {fallbackElement || (

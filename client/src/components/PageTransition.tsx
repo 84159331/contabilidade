@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
@@ -6,7 +6,7 @@ interface PageTransitionProps {
   className?: string;
 }
 
-const PageTransition: React.FC<PageTransitionProps> = ({ children, className = '' }) => {
+const PageTransition: React.FC<PageTransitionProps> = memo(({ children, className = '' }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -18,6 +18,8 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children, className = '
       {children}
     </motion.div>
   );
-};
+});
+
+PageTransition.displayName = 'PageTransition';
 
 export default PageTransition;

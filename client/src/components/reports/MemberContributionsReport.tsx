@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon não utilizado
 
 interface MemberContribution {
-  id: number;
+  id: string;
   name: string;
   email: string;
   contribution_count: number;
@@ -16,9 +16,10 @@ interface MemberContribution {
 
 interface Props {
   onDataLoaded: (data: MemberContribution[]) => void;
+  onMetadataLoaded?: (metadata: any) => void;
 }
 
-const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
+const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => {
   const [data, setData] = useState<MemberContribution[]>([]);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -50,6 +51,14 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
       const contributionsData = Array.isArray(response.data) ? response.data : [];
       setData(contributionsData);
       onDataLoaded(contributionsData);
+      
+      // Passa metadados para geração de PDF
+      if (onMetadataLoaded) {
+        onMetadataLoaded({
+          startDate,
+          endDate
+        });
+      }
     } catch (error) {
       toast.error('Erro ao carregar relatório de contribuições');
       console.error('Erro ao carregar relatório:', error);
@@ -249,10 +258,10 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded }) => {
                       R$ {member.average_contribution.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {new Date(member.first_contribution).toLocaleDateString('pt-BR')}
+                      {member.first_contribution ? new Date(member.first_contribution).toLocaleDateString('pt-BR') : '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {new Date(member.last_contribution).toLocaleDateString('pt-BR')}
+                      {member.last_contribution ? new Date(member.last_contribution).toLocaleDateString('pt-BR') : '-'}
                     </td>
                   </tr>
                 ))}

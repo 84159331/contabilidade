@@ -12,9 +12,10 @@ interface CashFlowData {
 
 interface Props {
   onDataLoaded: (data: CashFlowData[]) => void;
+  onMetadataLoaded?: (metadata: any) => void;
 }
 
-const CashFlowReport: React.FC<Props> = ({ onDataLoaded }) => {
+const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => {
   const [data, setData] = useState<CashFlowData[]>([]);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -45,9 +46,19 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded }) => {
         end_date: endDate,
         period
       });
-      const cashFlowData = Array.isArray(response.data) ? response.data : response.data.cashFlow || [];
+      // A API já retorna array diretamente
+      const cashFlowData = Array.isArray(response.data) ? response.data : [];
       setData(cashFlowData);
       onDataLoaded(cashFlowData);
+      
+      // Passa metadados para geração de PDF
+      if (onMetadataLoaded) {
+        onMetadataLoaded({
+          startDate,
+          endDate,
+          period
+        });
+      }
     } catch (error) {
       toast.error('Erro ao carregar relatório de fluxo de caixa');
       console.error('Erro ao carregar relatório:', error);

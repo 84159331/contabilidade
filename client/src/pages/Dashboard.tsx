@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   CurrencyDollarIcon, 
   ArrowUpIcon, 
   ArrowDownIcon,
   UsersIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
-import { transactionsAPI, membersAPI } from '../services/api';
-import { mockDashboardData, simulateApiDelay } from '../services/mockData';
-import { useAuth } from '../firebase/AuthContext';
+import { useDashboardData } from '../hooks/useDashboardData';
 import { toast } from 'react-toastify';
-import LoadingSpinner from '../components/LoadingSpinner';
 import AnimatedCard from '../components/AnimatedCard';
 import StatusIndicator from '../components/StatusIndicator';
 import PageTransition from '../components/PageTransition';
@@ -19,89 +17,26 @@ import { SkeletonCard } from '../components/Skeleton';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import MemberStats from '../components/MemberStats';
-// import useNotificationDemo from '../hooks/useNotificationDemo'; // Removido - notificações desabilitadas
-
-interface DashboardStats {
-  income: { total: number; count: number };
-  expense: { total: number; count: number };
-  balance: number;
-}
-
-interface MemberStatsData {
-  total: number;
-  active: number;
-  inactive: number;
-}
 
 const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [memberStats, setMemberStats] = useState<MemberStatsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { stats, memberStats, loading, error, refresh } = useDashboardData();
+  const hasRenderedRef = useRef(false);
+  const hasShownErrorRef = useRef(false);
 
-  // Hook para demonstração de notificações - DESABILITADO
-  // useNotificationDemo();
-
+  // Marcar como renderizado
   useEffect(() => {
-    loadDashboardData();
+    hasRenderedRef.current = true;
   }, []);
 
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      // Debug: verificar usuário autenticado
-      console.log('Usuário autenticado:', user ? user.email : 'null');
-      
-      // Se não há usuário autenticado, usar dados mock
-      const useMockData = !user;
-      console.log('Usando dados mock:', useMockData);
-      
-      if (useMockData) {
-        // Simular delay de API
-        await simulateApiDelay(800);
-        
-        // Usar dados mock
-        setStats(mockDashboardData.financialSummary);
-        setMemberStats(mockDashboardData.memberStats);
-        
-        console.log('Dados mock carregados:', {
-          stats: mockDashboardData.financialSummary,
-          memberStats: mockDashboardData.memberStats
-        });
-      } else {
-        // Usar APIs reais do Firestore
-        const [financialSummary, memberStatsData] = await Promise.all([
-          transactionsAPI.getSummary(),
-          membersAPI.getMemberStats()
-        ]);
-
-        console.log('Financial Summary:', financialSummary.data);
-        console.log('Member Stats:', memberStatsData.data);
-
-        // Usar dados reais do Firestore
-        const financialData = financialSummary.data;
-        const transformedStats = {
-          income: { total: financialData.totalIncome, count: financialData.transactionCount },
-          expense: { total: financialData.totalExpense, count: financialData.transactionCount },
-          balance: financialData.balance
-        };
-        setStats(transformedStats);
-        setMemberStats(memberStatsData.data);
-      }
-    } catch (error) {
-      console.error('Erro ao carregar dashboard:', error);
-      
-      // Em caso de erro, usar dados mock como fallback
-      console.log('Usando dados mock como fallback');
-      setStats(mockDashboardData.financialSummary);
-      setMemberStats(mockDashboardData.memberStats);
-      
-      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
-    } finally {
-      setLoading(false);
+  // Mostrar erro se houver (apenas uma vez)
+  useEffect(() => {
+    if (error && !hasShownErrorRef.current) {
+      hasShownErrorRef.current = true;
+      toast.info(error, { autoClose: 3000 });
+    } else if (!error) {
+      hasShownErrorRef.current = false;
     }
-  };
+  }, [error]);
 
   if (loading) {
     return (
@@ -127,11 +62,22 @@ const Dashboard: React.FC = () => {
     <PageTransition>
       <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
-        <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
-          Visão geral das finanças da igreja
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+          <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
+            Visão geral das finanças da igreja
+          </p>
+        </div>
+        <button
+          onClick={refresh}
+          disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Atualizar dados"
+        >
+          <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <span>Atualizar</span>
+        </button>
       </div>
 
       {/* Stats Cards */}

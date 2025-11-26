@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon não utilizado
 
 interface CategoryData {
-  id: number;
+  id: string;
   name: string;
   color: string;
   transaction_count: number;
@@ -14,9 +14,10 @@ interface CategoryData {
 
 interface Props {
   onDataLoaded: (data: any[]) => void;
+  onMetadataLoaded?: (metadata: any) => void;
 }
 
-const CategoryReport: React.FC<Props> = ({ onDataLoaded }) => {
+const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => {
   const [incomeData, setIncomeData] = useState<CategoryData[]>([]);
   const [expenseData, setExpenseData] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -53,8 +54,9 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded }) => {
         })
       ]);
       
-      const incomeData = Array.isArray(incomeResponse.data) ? incomeResponse.data : incomeResponse.data.income || [];
-      const expenseData = Array.isArray(expenseResponse.data) ? expenseResponse.data : expenseResponse.data.expenses || [];
+      // As APIs já retornam arrays diretamente
+      const incomeData = Array.isArray(incomeResponse.data) ? incomeResponse.data : [];
+      const expenseData = Array.isArray(expenseResponse.data) ? expenseResponse.data : [];
       
       setIncomeData(incomeData);
       setExpenseData(expenseData);
@@ -64,6 +66,16 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded }) => {
         ...expenseData.map((d: any) => ({ ...d, 'Tipo': 'Despesa' }))
       ];
       onDataLoaded(combinedData);
+      
+      // Passa metadados para geração de PDF
+      if (onMetadataLoaded) {
+        onMetadataLoaded({
+          incomeData,
+          expenseData,
+          startDate,
+          endDate
+        });
+      }
 
     } catch (error) {
       toast.error('Erro ao carregar relatório por categoria');

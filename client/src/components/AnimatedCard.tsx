@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
 interface AnimatedCardProps {
@@ -8,7 +8,7 @@ interface AnimatedCardProps {
   hover?: boolean;
 }
 
-const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
+const AnimatedCard: React.FC<AnimatedCardProps> = memo(({ 
   children, 
   delay = 0, 
   className = '',
@@ -33,6 +33,8 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
       {children}
     </motion.div>
   );
-};
+});
+
+AnimatedCard.displayName = 'AnimatedCard';
 
 export default AnimatedCard;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { transactionsAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
@@ -13,7 +13,7 @@ interface MonthlyData {
   balance: number;
 }
 
-// Gera uma lista de anos recentes para o filtro
+// Gera uma lista de anos recentes para o filtro (memoizado fora do componente)
 const generateYears = () => {
   const currentYear = new Date().getFullYear();
   const years = [];
@@ -23,18 +23,16 @@ const generateYears = () => {
   return years;
 };
 
+const MONTH_NAMES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
 const FinancialSummary: React.FC = () => {
   const [data, setData] = useState<MonthlyData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const availableYears = generateYears();
+  const availableYears = useMemo(() => generateYears(), []);
   const { user } = useAuth();
 
-  useEffect(() => {
-    loadCashFlowData(selectedYear);
-  }, [selectedYear]);
-
-  const loadCashFlowData = async (year: number) => {
+  const loadCashFlowData = useCallback(async (year: number) => {
     setLoading(true);
     try {
       // Verificar se deve usar dados mock
@@ -45,22 +43,19 @@ const FinancialSummary: React.FC = () => {
         await simulateApiDelay(600);
         
         // Usar dados mock
-        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const formattedData = mockDashboardData.cashFlowData.map((d: any) => ({
           ...d,
-          month: monthNames[parseInt(d.month) - 1],
+          month: MONTH_NAMES[parseInt(d.month) - 1],
         }));
         setData(formattedData);
         console.log('Dados mock de fluxo de caixa carregados:', formattedData);
       } else {
         // Tentar usar API real
         const response = await transactionsAPI.getCashFlow({ year });
-        // Mapeia os números dos meses para nomes abreviados para o gráfico
-        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const cashFlowData = Array.isArray(response.data) ? response.data : response.data.cashFlow || [];
         const formattedData = cashFlowData.map((d: any) => ({
           ...d,
-          month: monthNames[parseInt(d.month) - 1],
+          month: MONTH_NAMES[parseInt(d.month) - 1],
         }));
         setData(formattedData);
       }
@@ -68,10 +63,9 @@ const FinancialSummary: React.FC = () => {
       console.error('Erro ao carregar fluxo de caixa:', error);
       
       // Em caso de erro, usar dados mock como fallback
-      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
       const formattedData = mockDashboardData.cashFlowData.map((d: any) => ({
         ...d,
-        month: monthNames[parseInt(d.month) - 1],
+        month: MONTH_NAMES[parseInt(d.month) - 1],
       }));
       setData(formattedData);
       
@@ -79,11 +73,15 @@ const FinancialSummary: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  useEffect(() => {
+    loadCashFlowData(selectedYear);
+  }, [selectedYear, loadCashFlowData]);
+
+  const handleYearChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(parseInt(e.target.value, 10));
-  };
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -130,4 +128,4 @@ const FinancialSummary: React.FC = () => {
   );
 };
 
-export default FinancialSummary;
+export default memo(FinancialSummary);

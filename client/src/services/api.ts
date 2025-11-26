@@ -654,28 +654,493 @@ export const usersAPI = {
   }
 };
 
-export const reportsAPI = {
-  getMonthlyBalance: async (year: number, month: number) => {
-    return { data: { balance: 0 } };
-  },
-  getYearlyBalance: async (year: number) => {
-    return { data: { balance: 0 } };
-  },
-  getMemberContributions: async (params?: any) => {
-    return { data: { contributions: [] } };
-  },
-  getIncomeByCategory: async (params?: any) => {
-    return { data: { income: [] } };
-  },
-  getExpenseByCategory: async (params?: any) => {
-    return { data: { expenses: [] } };
-  },
-  getCashFlow: async (params?: any) => {
-    return { data: { cashFlow: [] } };
-  },
-  getTopContributors: async (params?: any) => {
-    return { data: { contributors: [] } };
+// Helper para converter data do Firestore para Date
+const toDate = (dateValue: any): Date => {
+  if (!dateValue) return new Date();
+  if (dateValue instanceof Date) return dateValue;
+  if (dateValue.toDate && typeof dateValue.toDate === 'function') {
+    return dateValue.toDate();
   }
+  if (typeof dateValue === 'string') {
+    return new Date(dateValue);
+  }
+  if (typeof dateValue === 'number') {
+    return new Date(dateValue);
+  }
+  return new Date();
+};
+
+// Helper para formatar mês com zero à esquerda
+const formatMonth = (month: number): string => {
+  return month.toString().padStart(2, '0');
+};
+
+export const reportsAPI = {
+  // Relatório de balanço mensal
+  getMonthlyBalance: async (year: number, month: number) => {
+    try {
+      console.log(`📊 Gerando relatório mensal: ${year}-${formatMonth(month)}`);
+      
+      const transactionsRef = collection(db, 'transactions');
+      const querySnapshot = await getDocs(transactionsRef);
+      
+      const income = { total: 0, count: 0 };
+      const expense = { total: 0, count: 0 };
+      
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const transactionDate = toDate(data.transaction_date);
+        const transactionYear = transactionDate.getFullYear();
+        const transactionMonth = transactionDate.getMonth() + 1;
+        
+        // Verificar se a transação pertence ao mês/ano especificado
+        if (transactionYear === year && transactionMonth === month) {
+          const amount = parseFloat(data.amount) || 0;
+          
+          if (data.type === 'income') {
+            income.total += amount;
+            income.count += 1;
+          } else if (data.type === 'expense') {
+            expense.total += amount;
+            expense.count += 1;
+          }
+        }
+      });
+      
+      const balance = income.total - expense.total;
+      
+      const result = {
+        income,
+        expense,
+        balance,
+        period: { year, month }
+      };
+      
+      console.log('✅ Relatório mensal gerado:', result);
+      return { data: result };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório mensal:', error);
+      return { 
+        data: { 
+          income: { total: 0, count: 0 },
+          expense: { total: 0, count: 0 },
+          balance: 0,
+          period: { year, month }
+        } 
+      };
+    }
+  },
+
+  // Relatório de balanço anual
+  getYearlyBalance: async (year: number) => {
+    try {
+      console.log(`📊 Gerando relatório anual: ${year}`);
+      
+      const transactionsRef = collection(db, 'transactions');
+      const querySnapshot = await getDocs(transactionsRef);
+      
+      const monthNames = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      
+      // Inicializar dados mensais
+      const monthlyData: any[] = [];
+      for (let i = 1; i <= 12; i++) {
+        monthlyData.push({
+          month: formatMonth(i),
+          monthName: monthNames[i - 1],
+          income: 0,
+          expense: 0,
+          balance: 0
+        });
+      }
+      
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const transactionDate = toDate(data.transaction_date);
+        const transactionYear = transactionDate.getFullYear();
+        const transactionMonth = transactionDate.getMonth() + 1;
+        
+        // Verificar se a transação pertence ao ano especificado
+        if (transactionYear === year) {
+          const amount = parseFloat(data.amount) || 0;
+          const monthIndex = transactionMonth - 1;
+          
+          if (data.type === 'income') {
+            monthlyData[monthIndex].income += amount;
+          } else if (data.type === 'expense') {
+            monthlyData[monthIndex].expense += amount;
+          }
+        }
+      });
+      
+      // Calcular saldos mensais
+      monthlyData.forEach(month => {
+        month.balance = month.income - month.expense;
+      });
+      
+      // Calcular totais anuais
+      const yearlyTotal = {
+        income: monthlyData.reduce((sum, m) => sum + m.income, 0),
+        expense: monthlyData.reduce((sum, m) => sum + m.expense, 0),
+        balance: monthlyData.reduce((sum, m) => sum + m.balance, 0)
+      };
+      
+      const result = {
+        year,
+        monthlyData,
+        yearlyTotal
+      };
+      
+      console.log('✅ Relatório anual gerado:', result);
+      return { data: result };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório anual:', error);
+      return { 
+        data: { 
+          year,
+          monthlyData: [],
+          yearlyTotal: { income: 0, expense: 0, balance: 0 }
+        } 
+      };
+    }
+  },
+
+  // Relatório de contribuições por membro
+  getMemberContributions: async (params?: any) => {
+    try {
+      console.log('📊 Gerando relatório de contribuições por membro');
+      
+      const { start_date, end_date } = params || {};
+      const transactionsRef = collection(db, 'transactions');
+      const membersRef = collection(db, 'members');
+      
+      const [transactionsSnapshot, membersSnapshot] = await Promise.all([
+        getDocs(query(transactionsRef, where('type', '==', 'income'))),
+        getDocs(membersRef)
+      ]);
+      
+      // Mapear membros
+      const membersMap: Record<string, any> = {};
+      membersSnapshot.docs.forEach(doc => {
+        membersMap[doc.id] = doc.data();
+      });
+      
+      // Agrupar contribuições por membro
+      const contributionsMap: Record<string, {
+        member: any;
+        contributions: Array<{ amount: number; date: Date }>;
+        total: number;
+        count: number;
+      }> = {};
+      
+      transactionsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const memberId = data.member_id;
+        const transactionDate = toDate(data.transaction_date);
+        
+        // Verificar filtros de data
+        if (start_date && transactionDate < new Date(start_date)) return;
+        if (end_date && transactionDate > new Date(end_date)) return;
+        
+        if (memberId && membersMap[memberId]) {
+          if (!contributionsMap[memberId]) {
+            contributionsMap[memberId] = {
+              member: membersMap[memberId],
+              contributions: [],
+              total: 0,
+              count: 0
+            };
+          }
+          
+          const amount = parseFloat(data.amount) || 0;
+          contributionsMap[memberId].contributions.push({
+            amount,
+            date: transactionDate
+          });
+          contributionsMap[memberId].total += amount;
+          contributionsMap[memberId].count += 1;
+        }
+      });
+      
+      // Converter para formato esperado
+      const contributions = Object.entries(contributionsMap)
+        .map(([memberId, contrib]) => {
+          const sortedContributions = contrib.contributions.sort((a, b) => a.date.getTime() - b.date.getTime());
+          const firstContribution = sortedContributions[0];
+          const lastContribution = sortedContributions[sortedContributions.length - 1];
+          
+          return {
+            id: memberId,
+            name: contrib.member.name || 'Sem nome',
+            email: contrib.member.email || '',
+            contribution_count: contrib.count,
+            total_contributed: contrib.total,
+            average_contribution: contrib.count > 0 ? contrib.total / contrib.count : 0,
+            first_contribution: firstContribution ? firstContribution.date.toISOString().split('T')[0] : '',
+            last_contribution: lastContribution ? lastContribution.date.toISOString().split('T')[0] : ''
+          };
+        })
+        .sort((a, b) => b.total_contributed - a.total_contributed);
+      
+      console.log('✅ Relatório de contribuições gerado:', contributions.length, 'membros');
+      return { data: contributions };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório de contribuições:', error);
+      return { data: [] };
+    }
+  },
+
+  // Relatório de receitas por categoria
+  getIncomeByCategory: async (params?: any) => {
+    try {
+      console.log('📊 Gerando relatório de receitas por categoria');
+      
+      const { start_date, end_date } = params || {};
+      const transactionsRef = collection(db, 'transactions');
+      const categoriesRef = collection(db, 'categories');
+      
+      const [transactionsSnapshot, categoriesSnapshot] = await Promise.all([
+        getDocs(query(transactionsRef, where('type', '==', 'income'))),
+        getDocs(query(categoriesRef, where('type', '==', 'income')))
+      ]);
+      
+      // Mapear categorias
+      const categoriesMap: Record<string, any> = {};
+      categoriesSnapshot.docs.forEach(doc => {
+        categoriesMap[doc.id] = { ...doc.data(), id: doc.id };
+      });
+      
+      // Inicializar dados por categoria
+      const categoryDataMap: Record<string, {
+        id: string;
+        name: string;
+        color: string;
+        transaction_count: number;
+        total_amount: number;
+      }> = {};
+      
+      // Inicializar todas as categorias
+      Object.keys(categoriesMap).forEach(catId => {
+        const cat = categoriesMap[catId];
+        categoryDataMap[catId] = {
+          id: catId,
+          name: cat.name || 'Sem nome',
+          color: cat.color || '#3B82F6',
+          transaction_count: 0,
+          total_amount: 0
+        };
+      });
+      
+      // Processar transações
+      transactionsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const categoryId = data.category_id;
+        const transactionDate = toDate(data.transaction_date);
+        
+        // Verificar filtros de data
+        if (start_date && transactionDate < new Date(start_date)) return;
+        if (end_date && transactionDate > new Date(end_date)) return;
+        
+        if (categoryId && categoryDataMap[categoryId]) {
+          categoryDataMap[categoryId].transaction_count += 1;
+          categoryDataMap[categoryId].total_amount += parseFloat(data.amount) || 0;
+        }
+      });
+      
+      // Converter para array e ordenar
+      const result = Object.values(categoryDataMap)
+        .filter(cat => cat.transaction_count > 0)
+        .map(cat => ({
+          ...cat,
+          average_amount: cat.transaction_count > 0 ? cat.total_amount / cat.transaction_count : 0
+        }))
+        .sort((a, b) => b.total_amount - a.total_amount);
+      
+      console.log('✅ Relatório de receitas por categoria gerado:', result.length, 'categorias');
+      return { data: result };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório de receitas por categoria:', error);
+      return { data: [] };
+    }
+  },
+
+  // Relatório de despesas por categoria
+  getExpenseByCategory: async (params?: any) => {
+    try {
+      console.log('📊 Gerando relatório de despesas por categoria');
+      
+      const { start_date, end_date } = params || {};
+      const transactionsRef = collection(db, 'transactions');
+      const categoriesRef = collection(db, 'categories');
+      
+      const [transactionsSnapshot, categoriesSnapshot] = await Promise.all([
+        getDocs(query(transactionsRef, where('type', '==', 'expense'))),
+        getDocs(query(categoriesRef, where('type', '==', 'expense')))
+      ]);
+      
+      // Mapear categorias
+      const categoriesMap: Record<string, any> = {};
+      categoriesSnapshot.docs.forEach(doc => {
+        categoriesMap[doc.id] = { ...doc.data(), id: doc.id };
+      });
+      
+      // Inicializar dados por categoria
+      const categoryDataMap: Record<string, {
+        id: string;
+        name: string;
+        color: string;
+        transaction_count: number;
+        total_amount: number;
+      }> = {};
+      
+      // Inicializar todas as categorias
+      Object.keys(categoriesMap).forEach(catId => {
+        const cat = categoriesMap[catId];
+        categoryDataMap[catId] = {
+          id: catId,
+          name: cat.name || 'Sem nome',
+          color: cat.color || '#EF4444',
+          transaction_count: 0,
+          total_amount: 0
+        };
+      });
+      
+      // Processar transações
+      transactionsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const categoryId = data.category_id;
+        const transactionDate = toDate(data.transaction_date);
+        
+        // Verificar filtros de data
+        if (start_date && transactionDate < new Date(start_date)) return;
+        if (end_date && transactionDate > new Date(end_date)) return;
+        
+        if (categoryId && categoryDataMap[categoryId]) {
+          categoryDataMap[categoryId].transaction_count += 1;
+          categoryDataMap[categoryId].total_amount += parseFloat(data.amount) || 0;
+        }
+      });
+      
+      // Converter para array e ordenar
+      const result = Object.values(categoryDataMap)
+        .filter(cat => cat.transaction_count > 0)
+        .map(cat => ({
+          ...cat,
+          average_amount: cat.transaction_count > 0 ? cat.total_amount / cat.transaction_count : 0
+        }))
+        .sort((a, b) => b.total_amount - a.total_amount);
+      
+      console.log('✅ Relatório de despesas por categoria gerado:', result.length, 'categorias');
+      return { data: result };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório de despesas por categoria:', error);
+      return { data: [] };
+    }
+  },
+
+  // Relatório de fluxo de caixa
+  getCashFlow: async (params?: any) => {
+    try {
+      console.log('📊 Gerando relatório de fluxo de caixa');
+      
+      const { start_date, end_date, period = 'monthly' } = params || {};
+      
+      if (!start_date || !end_date) {
+        return { data: [] };
+      }
+      
+      const startDate = new Date(start_date);
+      const endDate = new Date(end_date);
+      
+      const transactionsRef = collection(db, 'transactions');
+      const querySnapshot = await getDocs(transactionsRef);
+      
+      const periodDataMap: Record<string, { period: string; income: number; expense: number; balance: number }> = {};
+      
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const transactionDate = toDate(data.transaction_date);
+        
+        // Verificar se está no período
+        if (transactionDate < startDate || transactionDate > endDate) return;
+        
+        let periodKey = '';
+        if (period === 'daily') {
+          periodKey = transactionDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        } else if (period === 'weekly') {
+          const weekNum = getWeekNumber(transactionDate);
+          periodKey = `${transactionDate.getFullYear()}-W${weekNum}`;
+        } else {
+          // monthly
+          const year = transactionDate.getFullYear();
+          const month = formatMonth(transactionDate.getMonth() + 1);
+          periodKey = `${year}-${month}`;
+        }
+        
+        if (!periodDataMap[periodKey]) {
+          periodDataMap[periodKey] = {
+            period: periodKey,
+            income: 0,
+            expense: 0,
+            balance: 0
+          };
+        }
+        
+        const amount = parseFloat(data.amount) || 0;
+        if (data.type === 'income') {
+          periodDataMap[periodKey].income += amount;
+        } else if (data.type === 'expense') {
+          periodDataMap[periodKey].expense += amount;
+        }
+      });
+      
+      // Calcular saldos
+      Object.values(periodDataMap).forEach(periodData => {
+        periodData.balance = periodData.income - periodData.expense;
+      });
+      
+      // Ordenar por período
+      const result = Object.values(periodDataMap).sort((a, b) => {
+        return a.period.localeCompare(b.period);
+      });
+      
+      console.log('✅ Relatório de fluxo de caixa gerado:', result.length, 'períodos');
+      return { data: result };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório de fluxo de caixa:', error);
+      return { data: [] };
+    }
+  },
+
+  getTopContributors: async (params?: any) => {
+    try {
+      console.log('📊 Gerando relatório de top contribuintes');
+      
+      const contributions = await reportsAPI.getMemberContributions(params);
+      const topContributors = contributions.data
+        .slice(0, params?.limit || 10)
+        .map((contrib: any, index: number) => ({
+          ...contrib,
+          rank: index + 1
+        }));
+      
+      return { data: topContributors };
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório de top contribuintes:', error);
+      return { data: [] };
+    }
+  }
+};
+
+// Helper para calcular número da semana
+const getWeekNumber = (date: Date): string => {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7).toString().padStart(2, '0');
 };
 
 // API para eventos (usando Firebase Firestore)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
@@ -16,11 +16,7 @@ const MemberStats: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    loadMemberStats();
-  }, []);
-
-  const loadMemberStats = async () => {
+  const loadMemberStats = useCallback(async () => {
     try {
       // Verificar se deve usar dados mock
       const useMockData = !user;
@@ -46,7 +42,22 @@ const MemberStats: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadMemberStats();
+  }, [loadMemberStats]);
+
+  // Calcular percentuais (hooks devem vir antes de qualquer return)
+  const activePercentage = useMemo(
+    () => stats && stats.total > 0 ? (stats.active / stats.total) * 100 : 0,
+    [stats?.total, stats?.active]
+  );
+  
+  const inactivePercentage = useMemo(
+    () => stats && stats.total > 0 ? (stats.inactive / stats.total) * 100 : 0,
+    [stats?.total, stats?.inactive]
+  );
 
   if (loading) {
     return (
@@ -63,9 +74,6 @@ const MemberStats: React.FC = () => {
       </div>
     );
   }
-
-  const activePercentage = stats.total > 0 ? (stats.active / stats.total) * 100 : 0;
-  const inactivePercentage = stats.total > 0 ? (stats.inactive / stats.total) * 100 : 0;
 
   return (
     <div className="space-y-4">
@@ -144,4 +152,4 @@ const MemberStats: React.FC = () => {
   );
 };
 
-export default MemberStats;
+export default memo(MemberStats);

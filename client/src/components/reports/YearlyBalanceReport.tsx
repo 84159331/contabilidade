@@ -23,9 +23,10 @@ interface YearlyBalance {
 
 interface Props {
   onDataLoaded: (data: MonthlyData[]) => void;
+  onFullDataLoaded?: (data: YearlyBalance) => void;
 }
 
-const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
+const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }) => {
   const [data, setData] = useState<YearlyBalance | null>(null);
   const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -37,25 +38,48 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const loadReport = async () => {
     try {
       setLoading(true);
-      // Usar dados mock por enquanto
-      const mockData = {
-        year,
-        monthlyData: [
-          { month: '01', monthName: 'Janeiro', income: 2000, expense: 500, balance: 1500 },
-          { month: '02', monthName: 'Fevereiro', income: 2200, expense: 600, balance: 1600 },
-          { month: '03', monthName: 'Março', income: 1800, expense: 400, balance: 1400 }
-        ],
-        yearlyTotal: {
-          income: 24000.00,
-          expense: 6000.00,
-          balance: 18000.00
+      
+      // Buscar dados reais do Firestore
+      const response = await reportsAPI.getYearlyBalance(year);
+      const reportData = response.data;
+      
+      if (reportData && reportData.monthlyData) {
+        setData(reportData);
+        // Passa o array mensal para compatibilidade (pode ser usado por outros componentes)
+        onDataLoaded(reportData.monthlyData);
+        // Passa o objeto completo para geração de PDF (chamado depois para sobrescrever)
+        if (onFullDataLoaded) {
+          onFullDataLoaded(reportData);
         }
-      };
-      setData(mockData);
-      onDataLoaded(mockData.monthlyData);
+        console.log('✅ Relatório anual carregado:', reportData);
+      } else {
+        // Dados vazios se não houver dados
+        const emptyData: YearlyBalance = {
+          year,
+          monthlyData: [],
+          yearlyTotal: { income: 0, expense: 0, balance: 0 }
+        };
+        setData(emptyData);
+        onDataLoaded([]);
+        if (onFullDataLoaded) {
+          onFullDataLoaded(emptyData);
+        }
+      }
     } catch (error) {
-      toast.error('Erro ao carregar relatório anual');
-      console.error('Erro ao carregar relatório:', error);
+      console.error('❌ Erro ao carregar relatório anual:', error);
+      toast.error('Erro ao carregar relatório anual. Tente novamente.');
+      
+      // Dados vazios em caso de erro
+      const emptyData: YearlyBalance = {
+        year,
+        monthlyData: [],
+        yearlyTotal: { income: 0, expense: 0, balance: 0 }
+      };
+      setData(emptyData);
+      onDataLoaded([]);
+      if (onFullDataLoaded) {
+        onFullDataLoaded(emptyData);
+      }
     } finally {
       setLoading(false);
     }

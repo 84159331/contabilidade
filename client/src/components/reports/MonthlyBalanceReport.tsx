@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
-import { mockDashboardData, simulateApiDelay } from '../../services/mockData';
 import { toast } from 'react-toastify';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
-import storage from '../../utils/storage';
 
 interface MonthlyBalance {
   income: { total: number; count: number };
@@ -30,47 +28,41 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
     try {
       setLoading(true);
       
-      // Verificar se deve usar dados mock
-      const token = storage.getString('token');
-      const useMockData = !token;
+      // Buscar dados reais do Firestore
+      const response = await reportsAPI.getMonthlyBalance(year, month);
+      const reportData = response.data;
       
-      if (useMockData) {
-        // Simular delay da API
-        await simulateApiDelay();
-        
-        // Usar dados mock
-        const mockData = {
-          ...mockDashboardData.monthlyBalance,
-          period: { year, month }
-        };
-        setData(mockData);
-        onDataLoaded(mockData);
-        console.log('Dados mock de relatório mensal carregados:', mockData);
-        return;
-      }
-      
-      // Usar dados mock por enquanto
-      const mockData = {
-        balance: 1500.00,
-        income: { total: 2000.00, count: 8 },
-        expense: { total: 500.00, count: 7 },
+      // Transformar dados para o formato esperado
+      const formattedData: MonthlyBalance = {
+        income: {
+          total: reportData.income?.total || 0,
+          count: reportData.income?.count || 0
+        },
+        expense: {
+          total: reportData.expense?.total || 0,
+          count: reportData.expense?.count || 0
+        },
+        balance: reportData.balance || 0,
         period: { year, month }
       };
-      setData(mockData);
-      onDataLoaded(mockData);
+      
+      setData(formattedData);
+      onDataLoaded(formattedData);
+      console.log('✅ Relatório mensal carregado:', formattedData);
     } catch (error) {
-      console.error('Erro ao carregar relatório:', error);
+      console.error('❌ Erro ao carregar relatório mensal:', error);
       
-      // Em caso de erro, usar dados mock como fallback
-      const mockData = {
-        ...mockDashboardData.monthlyBalance,
+      // Em caso de erro, usar dados vazios
+      const emptyData: MonthlyBalance = {
+        income: { total: 0, count: 0 },
+        expense: { total: 0, count: 0 },
+        balance: 0,
         period: { year, month }
       };
-      setData(mockData);
-      onDataLoaded(mockData);
-      console.log('Usando dados mock como fallback');
+      setData(emptyData);
+      onDataLoaded(emptyData);
       
-      toast.error('Erro ao carregar relatório mensal');
+      toast.error('Erro ao carregar relatório mensal. Tente novamente.');
     } finally {
       setLoading(false);
     }
