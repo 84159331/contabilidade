@@ -12,6 +12,8 @@ import GivePage from './pages/public/GivePage';
 import LocationsPage from './pages/public/LocationsPage';
 import BonsEstudosPage from './pages/public/BonsEstudosPage';
 import BibliotecaPage from './pages/public/BibliotecaPage';
+import EsbocosPage from './pages/public/EsbocosPage';
+import EsbocoDetalhePage from './pages/public/EsbocoDetalhePage';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import LoginDebug from './pages/LoginDebug';
@@ -37,6 +39,8 @@ function App() {
                   <Route path="/localizacoes" element={<LocationsPage />} />
                   <Route path="/bons-estudos" element={<BonsEstudosPage />} />
                   <Route path="/biblioteca" element={<BibliotecaPage />} />
+                  <Route path="/esbocos" element={<EsbocosPage />} />
+                  <Route path="/esbocos/:id" element={<EsbocoDetalhePage />} />
                 </Route>
                 <Route path="/login-debug" element={<LoginDebug />} />
                 <Route path="/login" element={<Login />} />

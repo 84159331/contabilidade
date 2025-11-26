@@ -34,6 +34,7 @@ const PublicLayout: React.FC = () => {
             <Link to="/assista" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Assista</Link>
             <Link to="/contribua" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contribua</Link>
             <Link to="/localizacoes" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Localização</Link>
+            <Link to="/esbocos" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Esboços</Link>
           </div>
 
           {/* Right Side Actions */}
@@ -80,6 +81,7 @@ const PublicLayout: React.FC = () => {
                 <li><a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400">Assista</a></li>
                 <li><Link to="/contribua" className="hover:text-primary-400">Contribua</Link></li>
                 <li><Link to="/localizacoes" className="hover:text-primary-400">Localização</Link></li>
+                <li><Link to="/esbocos" className="hover:text-primary-400">Esboços de Pregação</Link></li>
               </ul>
             </div>
             <div>
