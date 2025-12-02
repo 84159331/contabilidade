@@ -306,8 +306,8 @@ const BibliotecaPage: React.FC = () => {
                     alt={livro.titulo}
                     className="w-full h-64 object-cover"
                     fallbackText="Capa do Livro"
-                    loading={index < 6 ? 'eager' : 'lazy'}
-                    priority={index < 3}
+                    loading={index < 9 ? 'eager' : 'lazy'}
+                    priority={index < 6}
                   />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   {livro.isDestaque && (
