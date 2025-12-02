@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
@@ -58,43 +58,54 @@ const BibliotecaPage: React.FC = () => {
     const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros', livros);
     return livrosSalvos ?? livros;
   });
-  const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
   const [termoBusca, setTermoBusca] = useState('');
+  const [termoBuscaDebounced, setTermoBuscaDebounced] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
+  const [isLoading, setIsLoading] = useState(false);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debounce na busca (300ms)
   useEffect(() => {
-    filtrarLivros();
-  }, [categoriaSelecionada, termoBusca, ordenacao, livrosLista]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
+    debounceTimerRef.current = setTimeout(() => {
+      setTermoBuscaDebounced(termoBusca);
+    }, 300);
 
-  // Atualizar lista quando o armazenamento local mudar
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [termoBusca]);
+
+  // Atualizar lista quando o armazenamento local mudar (otimizado)
   useEffect(() => {
-    const handleStorageChange = () => {
-      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
-      if (livrosSalvos) {
-        setLivrosLista(livrosSalvos);
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'biblioteca-livros') {
+        const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
+        if (livrosSalvos) {
+          setLivrosLista(livrosSalvos);
+        }
       }
     };
 
-    // Escutar mudanças no armazenamento local
+    // Escutar mudanças no armazenamento local (apenas entre abas)
     window.addEventListener('storage', handleStorageChange);
-    
-    // Verificar mudanças periodicamente (para mudanças na mesma aba)
-    const interval = setInterval(() => {
-      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
-      if (livrosSalvos && JSON.stringify(livrosSalvos) !== JSON.stringify(livrosLista)) {
-        setLivrosLista(livrosSalvos);
-      }
-    }, 1000);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
     };
-  }, [livrosLista]);
+  }, []);
 
-  const filtrarLivros = () => {
-    let resultado = livrosLista;
+  // Filtrar e ordenar livros com useMemo para otimização
+  const livrosFiltrados = useMemo(() => {
+    setIsLoading(true);
+    
+    let resultado = [...livrosLista];
 
     // Filtrar por categoria
     if (categoriaSelecionada !== 'Todos') {
@@ -102,11 +113,12 @@ const BibliotecaPage: React.FC = () => {
     }
 
     // Filtrar por termo de busca
-    if (termoBusca) {
+    if (termoBuscaDebounced) {
+      const termoLower = termoBuscaDebounced.toLowerCase();
       resultado = resultado.filter(livro => 
-        livro.titulo.toLowerCase().includes(termoBusca.toLowerCase()) ||
-        livro.autor.toLowerCase().includes(termoBusca.toLowerCase()) ||
-        livro.tags.some(tag => tag.toLowerCase().includes(termoBusca.toLowerCase()))
+        livro.titulo.toLowerCase().includes(termoLower) ||
+        livro.autor.toLowerCase().includes(termoLower) ||
+        livro.tags.some(tag => tag.toLowerCase().includes(termoLower))
       );
     }
 
@@ -133,10 +145,13 @@ const BibliotecaPage: React.FC = () => {
         break;
     }
 
-    setLivrosFiltrados(resultado);
-  };
+    // Simular pequeno delay para mostrar loading (melhor UX)
+    setTimeout(() => setIsLoading(false), 50);
+    
+    return resultado;
+  }, [livrosLista, categoriaSelecionada, termoBuscaDebounced, ordenacao]);
 
-  const handleDownload = (livro: Livro) => {
+  const handleDownload = useCallback((livro: Livro) => {
     try {
       // Verificar se o arquivo existe
       const link = document.createElement('a');
@@ -158,17 +173,12 @@ const BibliotecaPage: React.FC = () => {
         return atualizados;
       });
       
-      // eslint-disable-next-line no-console
-      console.log(`Download iniciado: ${livro.titulo}`);
-      
       // Mostrar mensagem de sucesso
       toast.success(`Download de "${livro.titulo}" iniciado!`);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Erro no download:', error);
       toast.error('Erro ao iniciar download. Tente novamente.');
     }
-  };
+  }, []);
 
 
   return (
@@ -266,23 +276,39 @@ const BibliotecaPage: React.FC = () => {
         </div>
 
         {/* Grid de Livros */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {livrosFiltrados.map((livro, index) => (
-            <motion.div
-              key={livro.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-            >
-              {/* Badges */}
-              <div className="relative">
-                <SafeImage 
-                  src={livro.capa} 
-                  alt={livro.titulo}
-                  className="w-full h-64 object-cover"
-                  fallbackText="Capa do Livro"
-                />
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden animate-pulse">
+                <div className="w-full h-64 bg-gray-200 dark:bg-gray-700"></div>
+                <div className="p-6">
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {livrosFiltrados.map((livro, index) => (
+              <motion.div
+                key={livro.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5) }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                {/* Badges */}
+                <div className="relative">
+                  <SafeImage 
+                    src={livro.capa} 
+                    alt={livro.titulo}
+                    className="w-full h-64 object-cover"
+                    fallbackText="Capa do Livro"
+                    loading={index < 6 ? 'eager' : 'lazy'}
+                    priority={index < 3}
+                  />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   {livro.isDestaque && (
                     <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -367,6 +393,7 @@ const BibliotecaPage: React.FC = () => {
             </motion.div>
           ))}
         </div>
+        )}
 
         {/* Mensagem quando não há resultados */}
         {livrosFiltrados.length === 0 && (
