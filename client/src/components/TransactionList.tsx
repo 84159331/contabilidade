@@ -2,12 +2,12 @@ import React, { memo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Transaction {
-  id: number;
+  id: number | string;
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category_id?: number;
-  member_id?: number;
+  category_id?: number | string;
+  member_id?: number | string;
   transaction_date: string;
   payment_method?: string;
   reference?: string;
@@ -30,7 +30,7 @@ interface TransactionListProps {
   loading: boolean;
   pagination: Pagination;
   onEdit: (transaction: Transaction) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string | number) => void;
   onPageChange: (page: number) => void;
 }
 
@@ -63,45 +63,46 @@ const TransactionList: React.FC<TransactionListProps> = ({
   }
 
   return (
-    <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+    <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Descrição
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Categoria
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Membro
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Data
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Valor
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Ações
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {transactions.map((transaction) => (
-              <tr key={transaction.id} className="hover:bg-gray-50">
+              <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className={`w-2 h-2 rounded-full mr-3 ${
                       transaction.type === 'income' ? 'bg-success-500' : 'bg-danger-500'
                     }`}></div>
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {transaction.description}
                       </div>
                       {transaction.reference && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
                           Ref: {transaction.reference}
                         </div>
                       )}
@@ -109,21 +110,21 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     {transaction.category_name || '-'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     {transaction.member_name || '-'}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                   {new Date(transaction.transaction_date).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <span className={`${
-                    transaction.type === 'income' ? 'text-success-600' : 'text-danger-600'
+                    transaction.type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400'
                   }`}>
                     {transaction.type === 'income' ? '+' : '-'}R$ {transaction.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </span>
@@ -132,14 +133,14 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   <div className="flex items-center justify-end space-x-2">
                     <button
                       onClick={() => onEdit(transaction)}
-                      className="text-primary-600 hover:text-primary-900"
+                      className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                       title="Editar"
                     >
                       <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => onDelete(transaction.id)}
-                      className="text-danger-600 hover:text-danger-900"
+                      className="text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300"
                       title="Deletar"
                     >
                       <TrashIcon className="h-4 w-4" />
@@ -150,6 +151,76 @@ const TransactionList: React.FC<TransactionListProps> = ({
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3 p-4">
+        {transactions.map((transaction) => (
+          <div key={transaction.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center flex-1">
+                <div className={`w-3 h-3 rounded-full mr-3 ${
+                  transaction.type === 'income' ? 'bg-success-500' : 'bg-danger-500'
+                }`}></div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                    {transaction.description}
+                  </h3>
+                  {transaction.reference && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Ref: {transaction.reference}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => onEdit(transaction)}
+                  className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                  title="Editar"
+                >
+                  <PencilIcon className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => onDelete(transaction.id)}
+                  className="text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300"
+                  title="Deletar"
+                >
+                  <TrashIcon className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Categoria:</span>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {transaction.category_name || '-'}
+                </p>
+              </div>
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Membro:</span>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {transaction.member_name || '-'}
+                </p>
+              </div>
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Data:</span>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {new Date(transaction.transaction_date).toLocaleDateString('pt-BR')}
+                </p>
+              </div>
+              <div>
+                <span className="text-gray-500 dark:text-gray-400">Valor:</span>
+                <p className={`font-medium ${
+                  transaction.type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400'
+                }`}>
+                  {transaction.type === 'income' ? '+' : '-'}R$ {transaction.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Pagination */}

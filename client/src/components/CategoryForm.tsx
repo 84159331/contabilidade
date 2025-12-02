@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface Category {
-  id: number;
+  id: string | number;
   name: string;
   type: 'income' | 'expense';
   description?: string;

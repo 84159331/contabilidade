@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
@@ -16,6 +16,8 @@ import {
   MapPinIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import ImageUpload from '../components/ImageUpload';
+import storage from '../utils/storage';
 
 interface Member {
   id: string;
@@ -57,11 +59,40 @@ const CellGroupsAdmin: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const [filterActive, setFilterActive] = useState<boolean | null>(null);
 
-  // Carregar grupos do localStorage
+// Carregar grupos do armazenamento local
   useEffect(() => {
-    const savedGroups = localStorage.getItem('cellGroups');
-    if (savedGroups) {
-      setGroups(JSON.parse(savedGroups));
+    // Limpar dados antigos que possam ter horários incorretos
+    const clearOldData = () => {
+      const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
+      if (savedGroups && Array.isArray(savedGroups)) {
+        // Verificar se algum grupo tem horário antigo
+        const hasOldSchedule = savedGroups.some(
+          (group: CellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+        );
+
+        if (hasOldSchedule) {
+          console.log('🔄 Detectados horários antigos, atualizando...');
+          storage.remove('cellGroups');
+          storage.remove('publicCellGroups');
+          storage.remove('cellGroupsLastSync');
+          return true; // Indica que dados foram limpos
+        }
+      }
+      return false;
+    };
+
+    const dataCleared = clearOldData();
+    
+    const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
+    if (savedGroups && Array.isArray(savedGroups)) {
+      // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+      const updatedGroups = savedGroups.map((group: CellGroup) => ({
+        ...group,
+        meetings: 'Quarta-Feira 20:00hrs',
+        features: [], // Garantir que features esteja vazio
+        updatedAt: new Date().toISOString()
+      }));
+      setGroups(updatedGroups);
     } else {
       // Grupos padrão
       const defaultGroups: CellGroup[] = [
@@ -74,12 +105,12 @@ const CellGroupsAdmin: React.FC = () => {
           icon: 'HomeIcon',
           color: 'blue',
           members: [],
-          meetings: 'Sábados às 19h',
-          location: 'Casas dos membros',
+          meetings: 'Quarta-Feira 20:00hrs',
+          location: '',
           leader: '',
           leaderPhone: '',
           leaderEmail: '',
-          features: ['Estudos bíblicos', 'Oração em família', 'Atividades para crianças', 'Comunhão'],
+          features: [],
           isPopular: true,
           isActive: true,
           maxMembers: 15,
@@ -93,14 +124,14 @@ const CellGroupsAdmin: React.FC = () => {
           description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
           image: '/img/youth-group.jpg',
           icon: 'SparklesIcon',
-          color: 'purple',
+          color: 'blue',
           members: [],
-          meetings: 'Sextas às 20h',
-          location: 'Igreja - Sala dos Jovens',
+          meetings: 'Quarta-Feira 20:00hrs',
+          location: '',
           leader: '',
           leaderPhone: '',
           leaderEmail: '',
-          features: ['Temas atuais', 'Adoração jovem', 'Missões', 'Networking cristão'],
+          features: [],
           isPopular: true,
           isActive: true,
           maxMembers: 20,
@@ -114,14 +145,14 @@ const CellGroupsAdmin: React.FC = () => {
           description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
           image: '/img/women-group.jpg',
           icon: 'HeartIcon',
-          color: 'pink',
+          color: 'green',
           members: [],
-          meetings: 'Terças às 19h30',
-          location: 'Casa da Líder',
+          meetings: 'Quarta-Feira 20:00hrs',
+          location: '',
           leader: '',
           leaderPhone: '',
           leaderEmail: '',
-          features: ['Estudos femininos', 'Oração', 'Apoio mútuo', 'Café da manhã'],
+          features: [],
           isPopular: false,
           isActive: true,
           maxMembers: 12,
@@ -137,12 +168,12 @@ const CellGroupsAdmin: React.FC = () => {
           icon: 'UserGroupIcon',
           color: 'green',
           members: [],
-          meetings: 'Quartas às 20h',
-          location: 'Igreja - Sala dos Homens',
+          meetings: 'Quarta-Feira 20:00hrs',
+          location: '',
           leader: '',
           leaderPhone: '',
           leaderEmail: '',
-          features: ['Estudos masculinos', 'Responsabilidade', 'Liderança', 'Camaradagem'],
+          features: [],
           isPopular: false,
           isActive: true,
           maxMembers: 15,
@@ -154,28 +185,31 @@ const CellGroupsAdmin: React.FC = () => {
     }
   }, []);
 
-  // Salvar grupos no localStorage sempre que houver mudanças
+  // Salvar grupos no armazenamento local sempre que houver mudanças
   useEffect(() => {
     if (groups.length > 0) {
-      localStorage.setItem('cellGroups', JSON.stringify(groups));
+      storage.setJSON('cellGroups', groups);
       // Também salvar uma versão pública para o site
-      localStorage.setItem('publicCellGroups', JSON.stringify(groups.map(group => ({
-        id: group.id,
-        title: group.title,
-        subtitle: group.subtitle,
-        description: group.description,
-        image: group.image,
-        icon: group.icon,
-        color: group.color,
-        members: group.members.length,
-        meetings: group.meetings,
-        location: group.location,
-        leader: group.leader,
-        features: group.features,
-        isPopular: group.isPopular,
-        isActive: group.isActive,
-        maxMembers: group.maxMembers
-      }))));
+      storage.setJSON(
+        'publicCellGroups',
+        groups.map(group => ({
+          id: group.id,
+          title: group.title,
+          subtitle: group.subtitle,
+          description: group.description,
+          image: group.image || '', // Incluir imagem na sincronização
+          icon: group.icon,
+          color: group.color,
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
+          meetings: group.meetings,
+          location: group.location,
+          leader: group.leader,
+          features: [], // Sempre array vazio para não exibir atividades
+          isPopular: group.isPopular,
+          isActive: group.isActive,
+          maxMembers: group.maxMembers
+        }))
+      );
     }
   }, [groups]);
 
@@ -200,18 +234,6 @@ const CellGroupsAdmin: React.FC = () => {
         light: 'bg-blue-50 dark:bg-blue-900',
         text: 'text-blue-600 dark:text-blue-400',
         border: 'border-blue-200 dark:border-blue-700'
-      },
-      purple: {
-        bg: 'bg-purple-500',
-        light: 'bg-purple-50 dark:bg-purple-900',
-        text: 'text-purple-600 dark:text-purple-400',
-        border: 'border-purple-200 dark:border-purple-700'
-      },
-      pink: {
-        bg: 'bg-pink-500',
-        light: 'bg-pink-50 dark:bg-pink-900',
-        text: 'text-pink-600 dark:text-pink-400',
-        border: 'border-pink-200 dark:border-pink-700'
       },
       green: {
         bg: 'bg-green-500',
@@ -414,6 +436,19 @@ const CellGroupsAdmin: React.FC = () => {
           >
             {viewMode === 'cards' ? <EyeIcon className="h-5 w-5" /> : <UserGroupIcon className="h-5 w-5" />}
           </button>
+          <button
+            onClick={() => {
+              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irá restaurar os dados padrão.')) {
+                storage.remove('cellGroups');
+                storage.remove('publicCellGroups');
+                storage.remove('cellGroupsLastSync');
+                window.location.reload();
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white border border-red-600 rounded-lg font-medium hover:bg-red-700"
+          >
+            🔄 Resetar Dados
+          </button>
         </div>
       </div>
 
@@ -455,6 +490,19 @@ const CellGroupsAdmin: React.FC = () => {
 
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{group.description}</p>
 
+              {/* Upload de Imagem */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Imagem da Célula:
+                </label>
+                <ImageUpload
+                  currentImage={group.image}
+                  onImageChange={(imageData) => handleLeaderChange(group.id, 'image', imageData || '')}
+                  maxSize={5}
+                  className="w-full"
+                />
+              </div>
+
               {/* Leader Section */}
               <div className="mb-4 space-y-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -493,36 +541,14 @@ const CellGroupsAdmin: React.FC = () => {
                 </div>
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <MapPinIcon className="h-4 w-4 mr-2" />
-                  {group.location}
+                  <input
+                    type="text"
+                    value={group.location}
+                    onChange={(e) => handleLeaderChange(group.id, 'location', e.target.value)}
+                    className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Local da célula"
+                  />
                 </div>
-              </div>
-
-              {/* Members Section */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-gray-700 dark:text-gray-300 flex items-center">
-                  <UserGroupIcon className="h-5 w-5 mr-2" />
-                  Membros: {group.members.length}/{group.maxMembers}
-                </span>
-                <button
-                  onClick={() => openAddMemberModal(group)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 flex items-center"
-                >
-                  <UserPlusIcon className="h-4 w-4 mr-2" />
-                  Adicionar
-                </button>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div 
-                    className={`${colors.bg} h-2 rounded-full transition-all duration-300`}
-                    style={{ width: `${Math.min((group.members.length / group.maxMembers) * 100, 100)}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {Math.round((group.members.length / group.maxMembers) * 100)}% da capacidade
-                </p>
               </div>
 
               {/* Members List */}
@@ -559,17 +585,6 @@ const CellGroupsAdmin: React.FC = () => {
                 </div>
               )}
 
-              {/* Features */}
-              <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Características:</h4>
-                <div className="flex flex-wrap gap-1">
-                  {group.features.map((feature, index) => (
-                    <span key={index} className={`px-2 py-1 text-xs rounded-full ${colors.light} ${colors.text}`}>
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
           );
         })}

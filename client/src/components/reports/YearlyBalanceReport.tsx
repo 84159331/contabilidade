@@ -23,9 +23,10 @@ interface YearlyBalance {
 
 interface Props {
   onDataLoaded: (data: MonthlyData[]) => void;
+  onFullDataLoaded?: (data: YearlyBalance) => void;
 }
 
-const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
+const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }) => {
   const [data, setData] = useState<YearlyBalance | null>(null);
   const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -37,12 +38,48 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const loadReport = async () => {
     try {
       setLoading(true);
+      
+      // Buscar dados reais do Firestore
       const response = await reportsAPI.getYearlyBalance(year);
-      setData(response.data);
-      onDataLoaded(response.data.monthlyData);
+      const reportData = response.data;
+      
+      if (reportData && reportData.monthlyData) {
+        setData(reportData);
+        // Passa o array mensal para compatibilidade (pode ser usado por outros componentes)
+        onDataLoaded(reportData.monthlyData);
+        // Passa o objeto completo para geração de PDF (chamado depois para sobrescrever)
+        if (onFullDataLoaded) {
+          onFullDataLoaded(reportData);
+        }
+        console.log('✅ Relatório anual carregado:', reportData);
+      } else {
+        // Dados vazios se não houver dados
+        const emptyData: YearlyBalance = {
+          year,
+          monthlyData: [],
+          yearlyTotal: { income: 0, expense: 0, balance: 0 }
+        };
+        setData(emptyData);
+        onDataLoaded([]);
+        if (onFullDataLoaded) {
+          onFullDataLoaded(emptyData);
+        }
+      }
     } catch (error) {
-      toast.error('Erro ao carregar relatório anual');
-      console.error('Erro ao carregar relatório:', error);
+      console.error('❌ Erro ao carregar relatório anual:', error);
+      toast.error('Erro ao carregar relatório anual. Tente novamente.');
+      
+      // Dados vazios em caso de erro
+      const emptyData: YearlyBalance = {
+        year,
+        monthlyData: [],
+        yearlyTotal: { income: 0, expense: 0, balance: 0 }
+      };
+      setData(emptyData);
+      onDataLoaded([]);
+      if (onFullDataLoaded) {
+        onFullDataLoaded(emptyData);
+      }
     } finally {
       setLoading(false);
     }

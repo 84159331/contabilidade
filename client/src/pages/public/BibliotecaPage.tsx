@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
-import AddBookModal from '../../components/AddBookModal';
-import { 
+import storage from '../../utils/storage';
+import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
   DocumentArrowDownIcon,
   EyeIcon,
   CalendarIcon,
-  StarIcon,
-  PlusIcon
+  StarIcon
 } from '@heroicons/react/24/outline';
 
 interface Livro {
@@ -35,6 +35,10 @@ const categorias = [
   'Teologia',
   'Devocionais',
   'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
+  'Palavras de Coach',
+  'Palavras de Esperança',
   'Biografias',
   'História da Igreja',
   'Liderança',
@@ -44,111 +48,50 @@ const categorias = [
 ];
 
 const livros: Livro[] = [
-  {
-    id: '1',
-    titulo: 'A Bíblia de Estudo Pentecostal',
-    autor: 'Donald C. Stamps',
-    descricao: 'Uma das mais completas Bíblias de estudo com comentários pentecostais, notas explicativas e referências cruzadas.',
-    categoria: 'Teologia',
-    capa: '/img/biblia-pentecostal.jpg',
-    pdfUrl: '/pdfs/biblia-pentecostal.pdf',
-    tamanho: '45.2 MB',
-    paginas: 2048,
-    ano: 2020,
-    tags: ['Bíblia', 'Estudo', 'Pentecostal', 'Comentários'],
-    downloads: 1250,
-    avaliacao: 4.9,
-    isDestaque: true
-  },
-  {
-    id: '2',
-    titulo: 'O Peregrino',
-    autor: 'John Bunyan',
-    descricao: 'Clássico da literatura cristã que narra a jornada espiritual de Cristão em busca da Cidade Celestial.',
-    categoria: 'Devocionais',
-    capa: '/img/o-peregrino.jpg',
-    pdfUrl: '/pdfs/o-peregrino.pdf',
-    tamanho: '12.8 MB',
-    paginas: 320,
-    ano: 1678,
-    tags: ['Clássico', 'Jornada', 'Espiritual', 'Alegoria'],
-    downloads: 890,
-    avaliacao: 4.8,
-    isNovo: true
-  },
-  {
-    id: '3',
-    titulo: 'A Vida de Cristo',
-    autor: 'Fulton J. Sheen',
-    descricao: 'Profunda reflexão sobre a vida, morte e ressurreição de Jesus Cristo, com insights teológicos únicos.',
-    categoria: 'Teologia',
-    capa: '/img/vida-cristo.jpg',
-    pdfUrl: '/pdfs/vida-cristo.pdf',
-    tamanho: '28.5 MB',
-    paginas: 650,
-    ano: 1958,
-    tags: ['Cristo', 'Teologia', 'Reflexão', 'Biografia'],
-    downloads: 756,
-    avaliacao: 4.7
-  },
-  {
-    id: '4',
-    titulo: 'Oração: A Chave do Avivamento',
-    autor: 'E. M. Bounds',
-    descricao: 'Clássico sobre a importância da oração no avivamento espiritual e na vida cristã.',
-    categoria: 'Devocionais',
-    capa: '/img/oracao-avivamento.jpg',
-    pdfUrl: '/pdfs/oracao-avivamento.pdf',
-    tamanho: '8.3 MB',
-    paginas: 180,
-    ano: 1927,
-    tags: ['Oração', 'Avivamento', 'Espiritual', 'Crescimento'],
-    downloads: 634,
-    avaliacao: 4.6
-  },
-  {
-    id: '5',
-    titulo: 'Estudos no Sermão do Monte',
-    autor: 'D. Martyn Lloyd-Jones',
-    descricao: 'Análise profunda e prática do mais famoso sermão de Jesus, com aplicações para a vida cristã.',
-    categoria: 'Estudos Bíblicos',
-    capa: '/img/sermao-monte.jpg',
-    pdfUrl: '/pdfs/sermao-monte.pdf',
-    tamanho: '22.1 MB',
-    paginas: 480,
-    ano: 1959,
-    tags: ['Sermão', 'Monte', 'Estudo', 'Prático'],
-    downloads: 542,
-    avaliacao: 4.8
-  },
-  {
-    id: '6',
-    titulo: 'A História da Igreja Cristã',
-    autor: 'Earle E. Cairns',
-    descricao: 'Completa história da igreja desde os tempos apostólicos até os dias atuais.',
-    categoria: 'História da Igreja',
-    capa: '/img/historia-igreja.jpg',
-    pdfUrl: '/pdfs/historia-igreja.pdf',
-    tamanho: '35.7 MB',
-    paginas: 720,
-    ano: 1996,
-    tags: ['História', 'Igreja', 'Cristianismo', 'Apostólico'],
-    downloads: 423,
-    avaliacao: 4.5
-  }
+  // A biblioteca começará vazia para que você possa adicionar apenas livros reais
+  // Use o botão "Adicionar Livro" para inserir seus próprios livros
 ];
 
 const BibliotecaPage: React.FC = () => {
-  const [livrosLista, setLivrosLista] = useState<Livro[]>(livros);
-  const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livros);
+  const [livrosLista, setLivrosLista] = useState<Livro[]>(() => {
+    // Carregar livros salvos do armazenamento local
+    const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros', livros);
+    return livrosSalvos ?? livros;
+  });
+  const [livrosFiltrados, setLivrosFiltrados] = useState<Livro[]>(livrosLista);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
   const [termoBusca, setTermoBusca] = useState('');
   const [ordenacao, setOrdenacao] = useState('destaque');
-  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     filtrarLivros();
-  }, [categoriaSelecionada, termoBusca, ordenacao]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [categoriaSelecionada, termoBusca, ordenacao, livrosLista]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Atualizar lista quando o armazenamento local mudar
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
+      if (livrosSalvos) {
+        setLivrosLista(livrosSalvos);
+      }
+    };
+
+    // Escutar mudanças no armazenamento local
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Verificar mudanças periodicamente (para mudanças na mesma aba)
+    const interval = setInterval(() => {
+      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
+      if (livrosSalvos && JSON.stringify(livrosSalvos) !== JSON.stringify(livrosLista)) {
+        setLivrosLista(livrosSalvos);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [livrosLista]);
 
   const filtrarLivros = () => {
     let resultado = livrosLista;
@@ -194,25 +137,39 @@ const BibliotecaPage: React.FC = () => {
   };
 
   const handleDownload = (livro: Livro) => {
-    // Simular download
-    const link = document.createElement('a');
-    link.href = livro.pdfUrl;
-    link.download = `${livro.titulo}.pdf`;
-    link.click();
-    
-    // Atualizar contador de downloads
-    setLivrosLista(prev => prev.map(l => 
-      l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
-    ));
-    
-    // eslint-disable-next-line no-console
-    console.log(`Download iniciado: ${livro.titulo}`);
+    try {
+      // Verificar se o arquivo existe
+      const link = document.createElement('a');
+      link.href = livro.pdfUrl;
+      link.download = `${livro.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      link.target = '_blank';
+      
+      // Adicionar o link ao DOM temporariamente
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Atualizar contador de downloads
+      setLivrosLista(prev => {
+        const atualizados = prev.map(l => 
+          l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
+        );
+        storage.setJSON('biblioteca-livros', atualizados);
+        return atualizados;
+      });
+      
+      // eslint-disable-next-line no-console
+      console.log(`Download iniciado: ${livro.titulo}`);
+      
+      // Mostrar mensagem de sucesso
+      toast.success(`Download de "${livro.titulo}" iniciado!`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Erro no download:', error);
+      toast.error('Erro ao iniciar download. Tente novamente.');
+    }
   };
 
-  const handleAddBook = (novoLivro: Livro) => {
-    setLivrosLista(prev => [novoLivro, ...prev]);
-    setShowAddModal(false);
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -257,13 +214,9 @@ const BibliotecaPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Catálogo de Livros
           </h2>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
-          >
-            <PlusIcon className="h-5 w-5 mr-2" />
-            Adicionar Livro
-          </button>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {livrosLista.length} livros disponíveis
+          </div>
         </div>
         
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
@@ -402,7 +355,11 @@ const BibliotecaPage: React.FC = () => {
                     <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
                     Baixar
                   </button>
-                  <button className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                  <button 
+                    onClick={() => window.open(livro.pdfUrl, '_blank')}
+                    className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    title="Visualizar PDF"
+                  >
                     <EyeIcon className="h-5 w-5" />
                   </button>
                 </div>
@@ -416,21 +373,18 @@ const BibliotecaPage: React.FC = () => {
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Nenhum livro encontrado
+              {livrosLista.length === 0 ? 'Biblioteca Vazia' : 'Nenhum livro encontrado'}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Tente ajustar os filtros ou termo de busca
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              {livrosLista.length === 0 
+                ? 'A biblioteca ainda não possui livros disponíveis. Volte em breve!'
+                : 'Tente ajustar os filtros ou termo de busca'
+              }
             </p>
           </div>
         )}
       </div>
 
-      {/* Modal para Adicionar Livro */}
-      <AddBookModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onAddBook={handleAddBook}
-      />
     </div>
   );
 };

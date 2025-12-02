@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   CurrencyDollarIcon, 
   ArrowUpIcon, 
   ArrowDownIcon,
   UsersIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
-import { transactionsAPI, membersAPI } from '../services/api';
+import { useDashboardData } from '../hooks/useDashboardData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
-import LoadingSpinner from '../components/LoadingSpinner';
 import AnimatedCard from '../components/AnimatedCard';
 import StatusIndicator from '../components/StatusIndicator';
 import PageTransition from '../components/PageTransition';
@@ -17,63 +18,38 @@ import { SkeletonCard } from '../components/Skeleton';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import MemberStats from '../components/MemberStats';
-import useNotificationDemo from '../hooks/useNotificationDemo';
-
-interface DashboardStats {
-  income: { total: number; count: number };
-  expense: { total: number; count: number };
-  balance: number;
-}
-
-interface MemberStatsData {
-  total: number;
-  active: number;
-  inactive: number;
-}
 
 const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [memberStats, setMemberStats] = useState<MemberStatsData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { stats, memberStats, loading, error, refresh } = useDashboardData();
+  const { loading: authLoading } = useAuth();
+  const hasRenderedRef = useRef(false);
+  const hasShownErrorRef = useRef(false);
 
-  // Hook para demonstração de notificações
-  useNotificationDemo();
-
+  // Força recarregamento quando a rota muda ou quando necessário
   useEffect(() => {
-    loadDashboardData();
+    // Se não há dados mas o loading terminou, forçar refresh
+    if (!loading && !authLoading && !stats) {
+      console.log('🔄 Dashboard sem dados, forçando refresh...');
+      refresh();
+    }
+  }, [loading, authLoading, stats, refresh]);
+
+  // Marcar como renderizado
+  useEffect(() => {
+    hasRenderedRef.current = true;
   }, []);
 
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      // Debug: verificar token
-      const token = localStorage.getItem('token');
-      console.log('Token no localStorage:', token);
-      
-      // Se não há token, usar rotas de teste
-      const useTestRoutes = !token;
-      console.log('Usando rotas de teste:', useTestRoutes);
-      
-      const [financialSummary, memberStatsData] = await Promise.all([
-        transactionsAPI.getSummary(useTestRoutes),
-        membersAPI.getMemberStats(useTestRoutes)
-      ]);
-
-      console.log('Financial Summary:', financialSummary.data);
-      console.log('Member Stats:', memberStatsData.data);
-
-      setStats(financialSummary.data?.data);
-      setMemberStats(memberStatsData.data?.data);
-    } catch (error) {
-      toast.error('Erro ao carregar dados do dashboard');
-      console.error('Erro ao carregar dashboard:', error);
-    } finally {
-      setLoading(false);
+  // Mostrar erro se houver (apenas uma vez)
+  useEffect(() => {
+    if (error && !hasShownErrorRef.current) {
+      hasShownErrorRef.current = true;
+      toast.info(error, { autoClose: 3000 });
+    } else if (!error) {
+      hasShownErrorRef.current = false;
     }
-  };
+  }, [error]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <PageTransition>
         <div className="space-y-6">
@@ -97,11 +73,22 @@ const Dashboard: React.FC = () => {
     <PageTransition>
       <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
-        <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
-          Visão geral das finanças da igreja
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+          <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
+            Visão geral das finanças da igreja
+          </p>
+        </div>
+        <button
+          onClick={refresh}
+          disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Atualizar dados"
+        >
+          <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <span>Atualizar</span>
+        </button>
       </div>
 
       {/* Stats Cards */}
@@ -158,16 +145,39 @@ const Dashboard: React.FC = () => {
         {/* Membros */}
         <AnimatedCard delay={3}>
           <div className="p-5">
-            <StatusIndicator
-              status="neutral"
-              value={memberStats?.total || 0}
-              label="Membros"
-              icon={<UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />}
-              pulse={false}
-            />
-            <div className="mt-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {memberStats?.active || 0} ativos
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                  <UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Membros</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {memberStats?.total || 0}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {memberStats?.active || 0} ativos
+                </div>
+                <div className="text-xs text-gray-400 dark:text-gray-500">
+                  {memberStats?.inactive || 0} inativos
+                </div>
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>Status dos Membros</span>
+                <span>{memberStats?.total ? Math.round(((memberStats?.active || 0) / memberStats.total) * 100) : 0}% ativos</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                  style={{ 
+                    width: `${memberStats?.total ? ((memberStats?.active || 0) / memberStats.total) * 100 : 0}%` 
+                  }}
+                ></div>
               </div>
             </div>
           </div>

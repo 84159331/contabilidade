@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { 
+import {
   BellIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -14,6 +14,7 @@ import {
   BellSlashIcon,
   BellAlertIcon
 } from '@heroicons/react/24/outline';
+import storage from '../utils/storage';
 
 export interface Notification {
   id: string;
@@ -101,17 +102,17 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     },
   });
 
-  // Carregar configurações do localStorage
+  // Carregar configurações do armazenamento local
   useEffect(() => {
-    const savedSettings = localStorage.getItem('notificationSettings');
+    const savedSettings = storage.getJSON<NotificationSettings>('notificationSettings');
     if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
+      setSettings(savedSettings);
     }
   }, []);
 
-  // Salvar configurações no localStorage
+  // Salvar configurações no armazenamento local
   useEffect(() => {
-    localStorage.setItem('notificationSettings', JSON.stringify(settings));
+    storage.setJSON('notificationSettings', settings);
   }, [settings]);
 
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {

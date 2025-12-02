@@ -1,4 +1,22 @@
 // Function para buscar transações
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy, where } = require('firebase/firestore');
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDW73K6vb7RMdyfsJ6JVzzm1r3sULs4ceY",
+  authDomain: "comunidaderesgate-82655.firebaseapp.com",
+  projectId: "comunidaderesgate-82655",
+  storageBucket: "comunidaderesgate-82655.firebasestorage.app",
+  messagingSenderId: "587928941365",
+  appId: "1:587928941365:web:b788b8c9acf0a20992d27c",
+  measurementId: "G-485FKRFYHE"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 exports.handler = async (event, context) => {
   console.log('💰 Transactions function chamada:', event.httpMethod);
   
@@ -6,7 +24,7 @@ exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Content-Type': 'application/json'
   };
 
@@ -22,61 +40,21 @@ exports.handler = async (event, context) => {
   try {
     // Lidar com diferentes métodos HTTP
     if (event.httpMethod === 'GET') {
-      // Dados simulados de transações
-    const transactions = [
-      {
-        id: 1,
-        description: 'Dízimo - João Silva',
-        amount: 500.00,
-        type: 'income',
-        category_id: 1,
-        member_id: 1,
-        transaction_date: '2024-01-15',
-        payment_method: 'Dinheiro',
-        reference: 'DIZ-001',
-        notes: 'Dízimo mensal',
-        created_at: '2024-01-15T10:00:00Z'
-      },
-      {
-        id: 2,
-        description: 'Oferta - Maria Santos',
-        amount: 200.00,
-        type: 'income',
-        category_id: 2,
-        member_id: 2,
-        transaction_date: '2024-01-15',
-        payment_method: 'PIX',
-        reference: 'OFE-001',
-        notes: 'Oferta especial',
-        created_at: '2024-01-15T11:00:00Z'
-      },
-      {
-        id: 3,
-        description: 'Conta de luz',
-        amount: 150.00,
-        type: 'expense',
-        category_id: 3,
-        member_id: null,
-        transaction_date: '2024-01-14',
-        payment_method: 'Transferência',
-        reference: 'DESP-001',
-        notes: 'Conta de luz da igreja',
-        created_at: '2024-01-14T14:00:00Z'
-      },
-      {
-        id: 4,
-        description: 'Material de limpeza',
-        amount: 80.00,
-        type: 'expense',
-        category_id: 4,
-        member_id: null,
-        transaction_date: '2024-01-13',
-        payment_method: 'Dinheiro',
-        reference: 'DESP-002',
-        notes: 'Produtos de limpeza',
-        created_at: '2024-01-13T09:00:00Z'
-      }
-    ];
+      console.log('📊 Buscando transações do Firestore...');
+      
+      const transactionsRef = collection(db, 'transactions');
+      const q = query(transactionsRef, orderBy('created_at', 'desc'));
+      const snapshot = await getDocs(q);
+      
+      const transactions = [];
+      snapshot.forEach((doc) => {
+        transactions.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+
+      console.log(`✅ ${transactions.length} transações encontradas`);
 
       return {
         statusCode: 200,
@@ -90,6 +68,8 @@ exports.handler = async (event, context) => {
 
     // Lidar com criação de transações (POST)
     if (event.httpMethod === 'POST') {
+      console.log('💾 Criando nova transação no Firestore...');
+      
       const body = JSON.parse(event.body || '{}');
       const { 
         description, 
@@ -114,9 +94,8 @@ exports.handler = async (event, context) => {
         };
       }
 
-      // Simular criação de transação (em um sistema real, salvaria no banco de dados)
-      const newTransaction = {
-        id: Date.now(), // ID temporário baseado em timestamp
+      // Preparar dados para o Firestore
+      const transactionData = {
         description,
         amount: parseFloat(amount),
         type,
@@ -126,18 +105,25 @@ exports.handler = async (event, context) => {
         payment_method: payment_method || null,
         reference: reference || null,
         notes: notes || null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        created_at: new Date(),
+        updated_at: new Date()
       };
 
-      console.log('✅ Nova transação criada:', newTransaction);
+      // Salvar no Firestore
+      const transactionsRef = collection(db, 'transactions');
+      const docRef = await addDoc(transactionsRef, transactionData);
+
+      console.log('✅ Transação salva no Firestore com ID:', docRef.id);
 
       return {
         statusCode: 201,
         headers,
         body: JSON.stringify({
           message: 'Transação criada com sucesso',
-          transaction: newTransaction
+          transaction: {
+            id: docRef.id,
+            ...transactionData
+          }
         })
       };
     }

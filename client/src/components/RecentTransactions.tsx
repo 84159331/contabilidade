@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { transactionsAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 interface Transaction {
-  id: number;
+  id: string | number;
   description: string;
   amount: number;
   type: 'income' | 'expense';
@@ -12,28 +14,95 @@ interface Transaction {
   member_name?: string;
 }
 
+// Componente memoizado para linha da tabela
+const TransactionRow = memo<{ transaction: Transaction }>(({ transaction }) => {
+  const formattedDate = useMemo(
+    () => new Date(transaction.transaction_date).toLocaleDateString('pt-BR'),
+    [transaction.transaction_date]
+  );
+
+  const formattedAmount = useMemo(
+    () => transaction.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+    [transaction.amount]
+  );
+
+  return (
+    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center">
+          <div className={`w-2 h-2 rounded-full mr-3 ${
+            transaction.type === 'income' ? 'bg-success-500' : 'bg-danger-500'
+          }`}></div>
+          <div className="text-sm font-medium text-gray-900 dark:text-white">
+            {transaction.description}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          {transaction.category_name || '-'}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          {transaction.member_name || '-'}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+        {formattedDate}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <span className={`${
+          transaction.type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400'
+        }`}>
+          {transaction.type === 'income' ? '+' : '-'}R$ {formattedAmount}
+        </span>
+      </td>
+    </tr>
+  );
+});
+
+TransactionRow.displayName = 'TransactionRow';
+
 const RecentTransactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    loadRecentTransactions();
-  }, []);
-
-  const loadRecentTransactions = async () => {
+  const loadRecentTransactions = useCallback(async () => {
     try {
-      const response = await transactionsAPI.getTransactions({ 
-        page: 1, 
-        limit: 10 
-      });
-      setTransactions(response.data.transactions);
+      // Verificar se deve usar dados mock
+      const useMockData = !user;
+      
+      if (useMockData) {
+        // Simular delay de API (reduzido)
+        await simulateApiDelay(200);
+        
+        // Usar dados mock
+        setTransactions(mockDashboardData.recentTransactions);
+        console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
+      } else {
+        // Usar API real do Firestore
+        console.log('🔥 Carregando transações recentes do Firestore...');
+        const response = await transactionsAPI.getRecentTransactions(5);
+        setTransactions(response.data);
+        console.log('✅ Transações recentes carregadas do Firestore:', response.data.length);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar transações recentes');
       console.error('Erro ao carregar transações:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setTransactions(mockDashboardData.recentTransactions);
+      console.log('Usando dados mock como fallback');
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadRecentTransactions();
+  }, [loadRecentTransactions]);
+
 
   if (loading) {
     return (
@@ -76,38 +145,7 @@ const RecentTransactions: React.FC = () => {
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {transactions.map((transaction) => (
-              <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className={`w-2 h-2 rounded-full mr-3 ${
-                      transaction.type === 'income' ? 'bg-success-500' : 'bg-danger-500'
-                    }`}></div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      {transaction.description}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {transaction.category_name || '-'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {transaction.member_name || '-'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(transaction.transaction_date).toLocaleDateString('pt-BR')}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <span className={`${
-                    transaction.type === 'income' ? 'text-success-600 dark:text-success-400' : 'text-danger-600 dark:text-danger-400'
-                  }`}>
-                    {transaction.type === 'income' ? '+' : '-'}R$ {transaction.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </span>
-                </td>
-              </tr>
+              <TransactionRow key={transaction.id} transaction={transaction} />
             ))}
           </tbody>
         </table>
@@ -116,4 +154,4 @@ const RecentTransactions: React.FC = () => {
   );
 };
 
-export default RecentTransactions;
+export default memo(RecentTransactions);

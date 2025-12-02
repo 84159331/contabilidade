@@ -31,10 +31,10 @@ const PublicLayout: React.FC = () => {
           <div className="hidden md:flex space-x-8 items-center font-heading">
             <Link to="/sobre" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre</Link>
             <Link to="/conecte" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Conecte-se</Link>
-            <Link to="/eventos" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Eventos</Link>
             <Link to="/assista" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Assista</Link>
             <Link to="/contribua" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contribua</Link>
             <Link to="/localizacoes" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Localização</Link>
+            <Link to="/esbocos" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Esboços</Link>
           </div>
 
           {/* Right Side Actions */}
@@ -78,10 +78,10 @@ const PublicLayout: React.FC = () => {
               <ul className="space-y-2">
                 <li><Link to="/sobre" className="hover:text-primary-400">Sobre</Link></li>
                 <li><Link to="/conecte" className="hover:text-primary-400">Conecte-se</Link></li>
-                <li><Link to="/eventos" className="hover:text-primary-400">Eventos</Link></li>
                 <li><a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400">Assista</a></li>
                 <li><Link to="/contribua" className="hover:text-primary-400">Contribua</Link></li>
                 <li><Link to="/localizacoes" className="hover:text-primary-400">Localização</Link></li>
+                <li><Link to="/esbocos" className="hover:text-primary-400">Esboços de Pregação</Link></li>
               </ul>
             </div>
             <div>

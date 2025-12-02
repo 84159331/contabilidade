@@ -48,3 +48,15 @@ Interface adaptada para desktop, tablet e mobile.
 - Sessões seguras
 - Validação de dados
 - Backup automático
+
+## 📁 Estrutura Atual
+- `client/`: código ativo da aplicação (React + TypeScript).
+- `contabilidade/`: snapshot legado mantido apenas como referência. Consulte `docs/STRUCTURE.md` para o plano de consolidação e evite modificar essa pasta.
+
+## 📝 Observabilidade e Logs
+- Logs de console são suprimidos automaticamente em produção para evitar vazamentos.
+- Defina `REACT_APP_ENABLE_LOGS=true` no `.env` para reativar logs locais quando necessário.
+- Utilize o helper `logger` (`client/src/utils/logger.ts`) para mensagens estruturadas.
+
+## 💾 Armazenamento Local
+- Toda leitura/escrita em `localStorage` deve usar `client/src/utils/storage.ts`, garantindo fallback seguro em ambientes sem `window`.

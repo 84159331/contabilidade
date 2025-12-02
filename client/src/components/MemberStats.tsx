@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 interface MemberStatsData {
@@ -12,27 +14,50 @@ interface MemberStatsData {
 const MemberStats: React.FC = () => {
   const [stats, setStats] = useState<MemberStatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    loadMemberStats();
-  }, []);
-
-  const loadMemberStats = async () => {
+  const loadMemberStats = useCallback(async () => {
     try {
-      const response = await membersAPI.getMemberStats();
-      // eslint-disable-next-line no-console
-      console.log('Resposta da API de estatísticas:', response.data);
-      setStats(response.data.data);
+      // Verificar se deve usar dados mock
+      const useMockData = !user;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(400);
+        
+        // Usar dados mock
+        setStats(mockDashboardData.memberStats);
+        console.log('Dados mock de estatísticas carregados:', mockDashboardData.memberStats);
+      } else {
+        // Usar dados reais do Firestore
+        const response = await membersAPI.getMemberStats();
+        setStats(response.data);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar estatísticas dos membros');
-      // eslint-disable-next-line no-console
       console.error('Erro ao carregar estatísticas:', error);
-      // eslint-disable-next-line no-console
-      console.error('Detalhes do erro:', (error as any)?.response?.data);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setStats(mockDashboardData.memberStats);
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadMemberStats();
+  }, [loadMemberStats]);
+
+  // Calcular percentuais (hooks devem vir antes de qualquer return)
+  const activePercentage = useMemo(
+    () => stats && stats.total > 0 ? (stats.active / stats.total) * 100 : 0,
+    [stats?.total, stats?.active]
+  );
+  
+  const inactivePercentage = useMemo(
+    () => stats && stats.total > 0 ? (stats.inactive / stats.total) * 100 : 0,
+    [stats?.total, stats?.inactive]
+  );
 
   if (loading) {
     return (
@@ -49,9 +74,6 @@ const MemberStats: React.FC = () => {
       </div>
     );
   }
-
-  const activePercentage = stats.total > 0 ? (stats.active / stats.total) * 100 : 0;
-  const inactivePercentage = stats.total > 0 ? (stats.inactive / stats.total) * 100 : 0;
 
   return (
     <div className="space-y-4">
@@ -130,4 +152,4 @@ const MemberStats: React.FC = () => {
   );
 };
 
-export default MemberStats;
+export default memo(MemberStats);

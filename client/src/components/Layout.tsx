@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../firebase/AuthContext';
 import { NotificationCenter } from '../contexts/NotificationContext';
 import ThemeToggle from './ThemeToggle';
 import TabTransition from './TabTransition';
@@ -16,7 +16,10 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  BookOpenIcon,
+  CalendarIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
 // Definindo tipos para os itens de navegação para maior segurança
@@ -52,6 +55,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
     { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
+    { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
+    { type: 'link', name: 'Eventos', href: '/tesouraria/events', icon: CalendarIcon },
+    { type: 'link', name: 'Esboços', href: '/tesouraria/esbocos', icon: DocumentTextIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
@@ -97,7 +103,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-blue-200 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -136,7 +142,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        <div className="flex flex-col flex-grow bg-white/95 backdrop-blur-sm border-r border-gray-100 dark:bg-gray-900/95 dark:border-gray-800 shadow-sm">
           <a 
             href="https://www.instagram.com/comunidadecresgate/" 
             target="_blank" 
@@ -164,7 +170,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="lg:pl-72">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white/60 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-gray-700 dark:bg-gray-900/60">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-2 border-b border-gray-100 bg-white/80 backdrop-blur-sm px-3 shadow-sm sm:gap-x-4 sm:px-4 lg:gap-x-6 lg:px-8 dark:border-gray-800 dark:bg-gray-900/80">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden dark:text-gray-300"
@@ -173,20 +179,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Bars3Icon className="h-6 w-6" />
           </button>
 
-          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+          <div className="flex flex-1 gap-x-2 self-stretch sm:gap-x-4 lg:gap-x-6">
             <div className="flex flex-1" />
-            <div className="flex items-center gap-x-4 lg:gap-x-6">
+            <div className="flex items-center gap-x-2 sm:gap-x-4 lg:gap-x-6">
               <NotificationCenter />
               <ThemeToggle />
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200 dark:bg-gray-700" />
-              <div className="flex items-center gap-x-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">Olá, {user?.username}</span>
+              <div className="flex items-center gap-x-1 sm:gap-x-2">
+                <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
+                  Olá, {user?.displayName || user?.email?.split('@')[0] || 'Usuário'}
+                </span>
                 <button
                   onClick={logout}
-                  className="flex items-center gap-x-2 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  className="flex items-center gap-x-1 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                  Sair
+                  <span className="hidden sm:inline">Sair</span>
                 </button>
               </div>
             </div>
@@ -194,10 +202,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         {/* Page content */}
-        <main className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <TabTransition key={location.pathname}>
-              {children}
+        <main className="py-4 sm:py-6">
+          <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
+            <TabTransition transitionKey={location.pathname}>
+              <div className="bg-white/90 dark:bg-gray-900/90 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm sm:shadow-md p-4 sm:p-6 lg:p-8">
+                {children}
+              </div>
             </TabTransition>
           </div>
         </main>

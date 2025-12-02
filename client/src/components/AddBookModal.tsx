@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { XMarkIcon, DocumentArrowUpIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 interface AddBookModalProps {
   isOpen: boolean;
@@ -12,6 +13,10 @@ const categorias = [
   'Teologia',
   'Devocionais',
   'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
+  'Palavras de Coach',
+  'Palavras de Esperança',
   'Biografias',
   'História da Igreja',
   'Liderança',
@@ -21,6 +26,8 @@ const categorias = [
 ];
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook }) => {
+  console.log('🔍 AddBookModal renderizado - isOpen:', isOpen);
+  
   const [formData, setFormData] = useState({
     titulo: '',
     autor: '',
@@ -55,43 +62,61 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.pdfFile || !formData.capaFile) {
-      alert('Por favor, selecione o PDF e a capa do livro');
+    
+    // Validações
+    if (!formData.titulo.trim()) {
+      toast.warn('Por favor, digite o título do livro');
+      return;
+    }
+    
+    if (!formData.autor.trim()) {
+      toast.warn('Por favor, digite o nome do autor');
+      return;
+    }
+    
+    if (!formData.descricao.trim()) {
+      toast.warn('Por favor, digite a descrição do livro');
+      return;
+    }
+    
+    if (!formData.pdfFile) {
+      toast.warn('Por favor, selecione o arquivo PDF do livro');
+      return;
+    }
+    
+    if (!formData.capaFile) {
+      toast.warn('Por favor, selecione a capa do livro');
       return;
     }
 
     setUploading(true);
     try {
-      // Simular upload dos arquivos
-      const pdfUrl = `/pdfs/${formData.pdfFile.name}`;
-      const capaUrl = `/img/biblioteca/${formData.capaFile.name}`;
+      // Criar URLs para os arquivos (usando FileReader para arquivos locais)
+      const pdfUrl = URL.createObjectURL(formData.pdfFile);
+      const capaUrl = URL.createObjectURL(formData.capaFile);
       
       // Criar objeto do livro
       const novoLivro = {
         id: Date.now().toString(),
-        titulo: formData.titulo,
-        autor: formData.autor,
-        descricao: formData.descricao,
+        titulo: formData.titulo.trim(),
+        autor: formData.autor.trim(),
+        descricao: formData.descricao.trim(),
         categoria: formData.categoria,
         capa: capaUrl,
         pdfUrl: pdfUrl,
         tamanho: `${(formData.pdfFile.size / 1024 / 1024).toFixed(1)} MB`,
-        paginas: formData.paginas,
-        ano: formData.ano,
+        paginas: formData.paginas || 0,
+        ano: formData.ano || new Date().getFullYear(),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         downloads: 0,
         avaliacao: 0,
-        isNovo: true
+        isNovo: true,
+        // Adicionar informações dos arquivos para referência
+        pdfFile: formData.pdfFile,
+        capaFile: formData.capaFile
       };
 
-      // Simular upload (em produção, enviaria para o servidor)
-      // eslint-disable-next-line no-console
-      console.log('Uploading files:', {
-        pdf: formData.pdfFile.name,
-        capa: formData.capaFile.name
-      });
-
-      // Adicionar livro à biblioteca
+      // Adicionar livro à biblioteca (a função onAddBook já salva no armazenamento local)
       onAddBook(novoLivro);
       
       // Reset form
@@ -107,11 +132,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         capaFile: null
       });
       
+      // Mostrar mensagem de sucesso
+      toast.success('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Erro ao adicionar livro:', error);
-      alert('Erro ao adicionar livro. Tente novamente.');
+      toast.error('Erro ao adicionar livro. Tente novamente.');
     } finally {
       setUploading(false);
     }
@@ -138,6 +163,20 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
+          </div>
+
+          {/* Instruções */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
+              📚 Como adicionar livros reais:
+            </h3>
+            <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+              <li>• Baixe o PDF do livro da internet</li>
+              <li>• Encontre ou crie uma imagem da capa (JPG, PNG)</li>
+              <li>• Preencha todas as informações do livro</li>
+              <li>• Selecione os arquivos PDF e da capa</li>
+              <li>• Clique em "Adicionar Livro"</li>
+            </ul>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -261,11 +300,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   <DocumentArrowUpIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                   <input
                     type="file"
+                    name="pdfFile"
                     accept=".pdf"
                     onChange={(e) => handleFileChange(e, 'pdf')}
                     className="hidden"
                     id="pdf-upload"
-                    required
                   />
                   <label htmlFor="pdf-upload" className="cursor-pointer">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -282,11 +321,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   <PhotoIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                   <input
                     type="file"
+                    name="capaFile"
                     accept="image/*"
                     onChange={(e) => handleFileChange(e, 'capa')}
                     className="hidden"
                     id="capa-upload"
-                    required
                   />
                   <label htmlFor="capa-upload" className="cursor-pointer">
                     <span className="text-sm text-gray-600 dark:text-gray-400">

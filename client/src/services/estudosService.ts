@@ -133,6 +133,106 @@ const estudosDatabase: Estudo[] = [
     autor: "Pastora Rany",
     categoria: "Amor",
     tags: ["amor", "eternidade", "transformação"]
+  },
+  // Novos estudos de Fé
+  {
+    id: 11,
+    titulo: "Confiança Inabalável",
+    versiculo: "Isaías 26:3",
+    texto: "Tu conservarás em paz aquele cuja mente está firme em ti; porque ele confia em ti.",
+    reflexao: "A confiança em Deus é a base de uma vida estável e pacífica. Quando nossa mente está firmemente focada em Deus, Ele nos conserva em paz, independentemente das circunstâncias externas. Esta confiança não é passiva, mas ativa - é uma escolha diária de depositar nossa fé no Senhor.",
+    oracao: "Senhor, fortalece minha confiança em Ti. Ajuda-me a manter minha mente firme em Ti, mesmo quando as circunstâncias são desafiadoras. Que eu possa experimentar a Tua paz que vem da confiança genuína. Amém.",
+    data: new Date(Date.now() - 864000000).toISOString().split('T')[0],
+    autor: "Pastor Jadney",
+    categoria: "Fé",
+    tags: ["confiança", "paz", "estabilidade"]
+  },
+  {
+    id: 12,
+    titulo: "A Fé dos Gigantes",
+    versiculo: "Hebreus 11:1",
+    texto: "Ora, a fé é o firme fundamento das coisas que se esperam, e a prova das coisas que se não veem.",
+    reflexao: "A fé é o fundamento sólido que sustenta nossas esperanças e a evidência das realidades invisíveis. Os heróis da fé mencionados em Hebreus 11 não eram perfeitos, mas tinham uma característica em comum: confiavam completamente em Deus. Sua fé os capacitou a fazer coisas extraordinárias e a perseverar em meio às dificuldades.",
+    oracao: "Senhor, desenvolve em mim a fé dos gigantes. Ajuda-me a ver além das circunstâncias visíveis e a confiar nas Tuas promessas invisíveis. Que minha fé seja um firme fundamento que sustente todas as minhas esperanças. Amém.",
+    data: new Date(Date.now() - 950400000).toISOString().split('T')[0],
+    autor: "Pastora Fran",
+    categoria: "Fé",
+    tags: ["fé", "fundamento", "heróis"]
+  },
+  // Novos estudos de Esperança
+  {
+    id: 13,
+    titulo: "Esperança Renovada",
+    versiculo: "Lamentações 3:22-23",
+    texto: "As misericórdias do Senhor são a causa de não sermos consumidos, porque as suas misericórdias não têm fim; renovam-se cada manhã. Grande é a tua fidelidade.",
+    reflexao: "Mesmo nos momentos mais sombrios da vida, as misericórdias de Deus se renovam a cada manhã. Sua fidelidade é grande e constante. Esta verdade nos dá esperança renovada para cada novo dia, sabendo que Deus está sempre presente e ativo em nossa vida.",
+    oracao: "Senhor, obrigado pelas Tuas misericórdias que se renovam a cada manhã. Ajuda-me a confiar na Tua grande fidelidade, mesmo quando não vejo o caminho à frente. Renova minha esperança e fortalece minha confiança em Ti. Amém.",
+    data: new Date(Date.now() - 1036800000).toISOString().split('T')[0],
+    autor: "Apóstola Elaine",
+    categoria: "Esperança",
+    tags: ["esperança", "misericórdia", "fidelidade"]
+  },
+  {
+    id: 14,
+    titulo: "O Amanhã Pertence a Deus",
+    versiculo: "Jeremias 29:11",
+    texto: "Porque eu bem sei os pensamentos que tenho a vosso respeito, diz o Senhor; pensamentos de paz, e não de mal, para vos dar o fim que esperais.",
+    reflexao: "Deus tem planos específicos para cada um de nós - planos de paz e prosperidade, não de mal. Quando entregamos nosso futuro nas mãos de Deus, podemos descansar na certeza de que Ele está trabalhando para o nosso bem. O amanhã pertence a Ele, e podemos confiar nisso.",
+    oracao: "Senhor, entrego meu futuro em Tuas mãos. Ajuda-me a confiar nos Teus pensamentos de paz para minha vida. Que eu possa descansar na certeza de que Tu tens o melhor planejado para mim. Amém.",
+    data: new Date(Date.now() - 1123200000).toISOString().split('T')[0],
+    autor: "Pastor Jadney",
+    categoria: "Esperança",
+    tags: ["futuro", "planos", "paz"]
+  },
+  // Palavras de Coach
+  {
+    id: 15,
+    titulo: "Desperte o Gigante Interior",
+    versiculo: "Filipenses 4:13",
+    texto: "Posso todas as coisas naquele que me fortalece.",
+    reflexao: "Dentro de cada um de nós existe um potencial ilimitado que só pode ser despertado através da força que vem de Cristo. Não somos limitados por nossas próprias capacidades, mas sim fortalecidos pelo poder de Deus. Quando reconhecemos nossa dependência dEle, descobrimos que podemos fazer muito mais do que imaginávamos.",
+    oracao: "Senhor, desperta o gigante interior que há em mim. Ajuda-me a reconhecer que posso todas as coisas através da Tua força. Remove as limitações que coloquei sobre mim mesmo e capacita-me para cumprir o propósito que tens para minha vida. Amém.",
+    data: new Date(Date.now() - 1209600000).toISOString().split('T')[0],
+    autor: "Coach Cristão",
+    categoria: "Palavras de Coach",
+    tags: ["potencial", "força", "capacitação"]
+  },
+  {
+    id: 16,
+    titulo: "Mindset Vencedor",
+    versiculo: "Romanos 12:2",
+    texto: "E não vos conformeis com este mundo, mas transformai-vos pela renovação do vosso entendimento, para que experimenteis qual seja a boa, agradável e perfeita vontade de Deus.",
+    reflexao: "Um mindset vencedor começa com a renovação da mente. Precisamos transformar nossa forma de pensar, deixando de lado os padrões do mundo e abraçando a perspectiva de Deus. Esta transformação nos capacita a discernir e viver a vontade perfeita de Deus.",
+    oracao: "Senhor, renova minha mente e transforma meu entendimento. Ajuda-me a não me conformar com os padrões do mundo, mas a pensar como Tu pensas. Que eu possa experimentar e viver a Tua vontade perfeita. Amém.",
+    data: new Date(Date.now() - 1296000000).toISOString().split('T')[0],
+    autor: "Coach Cristão",
+    categoria: "Palavras de Coach",
+    tags: ["mindset", "transformação", "renovação"]
+  },
+  // Palavras de Esperança
+  {
+    id: 17,
+    titulo: "Consolo para o Coração Ferido",
+    versiculo: "Salmo 34:18",
+    texto: "Perto está o Senhor dos que têm o coração quebrantado, e salva os contritos de espírito.",
+    reflexao: "Deus não está distante quando nosso coração está ferido. Ele se aproxima especialmente dos quebrantados e contritos. Sua presença é um bálsamo para nossa dor, e Sua salvação é nossa esperança. Em meio ao sofrimento, podemos encontrar consolo na certeza de que Ele está próximo.",
+    oracao: "Senhor, obrigado por estares próximo quando meu coração está ferido. Ajuda-me a sentir a Tua presença consoladora e a encontrar esperança em Ti. Cura minhas feridas e restaura minha alegria. Amém.",
+    data: new Date(Date.now() - 1382400000).toISOString().split('T')[0],
+    autor: "Ministério de Consolação",
+    categoria: "Palavras de Esperança",
+    tags: ["consolo", "cura", "presença"]
+  },
+  {
+    id: 18,
+    titulo: "Novos Caminhos, Novas Possibilidades",
+    versiculo: "Isaías 43:19",
+    texto: "Eis que farei uma coisa nova, agora sairá à luz; porventura não a percebeis? Eis que porei um caminho no deserto, e rios no ermo.",
+    reflexao: "Deus está sempre fazendo coisas novas em nossa vida. Mesmo quando parece que estamos no deserto, Ele pode abrir caminhos onde não existiam e fazer brotar rios em lugares secos. Sua criatividade e poder não têm limites, e Ele pode transformar qualquer situação em uma nova possibilidade.",
+    oracao: "Senhor, abre meus olhos para ver as coisas novas que estás fazendo. Ajuda-me a perceber os novos caminhos e possibilidades que tens para minha vida. Que eu possa confiar em Ti mesmo quando estou no deserto. Amém.",
+    data: new Date(Date.now() - 1468800000).toISOString().split('T')[0],
+    autor: "Ministério de Consolação",
+    categoria: "Palavras de Esperança",
+    tags: ["novos caminhos", "possibilidades", "renovação"]
   }
 ];
 

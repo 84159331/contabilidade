@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   ChatBubbleLeftRightIcon,
   PhoneIcon,
   EnvelopeIcon,
@@ -17,6 +17,7 @@ import {
   ClockIcon,
   UserGroupIcon
 } from '@heroicons/react/24/outline';
+import storage from '../utils/storage';
 
 interface WhatsAppContact {
   id: string;
@@ -129,13 +130,13 @@ Que Deus abençoe e fortaleça você! ✨
     }
   };
 
-  // Carregar dados do localStorage
+  // Carregar dados do armazenamento local
   useEffect(() => {
-    const savedContacts = localStorage.getItem('whatsapp-contacts');
-    const savedMessages = localStorage.getItem('whatsapp-messages');
+    const savedContacts = storage.getJSON<any[]>('whatsapp-contacts');
+    const savedMessages = storage.getJSON<any[]>('whatsapp-messages');
     
-    if (savedContacts) {
-      const parsedContacts = JSON.parse(savedContacts).map((contact: any) => ({
+    if (savedContacts && Array.isArray(savedContacts)) {
+      const parsedContacts = savedContacts.map((contact: any) => ({
         ...contact,
         createdAt: new Date(contact.createdAt),
         lastMessage: contact.lastMessage ? new Date(contact.lastMessage) : undefined
@@ -228,8 +229,8 @@ Que Deus abençoe e fortaleça você! ✨
       setContacts(exampleContacts);
     }
 
-    if (savedMessages) {
-      const parsedMessages = JSON.parse(savedMessages).map((message: any) => ({
+    if (savedMessages && Array.isArray(savedMessages)) {
+      const parsedMessages = savedMessages.map((message: any) => ({
         ...message,
         scheduledAt: message.scheduledAt ? new Date(message.scheduledAt) : undefined,
         sentAt: message.sentAt ? new Date(message.sentAt) : undefined
@@ -238,13 +239,13 @@ Que Deus abençoe e fortaleça você! ✨
     }
   }, []);
 
-  // Salvar dados no localStorage
+  // Salvar dados no armazenamento local
   useEffect(() => {
-    localStorage.setItem('whatsapp-contacts', JSON.stringify(contacts));
+    storage.setJSON('whatsapp-contacts', contacts);
   }, [contacts]);
 
   useEffect(() => {
-    localStorage.setItem('whatsapp-messages', JSON.stringify(messages));
+    storage.setJSON('whatsapp-messages', messages);
   }, [messages]);
 
   const handleAddContact = () => {

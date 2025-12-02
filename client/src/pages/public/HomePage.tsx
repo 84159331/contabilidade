@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SafeImage from '../../components/SafeImage';
+import EventsSection from '../../components/EventsSection';
 import { 
   HeartIcon, 
   BookOpenIcon, 
@@ -81,6 +82,30 @@ const dailyStudies = [
     verse: "1 Coríntios 13:8",
     author: "Pastora Rany"
   },
+  {
+    title: "Confiança Inabalável",
+    content: "A confiança em Deus é a base de uma vida estável e pacífica. Quando nossa mente está firmemente focada em Deus, Ele nos conserva em paz, independentemente das circunstâncias externas. Esta confiança não é passiva, mas ativa - é uma escolha diária de depositar nossa fé no Senhor.",
+    verse: "Isaías 26:3",
+    author: "Pastor Jadney"
+  },
+  {
+    title: "Esperança Renovada",
+    content: "Mesmo nos momentos mais sombrios da vida, as misericórdias de Deus se renovam a cada manhã. Sua fidelidade é grande e constante. Esta verdade nos dá esperança renovada para cada novo dia, sabendo que Deus está sempre presente e ativo em nossa vida.",
+    verse: "Lamentações 3:22-23",
+    author: "Apóstola Elaine"
+  },
+  {
+    title: "Desperte o Gigante Interior",
+    content: "Dentro de cada um de nós existe um potencial ilimitado que só pode ser despertado através da força que vem de Cristo. Não somos limitados por nossas próprias capacidades, mas sim fortalecidos pelo poder de Deus. Quando reconhecemos nossa dependência dEle, descobrimos que podemos fazer muito mais do que imaginávamos.",
+    verse: "Filipenses 4:13",
+    author: "Coach Cristão"
+  },
+  {
+    title: "Consolo para o Coração Ferido",
+    content: "Deus não está distante quando nosso coração está ferido. Ele se aproxima especialmente dos quebrantados e contritos. Sua presença é um bálsamo para nossa dor, e Sua salvação é nossa esperança. Em meio ao sofrimento, podemos encontrar consolo na certeza de que Ele está próximo.",
+    verse: "Salmo 34:18",
+    author: "Ministério de Consolação"
+  },
 ];
 
 // Testemunhos - TEMPORARIAMENTE DESABILITADOS
@@ -148,57 +173,43 @@ const ministries = [
     name: "Ministério de Louvor",
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
-    members: 25,
-    leader: "Pastora Kele"
+    leader: "Apóstolo Isac"
   },
   {
     name: "Ministério Infantil",
     description: "Cuidamos e ensinamos as crianças no caminho do Senhor",
     icon: UsersIcon,
-    members: 15,
-    leader: "Pastora Fran"
+    leader: "Pastora Eneiza"
   },
   {
     name: "Ministério de Jovens",
     description: "Conectamos jovens com Cristo e uns com os outros",
     icon: CalendarIcon,
-    members: 40,
-    leader: "Pastor Jadney"
+    leader: "Prs. Jadney e Kele"
   },
   {
     name: "Ministério de Ação Social",
     description: "Servimos nossa comunidade com amor e compaixão",
     icon: GiftIcon,
-    members: 30,
-    leader: "Pastora Eneize"
+    leader: "Obr. Clebson e Hiully"
   },
   {
     name: "Ministério de Ensino",
     description: "Crescimento espiritual através do estudo da Palavra",
     icon: BookOpenIcon,
-    members: 20,
     leader: "Pastor Leomar"
-  },
-  {
-    name: "Ministério de Evangelismo",
-    description: "Compartilhando o amor de Cristo com o mundo",
-    icon: ShareIcon,
-    members: 35,
-    leader: "Pastor Elcio"
   },
   {
     name: "Ministério de Discipulado",
     description: "Formando discípulos maduros na fé",
     icon: UserGroupIcon,
-    members: 28,
-    leader: "Pastor Thiago"
+    leader: "Aps. Isac e Elaine"
   },
   {
     name: "Ministério de Casais",
     description: "Fortalecendo relacionamentos e famílias",
     icon: HeartIcon,
-    members: 22,
-    leader: "Pastora Rany"
+    leader: "Prs. Leomar e Odília"
   }
 ];
 
@@ -356,69 +367,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Próximos Eventos Section */}
-      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Próximos Eventos</h2>
-            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Participe dos nossos eventos e fortaleça sua fé</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {upcomingEvents.map((event, index) => (
-              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 fade-in-scale stagger-${index + 2}">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    event.type === 'culto' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                    event.type === 'estudo' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  }`}>
-                    {event.type === 'culto' ? 'Culto' : event.type === 'estudo' ? 'Estudo' : 'Conferência'}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <UsersIcon className="h-4 w-4 mr-1" />
-                    {event.attendees}
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{event.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{event.description}</p>
-                
-                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center">
-                    <CalendarIcon className="h-4 w-4 mr-2" />
-                    {event.date}
-                  </div>
-                  <div className="flex items-center">
-                    <ClockIcon className="h-4 w-4 mr-2" />
-                    {event.time}
-                  </div>
-                  <div className="flex items-center">
-                    <MapPinIcon className="h-4 w-4 mr-2" />
-                    {event.location}
-                  </div>
-                </div>
-                
-                <Link
-                  to="/eventos"
-                  className="mt-4 inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-                >
-                  Ver Detalhes
-                  <ArrowRightIcon className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-8">
-            <Link
-              to="/eventos"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-            >
-              Ver Todos os Eventos
-            </Link>
-          </div>
-        </div>
-      </div>
+      <EventsSection />
 
       {/* Ministérios Section */}
       <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
@@ -440,20 +389,12 @@ const HomePage: React.FC = () => {
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{ministry.name}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{ministry.description}</p>
                 
-                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center justify-center">
-                    <UsersIcon className="h-4 w-4 mr-1" />
-                    {ministry.members} membros
-                  </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center justify-center">
                     <StarIcon className="h-4 w-4 mr-1" />
                     Líder: {ministry.leader}
                   </div>
                 </div>
-                
-                <button className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                  Participar
-                </button>
               </div>
             ))}
           </div>

@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { transactionsAPI, categoriesAPI, membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SkeletonLoader from '../components/SkeletonLoader';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
 import useDebounce from '../hooks/useDebounce';
 
 interface Transaction {
-  id: number;
+  id: number | string;
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category_id?: number;
-  member_id?: number;
+  category_id?: number | string;
+  member_id?: number | string;
   transaction_date: string;
   payment_method?: string;
   reference?: string;
@@ -25,14 +29,14 @@ interface Transaction {
 }
 
 interface Category {
-  id: number;
+  id: number | string;
   name: string;
   type: 'income' | 'expense';
   color: string;
 }
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -60,36 +64,117 @@ const Transactions: React.FC = () => {
     total: 0,
     pages: 0
   });
+  const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
+  const lastRouteRef = useRef<string>(location.pathname);
+  const hasLoadedRef = useRef(false);
 
   const loadData = useCallback(async () => {
+    // Aguardar autenticação terminar antes de carregar
+    if (authLoading) {
+      return;
+    }
+
     try {
       setLoading(true);
       
-      const [transactionsResponse, categoriesResponse, membersResponse] = await Promise.all([
-        transactionsAPI.getTransactions({
+      // Verificar se deve usar dados mock
+      const useMockData = !user;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        setTransactions(mockDashboardData.transactions);
+        setCategories(mockDashboardData.categories);
+        setMembers(mockDashboardData.members);
+        setPagination({
+          page: 1,
+          limit: 20,
+          total: 0,
+          pages: 0
+        });
+        console.log('Dados mock de transações carregados:', mockDashboardData.transactions);
+      } else {
+        // Tentar usar APIs reais - otimizar carregamento
+        // Carregar transações primeiro (mais importante), depois o resto em paralelo
+        const transactionsResponse = await transactionsAPI.getTransactions({
           page: pagination.page,
           limit: pagination.limit,
           ...filters
-        }),
-        categoriesAPI.getCategories(),
-        membersAPI.getMembers({ limit: 1000 })
-      ]);
-      
-      setTransactions(transactionsResponse.data.transactions);
-      setPagination(transactionsResponse.data.pagination);
-      setCategories(categoriesResponse.data);
-      setMembers(membersResponse.data.members);
+        });
+        
+        // Carregar categorias e membros em paralelo (menos crítico)
+        const [categoriesResponse, membersResponse] = await Promise.all([
+          categoriesAPI.getCategories(),
+          membersAPI.getMembers()
+        ]);
+        
+        // Usar dados reais do Firestore
+        setTransactions(transactionsResponse.data.transactions);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: transactionsResponse.data.total,
+          pages: Math.ceil(transactionsResponse.data.total / 10)
+        });
+        setCategories(categoriesResponse.data.categories);
+        setMembers(membersResponse.data.members);
+        
+        console.log('✅ Dados carregados do Firestore:');
+        console.log('- Transações:', transactionsResponse.data.transactions.length);
+        console.log('- Categorias:', categoriesResponse.data.categories.length);
+        console.log('- Membros:', membersResponse.data.members.length);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar dados');
       console.error('Erro ao carregar dados:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setTransactions(mockDashboardData.transactions);
+      setCategories(mockDashboardData.categories);
+      setMembers(mockDashboardData.members);
+      setPagination({
+        page: 1,
+        limit: 20,
+        total: 0,
+        pages: 0
+      });
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }
-  }, [filters, pagination.page, pagination.limit]);
+  }, [filters, pagination.page, pagination.limit, user, authLoading]);
 
+  // Resetar e limpar cache quando a rota mudar
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    if (lastRouteRef.current !== location.pathname) {
+      hasLoadedRef.current = false;
+      lastRouteRef.current = location.pathname;
+      // Limpar cache ao mudar de rota
+      try {
+        sessionStorage.removeItem('transactions_cache');
+      } catch (e) {
+        // Ignorar erro
+      }
+      console.log('🔄 Rota mudou em Transactions, limpando cache e resetando');
+    }
+  }, [location.pathname]);
+
+  // Carregar dados quando monta ou quando auth/user/rota muda
+  useEffect(() => {
+    // Só carregar dados quando auth terminar
+    if (authLoading) {
+      return;
+    }
+
+    // Forçar recarregamento se ainda não carregou ou se a rota mudou
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      // Carregar imediatamente (sem delay desnecessário)
+      loadData();
+    }
+  }, [loadData, authLoading, location.pathname]);
 
   // Efeito separado para busca com debounce
   useEffect(() => {
@@ -111,7 +196,7 @@ const Transactions: React.FC = () => {
     }
   }, [loadData]);
 
-  const handleUpdateTransaction = useCallback(async (id: number, transactionData: any) => {
+  const handleUpdateTransaction = useCallback(async (id: string, transactionData: any) => {
     try {
       await transactionsAPI.updateTransaction(id, transactionData);
       toast.success('Transação atualizada com sucesso!');
@@ -122,10 +207,10 @@ const Transactions: React.FC = () => {
     }
   }, [loadData]);
 
-  const handleDeleteTransaction = async (id: number) => {
+  const handleDeleteTransaction = async (id: string | number) => {
     if (window.confirm('Tem certeza que deseja deletar esta transação?')) {
       try {
-        await transactionsAPI.deleteTransaction(id);
+        await transactionsAPI.deleteTransaction(String(id));
         toast.success('Transação deletada com sucesso!');
         loadData();
       } catch (error: any) {
@@ -171,7 +256,11 @@ const Transactions: React.FC = () => {
   };
 
   if (loading && transactions.length === 0) {
-    return <LoadingSpinner />;
+    return (
+      <div className="space-y-6">
+        <SkeletonLoader type="table" count={5} />
+      </div>
+    );
   }
 
   return (
@@ -179,8 +268,8 @@ const Transactions: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Transações</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie receitas e despesas da igreja
           </p>
         </div>
@@ -194,20 +283,20 @@ const Transactions: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
         <form onSubmit={handleSearch} className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {/* Search */}
             <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Buscar
               </label>
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
                 <input
                   type="text"
                   id="search"
-                  className="input pl-10"
+                  className="input pl-10 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                   placeholder="Descrição ou referência..."
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
@@ -217,12 +306,12 @@ const Transactions: React.FC = () => {
 
             {/* Type */}
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Tipo
               </label>
               <select
                 id="type"
-                className="input"
+                className="input dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 value={filters.type}
                 onChange={(e) => handleFilterChange('type', e.target.value)}
               >
@@ -234,12 +323,12 @@ const Transactions: React.FC = () => {
 
             {/* Category */}
             <div>
-              <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Categoria
               </label>
               <select
                 id="category_id"
-                className="input"
+                className="input dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 value={filters.category_id}
                 onChange={(e) => handleFilterChange('category_id', e.target.value)}
               >
@@ -333,7 +422,7 @@ const Transactions: React.FC = () => {
           categories={categories}
           members={members}
           onSave={editingTransaction ? 
-            (data) => handleUpdateTransaction(editingTransaction.id, data) : 
+            (data) => handleUpdateTransaction(String(editingTransaction.id), data) : 
             handleCreateTransaction
           }
           onClose={handleCloseForm}

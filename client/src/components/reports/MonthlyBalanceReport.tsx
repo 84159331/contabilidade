@@ -27,12 +27,42 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   const loadReport = async () => {
     try {
       setLoading(true);
+      
+      // Buscar dados reais do Firestore
       const response = await reportsAPI.getMonthlyBalance(year, month);
-      setData(response.data);
-      onDataLoaded(response.data);
+      const reportData = response.data;
+      
+      // Transformar dados para o formato esperado
+      const formattedData: MonthlyBalance = {
+        income: {
+          total: reportData.income?.total || 0,
+          count: reportData.income?.count || 0
+        },
+        expense: {
+          total: reportData.expense?.total || 0,
+          count: reportData.expense?.count || 0
+        },
+        balance: reportData.balance || 0,
+        period: { year, month }
+      };
+      
+      setData(formattedData);
+      onDataLoaded(formattedData);
+      console.log('✅ Relatório mensal carregado:', formattedData);
     } catch (error) {
-      toast.error('Erro ao carregar relatório mensal');
-      console.error('Erro ao carregar relatório:', error);
+      console.error('❌ Erro ao carregar relatório mensal:', error);
+      
+      // Em caso de erro, usar dados vazios
+      const emptyData: MonthlyBalance = {
+        income: { total: 0, count: 0 },
+        expense: { total: 0, count: 0 },
+        balance: 0,
+        period: { year, month }
+      };
+      setData(emptyData);
+      onDataLoaded(emptyData);
+      
+      toast.error('Erro ao carregar relatório mensal. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -119,14 +149,14 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Receitas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {data.income.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.income?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.income.count} transações
+                {data.income?.count || 0} transações
               </div>
             </div>
           </div>
@@ -146,14 +176,14 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Despesas
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    R$ {data.expense.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.expense?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.expense.count} transações
+                {data.expense?.count || 0} transações
               </div>
             </div>
           </div>
@@ -164,10 +194,10 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  data.balance >= 0 ? 'bg-success-100' : 'bg-danger-100'
+                  (data.balance || 0) >= 0 ? 'bg-success-100' : 'bg-danger-100'
                 }`}>
                   <span className={`font-bold ${
-                    data.balance >= 0 ? 'text-success-600' : 'text-danger-600'
+                    (data.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
                   }`}>
                     =
                   </span>
@@ -179,9 +209,9 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                     Saldo
                   </dt>
                   <dd className={`text-lg font-medium ${
-                    data.balance >= 0 ? 'text-success-600' : 'text-danger-600'
+                    (data.balance || 0) >= 0 ? 'text-success-600' : 'text-danger-600'
                   }`}>
-                    R$ {data.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {(data.balance || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowPathIcon, CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import storage from '../utils/storage';
 
 interface SyncStatus {
   lastSync: string | null;
@@ -17,7 +18,7 @@ const CellGroupsSync: React.FC = () => {
 
   useEffect(() => {
     // Verificar status de sincronização
-    const lastSync = localStorage.getItem('cellGroupsLastSync');
+    const lastSync = storage.getString('cellGroupsLastSync');
     setSyncStatus(prev => ({
       ...prev,
       lastSync
@@ -28,27 +29,20 @@ const CellGroupsSync: React.FC = () => {
   }, []);
 
   const checkForChanges = () => {
-    const cellGroups = localStorage.getItem('cellGroups');
-    const publicCellGroups = localStorage.getItem('publicCellGroups');
-    
+    const cellGroups = storage.getJSON<any[]>('cellGroups');
+    const publicCellGroups = storage.getJSON<any[]>('publicCellGroups');
+
     if (cellGroups && publicCellGroups) {
-      try {
-        const groups = JSON.parse(cellGroups);
-        const publicGroups = JSON.parse(publicCellGroups);
-        
-        // Comparar timestamps ou conteúdo
-        const hasChanges = groups.some((group: any) => {
-          const publicGroup = publicGroups.find((pg: any) => pg.id === group.id);
-          return !publicGroup || publicGroup.updatedAt !== group.updatedAt;
-        });
-        
-        setSyncStatus(prev => ({
-          ...prev,
-          hasChanges
-        }));
-      } catch (error) {
-        // Erro silencioso na verificação de mudanças
-      }
+      // Comparar timestamps ou conteúdo
+      const hasChanges = cellGroups.some((group: any) => {
+        const publicGroup = publicCellGroups.find((pg: any) => pg.id === group.id);
+        return !publicGroup || publicGroup.updatedAt !== group.updatedAt;
+      });
+
+      setSyncStatus(prev => ({
+        ...prev,
+        hasChanges
+      }));
     }
   };
 
@@ -56,47 +50,50 @@ const CellGroupsSync: React.FC = () => {
     setSyncStatus(prev => ({ ...prev, isSyncing: true }));
     
     try {
-      const cellGroups = localStorage.getItem('cellGroups');
-      if (cellGroups) {
-        const groups = JSON.parse(cellGroups);
-        
+      const cellGroups = storage.getJSON<any[]>('cellGroups');
+      if (cellGroups && Array.isArray(cellGroups)) {
         // Converter para formato público
-        const publicGroups = groups.map((group: any) => ({
+        const publicGroups = cellGroups.map((group: any) => ({
           id: group.id,
           title: group.title,
           subtitle: group.subtitle,
           description: group.description,
-          image: group.image,
-          icon: group.icon.name || 'UserGroupIcon',
+          image: group.image || '', // Incluir imagem na sincronização
+          icon: group.icon?.name || group.icon || 'UserGroupIcon',
           color: group.color,
-          members: group.members.length,
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
           meetings: group.meetings,
           location: group.location,
           leader: group.leader,
-          features: group.features,
+          features: [], // Sempre array vazio para não exibir atividades
           isPopular: group.isPopular,
           isActive: group.isActive,
           maxMembers: group.maxMembers,
           updatedAt: group.updatedAt
         }));
-        
+
+        const timestamp = new Date().toISOString();
+
         // Salvar versão pública
-        localStorage.setItem('publicCellGroups', JSON.stringify(publicGroups));
-        localStorage.setItem('cellGroupsLastSync', new Date().toISOString());
-        
+        storage.setJSON('publicCellGroups', publicGroups);
+        storage.setString('cellGroupsLastSync', timestamp);
+
         setSyncStatus({
-          lastSync: new Date().toISOString(),
+          lastSync: timestamp,
           isSyncing: false,
           hasChanges: false
         });
-        
+
         toast.success('Grupos celulares sincronizados com sucesso!');
+      } else {
+        toast.info('Nenhum grupo para sincronizar.');
+        setSyncStatus(prev => ({ ...prev, isSyncing: false }));
       }
-        } catch (error) {
-          // Fallback para grupos padrão se houver erro
-          setSyncStatus(prev => ({ ...prev, isSyncing: false }));
-          toast.error('Erro ao sincronizar grupos celulares');
-        }
+    } catch (error) {
+      // Fallback para grupos padrão se houver erro
+      setSyncStatus(prev => ({ ...prev, isSyncing: false }));
+      toast.error('Erro ao sincronizar grupos celulares');
+    }
   };
 
   const formatLastSync = (timestamp: string | null) => {

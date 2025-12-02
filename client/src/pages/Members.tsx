@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { membersAPI } from '../services/api';
+import { mockDashboardData, simulateApiDelay } from '../services/mockData';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MemberForm from '../components/MemberForm';
@@ -9,7 +12,7 @@ import Modal from '../components/Modal';
 import Button from '../components/Button';
 
 interface Member {
-  id: number;
+  id: number | string;
   name: string;
   email?: string;
   phone?: string;
@@ -38,30 +41,106 @@ const Members: React.FC = () => {
     total: 0,
     pages: 0
   });
+  const { user, loading: authLoading } = useAuth();
+  const location = useLocation();
+  const lastRouteRef = useRef<string>(location.pathname);
+  const hasLoadedRef = useRef(false);
 
+  // Resetar quando a rota mudar
   useEffect(() => {
-    loadMembers();
-  }, [searchTerm, statusFilter, pagination.page]);
+    if (lastRouteRef.current !== location.pathname) {
+      hasLoadedRef.current = false;
+      lastRouteRef.current = location.pathname;
+      console.log('🔄 Rota mudou em Members, resetando estado');
+    }
+  }, [location.pathname]);
 
-  const loadMembers = async () => {
+  const loadMembers = useCallback(async (forceReload = false) => {
+    // Aguardar autenticação terminar
+    if (authLoading) {
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await membersAPI.getMembers({
-        page: pagination.page,
-        limit: pagination.limit,
-        search: searchTerm,
-        status: statusFilter
-      });
       
-      setMembers(response.data.members);
-      setPagination(response.data.pagination);
+      // Limpar cache se forçado
+      if (forceReload) {
+        console.log('🔄 Forçando recarga dos membros...');
+        setMembers([]);
+      }
+      
+      // Verificar se deve usar dados mock
+      const useMockData = !user;
+      
+      if (useMockData) {
+        // Simular delay de API
+        await simulateApiDelay(600);
+        
+        // Usar dados mock
+        setMembers(mockDashboardData.members);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: mockDashboardData.members.length,
+          pages: Math.ceil(mockDashboardData.members.length / 10)
+        });
+        console.log('Dados mock de membros carregados:', mockDashboardData.members.length);
+      } else {
+        // Usar API real do Firestore
+        console.log('🔥 Carregando membros do Firestore...');
+        const response = await membersAPI.getMembers();
+        
+        // Verificar se os IDs são válidos
+        const validMembers = response.data.members.filter(member => {
+          const isValid = typeof member.id === 'string' && member.id.length > 0;
+          if (!isValid) {
+            console.warn('⚠️ Membro com ID inválido encontrado:', member);
+          }
+          return isValid;
+        });
+        
+        setMembers(validMembers);
+        setPagination({
+          page: 1,
+          limit: 10,
+          total: validMembers.length,
+          pages: Math.ceil(validMembers.length / 10)
+        });
+        console.log('✅ Membros válidos carregados do Firestore:', validMembers.length);
+      }
     } catch (error) {
-      toast.error('Erro ao carregar membros');
       console.error('Erro ao carregar membros:', error);
+      
+      // Em caso de erro, usar dados mock como fallback
+      setMembers(mockDashboardData.members);
+      setPagination({
+        page: 1,
+        limit: 10,
+        total: mockDashboardData.members.length,
+        pages: Math.ceil(mockDashboardData.members.length / 10)
+      });
+      console.log('Usando dados mock como fallback');
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, authLoading]);
+
+  useEffect(() => {
+    // Aguardar auth terminar
+    if (authLoading) {
+      return;
+    }
+
+    // Carregar apenas se ainda não carregou ou se filtros mudaram
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadMembers();
+    } else if (searchTerm || statusFilter || pagination.page > 1) {
+      // Se já carregou, só recarregar se filtros mudaram
+      loadMembers();
+    }
+  }, [searchTerm, statusFilter, pagination.page, authLoading, location.pathname, loadMembers]);
 
   const handleCreateMember = async (memberData: any) => {
     try {
@@ -77,29 +156,33 @@ const Members: React.FC = () => {
     }
   };
 
-  const handleUpdateMember = async (id: number, memberData: any) => {
+  const handleUpdateMember = async (id: string | number, memberData: any) => {
     try {
       setIsUpdating(true);
-      await membersAPI.updateMember(id, memberData);
+      console.log('🔄 Iniciando atualização do membro:', id, 'Tipo:', typeof id);
+      await membersAPI.updateMember(String(id), memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
       setShowForm(false);
-      loadMembers();
+      loadMembers(true); // Forçar recarga
     } catch (error: any) {
+      console.error('❌ Erro na atualização:', error);
       toast.error(error.response?.data?.error || 'Erro ao atualizar membro');
     } finally {
       setIsUpdating(false);
     }
   };
 
-  const handleDeleteMember = async (id: number) => {
+  const handleDeleteMember = async (id: string | number) => {
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
         setIsDeleting(true);
-        await membersAPI.deleteMember(id);
+        console.log('🗑️ Iniciando exclusão do membro:', id, 'Tipo:', typeof id);
+        await membersAPI.deleteMember(String(id));
         toast.success('Membro deletado com sucesso!');
-        loadMembers();
+        loadMembers(true); // Forçar recarga
       } catch (error: any) {
+        console.error('❌ Erro na exclusão:', error);
         toast.error(error.response?.data?.error || 'Erro ao deletar membro');
       } finally {
         setIsDeleting(false);
@@ -135,8 +218,8 @@ const Members: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Membros</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Membros</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie os membros da igreja
           </p>
         </div>
@@ -147,18 +230,18 @@ const Members: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow">
-        <form onSubmit={handleSearch} className="flex gap-4 items-end">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 items-end">
           <div className="flex-1">
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Buscar
             </label>
             <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 id="search"
-                className="input pl-10"
+                className="input pl-10 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 placeholder="Nome, email ou telefone..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -166,12 +249,12 @@ const Members: React.FC = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Status
             </label>
             <select
               id="status"
-              className="input"
+              className="input dark:bg-gray-700 dark:text-white dark:border-gray-600"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -206,7 +289,7 @@ const Members: React.FC = () => {
         <MemberForm
           member={editingMember}
           onSave={editingMember ? 
-            (data) => handleUpdateMember(editingMember.id, data) :
+            (data) => handleUpdateMember(editingMember.id.toString(), data) :
             handleCreateMember
           }
           onClose={handleCloseForm}

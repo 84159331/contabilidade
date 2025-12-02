@@ -6,7 +6,14 @@ import YearlyBalanceReport from '../components/reports/YearlyBalanceReport';
 import MemberContributionsReport from '../components/reports/MemberContributionsReport';
 import CategoryReport from '../components/reports/CategoryReport';
 import CashFlowReport from '../components/reports/CashFlowReport';
-import { generatePdf } from '../utils/pdf';
+import { toast } from 'react-toastify';
+import {
+  generateMonthlyBalancePDF,
+  generateYearlyBalancePDF,
+  generateCategoryReportPDF,
+  generateCashFlowPDF,
+  generateMemberContributionsPDF
+} from '../utils/reportPdfGenerators';
 import { exportToCsv } from '../utils/export';
 import Button from '../components/Button';
 
@@ -16,7 +23,13 @@ const Reports: React.FC = () => {
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState<any>(null);
+  const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, período, etc.
   const reportContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Informações da igreja (pode ser obtido de configurações ou deixar vazio)
+  const churchInfo = {
+    name: 'Minha Igreja', // Pode ser obtido de settings ou contexto
+  };
 
   const reports = [
     {
@@ -52,13 +65,110 @@ const Reports: React.FC = () => {
   ];
 
   const handleSetReportData = (data: any) => {
+    // Para relatório anual, não salva aqui se for apenas array (o objeto completo virá via handleYearlyFullDataLoaded)
+    if (activeReport === 'yearly' && Array.isArray(data)) {
+      // Ignora arrays no relatório anual - o objeto completo será passado via onFullDataLoaded
+      return;
+    }
+    // Para outros relatórios, salva normalmente
     setReportData(data);
   };
 
+  const handleSetReportMetadata = (metadata: any) => {
+    setReportMetadata(metadata);
+  };
+
+  // Handler específico para o relatório anual que precisa do objeto completo
+  const handleYearlyFullDataLoaded = (fullData: any) => {
+    // Sempre sobrescreve com o objeto completo para o relatório anual
+    setReportData(fullData);
+  };
+
   const handleGeneratePdf = async () => {
-    if (reportContainerRef.current) {
-      const reportName = reports.find(r => r.id === activeReport)?.name || 'relatorio';
-      await generatePdf(reportContainerRef.current, `${reportName}.pdf`);
+    try {
+      if (!reportData) {
+        toast.warning('Aguarde o carregamento dos dados do relatório');
+        return;
+      }
+
+      toast.info('Gerando PDF profissional...');
+
+      switch (activeReport) {
+        case 'monthly':
+          if (reportData && reportData.income && reportData.expense) {
+            generateMonthlyBalancePDF(reportData, churchInfo);
+            toast.success('PDF gerado com sucesso!');
+          } else {
+            toast.error('Dados insuficientes para gerar o PDF');
+          }
+          break;
+
+        case 'yearly':
+          if (reportData && reportData.yearlyTotal && reportData.monthlyData) {
+            // Garante que reportData tenha a estrutura completa YearlyBalance
+            const yearlyData = {
+              year: reportData.year || new Date().getFullYear(),
+              monthlyData: reportData.monthlyData || [],
+              yearlyTotal: reportData.yearlyTotal || { income: 0, expense: 0, balance: 0 }
+            };
+            generateYearlyBalancePDF(yearlyData, churchInfo);
+            toast.success('PDF gerado com sucesso!');
+          } else {
+            toast.error('Dados insuficientes para gerar o PDF. Aguarde o carregamento completo.');
+            console.error('Dados do relatório anual:', reportData);
+          }
+          break;
+
+        case 'categories':
+          if (reportMetadata && reportMetadata.incomeData && reportMetadata.expenseData && reportMetadata.startDate && reportMetadata.endDate) {
+            generateCategoryReportPDF(
+              reportMetadata.incomeData,
+              reportMetadata.expenseData,
+              reportMetadata.startDate,
+              reportMetadata.endDate,
+              churchInfo
+            );
+            toast.success('PDF gerado com sucesso!');
+          } else {
+            toast.error('Dados insuficientes para gerar o PDF');
+          }
+          break;
+
+        case 'cashflow':
+          if (reportData && Array.isArray(reportData) && reportMetadata && reportMetadata.startDate && reportMetadata.endDate && reportMetadata.period) {
+            generateCashFlowPDF(
+              reportData,
+              reportMetadata.startDate,
+              reportMetadata.endDate,
+              reportMetadata.period,
+              churchInfo
+            );
+            toast.success('PDF gerado com sucesso!');
+          } else {
+            toast.error('Dados insuficientes para gerar o PDF');
+          }
+          break;
+
+        case 'contributions':
+          if (reportData && Array.isArray(reportData) && reportMetadata && reportMetadata.startDate && reportMetadata.endDate) {
+            generateMemberContributionsPDF(
+              reportData,
+              reportMetadata.startDate,
+              reportMetadata.endDate,
+              churchInfo
+            );
+            toast.success('PDF gerado com sucesso!');
+          } else {
+            toast.error('Dados insuficientes para gerar o PDF');
+          }
+          break;
+
+        default:
+          toast.error('Tipo de relatório não suportado');
+      }
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      toast.error('Erro ao gerar PDF. Tente novamente.');
     }
   };
 
@@ -100,13 +210,33 @@ const Reports: React.FC = () => {
       case 'monthly':
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'yearly':
-        return <YearlyBalanceReport onDataLoaded={handleSetReportData} />;
+        return (
+          <YearlyBalanceReport
+            onDataLoaded={handleSetReportData}
+            onFullDataLoaded={handleYearlyFullDataLoaded}
+          />
+        );
       case 'contributions':
-        return <MemberContributionsReport onDataLoaded={handleSetReportData} />;
+        return (
+          <MemberContributionsReport
+            onDataLoaded={handleSetReportData}
+            onMetadataLoaded={handleSetReportMetadata}
+          />
+        );
       case 'categories':
-        return <CategoryReport onDataLoaded={handleSetReportData} />;
+        return (
+          <CategoryReport
+            onDataLoaded={handleSetReportData}
+            onMetadataLoaded={handleSetReportMetadata}
+          />
+        );
       case 'cashflow':
-        return <CashFlowReport onDataLoaded={handleSetReportData} />;
+        return (
+          <CashFlowReport
+            onDataLoaded={handleSetReportData}
+            onMetadataLoaded={handleSetReportMetadata}
+          />
+        );
       default:
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
     }
@@ -116,15 +246,15 @@ const Reports: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Visualize e analise os dados financeiros da igreja
         </p>
       </div>
 
       {/* Report Tabs */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="-mb-px flex space-x-8 px-6" aria-label="Tabs">
             {reports.map((report) => {
               const Icon = report.icon;
@@ -134,11 +264,12 @@ const Reports: React.FC = () => {
                   onClick={() => {
                     setActiveReport(report.id);
                     setReportData(null);
+                    setReportMetadata(null);
                   }}
                   className={`${
                     activeReport === report.id
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2`}
                 >
                   <Icon className="h-4 w-4" />
@@ -152,10 +283,10 @@ const Reports: React.FC = () => {
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                 {reports.find(r => r.id === activeReport)?.name}
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {reports.find(r => r.id === activeReport)?.description}
               </p>
             </div>

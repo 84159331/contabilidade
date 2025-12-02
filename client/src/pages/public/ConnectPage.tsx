@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
-import { 
+import PerfectFillImage from '../../components/PerfectFillImage';
+import {
   UserGroupIcon,
   HeartIcon,
   AcademicCapIcon,
@@ -17,6 +19,7 @@ import {
   ArrowRightIcon,
   BookOpenIcon
 } from '@heroicons/react/24/outline';
+import storage from '../../utils/storage';
 
 interface PublicCellGroup {
   id: string;
@@ -41,20 +44,42 @@ const ConnectPage: React.FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [cellGroups, setCellGroups] = useState<PublicCellGroup[]>([]);
 
-  // Carregar grupos celulares do localStorage (sincronizado com a tesouraria)
+  // Carregar grupos celulares do armazenamento local (sincronizado com a tesouraria)
   useEffect(() => {
     const loadCellGroups = () => {
-      const savedGroups = localStorage.getItem('publicCellGroups');
-      if (savedGroups) {
-        try {
-          const groups = JSON.parse(savedGroups);
-          // Filtrar apenas grupos ativos
-          const activeGroups = groups.filter((group: PublicCellGroup) => group.isActive);
-          setCellGroups(activeGroups);
-        } catch (error) {
-          // Fallback para grupos padrão se houver erro
-          setCellGroups(getDefaultGroups());
+      // Limpar dados antigos que possam ter horários incorretos
+      const clearOldData = () => {
+        const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
+        if (savedGroups && Array.isArray(savedGroups)) {
+          // Verificar se algum grupo tem horário antigo
+          const hasOldSchedule = savedGroups.some(
+            (group: PublicCellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
+          );
+
+          if (hasOldSchedule) {
+            console.log('🔄 Detectados horários antigos na página pública, atualizando...');
+            storage.remove('publicCellGroups');
+            storage.remove('cellGroups');
+            storage.remove('cellGroupsLastSync');
+            return true; // Indica que dados foram limpos
+          }
         }
+        return false;
+      };
+
+      const dataCleared = clearOldData();
+      
+      const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
+      if (savedGroups && Array.isArray(savedGroups)) {
+        // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+        const updatedGroups = savedGroups.map((group: PublicCellGroup) => ({
+          ...group,
+          meetings: 'Quarta-Feira 20:00hrs',
+          features: [] // Garantir que features esteja vazio
+        }));
+        // Filtrar apenas grupos ativos
+        const activeGroups = updatedGroups.filter((group: PublicCellGroup) => group.isActive);
+        setCellGroups(activeGroups);
       } else {
         // Se não há dados salvos, usar grupos padrão
         setCellGroups(getDefaultGroups());
@@ -76,10 +101,10 @@ const ConnectPage: React.FC = () => {
       icon: 'HomeIcon',
       color: 'blue',
       members: 0,
-      meetings: 'Sábados às 19h',
-      location: 'Casas dos membros',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos bíblicos', 'Oração em família', 'Atividades para crianças', 'Comunhão'],
+      features: [],
       isPopular: true,
       isActive: true,
       maxMembers: 15
@@ -91,12 +116,12 @@ const ConnectPage: React.FC = () => {
       description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
       image: '/img/youth-group.jpg',
       icon: 'SparklesIcon',
-      color: 'purple',
+      color: 'blue',
       members: 0,
-      meetings: 'Sextas às 20h',
-      location: 'Igreja - Sala dos Jovens',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Temas atuais', 'Adoração jovem', 'Missões', 'Networking cristão'],
+      features: [],
       isPopular: true,
       isActive: true,
       maxMembers: 20
@@ -108,12 +133,12 @@ const ConnectPage: React.FC = () => {
       description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
       image: '/img/women-group.jpg',
       icon: 'HeartIcon',
-      color: 'pink',
+      color: 'green',
       members: 0,
-      meetings: 'Terças às 19h30',
-      location: 'Casa da Líder',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos femininos', 'Oração', 'Apoio mútuo', 'Café da manhã'],
+      features: [],
       isPopular: false,
       isActive: true,
       maxMembers: 12
@@ -127,10 +152,10 @@ const ConnectPage: React.FC = () => {
       icon: 'UserGroupIcon',
       color: 'green',
       members: 0,
-      meetings: 'Quartas às 20h',
-      location: 'Igreja - Sala dos Homens',
+      meetings: 'Quarta-Feira 20:00hrs',
+      location: '',
       leader: '',
-      features: ['Estudos masculinos', 'Responsabilidade', 'Liderança', 'Camaradagem'],
+      features: [],
       isPopular: false,
       isActive: true,
       maxMembers: 15
@@ -157,35 +182,11 @@ const ConnectPage: React.FC = () => {
         text: 'text-blue-600 dark:text-blue-400',
         border: 'border-blue-200 dark:border-blue-700'
       },
-      purple: {
-        bg: 'bg-purple-500',
-        light: 'bg-purple-50 dark:bg-purple-900',
-        text: 'text-purple-600 dark:text-purple-400',
-        border: 'border-purple-200 dark:border-purple-700'
-      },
-      pink: {
-        bg: 'bg-pink-500',
-        light: 'bg-pink-50 dark:bg-pink-900',
-        text: 'text-pink-600 dark:text-pink-400',
-        border: 'border-pink-200 dark:border-pink-700'
-      },
       green: {
         bg: 'bg-green-500',
         light: 'bg-green-50 dark:bg-green-900',
         text: 'text-green-600 dark:text-green-400',
         border: 'border-green-200 dark:border-green-700'
-      },
-      yellow: {
-        bg: 'bg-yellow-500',
-        light: 'bg-yellow-50 dark:bg-yellow-900',
-        text: 'text-yellow-600 dark:text-yellow-400',
-        border: 'border-yellow-200 dark:border-yellow-700'
-      },
-      indigo: {
-        bg: 'bg-indigo-500',
-        light: 'bg-indigo-50 dark:bg-indigo-900',
-        text: 'text-indigo-600 dark:text-indigo-400',
-        border: 'border-indigo-200 dark:border-indigo-700'
       }
     };
     return colors[color as keyof typeof colors] || colors.blue;
@@ -195,7 +196,7 @@ const ConnectPage: React.FC = () => {
     setSelectedGroup(groupId);
     // Simular processo de inscrição
     setTimeout(() => {
-      alert('Inscrição realizada com sucesso! Você receberá um contato em breve.');
+      toast.success('Inscrição realizada com sucesso! Você receberá um contato em breve.');
       setSelectedGroup(null);
     }, 2000);
   };
@@ -281,11 +282,14 @@ const ConnectPage: React.FC = () => {
                 )}
 
                 {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <SafeImage 
+                <div className="relative overflow-hidden">
+                  <PerfectFillImage 
                     src={group.image} 
                     alt={group.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    className="w-full"
+                    containerHeight={192}
+                    fallbackText="Imagem da Célula"
+                    borderRadius="rounded-t-xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   
@@ -299,7 +303,7 @@ const ConnectPage: React.FC = () => {
                   {/* Members Count */}
                   <div className="absolute bottom-4 right-4 bg-white/90 dark:bg-gray-800/90 px-3 py-1 rounded-full">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                      {group.members}/{group.maxMembers} membros
+                      Célula Ativa
                     </span>
                   </div>
                 </div>
@@ -328,7 +332,7 @@ const ConnectPage: React.FC = () => {
                       </div>
                       <div className="flex items-center">
                         <MapPinIcon className={`h-4 w-4 mr-2 ${colors.text}`} />
-                        <span className="text-gray-700 dark:text-gray-300">{group.location}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{group.location || 'Local a ser definido'}</span>
                       </div>
                       {group.leader && (
                         <div className="flex items-center">
@@ -338,42 +342,6 @@ const ConnectPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-
-                  {/* Features */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                      Atividades:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {group.features.map((feature, index) => (
-                        <span 
-                          key={index}
-                          className={`text-xs px-2 py-1 rounded-full ${colors.light} ${colors.text}`}
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Join Button */}
-                  <button
-                    onClick={() => handleJoinGroup(group.id)}
-                    disabled={selectedGroup === group.id}
-                    className={`w-full ${colors.bg} text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 flex items-center justify-center disabled:opacity-50`}
-                  >
-                    {selectedGroup === group.id ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Processando...
-                      </>
-                    ) : (
-                      <>
-                        <ArrowRightIcon className="h-5 w-5 mr-2" />
-                                 Participar da Célula
-                      </>
-                    )}
-                  </button>
                 </div>
               </div>
             );
