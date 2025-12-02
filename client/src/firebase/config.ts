@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
-import { getAnalytics } from 'firebase/analytics';
+import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
 // Configuração do Firebase - COMUNIDADE RESGATE (CRA)
 const firebaseConfig = {
@@ -34,6 +34,31 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
-export const analytics = getAnalytics(app);
+
+// Inicializar Analytics de forma condicional e segura
+// Evita erros 404 quando o Analytics não está configurado no Firebase Console
+let analytics: Analytics | null = null;
+
+if (typeof window !== 'undefined') {
+  // Verificar se o Analytics é suportado e inicializar apenas se estiver disponível
+  isSupported()
+    .then((supported) => {
+      if (supported) {
+        try {
+          analytics = getAnalytics(app);
+          console.log('✅ Firebase Analytics inicializado');
+        } catch (error) {
+          console.warn('⚠️ Firebase Analytics não pôde ser inicializado:', error);
+        }
+      } else {
+        console.warn('⚠️ Firebase Analytics não é suportado neste ambiente');
+      }
+    })
+    .catch((error) => {
+      console.warn('⚠️ Erro ao verificar suporte do Firebase Analytics:', error);
+    });
+}
+
+export { analytics };
 
 export default app;
