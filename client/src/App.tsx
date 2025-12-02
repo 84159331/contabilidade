@@ -22,6 +22,7 @@ const BonsEstudosPage = lazy(() => import('./pages/public/BonsEstudosPage'));
 const BibliotecaPage = lazy(() => import('./pages/public/BibliotecaPage'));
 const EsbocosPage = lazy(() => import('./pages/public/EsbocosPage'));
 const EsbocoDetalhePage = lazy(() => import('./pages/public/EsbocoDetalhePage'));
+const EventsPage = lazy(() => import('./pages/public/EventsPage'));
 const Login = lazy(() => import('./pages/Login'));
 const Logout = lazy(() => import('./pages/Logout'));
 const LoginDebug = lazy(() => import('./pages/LoginDebug'));
@@ -47,6 +48,7 @@ function App() {
                     <Route path="/biblioteca" element={<BibliotecaPage />} />
                     <Route path="/esbocos" element={<EsbocosPage />} />
                     <Route path="/esbocos/:id" element={<EsbocoDetalhePage />} />
+                    <Route path="/eventos" element={<EventsPage />} />
                   </Route>
                   <Route path="/login-debug" element={<LoginDebug />} />
                   <Route path="/login" element={<Login />} />

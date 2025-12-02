@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SafeImage from '../../components/SafeImage';
+import SEOHead from '../../components/SEOHead';
 import EventsSection from '../../components/EventsSection';
 import { 
   HeartIcon, 
@@ -269,7 +270,15 @@ const HomePage: React.FC = () => {
   const dailyStudy = dailyStudies[currentStudyIndex];
 
   return (
-    <div>
+    <>
+      <SEOHead
+        title="Comunidade Cristã Resgate - Um lugar de fé, comunidade e transparência"
+        description="Comunidade Cristã Resgate em Brasília-DF. Cultos, estudos bíblicos, ministérios, células e muito mais. Venha fazer parte da nossa família!"
+        keywords="igreja brasília, comunidade cristã resgate, culto, estudos bíblicos, ministérios, célula, fé, esperança, brasília df"
+        url="/"
+        type="website"
+      />
+      <div>
       {/* Hero Section */}
       <div
         className="relative h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles"
@@ -581,6 +590,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,10 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SEOHead from '../../components/SEOHead';
 import { HeartIcon, UsersIcon, HandRaisedIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const AboutPage: React.FC = () => {
   return (
     <div>
+      <SEOHead
+        title="Sobre Nós - Comunidade Cristã Resgate"
+        description="Conheça a história, missão e valores da Comunidade Cristã Resgate. Uma igreja em Brasília-DF comprometida com a fé, comunidade e transparência."
+        keywords="sobre, história, missão, valores, igreja brasília, comunidade cristã resgate"
+        url="/sobre"
+        type="website"
+      />
       {/* Hero Section */}
       <div className="relative h-96 bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white">
         <div className="absolute inset-0 bg-black opacity-20"></div>

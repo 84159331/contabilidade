@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
+import SEOHead from '../../components/SEOHead';
 import { CalendarIcon, ClockIcon, MapPinIcon, UsersIcon, HeartIcon } from '@heroicons/react/24/outline';
 
 interface Event {
@@ -96,6 +97,14 @@ const EventsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <SEOHead
+        title="Eventos - Comunidade Cristã Resgate"
+        description="Participe dos nossos eventos, cultos, estudos bíblicos e atividades. Veja nossa programação completa e faça parte da nossa comunidade."
+        keywords="eventos, cultos, estudos bíblicos, programação, igreja brasília, comunidade cristã resgate"
+        url="/eventos"
+        type="website"
+      />
+      
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

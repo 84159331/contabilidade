@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaYoutube } from 'react-icons/fa';
 import SafeImage from '../../components/SafeImage';
+import SEOHead from '../../components/SEOHead';
 
 const FaYoutubeIcon = FaYoutube as any;
 
@@ -98,7 +99,16 @@ const WatchPage: React.FC = () => {
   const [videoSelecionado, setVideoSelecionado] = useState<string | null>(null);
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
+    <>
+      <SEOHead
+        title="Assista - Comunidade Cristã Resgate"
+        description="Assista às nossas mensagens, cultos e estudos bíblicos. Acompanhe toda a programação da Comunidade Cristã Resgate no YouTube."
+        keywords="vídeos, cultos, mensagens, youtube, estudos bíblicos, comunidade cristã resgate"
+        url="/assista"
+        type="video"
+        image="/img/ICONE-RESGATE.png"
+      />
+      <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
       <section className="py-10 md:py-16">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Header */}
@@ -229,6 +239,7 @@ const WatchPage: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
