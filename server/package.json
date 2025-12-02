@@ -10,14 +10,15 @@
     "test": "echo 'No tests specified'"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "helmet": "^7.1.0",
-    "express-rate-limit": "^7.1.5",
-    "sqlite3": "^5.1.6",
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "dotenv": "^16.3.1"
+    "sqlite3": "^5.1.6"
   },
   "engines": {
     "node": ">=18.0.0"

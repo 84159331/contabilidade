@@ -88,8 +88,10 @@ export const transactionsAPI = {
   getTransaction: (id: number) =>
     api.get(`/.netlify/functions/transactions/${id}`),
   
-  createTransaction: (data: any) =>
-    api.post('/.netlify/functions/transactions', data),
+  createTransaction: (data: any) => {
+    console.log('📡 API: Enviando dados para criar transação:', data);
+    return api.post('/.netlify/functions/transactions', data);
+  },
   
   updateTransaction: (id: number, data: any) =>
     api.put(`/.netlify/functions/transactions/${id}`, data),

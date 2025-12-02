@@ -100,11 +100,13 @@ const Transactions: React.FC = () => {
 
   const handleCreateTransaction = useCallback(async (transactionData: any) => {
     try {
+      console.log('🚀 Criando transação com dados:', transactionData);
       await transactionsAPI.createTransaction(transactionData);
       toast.success('Transação criada com sucesso!');
       setShowForm(false);
       loadData();
     } catch (error: any) {
+      console.error('❌ Erro ao criar transação:', error);
       toast.error(error.response?.data?.error || 'Erro ao criar transação');
     }
   }, [loadData]);
