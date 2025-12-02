@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface SafeImageProps {
   src: string;
@@ -7,6 +7,8 @@ interface SafeImageProps {
   fallbackText?: string;
   fallbackElement?: React.ReactNode;
   onError?: () => void;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean; // Para imagens acima da dobra
 }
 
 const SafeImage: React.FC<SafeImageProps> = ({
@@ -15,10 +17,43 @@ const SafeImage: React.FC<SafeImageProps> = ({
   className = '',
   fallbackText = 'Imagem não disponível',
   fallbackElement,
-  onError
+  onError,
+  loading = 'lazy',
+  priority = false
 }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [shouldLoad, setShouldLoad] = useState(priority || loading === 'eager');
+  const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Intersection Observer para lazy loading eficiente
+  useEffect(() => {
+    if (shouldLoad || loading === 'eager' || priority) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoad(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '50px', // Começar a carregar 50px antes de entrar na viewport
+        threshold: 0.01
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [shouldLoad, loading, priority]);
 
   const handleError = () => {
     setHasError(true);
@@ -33,14 +68,15 @@ const SafeImage: React.FC<SafeImageProps> = ({
   };
 
   // Reset quando src mudar
-  React.useEffect(() => {
+  useEffect(() => {
     setHasError(false);
     setIsLoading(true);
-  }, [src]);
+    setShouldLoad(priority || loading === 'eager');
+  }, [src, priority, loading]);
 
   if (!src) {
     return (
-      <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
+      <div ref={containerRef} className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
         <div className="text-center p-4">
           <div className="text-gray-400 mb-2">
             <svg className="w-8 h-8 mx-auto" fill="currentColor" viewBox="0 0 20 20">
@@ -55,7 +91,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
 
   if (hasError) {
     return (
-      <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
+      <div ref={containerRef} className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
         {fallbackElement || (
           <div className="text-center p-4">
             <div className="text-gray-400 mb-2">
@@ -71,19 +107,28 @@ const SafeImage: React.FC<SafeImageProps> = ({
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
+      {/* Skeleton/Placeholder durante carregamento */}
       {isLoading && (
-        <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-400"></div>
+        <div className={`absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 animate-pulse ${className}`}>
+          <div className="w-full h-full bg-gray-200 dark:bg-gray-700"></div>
         </div>
       )}
-      <img
-        src={src}
-        alt={alt}
-        className={`${className} ${isLoading ? 'opacity-0 absolute' : 'opacity-100'}`}
-        onError={handleError}
-        onLoad={handleLoad}
-      />
+      
+      {/* Imagem otimizada */}
+      {shouldLoad && (
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          className={`${className} ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'} ${!shouldLoad ? 'hidden' : ''}`}
+          loading={loading}
+          decoding="async"
+          fetchPriority={priority ? 'high' : 'auto'}
+          onError={handleError}
+          onLoad={handleLoad}
+        />
+      )}
     </div>
   );
 };

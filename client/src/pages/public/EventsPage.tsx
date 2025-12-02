@@ -154,6 +154,8 @@ const EventsPage: React.FC = () => {
                     alt={event.title}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     fallbackText="Imagem do Evento"
+                    loading={index < 3 ? 'eager' : 'lazy'}
+                    priority={index < 3}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   
