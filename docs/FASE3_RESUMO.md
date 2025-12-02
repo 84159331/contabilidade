@@ -194,3 +194,4 @@ Para verificar melhorias de performance:
 - [React Performance Optimization](https://react.dev/learn/render-and-commit)
 
 
+
