@@ -204,13 +204,13 @@ const WatchPage: React.FC = () => {
           </div>
 
           {/* Informações do canal */}
-          <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-xl p-8 text-white">
+          <div className="bg-white dark:bg-gray-100 rounded-2xl shadow-xl p-8 text-black border border-gray-200">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <FaYoutubeIcon className="h-12 w-12" />
+                <FaYoutubeIcon className="h-12 w-12 text-red-600" />
                 <div>
-                  <h3 className="text-2xl font-bold mb-1">Comunidade Cristã Resgate</h3>
-                  <p className="text-red-100">
+                  <h3 className="text-2xl font-bold mb-1 text-black">Comunidade Cristã Resgate</h3>
+                  <p className="text-black">
                     Inscreva-se para não perder nenhuma mensagem
                   </p>
                 </div>
@@ -219,7 +219,8 @@ const WatchPage: React.FC = () => {
                 href="https://youtube.com/@comunidadecresgate"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-red-600 hover:bg-red-50 px-8 py-3 rounded-full font-bold transition-colors transform hover:scale-105"
+                className="bg-red-600 text-white hover:bg-red-700 border-2 border-red-700 hover:border-red-800 px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg text-white"
+                style={{ color: '#ffffff' }}
               >
                 Visitar Canal
               </a>

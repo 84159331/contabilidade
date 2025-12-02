@@ -173,7 +173,7 @@ const ministries = [
     name: "Ministério de Louvor",
     description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
-    leader: "Apóstolo Isac"
+    leader: "Pr. Jadney"
   },
   {
     name: "Ministério Infantil",
@@ -194,10 +194,10 @@ const ministries = [
     leader: "Obr. Clebson e Hiully"
   },
   {
-    name: "Ministério de Ensino",
+    name: "Escola Resgate",
     description: "Crescimento espiritual através do estudo da Palavra",
     icon: BookOpenIcon,
-    leader: "Pastor Leomar"
+    leader: "Apóstolo Isac e Elaine"
   },
   {
     name: "Ministério de Discipulado",
@@ -528,7 +528,7 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <BookOpenIcon className="h-6 w-6 text-green-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto Conectados</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Escola Resgate</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">Crescimento espiritual</p>
                     </div>
                   </div>
@@ -567,7 +567,7 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/conecte"
-              className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2"
+              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2"
             >
               Conectar-se
             </Link>

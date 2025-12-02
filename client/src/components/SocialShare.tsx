@@ -155,6 +155,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
                 alt={event.title}
                 className="mt-3 w-full h-32 object-cover rounded"
                 fallbackText="Imagem do Evento"
+                loading="lazy"
               />
             )}
           </div>

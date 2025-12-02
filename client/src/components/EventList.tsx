@@ -128,6 +128,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
                     alt={event.title}
                     className="h-20 w-20 object-cover rounded-lg"
                     fallbackText="Imagem do Evento"
+                    loading="lazy"
                   />
                 </div>
               )}
