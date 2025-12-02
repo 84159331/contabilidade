@@ -32,9 +32,15 @@ const SafeImage: React.FC<SafeImageProps> = ({
   const maxRetries = 2;
   const loadTimeout = 10000; // 10 segundos timeout
 
-  // Função para adicionar cache busting se necessário
+  // Função para adicionar cache busting se necessário e tratar blob URLs
   const getImageSrc = useCallback((imageSrc: string, retry: number = 0) => {
     if (!imageSrc) return '';
+    
+    // Se for blob URL, retornar vazio (blob URLs não funcionam após reload)
+    if (imageSrc.startsWith('blob:')) {
+      console.warn('Blob URL detectada e ignorada (não funciona após reload):', imageSrc);
+      return '';
+    }
     
     // Se for URL absoluta ou data URL, retornar como está
     if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://') || imageSrc.startsWith('data:')) {

@@ -82,6 +82,43 @@ const BibliotecaPage: React.FC = () => {
     };
   }, [termoBusca]);
 
+  // Migrar blob URLs para base64 ou remover (executar uma vez)
+  useEffect(() => {
+    const migrateBlobUrls = () => {
+      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
+      if (!livrosSalvos) return;
+
+      let hasChanges = false;
+      const livrosAtualizados = livrosSalvos.map(livro => {
+        // Verificar se a capa é blob URL
+        if (livro.capa && livro.capa.startsWith('blob:')) {
+          hasChanges = true;
+          return {
+            ...livro,
+            capa: '' // Remover blob URL inválida
+          };
+        }
+        // Verificar se o PDF é blob URL
+        if (livro.pdfUrl && livro.pdfUrl.startsWith('blob:')) {
+          hasChanges = true;
+          return {
+            ...livro,
+            pdfUrl: '' // Remover blob URL inválida
+          };
+        }
+        return livro;
+      });
+
+      if (hasChanges) {
+        storage.setJSON('biblioteca-livros', livrosAtualizados);
+        setLivrosLista(livrosAtualizados);
+        toast.warn('Alguns livros tinham imagens temporárias que foram removidas. Por favor, adicione novamente as capas.');
+      }
+    };
+
+    migrateBlobUrls();
+  }, []);
+
   // Atualizar lista quando o armazenamento local mudar (otimizado)
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {

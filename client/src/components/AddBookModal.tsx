@@ -91,9 +91,27 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
     setUploading(true);
     try {
-      // Criar URLs para os arquivos (usando FileReader para arquivos locais)
-      const pdfUrl = URL.createObjectURL(formData.pdfFile);
-      const capaUrl = URL.createObjectURL(formData.capaFile);
+      // Converter arquivos para base64 (permanente, funciona após reload)
+      const convertFileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (typeof reader.result === 'string') {
+              resolve(reader.result);
+            } else {
+              reject(new Error('Erro ao converter arquivo para base64'));
+            }
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      };
+
+      // Converter PDF e capa para base64
+      const [pdfUrl, capaUrl] = await Promise.all([
+        convertFileToBase64(formData.pdfFile!),
+        convertFileToBase64(formData.capaFile!)
+      ]);
       
       // Criar objeto do livro
       const novoLivro = {
@@ -102,18 +120,15 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         autor: formData.autor.trim(),
         descricao: formData.descricao.trim(),
         categoria: formData.categoria,
-        capa: capaUrl,
-        pdfUrl: pdfUrl,
-        tamanho: `${(formData.pdfFile.size / 1024 / 1024).toFixed(1)} MB`,
+        capa: capaUrl, // Agora é base64, não blob URL
+        pdfUrl: pdfUrl, // Agora é base64, não blob URL
+        tamanho: `${(formData.pdfFile!.size / 1024 / 1024).toFixed(1)} MB`,
         paginas: formData.paginas || 0,
         ano: formData.ano || new Date().getFullYear(),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         downloads: 0,
         avaliacao: 0,
-        isNovo: true,
-        // Adicionar informações dos arquivos para referência
-        pdfFile: formData.pdfFile,
-        capaFile: formData.capaFile
+        isNovo: true
       };
 
       // Adicionar livro à biblioteca (a função onAddBook já salva no armazenamento local)
