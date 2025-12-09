@@ -11,7 +11,6 @@ import {
   CurrencyDollarIcon, 
   ChartBarIcon, 
   TagIcon,
-  ShieldCheckIcon,
   ChatBubbleLeftRightIcon,
   Bars3Icon,
   XMarkIcon,
@@ -62,7 +61,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
     { type: 'heading', name: 'Administração' },
-    { type: 'link', name: 'Usuários', href: '/tesouraria/users', icon: ShieldCheckIcon },
     { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
     { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
   ];

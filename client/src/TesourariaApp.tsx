@@ -15,7 +15,6 @@ const Transactions = lazy(() => import('./pages/Transactions'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CellGroupsAdmin = lazy(() => import('./pages/CellGroupsAdmin'));
-const Users = lazy(() => import('./pages/Users'));
 const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
 const BooksManagement = lazy(() => import('./pages/BooksManagement'));
 const Events = lazy(() => import('./pages/Events'));
@@ -93,7 +92,6 @@ function TesourariaApp() {
             <Route path="reports" element={<Reports />} />
             <Route path="categories" element={<Categories />} />
             <Route path="cell-groups" element={<CellGroupsAdmin />} />
-            <Route path="users" element={<Users />} />
             <Route path="whatsapp" element={<WhatsAppPage />} />
             <Route path="books" element={<BooksManagement />} />
             <Route path="events" element={<Events />} />

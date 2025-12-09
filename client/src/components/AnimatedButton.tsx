@@ -47,8 +47,8 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       onClick={onClick}
       disabled={disabled || loading}
       className={`${baseClasses} ${variantClasses} ${sizeClasses} ${disabledClasses} ${className}`}
-      whileHover={!disabled && !loading ? { scale: 1.05 } : {}}
-      whileTap={!disabled && !loading ? { scale: 0.95 } : {}}
+      whileHover={!disabled && !loading ? { scale: 1.05 } : undefined}
+      whileTap={!disabled && !loading ? { scale: 0.95 } : undefined}
       transition={{ duration: 0.2 }}
     >
       {loading && (
