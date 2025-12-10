@@ -39,38 +39,38 @@ const PastorVacationCalendar: React.FC = () => {
 
   return (
     <>
-      <div style={{ height: 500 }}>
-        <Calendar
-          localizer={localizer}
-          events={vacations}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: '100%' }}
+    <div style={{ height: 500 }}>
+      <Calendar
+        localizer={localizer}
+        events={vacations}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: '100%' }}
           onSelectEvent={handleSelectEvent}
-          messages={{
-            next: "Próximo",
-            previous: "Anterior",
-            today: "Hoje",
-            month: "Mês",
-            week: "Semana",
-            day: "Dia",
-            agenda: "Agenda",
-            date: "Data",
-            time: "Hora",
-            event: "Evento",
-            noEventsInRange: "Não há eventos neste período.",
-            showMore: total => `+ Ver mais (${total})`
-          }}
-          eventPropGetter={(event) => {
+        messages={{
+          next: "Próximo",
+          previous: "Anterior",
+          today: "Hoje",
+          month: "Mês",
+          week: "Semana",
+          day: "Dia",
+          agenda: "Agenda",
+          date: "Data",
+          time: "Hora",
+          event: "Evento",
+          noEventsInRange: "Não há eventos neste período.",
+          showMore: total => `+ Ver mais (${total})`
+        }}
+        eventPropGetter={(event) => {
             const typedEvent = event as any;
-            const newTitle = typedEvent.pastorName ? `${typedEvent.title} (${typedEvent.pastorName})` : typedEvent.title;
-            return {
-              title: newTitle,
+          const newTitle = typedEvent.pastorName ? `${typedEvent.title} (${typedEvent.pastorName})` : typedEvent.title;
+          return {
+            title: newTitle,
               className: 'custom-event-class cursor-pointer',
-            };
-          }}
-        />
-      </div>
+          };
+        }}
+      />
+    </div>
 
       <Modal 
         isOpen={showDeleteModal} 
