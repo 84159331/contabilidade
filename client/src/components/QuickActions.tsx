@@ -53,8 +53,8 @@ const QuickActions: React.FC = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <AnimatePresence>
-        {isOpen && (
+      <AnimatePresence initial={false}>
+        {isOpen ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -80,7 +80,7 @@ const QuickActions: React.FC = () => {
               </motion.div>
             ))}
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
 
       <motion.button

@@ -106,7 +106,7 @@ interface ToastContainerProps {
 const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onClose }) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {toasts.map((toast) => (
           <Toast
             key={toast.id}

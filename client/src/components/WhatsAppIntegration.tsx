@@ -465,7 +465,7 @@ Que Deus abençoe e fortaleça você! ✨
           </h3>
           
           <div className="space-y-3">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {contacts.map((contact, index) => {
                 const RoleIcon = getRoleIcon(contact.role);
                 const colorClass = getRoleColor(contact.role);
@@ -552,7 +552,7 @@ Que Deus abençoe e fortaleça você! ✨
           </h3>
           
           <div className="space-y-3">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {messages.slice(-5).reverse().map((message, index) => {
                 const contact = contacts.find(c => c.id === message.contactId);
                 const StatusIcon = getStatusIcon(message.status);
@@ -631,8 +631,8 @@ Que Deus abençoe e fortaleça você! ✨
       </div>
 
       {/* Add Contact Modal */}
-      <AnimatePresence>
-        {showContactForm && (
+      <AnimatePresence initial={false}>
+        {showContactForm ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -712,12 +712,12 @@ Que Deus abençoe e fortaleça você! ✨
               </div>
             </motion.div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
 
       {/* Send Message Modal */}
-      <AnimatePresence>
-        {showMessageForm && selectedContact && (
+      <AnimatePresence initial={false}>
+        {showMessageForm && selectedContact ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -799,7 +799,7 @@ Que Deus abençoe e fortaleça você! ✨
               </div>
             </motion.div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );

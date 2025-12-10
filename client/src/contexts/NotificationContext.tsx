@@ -378,8 +378,8 @@ export const NotificationCenter: React.FC = () => {
       </button>
 
       {/* Notification Panel */}
-      <AnimatePresence>
-        {isOpen && (
+      <AnimatePresence initial={false}>
+        {isOpen ? (
           <motion.div
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -427,7 +427,7 @@ export const NotificationCenter: React.FC = () => {
             <div className="max-h-96 overflow-y-auto">
               {filteredNotifications.length > 0 ? (
                 <div className="p-4 space-y-3">
-                  <AnimatePresence>
+                  <AnimatePresence initial={false}>
                     {filteredNotifications.map((notification) => (
                       <NotificationItem
                         key={notification.id}
@@ -466,7 +466,7 @@ export const NotificationCenter: React.FC = () => {
               </div>
             )}
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );

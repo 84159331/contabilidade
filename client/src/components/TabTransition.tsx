@@ -8,7 +8,7 @@ interface TabTransitionProps {
 
 const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }) => {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={transitionKey}
         initial={{ opacity: 0, y: 20 }}
