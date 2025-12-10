@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { usePastorVacationData } from '../hooks/usePastorVacationData';
 import { VacationEvent } from '../services/pastorVacationAPI';
@@ -20,8 +20,19 @@ interface PastorVacationData {
 
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'];
 
-const VacationStats: React.FC = () => {
-  const { vacations, loading } = usePastorVacationData();
+interface VacationStatsProps {
+  vacations?: VacationEvent[];
+  loading?: boolean;
+}
+
+const VacationStats: React.FC<VacationStatsProps> = ({ 
+  vacations: propVacations, 
+  loading: propLoading 
+}) => {
+  // Usar dados passados como props ou carregar do hook (fallback)
+  const hookData = usePastorVacationData();
+  const vacations = propVacations ?? hookData.vacations;
+  const loading = propLoading ?? hookData.loading;
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   // Gerar lista de anos disponíveis
@@ -301,5 +312,6 @@ const VacationStats: React.FC = () => {
   );
 };
 
-export default VacationStats;
+// Memoizar componente para evitar re-renderizações desnecessárias
+export default memo(VacationStats);
 

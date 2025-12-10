@@ -7,7 +7,8 @@ import { usePastorVacationData } from '../hooks/usePastorVacationData';
 
 const FeriasPastores: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { createVacation } = usePastorVacationData();
+  // Carregar dados uma única vez e compartilhar entre componentes
+  const { vacations, loading, error, createVacation, deleteVacation, refresh } = usePastorVacationData();
 
   const handleSave = (data: any) => {
     createVacation({
@@ -37,7 +38,7 @@ const FeriasPastores: React.FC = () => {
 
       {/* Gráficos de Estatísticas */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <VacationStats />
+        <VacationStats vacations={vacations} loading={loading} />
       </div>
 
       {/* Calendário */}
@@ -48,7 +49,13 @@ const FeriasPastores: React.FC = () => {
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Clique em uma férias no calendário para visualizar detalhes ou removê-la.
         </p>
-        <PastorVacationCalendar />
+        <PastorVacationCalendar 
+          vacations={vacations} 
+          loading={loading} 
+          error={error} 
+          deleteVacation={deleteVacation}
+          onRefresh={refresh}
+        />
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Adicionar Férias">

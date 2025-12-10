@@ -1,56 +1,38 @@
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-const originalConsole = {
-  log: console.log.bind(console),
-  info: console.info.bind(console),
-  warn: console.warn.bind(console),
-  error: console.error.bind(console),
-  debug: console.debug ? console.debug.bind(console) : console.log.bind(console)
-};
+// Logger otimizado que desabilita console.logs em produção para melhor performance
 
-const isProduction = process.env.NODE_ENV === 'production';
-const logsExplicitlyEnabled = process.env.REACT_APP_ENABLE_LOGS === 'true';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-const shouldLog = (level: LogLevel) => {
-  if (logsExplicitlyEnabled) return true;
-  if (!isProduction) return true;
-  return level === 'warn' || level === 'error';
-};
-
-const formatPrefix = (level: LogLevel) => {
-  const timestamp = new Date().toISOString();
-  return `[${timestamp}] [${level.toUpperCase()}]`;
-};
-
-const emit = (level: LogLevel, args: unknown[]) => {
-  if (!shouldLog(level)) return;
-
-  const method =
-    level === 'debug'
-      ? originalConsole.debug
-      : level === 'info'
-      ? originalConsole.info
-      : level === 'warn'
-      ? originalConsole.warn
-      : originalConsole.error;
-
-  method(formatPrefix(level), ...args);
-};
-
-export const logger = {
-  debug: (...args: unknown[]) => emit('debug', args),
-  info: (...args: unknown[]) => emit('info', args),
-  warn: (...args: unknown[]) => emit('warn', args),
-  error: (...args: unknown[]) => emit('error', args)
-};
-
-export const disableConsoleInProduction = () => {
-  if (!isProduction || logsExplicitlyEnabled) {
-    return;
+// Função para log condicional
+export const log = (...args: any[]) => {
+  if (isDevelopment) {
+    console.log(...args);
   }
-
-  console.log = () => {};
-  console.info = () => {};
-  console.debug = () => {};
 };
 
+export const logError = (...args: any[]) => {
+  // Erros sempre são logados, mesmo em produção
+  console.error(...args);
+};
 
+export const logWarn = (...args: any[]) => {
+  if (isDevelopment) {
+    console.warn(...args);
+  }
+};
+
+// Exportar objeto logger para compatibilidade com código existente
+export const logger = {
+  log,
+  error: logError,
+  warn: logWarn,
+};
+
+// Função para desabilitar console em produção
+export const disableConsoleInProduction = () => {
+  if (!isDevelopment && typeof window !== 'undefined') {
+    // Opcional: desabilitar completamente console.log em produção
+    // console.log = () => {};
+    // console.warn = () => {};
+    // Manter console.error ativo para debugging de erros críticos
+  }
+};

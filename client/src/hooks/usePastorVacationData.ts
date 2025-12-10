@@ -49,15 +49,15 @@ export const usePastorVacationData = () => {
 
   const deleteVacation = useCallback(async (id: string) => {
     try {
-      setLoading(true);
-      await pastorVacationAPI.deleteVacation(id);
+      // Otimização: remoção otimista (não mostrar loading)
       setVacations(prev => prev.filter(v => v.id !== id));
+      await pastorVacationAPI.deleteVacation(id);
     } catch (err) {
+      // Em caso de erro, recarregar para restaurar estado
       setError('Failed to delete vacation.');
-    } finally {
-      setLoading(false);
+      loadVacations();
     }
-  }, []);
+  }, [loadVacations]);
 
   return {
     vacations,

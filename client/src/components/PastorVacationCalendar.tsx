@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo, useCallback } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -6,30 +6,62 @@ import '../styles/Calendar.css';
 import { usePastorVacationData } from '../hooks/usePastorVacationData';
 import LoadingSpinner from './LoadingSpinner';
 import Modal from './Modal';
-import * as HeroIcons from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { VacationEvent } from '../services/pastorVacationAPI';
-
-const TrashIcon = HeroIcons.TrashIcon;
 
 const localizer = momentLocalizer(moment);
 
-const PastorVacationCalendar: React.FC = () => {
-  const { vacations, loading, error, deleteVacation } = usePastorVacationData();
+interface PastorVacationCalendarProps {
+  vacations?: VacationEvent[];
+  loading?: boolean;
+  error?: string | null;
+  deleteVacation?: (id: string) => Promise<void>;
+  onRefresh?: () => void;
+}
+
+const PastorVacationCalendar: React.FC<PastorVacationCalendarProps> = ({
+  vacations: propVacations,
+  loading: propLoading,
+  error: propError,
+  deleteVacation: propDeleteVacation,
+  onRefresh
+}) => {
+  // Usar dados passados como props ou carregar do hook (fallback)
+  const hookData = usePastorVacationData();
+  const vacations = propVacations ?? hookData.vacations;
+  const loading = propLoading ?? hookData.loading;
+  const error = propError ?? hookData.error;
+  const deleteVacation = propDeleteVacation ?? hookData.deleteVacation;
+  
   const [selectedEvent, setSelectedEvent] = useState<VacationEvent | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleSelectEvent = (event: VacationEvent) => {
+  const handleSelectEvent = useCallback((event: VacationEvent) => {
     setSelectedEvent(event);
     setShowDeleteModal(true);
-  };
+  }, []);
 
-  const handleDelete = async () => {
-    if (selectedEvent) {
+  const handleDelete = useCallback(async () => {
+    if (selectedEvent && deleteVacation) {
       await deleteVacation(selectedEvent.id);
       setShowDeleteModal(false);
       setSelectedEvent(null);
+      // Recarregar dados se callback fornecido
+      if (onRefresh) {
+        onRefresh();
+      }
     }
-  };
+  }, [selectedEvent, deleteVacation, onRefresh]);
+
+  // Memoizar eventPropGetter para evitar recriação a cada render
+  const eventPropGetter = useMemo(() => (event: any) => {
+    const typedEvent = event as any;
+    const newTitle = typedEvent.pastorName ? `${typedEvent.title} (${typedEvent.pastorName})` : typedEvent.title;
+    return {
+      title: newTitle,
+      className: 'custom-event-class cursor-pointer',
+    };
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -63,14 +95,7 @@ const PastorVacationCalendar: React.FC = () => {
           noEventsInRange: "Não há eventos neste período.",
           showMore: total => `+ Ver mais (${total})`
         }}
-        eventPropGetter={(event) => {
-            const typedEvent = event as any;
-          const newTitle = typedEvent.pastorName ? `${typedEvent.title} (${typedEvent.pastorName})` : typedEvent.title;
-          return {
-            title: newTitle,
-              className: 'custom-event-class cursor-pointer',
-          };
-        }}
+        eventPropGetter={eventPropGetter}
       />
     </div>
 
@@ -115,4 +140,5 @@ const PastorVacationCalendar: React.FC = () => {
   );
 };
 
-export default PastorVacationCalendar;
+// Memoizar componente para evitar re-renderizações desnecessárias
+export default memo(PastorVacationCalendar);
