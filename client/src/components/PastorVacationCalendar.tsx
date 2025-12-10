@@ -6,8 +6,10 @@ import '../styles/Calendar.css';
 import { usePastorVacationData } from '../hooks/usePastorVacationData';
 import LoadingSpinner from './LoadingSpinner';
 import Modal from './Modal';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import * as HeroIcons from '@heroicons/react/24/outline';
 import { VacationEvent } from '../services/pastorVacationAPI';
+
+const TrashIcon = HeroIcons.TrashIcon;
 
 const localizer = momentLocalizer(moment);
 
