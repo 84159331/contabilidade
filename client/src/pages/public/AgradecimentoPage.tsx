@@ -11,7 +11,69 @@ import {
   HeartIcon
 } from '@heroicons/react/24/outline';
 
-const FaYoutubeIcon = FaYoutube as any;
+// ============================================
+// VALIDAÇÃO CRÍTICA DE IMPORTS - PARAR SE UNDEFINED
+// ============================================
+if (typeof motion === 'undefined' || motion === null) {
+  console.error("❌ CRÍTICO: motion está undefined!");
+  throw new Error("motion do framer-motion está undefined. Verifique a instalação do pacote.");
+}
+
+// Validação específica para propriedades do motion usadas no JSX
+if (!motion.div || typeof motion.div !== 'function') {
+  console.error("❌ CRÍTICO: motion.div está undefined!");
+  throw new Error("motion.div está undefined. Verifique a instalação do framer-motion.");
+}
+
+if (!motion.h1 || typeof motion.h1 !== 'function') {
+  console.error("❌ CRÍTICO: motion.h1 está undefined!");
+  throw new Error("motion.h1 está undefined. Verifique a instalação do framer-motion.");
+}
+
+if (!motion.p || typeof motion.p !== 'function') {
+  console.error("❌ CRÍTICO: motion.p está undefined!");
+  throw new Error("motion.p está undefined. Verifique a instalação do framer-motion.");
+}
+
+if (typeof SafeImage === 'undefined' || SafeImage === null) {
+  console.error("❌ CRÍTICO: SafeImage está undefined!");
+  throw new Error("SafeImage está undefined. Verifique o caminho do import.");
+}
+
+if (typeof SEOHead === 'undefined' || SEOHead === null) {
+  console.error("❌ CRÍTICO: SEOHead está undefined!");
+  throw new Error("SEOHead está undefined. Verifique o caminho do import.");
+}
+
+// LOG DE IMPORTS PARA DEBUG
+console.log("📦 IMPORT motion:", motion, "tipo:", typeof motion);
+console.log("📦 IMPORT SafeImage:", SafeImage, "tipo:", typeof SafeImage);
+console.log("📦 IMPORT SEOHead:", SEOHead, "tipo:", typeof SEOHead);
+console.log("📦 IMPORT FaYoutube:", FaYoutube, "tipo:", typeof FaYoutube);
+
+// VALIDAÇÃO E FALLBACK SEGURO PARA FaYoutube
+let FaYoutubeIcon: any;
+try {
+  if (FaYoutube && typeof FaYoutube !== 'undefined') {
+    FaYoutubeIcon = FaYoutube;
+  } else {
+    console.warn('⚠️ FaYoutube não disponível, usando fallback SVG');
+    // Fallback: componente SVG simples
+    FaYoutubeIcon = ({ className }: { className?: string }) => (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+      </svg>
+    );
+  }
+} catch (error) {
+  console.error('❌ Erro ao inicializar FaYoutubeIcon:', error);
+  FaYoutubeIcon = ({ className }: { className?: string }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+  );
+}
+
 const YOUTUBE_CHANNEL_URL = 'https://youtube.com/@comunidadecresgate?sub_confirmation=1';
 
 const AgradecimentoPage: React.FC = () => {
@@ -57,6 +119,55 @@ const AgradecimentoPage: React.FC = () => {
   const handleSubscribeNow = () => {
     window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
   };
+
+  // ============================================
+  // DEBUG: VALIDAÇÃO DE COMPONENTES ANTES DO RENDER
+  // ============================================
+  console.group("🔍 DEBUG PÓS-CADASTRO - AgradecimentoPage");
+  console.log("FaYoutube:", FaYoutube);
+  console.log("Tipo de FaYoutube:", typeof FaYoutube);
+  console.log("FaYoutubeIcon:", FaYoutubeIcon);
+  console.log("Tipo de FaYoutubeIcon:", typeof FaYoutubeIcon);
+  console.log("motion:", motion);
+  console.log("Tipo de motion:", typeof motion);
+  console.log("SafeImage:", SafeImage);
+  console.log("Tipo de SafeImage:", typeof SafeImage);
+  console.log("SEOHead:", SEOHead);
+  console.log("Tipo de SEOHead:", typeof SEOHead);
+  console.log("CheckCircleIcon:", CheckCircleIcon);
+  console.log("Tipo de CheckCircleIcon:", typeof CheckCircleIcon);
+  console.log("HomeIcon:", HomeIcon);
+  console.log("Tipo de HomeIcon:", typeof HomeIcon);
+  console.log("InformationCircleIcon:", InformationCircleIcon);
+  console.log("Tipo de InformationCircleIcon:", typeof InformationCircleIcon);
+  console.log("HeartIcon:", HeartIcon);
+  console.log("Tipo de HeartIcon:", typeof HeartIcon);
+  
+  // VALIDAÇÃO CRÍTICA - PARAR SE ALGUM COMPONENTE FOR UNDEFINED
+  const components = {
+    FaYoutube,
+    FaYoutubeIcon,
+    motion,
+    SafeImage,
+    SEOHead,
+    CheckCircleIcon,
+    HomeIcon,
+    InformationCircleIcon,
+    HeartIcon
+  };
+  
+  const undefinedComponents = Object.entries(components)
+    .filter(([name, comp]) => comp === undefined || comp === null)
+    .map(([name]) => name);
+  
+  if (undefinedComponents.length > 0) {
+    console.error("❌ COMPONENTES UNDEFINED ENCONTRADOS:", undefinedComponents);
+    console.groupEnd();
+    throw new Error(`Componentes undefined detectados: ${undefinedComponents.join(', ')}`);
+  }
+  
+  console.log("✅ Todos os componentes validados");
+  console.groupEnd();
 
   return (
     <div>
