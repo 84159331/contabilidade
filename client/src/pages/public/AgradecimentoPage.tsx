@@ -11,68 +11,20 @@ import {
   HeartIcon
 } from '@heroicons/react/24/outline';
 
-// ============================================
-// VALIDAÇÃO CRÍTICA DE IMPORTS - PARAR SE UNDEFINED
-// ============================================
-if (typeof motion === 'undefined' || motion === null) {
-  console.error("❌ CRÍTICO: motion está undefined!");
-  throw new Error("motion do framer-motion está undefined. Verifique a instalação do pacote.");
-}
-
-// Validação específica para propriedades do motion usadas no JSX
-if (!motion.div || typeof motion.div !== 'function') {
-  console.error("❌ CRÍTICO: motion.div está undefined!");
-  throw new Error("motion.div está undefined. Verifique a instalação do framer-motion.");
-}
-
-if (!motion.h1 || typeof motion.h1 !== 'function') {
-  console.error("❌ CRÍTICO: motion.h1 está undefined!");
-  throw new Error("motion.h1 está undefined. Verifique a instalação do framer-motion.");
-}
-
-if (!motion.p || typeof motion.p !== 'function') {
-  console.error("❌ CRÍTICO: motion.p está undefined!");
-  throw new Error("motion.p está undefined. Verifique a instalação do framer-motion.");
-}
-
-if (typeof SafeImage === 'undefined' || SafeImage === null) {
-  console.error("❌ CRÍTICO: SafeImage está undefined!");
-  throw new Error("SafeImage está undefined. Verifique o caminho do import.");
-}
-
-if (typeof SEOHead === 'undefined' || SEOHead === null) {
-  console.error("❌ CRÍTICO: SEOHead está undefined!");
-  throw new Error("SEOHead está undefined. Verifique o caminho do import.");
-}
-
-// LOG DE IMPORTS PARA DEBUG
-console.log("📦 IMPORT motion:", motion, "tipo:", typeof motion);
-console.log("📦 IMPORT SafeImage:", SafeImage, "tipo:", typeof SafeImage);
-console.log("📦 IMPORT SEOHead:", SEOHead, "tipo:", typeof SEOHead);
-console.log("📦 IMPORT FaYoutube:", FaYoutube, "tipo:", typeof FaYoutube);
-
-// VALIDAÇÃO E FALLBACK SEGURO PARA FaYoutube
-let FaYoutubeIcon: any;
-try {
+// VALIDAÇÃO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicialização)
+const FaYoutubeIcon: React.FC<{ className?: string }> = ({ className }) => {
+  // Tentar usar FaYoutube se disponível, senão usar SVG fallback
   if (FaYoutube && typeof FaYoutube !== 'undefined') {
-    FaYoutubeIcon = FaYoutube;
-  } else {
-    console.warn('⚠️ FaYoutube não disponível, usando fallback SVG');
-    // Fallback: componente SVG simples
-    FaYoutubeIcon = ({ className }: { className?: string }) => (
-      <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-      </svg>
-    );
+    const Icon = FaYoutube as any;
+    return <Icon className={className} />;
   }
-} catch (error) {
-  console.error('❌ Erro ao inicializar FaYoutubeIcon:', error);
-  FaYoutubeIcon = ({ className }: { className?: string }) => (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+  // Fallback SVG
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
     </svg>
   );
-}
+};
 
 const YOUTUBE_CHANNEL_URL = 'https://youtube.com/@comunidadecresgate?sub_confirmation=1';
 
@@ -82,7 +34,7 @@ const AgradecimentoPage: React.FC = () => {
   const [countdown, setCountdown] = useState<number | null>(null);
   const [showRedirect, setShowRedirect] = useState(true);
   
-  // Tratamento seguro do state
+  // Tratamento seguro do state (ANTES de qualquer early return)
   let memberName: string | null = null;
   try {
     memberName = (location.state as any)?.memberName || null;
@@ -92,6 +44,7 @@ const AgradecimentoPage: React.FC = () => {
   }
 
   // Redirecionamento automático após 5 segundos (com opção de cancelar)
+  // IMPORTANTE: Hooks devem estar ANTES de qualquer early return
   useEffect(() => {
     if (showRedirect) {
       setCountdown(5);
@@ -111,6 +64,71 @@ const AgradecimentoPage: React.FC = () => {
     }
   }, [showRedirect]);
 
+  // ============================================
+  // CRIAÇÃO DE COMPONENTES COM FALLBACKS SEGUROS
+  // ============================================
+  // Criar aliases seguros para motion components com fallback
+  // Sempre garantir que há um componente válido, mesmo se motion estiver undefined
+  // IMPORTANTE: Ignorar props de animação (initial, animate, transition) nos fallbacks
+  
+  // Fallback padrão que sempre funciona - usando React.forwardRef para compatibilidade
+  const FallbackDiv = React.forwardRef<HTMLDivElement, any>(({ children, className, ...props }, ref) => {
+    // Remover props de animação que podem causar erro
+    const { initial, animate, transition, ...restProps } = props;
+    return <div ref={ref} className={className} {...restProps}>{children}</div>;
+  });
+  FallbackDiv.displayName = 'FallbackDiv';
+  
+  const FallbackH1 = React.forwardRef<HTMLHeadingElement, any>(({ children, className, ...props }, ref) => {
+    const { initial, animate, transition, ...restProps } = props;
+    return <h1 ref={ref} className={className} {...restProps}>{children}</h1>;
+  });
+  FallbackH1.displayName = 'FallbackH1';
+  
+  const FallbackP = React.forwardRef<HTMLParagraphElement, any>(({ children, className, ...props }, ref) => {
+    const { initial, animate, transition, ...restProps } = props;
+    return <p ref={ref} className={className} {...restProps}>{children}</p>;
+  });
+  FallbackP.displayName = 'FallbackP';
+  
+  // Tentar usar motion se disponível, senão usar fallbacks
+  // IMPORTANTE: Sempre garantir que os componentes tenham um valor válido
+  let MotionDiv: React.ComponentType<any> = FallbackDiv;
+  let MotionH1: React.ComponentType<any> = FallbackH1;
+  let MotionP: React.ComponentType<any> = FallbackP;
+  
+  try {
+    // Verificar se motion está disponível e tem as propriedades necessárias
+    if (motion && typeof motion === 'object' && motion !== null) {
+      const motionAny = motion as any;
+      if (motionAny.div && typeof motionAny.div === 'function') {
+        MotionDiv = motionAny.div;
+      }
+      if (motionAny.h1 && typeof motionAny.h1 === 'function') {
+        MotionH1 = motionAny.h1;
+      }
+      if (motionAny.p && typeof motionAny.p === 'function') {
+        MotionP = motionAny.p;
+      }
+    }
+  } catch (error) {
+    // Se houver erro, usar fallbacks (já definidos acima)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️ Erro ao inicializar motion components, usando fallbacks HTML:', error);
+    }
+  }
+  
+  // VALIDAÇÃO FINAL: Garantir que os componentes não estão undefined
+  if (!MotionDiv || typeof MotionDiv !== 'function') {
+    MotionDiv = FallbackDiv;
+  }
+  if (!MotionH1 || typeof MotionH1 !== 'function') {
+    MotionH1 = FallbackH1;
+  }
+  if (!MotionP || typeof MotionP !== 'function') {
+    MotionP = FallbackP;
+  }
+
   const handleCancelRedirect = () => {
     setShowRedirect(false);
     setCountdown(null);
@@ -120,54 +138,17 @@ const AgradecimentoPage: React.FC = () => {
     window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
   };
 
-  // ============================================
-  // DEBUG: VALIDAÇÃO DE COMPONENTES ANTES DO RENDER
-  // ============================================
-  console.group("🔍 DEBUG PÓS-CADASTRO - AgradecimentoPage");
-  console.log("FaYoutube:", FaYoutube);
-  console.log("Tipo de FaYoutube:", typeof FaYoutube);
-  console.log("FaYoutubeIcon:", FaYoutubeIcon);
-  console.log("Tipo de FaYoutubeIcon:", typeof FaYoutubeIcon);
-  console.log("motion:", motion);
-  console.log("Tipo de motion:", typeof motion);
-  console.log("SafeImage:", SafeImage);
-  console.log("Tipo de SafeImage:", typeof SafeImage);
-  console.log("SEOHead:", SEOHead);
-  console.log("Tipo de SEOHead:", typeof SEOHead);
-  console.log("CheckCircleIcon:", CheckCircleIcon);
-  console.log("Tipo de CheckCircleIcon:", typeof CheckCircleIcon);
-  console.log("HomeIcon:", HomeIcon);
-  console.log("Tipo de HomeIcon:", typeof HomeIcon);
-  console.log("InformationCircleIcon:", InformationCircleIcon);
-  console.log("Tipo de InformationCircleIcon:", typeof InformationCircleIcon);
-  console.log("HeartIcon:", HeartIcon);
-  console.log("Tipo de HeartIcon:", typeof HeartIcon);
-  
-  // VALIDAÇÃO CRÍTICA - PARAR SE ALGUM COMPONENTE FOR UNDEFINED
-  const components = {
-    FaYoutube,
-    FaYoutubeIcon,
-    motion,
-    SafeImage,
-    SEOHead,
-    CheckCircleIcon,
-    HomeIcon,
-    InformationCircleIcon,
-    HeartIcon
-  };
-  
-  const undefinedComponents = Object.entries(components)
-    .filter(([name, comp]) => comp === undefined || comp === null)
-    .map(([name]) => name);
-  
-  if (undefinedComponents.length > 0) {
-    console.error("❌ COMPONENTES UNDEFINED ENCONTRADOS:", undefinedComponents);
-    console.groupEnd();
-    throw new Error(`Componentes undefined detectados: ${undefinedComponents.join(', ')}`);
+  // VALIDAÇÃO FINAL DOS COMPONENTES ANTES DO RENDER
+  // Garantir que todos os componentes críticos estão definidos
+  if (!SEOHead || typeof SEOHead !== 'function') {
+    console.error('❌ SEOHead está undefined!');
+    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
   
-  console.log("✅ Todos os componentes validados");
-  console.groupEnd();
+  if (!SafeImage || typeof SafeImage !== 'function') {
+    console.error('❌ SafeImage está undefined!');
+    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
+  }
 
   return (
     <div>
@@ -184,13 +165,13 @@ const AgradecimentoPage: React.FC = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-green-600/50 to-blue-600/50"></div>
         </div>
-        <motion.div 
+        <MotionDiv 
           className="relative z-10 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div
+          <MotionDiv
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -199,16 +180,16 @@ const AgradecimentoPage: React.FC = () => {
             <div className="mx-auto w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
               <CheckCircleIcon className="h-16 w-16 text-white" />
             </div>
-          </motion.div>
-          <motion.h1 
+          </MotionDiv>
+          <MotionH1 
             className="text-5xl font-bold font-heading mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             Obrigado por se Cadastrar!
-          </motion.h1>
-          <motion.p 
+          </MotionH1>
+          <MotionP 
             className="text-xl mt-4 opacity-90 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -219,15 +200,15 @@ const AgradecimentoPage: React.FC = () => {
             ) : (
               <>Bem-vindo à nossa família! Estamos felizes em tê-lo conosco.</>
             )}
-          </motion.p>
-        </motion.div>
+          </MotionP>
+        </MotionDiv>
       </div>
 
       {/* Content Section */}
       <div className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -299,7 +280,7 @@ const AgradecimentoPage: React.FC = () => {
                   
                   {/* Countdown para redirecionamento automático */}
                   {showRedirect && countdown !== null && countdown > 0 && (
-                    <motion.div
+                    <MotionDiv
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 pt-4 border-t border-red-300 dark:border-red-700"
@@ -313,7 +294,7 @@ const AgradecimentoPage: React.FC = () => {
                           Cancelar
                         </button>
                       </p>
-                    </motion.div>
+                    </MotionDiv>
                   )}
                 </div>
 
@@ -365,7 +346,7 @@ const AgradecimentoPage: React.FC = () => {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </div>
