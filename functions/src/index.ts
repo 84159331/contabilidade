@@ -305,3 +305,9 @@ Esta mensagem foi enviada através do formulário de contato do site da Comunida
     }
   });
 });
+
+// Exportar funções de aniversários
+export { checkBirthdays, testBirthdayCheck } from './birthdayNotifications';
+
+// Exportar função de membros
+export { addMembro } from './membros';

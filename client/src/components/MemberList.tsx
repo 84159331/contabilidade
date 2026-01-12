@@ -127,25 +127,46 @@ const MemberList: React.FC<MemberListProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
-                    <button
-                      onClick={() => onEdit(member)}
-                      className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
-                      title="Editar"
-                    >
-                      <PencilIcon className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => onDelete(member.id)}
-                      disabled={isDeleting}
-                      className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      title="Deletar"
-                    >
-                      {isDeleting ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
-                      ) : (
-                        <TrashIcon className="h-4 w-4" />
-                      )}
-                    </button>
+                    {PencilIcon ? (
+                      <button
+                        onClick={() => onEdit(member)}
+                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                        title="Editar"
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => onEdit(member)}
+                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                        title="Editar"
+                      >
+                        ✏️
+                      </button>
+                    )}
+                    {TrashIcon ? (
+                      <button
+                        onClick={() => onDelete(member.id)}
+                        disabled={isDeleting}
+                        className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        title="Deletar"
+                      >
+                        {isDeleting ? (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
+                        ) : (
+                          <TrashIcon className="h-4 w-4" />
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => onDelete(member.id)}
+                        disabled={isDeleting}
+                        className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        title="Deletar"
+                      >
+                        🗑️
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -175,25 +196,46 @@ const MemberList: React.FC<MemberListProps> = ({
                 }`}>
                   {member.status === 'active' ? 'Ativo' : 'Inativo'}
                 </span>
-                <button
-                  onClick={() => onEdit(member)}
-                  className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
-                  title="Editar"
-                >
-                  <PencilIcon className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => onDelete(member.id)}
-                  disabled={isDeleting}
-                  className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title="Deletar"
-                >
-                  {isDeleting ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
-                  ) : (
-                    <TrashIcon className="h-4 w-4" />
-                  )}
-                </button>
+                {PencilIcon ? (
+                  <button
+                    onClick={() => onEdit(member)}
+                    className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                    title="Editar"
+                  >
+                    <PencilIcon className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => onEdit(member)}
+                    className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                    title="Editar"
+                  >
+                    ✏️
+                  </button>
+                )}
+                {TrashIcon ? (
+                  <button
+                    onClick={() => onDelete(member.id)}
+                    disabled={isDeleting}
+                    className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title="Deletar"
+                  >
+                    {isDeleting ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
+                    ) : (
+                      <TrashIcon className="h-4 w-4" />
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => onDelete(member.id)}
+                    disabled={isDeleting}
+                    className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title="Deletar"
+                  >
+                    🗑️
+                  </button>
+                )}
               </div>
             </div>
             

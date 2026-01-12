@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { PlusIcon, MagnifyingGlassIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
@@ -43,6 +43,7 @@ const Members: React.FC = () => {
   });
   const { user, loading: authLoading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize useNavigate
   const lastRouteRef = useRef<string>(location.pathname);
   const hasLoadedRef = useRef(false);
 
@@ -142,53 +143,85 @@ const Members: React.FC = () => {
     }
   }, [searchTerm, statusFilter, pagination.page, authLoading, location.pathname, loadMembers]);
 
-  const handleCreateMember = async (memberData: any) => {
+  const handleCreateMember = useCallback(async (memberData: any) => {
+    // Validar dados antes de enviar
+    if (!memberData || typeof memberData !== 'object') {
+      console.error('❌ Dados inválidos para criar membro:', memberData);
+      toast.error('Dados inválidos para criar membro');
+      return;
+    }
+
     try {
       setIsCreating(true);
+      console.log('✅ Criando membro com dados:', memberData);
       await membersAPI.createMember(memberData);
       toast.success('Membro criado com sucesso!');
       setShowForm(false);
-      loadMembers();
+      setEditingMember(null);
+      await loadMembers(true);
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Erro ao criar membro');
+      console.error('❌ Erro ao criar membro:', error);
+      toast.error(error.response?.data?.error || error.message || 'Erro ao criar membro');
     } finally {
       setIsCreating(false);
     }
-  };
+  }, [loadMembers]);
 
-  const handleUpdateMember = async (id: string | number, memberData: any) => {
+  const handleUpdateMember = useCallback(async (id: string | number, memberData: any) => {
+    // Validar ID e dados antes de enviar
+    if (!id || (typeof id !== 'string' && typeof id !== 'number')) {
+      console.error('❌ ID inválido para atualizar membro:', id);
+      toast.error('ID inválido para atualizar membro');
+      return;
+    }
+
+    if (!memberData || typeof memberData !== 'object') {
+      console.error('❌ Dados inválidos para atualizar membro:', memberData);
+      toast.error('Dados inválidos para atualizar membro');
+      return;
+    }
+
     try {
       setIsUpdating(true);
-      console.log('🔄 Iniciando atualização do membro:', id, 'Tipo:', typeof id);
-      await membersAPI.updateMember(String(id), memberData);
+      const memberId = String(id);
+      console.log('🔄 Iniciando atualização do membro:', memberId, 'Tipo:', typeof id);
+      await membersAPI.updateMember(memberId, memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
       setShowForm(false);
-      loadMembers(true); // Forçar recarga
+      await loadMembers(true); // Forçar recarga
     } catch (error: any) {
       console.error('❌ Erro na atualização:', error);
-      toast.error(error.response?.data?.error || 'Erro ao atualizar membro');
+      toast.error(error.response?.data?.error || error.message || 'Erro ao atualizar membro');
     } finally {
       setIsUpdating(false);
     }
-  };
+  }, [loadMembers]);
 
-  const handleDeleteMember = async (id: string | number) => {
+  const handleDeleteMember = useCallback(async (id: string | number) => {
+    // Validar ID antes de deletar
+    if (!id || (typeof id !== 'string' && typeof id !== 'number')) {
+      console.error('❌ ID inválido para deletar membro:', id);
+      toast.error('ID inválido para deletar membro');
+      return;
+    }
+
     if (window.confirm('Tem certeza que deseja deletar este membro?')) {
       try {
         setIsDeleting(true);
-        console.log('🗑️ Iniciando exclusão do membro:', id, 'Tipo:', typeof id);
-        await membersAPI.deleteMember(String(id));
+        const memberId = String(id);
+        console.log('🗑️ Iniciando exclusão do membro:', memberId, 'Tipo:', typeof id);
+        await membersAPI.deleteMember(memberId);
         toast.success('Membro deletado com sucesso!');
-        loadMembers(true); // Forçar recarga
+        await loadMembers(true); // Forçar recarga
       } catch (error: any) {
         console.error('❌ Erro na exclusão:', error);
-        toast.error(error.response?.data?.error || 'Erro ao deletar membro');
+        toast.error(error.response?.data?.error || error.message || 'Erro ao deletar membro');
       } finally {
         setIsDeleting(false);
       }
     }
-  };
+  }, [loadMembers]);
 
   const handleEditMember = (member: Member) => {
     setEditingMember(member);
@@ -200,6 +233,31 @@ const Members: React.FC = () => {
     setEditingMember(null);
   };
 
+  // Handler unificado para salvar (criar ou atualizar)
+  const handleSaveMember = useCallback((data: any) => {
+    // Validar dados antes de salvar
+    if (!data || typeof data !== 'object') {
+      console.error('❌ Dados inválidos no formulário:', data);
+      toast.error('Dados inválidos no formulário');
+      return;
+    }
+
+    if (editingMember && editingMember.id) {
+      // Atualizar membro existente
+      const memberId = editingMember.id;
+      console.log('🔄 Salvando atualização do membro:', memberId);
+      handleUpdateMember(memberId, data).catch((error) => {
+        console.error('❌ Erro ao salvar atualização:', error);
+      });
+    } else {
+      // Criar novo membro
+      console.log('✅ Salvando novo membro');
+      handleCreateMember(data).catch((error) => {
+        console.error('❌ Erro ao salvar novo membro:', error);
+      });
+    }
+  }, [editingMember, handleUpdateMember, handleCreateMember]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPagination(prev => ({ ...prev, page: 1 }));
@@ -208,6 +266,14 @@ const Members: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
+
+  // Validação apenas em desenvolvimento
+  if (process.env.NODE_ENV === 'development') {
+    if (!LoadingSpinner || !MemberForm || !MemberList || !Modal || !Button) {
+      console.error('❌ Componente crítico não encontrado em Members!');
+      return <div>Erro: Componente não encontrado</div>;
+    }
+  }
 
   if (loading && members.length === 0) {
     return <LoadingSpinner />;
@@ -223,10 +289,19 @@ const Members: React.FC = () => {
             Gerencie os membros da igreja
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)} loading={isCreating}>
-          <PlusIcon className="h-4 w-4" />
-          Novo Membro
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            variant="secondary"
+            onClick={() => window.open('/cadastro', '_blank')}
+          >
+            <LinkIcon className="h-4 w-4" />
+            Link de Cadastro
+          </Button>
+          <Button onClick={() => navigate('/tesouraria/members/new')} >
+            <PlusIcon className="h-4 w-4" />
+            Novo Membro
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -281,21 +356,20 @@ const Members: React.FC = () => {
       />
 
       {/* Member Form Modal */}
-      <Modal
-        isOpen={showForm}
-        onClose={handleCloseForm}
-        title={editingMember ? 'Editar Membro' : 'Novo Membro'}
-      >
-        <MemberForm
-          member={editingMember}
-          onSave={editingMember ? 
-            (data) => handleUpdateMember(editingMember.id.toString(), data) :
-            handleCreateMember
-          }
+      {showForm && Modal && MemberForm && (
+        <Modal
+          isOpen={showForm}
           onClose={handleCloseForm}
-          isSaving={isCreating || isUpdating}
-        />
-      </Modal>
+          title={editingMember ? 'Editar Membro' : 'Novo Membro'}
+        >
+          <MemberForm
+            member={editingMember}
+            onSave={handleSaveMember}
+            onClose={handleCloseForm}
+            isSaving={editingMember ? isUpdating : isCreating}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

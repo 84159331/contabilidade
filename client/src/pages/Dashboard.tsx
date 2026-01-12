@@ -14,10 +14,11 @@ import AnimatedCard from '../components/AnimatedCard';
 import StatusIndicator from '../components/StatusIndicator';
 import PageTransition from '../components/PageTransition';
 import QuickActions from '../components/QuickActions';
-import { SkeletonCard } from '../components/Skeleton';
+import SkeletonCard from '../components/SkeletonCard';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import MemberStats from '../components/MemberStats';
+import BirthdayNotifications from '../components/BirthdayNotifications';
 
 const Dashboard: React.FC = () => {
   const { stats, memberStats, loading, error, refresh } = useDashboardData();
@@ -184,10 +185,15 @@ const Dashboard: React.FC = () => {
         </AnimatedCard>
       </div>
 
+        {/* Birthday Notifications */}
+        <AnimatedCard delay={4}>
+          <BirthdayNotifications />
+        </AnimatedCard>
+
         {/* Charts and Recent Activity */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Financial Summary Chart */}
-          <AnimatedCard delay={4}>
+          <AnimatedCard delay={5}>
             <div className="p-6">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 Resumo Financeiro
@@ -197,7 +203,7 @@ const Dashboard: React.FC = () => {
           </AnimatedCard>
 
           {/* Member Stats */}
-          <AnimatedCard delay={5}>
+          <AnimatedCard delay={6}>
             <div className="p-6">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 Estatísticas dos Membros
@@ -208,7 +214,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Recent Transactions */}
-        <AnimatedCard delay={8}>
+        <AnimatedCard delay={7}>
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Transações Recentes

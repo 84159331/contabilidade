@@ -87,8 +87,18 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validar que onSave existe e é uma função
+    if (!onSave || typeof onSave !== 'function') {
+      console.error('❌ onSave não é uma função válida:', onSave);
+      return;
+    }
+    
     if (validateForm()) {
-      onSave(formData);
+      try {
+        onSave(formData);
+      } catch (error) {
+        console.error('❌ Erro ao chamar onSave:', error);
+      }
     }
   };
 
@@ -235,21 +245,27 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
       </div>
 
       <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse mt-6 -mx-6 -mb-6 rounded-b-lg">
-        <Button
-          type="submit"
-          className="sm:ml-3 sm:w-auto w-full"
-          loading={isSaving}
-        >
-          {member ? 'Atualizar' : 'Criar'}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onClose}
-          className="mt-3 sm:mt-0 sm:w-auto w-full"
-        >
-          Cancelar
-        </Button>
+        {Button ? (
+          <>
+            <Button
+              type="submit"
+              className="sm:ml-3 sm:w-auto w-full"
+              loading={isSaving}
+            >
+              {member ? 'Atualizar' : 'Criar'}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onClose}
+              className="mt-3 sm:mt-0 sm:w-auto w-full"
+            >
+              Cancelar
+            </Button>
+          </>
+        ) : (
+          <div className="text-red-600">Erro: Componente Button não encontrado</div>
+        )}
       </div>
     </form>
   );

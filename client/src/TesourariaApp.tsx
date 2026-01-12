@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './firebase/AuthContext';
 import { useCacheInvalidation } from './hooks/useRouteRefresh';
@@ -7,19 +7,23 @@ import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 import PageSkeleton from './components/PageSkeleton';
 import SmartLoading from './components/SmartLoading';
+import ErrorBoundary from './components/ErrorBoundary';
+import PageErrorFallback from './components/PageErrorFallback';
+import { lazyWithRetry } from './utils/lazyWithRetry';
 
-// Lazy loading para componentes pesados
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Members = lazy(() => import('./pages/Members'));
-const Transactions = lazy(() => import('./pages/Transactions'));
-const Reports = lazy(() => import('./pages/Reports'));
-const Categories = lazy(() => import('./pages/Categories'));
-const CellGroupsAdmin = lazy(() => import('./pages/CellGroupsAdmin'));
-const WhatsAppPage = lazy(() => import('./pages/WhatsAppPage'));
-const BooksManagement = lazy(() => import('./pages/BooksManagement'));
-const Events = lazy(() => import('./pages/Events'));
-const EsbocosAdminPage = lazy(() => import('./pages/EsbocosAdminPage'));
-const FeriasPastores = lazy(() => import('./pages/FeriasPastores'));
+// Lazy loading com retry para componentes pesados (previne páginas brancas)
+const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
+const Members = lazyWithRetry(() => import('./pages/Members'));
+const Transactions = lazyWithRetry(() => import('./pages/Transactions'));
+const Reports = lazyWithRetry(() => import('./pages/Reports'));
+const Categories = lazyWithRetry(() => import('./pages/Categories'));
+const CellGroupsAdmin = lazyWithRetry(() => import('./pages/CellGroupsAdmin'));
+const WhatsAppPage = lazyWithRetry(() => import('./pages/WhatsAppPage'));
+const BooksManagement = lazyWithRetry(() => import('./pages/BooksManagement'));
+const Events = lazyWithRetry(() => import('./pages/Events'));
+const EsbocosAdminPage = lazyWithRetry(() => import('./pages/EsbocosAdminPage'));
+const FeriasPastores = lazyWithRetry(() => import('./pages/FeriasPastores'));
+const CadastroMembro = lazyWithRetry(() => import('./pages/CadastroMembro'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -62,15 +66,11 @@ function TesourariaApp() {
     }
   }, [user]);
 
-  console.log('🏦 TesourariaApp renderizado - user:', user, 'loading:', loading);
-
   if (loading) {
-    console.log('⏳ Mostrando LoadingSpinner');
     return <LoadingSpinner />;
   }
 
   if (!user) {
-    console.log('❌ Usuário não logado, redirecionando para login');
     return (
       <Routes>
         <Route path="login" element={<LoginFirebase />} />
@@ -79,15 +79,28 @@ function TesourariaApp() {
     );
   }
 
-  console.log('✅ Usuário logado, mostrando dashboard');
+  // Validação apenas em desenvolvimento
+  if (process.env.NODE_ENV === 'development') {
+    if (!Layout || !ErrorBoundary || !PageErrorFallback || !PageSkeleton || !SmartLoading) {
+      console.error('❌ Componente crítico não encontrado!');
+      return <div>Erro: Componente não encontrado</div>;
+    }
+  }
+  
   return (
     <Layout>
-      <Suspense fallback={<PageSkeleton type="dashboard" />}>
-        <SmartLoading>
-          <Routes>
+      <ErrorBoundary fallback={<PageErrorFallback />}>
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[400px]">
+            <PageSkeleton type="dashboard" />
+          </div>
+        }>
+          <SmartLoading>
+            <Routes>
             <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="members" element={<Members />} />
+            <Route path="members/new" element={<CadastroMembro />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="reports" element={<Reports />} />
             <Route path="categories" element={<Categories />} />
@@ -98,9 +111,10 @@ function TesourariaApp() {
             <Route path="esbocos" element={<EsbocosAdminPage />} />
             <Route path="ferias-pastores" element={<FeriasPastores />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
-          </Routes>
-        </SmartLoading>
-      </Suspense>
+            </Routes>
+          </SmartLoading>
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

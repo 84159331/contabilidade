@@ -31,4 +31,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-export default Modal;
+// Memoizar para evitar re-renders desnecessários
+export default React.memo(Modal);

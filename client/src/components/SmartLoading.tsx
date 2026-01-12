@@ -1,5 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+
+// Importação segura do framer-motion com fallback
+let MotionDiv: React.ComponentType<any>;
+try {
+  const framerMotion = require('framer-motion');
+  if (framerMotion && framerMotion.motion && framerMotion.motion.div) {
+    MotionDiv = framerMotion.motion.div;
+  } else {
+    throw new Error('motion.div não disponível');
+  }
+} catch (error) {
+  // Fallback: usar div padrão (sem log em produção)
+  if (process.env.NODE_ENV === 'development') {
+    console.warn('⚠️ framer-motion não disponível, usando div padrão');
+  }
+  MotionDiv = ({ children, ...props }: any) => <div {...props}>{children}</div>;
+}
 
 interface SmartLoadingProps {
   children: React.ReactNode;
@@ -25,13 +41,19 @@ const SmartLoading: React.FC<SmartLoadingProps> = ({
     return () => clearTimeout(timer);
   }, [preloadDelay]);
 
+  // Props de animação apenas se motion.div estiver disponível
+  const hasMotion = MotionDiv.name !== 'SmartLoading' && MotionDiv !== (() => <div />);
+  const loadingProps = hasMotion ? {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: 0.2 }
+  } : {};
+
   if (isLoading) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+      <MotionDiv
+        {...loadingProps}
         className="flex items-center justify-center min-h-[200px]"
       >
         {fallback || (
@@ -40,18 +62,20 @@ const SmartLoading: React.FC<SmartLoadingProps> = ({
             <p className="text-sm text-gray-600 dark:text-gray-400">Carregando...</p>
           </div>
         )}
-      </motion.div>
+      </MotionDiv>
     );
   }
 
+  const contentProps = hasMotion ? {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.3, ease: "easeOut" }
+  } : {};
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
+    <MotionDiv {...contentProps}>
       {showContent && children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 

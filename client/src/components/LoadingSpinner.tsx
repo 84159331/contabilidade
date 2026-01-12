@@ -37,4 +37,5 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-export default LoadingSpinner;
+// Memoizar para evitar re-renders desnecessários
+export default React.memo(LoadingSpinner);

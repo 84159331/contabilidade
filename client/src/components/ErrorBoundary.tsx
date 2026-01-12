@@ -46,6 +46,7 @@ class ErrorBoundary extends Component<Props, State> {
     }
   }
 
+
   handleReset = () => {
     this.setState({
       hasError: false,

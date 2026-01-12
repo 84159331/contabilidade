@@ -52,4 +52,5 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+// Memoizar para evitar re-renders desnecessários
+export default React.memo(Button);
