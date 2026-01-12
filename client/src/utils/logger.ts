@@ -12,7 +12,7 @@ export const log = (...args: any[]) => {
 export const logError = (...args: any[]) => {
   // Erros sempre são logados, mesmo em produção (mas apenas em desenvolvimento detalhado)
   if (isDevelopment) {
-    console.error(...args);
+  console.error(...args);
   } else {
     // Em produção, apenas erros críticos
     console.error('[ERROR]', ...args);

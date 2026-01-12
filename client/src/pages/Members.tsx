@@ -297,10 +297,10 @@ const Members: React.FC = () => {
             <LinkIcon className="h-4 w-4" />
             Link de Cadastro
           </Button>
-          <Button onClick={() => navigate('/tesouraria/members/new')} >
-            <PlusIcon className="h-4 w-4" />
-            Novo Membro
-          </Button>
+        <Button onClick={() => navigate('/tesouraria/members/new')} >
+          <PlusIcon className="h-4 w-4" />
+          Novo Membro
+        </Button>
         </div>
       </div>
 
@@ -357,18 +357,18 @@ const Members: React.FC = () => {
 
       {/* Member Form Modal */}
       {showForm && Modal && MemberForm && (
-        <Modal
-          isOpen={showForm}
-          onClose={handleCloseForm}
-          title={editingMember ? 'Editar Membro' : 'Novo Membro'}
-        >
-          <MemberForm
-            member={editingMember}
+      <Modal
+        isOpen={showForm}
+        onClose={handleCloseForm}
+        title={editingMember ? 'Editar Membro' : 'Novo Membro'}
+      >
+        <MemberForm
+          member={editingMember}
             onSave={handleSaveMember}
-            onClose={handleCloseForm}
+          onClose={handleCloseForm}
             isSaving={editingMember ? isUpdating : isCreating}
-          />
-        </Modal>
+        />
+      </Modal>
       )}
     </div>
   );

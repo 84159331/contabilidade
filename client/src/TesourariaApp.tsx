@@ -95,8 +95,8 @@ function TesourariaApp() {
             <PageSkeleton type="dashboard" />
           </div>
         }>
-          <SmartLoading>
-            <Routes>
+        <SmartLoading>
+          <Routes>
             <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="members" element={<Members />} />
@@ -111,9 +111,9 @@ function TesourariaApp() {
             <Route path="esbocos" element={<EsbocosAdminPage />} />
             <Route path="ferias-pastores" element={<FeriasPastores />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
-            </Routes>
-          </SmartLoading>
-        </Suspense>
+          </Routes>
+        </SmartLoading>
+      </Suspense>
       </ErrorBoundary>
     </Layout>
   );

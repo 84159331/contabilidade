@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
@@ -22,6 +23,7 @@ interface FormData {
 }
 
 const CadastroPublicoPage: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -84,6 +86,15 @@ const CadastroPublicoPage: React.FC = () => {
         member_since: new Date().toISOString().split('T')[0], // Data atual
       };
 
+      // Validação adicional antes de enviar
+      if (!memberData.name || memberData.name.length < 3) {
+        throw new Error('Nome inválido');
+      }
+
+      if (!memberData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(memberData.email)) {
+        throw new Error('Email inválido');
+      }
+
       console.log('📝 Cadastrando novo membro:', memberData);
 
       // Cadastrar automaticamente via API
@@ -92,8 +103,8 @@ const CadastroPublicoPage: React.FC = () => {
       // Mostrar mensagem de sucesso
       toast.success('🎉 Cadastro realizado com sucesso! Bem-vindo à nossa comunidade!');
       
-      // Mostrar estado de sucesso
-      setIsSuccess(true);
+      // Salvar nome do membro antes de limpar o formulário
+      const memberName = formData.name.trim();
 
       // Limpar formulário
       setFormData({
@@ -104,15 +115,40 @@ const CadastroPublicoPage: React.FC = () => {
         birth_date: ''
       });
 
-      // Resetar estado de sucesso após 5 segundos
+      // Redirecionar para página de agradecimento após um breve delay
+      // Passar o nome do membro para personalizar a mensagem
       setTimeout(() => {
-        setIsSuccess(false);
-      }, 5000);
+        try {
+          navigate('/cadastro/obrigado', {
+            state: {
+              memberName: memberName
+            }
+          });
+        } catch (navError) {
+          console.error('❌ Erro ao navegar:', navError);
+          // Fallback: recarregar a página se a navegação falhar
+          window.location.href = '/cadastro/obrigado';
+        }
+      }, 1000);
 
     } catch (error: any) {
       console.error('❌ Erro ao cadastrar:', error);
-      const errorMessage = error.message || 'Erro ao realizar cadastro. Tente novamente.';
+      
+      // Tratamento de erro mais robusto
+      let errorMessage = 'Erro ao realizar cadastro. Tente novamente.';
+      
+      if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
       toast.error(`Erro: ${errorMessage}`);
+      
+      // Garantir que o estado seja resetado mesmo em caso de erro
+      setIsSuccess(false);
     } finally {
       setIsSubmitting(false);
     }

@@ -48,7 +48,7 @@ interface SkeletonCardProps {
   delay?: number;
 }
 
-export const SkeletonCard: React.FC<SkeletonCardProps> = ({ delay = 0 }) => {
+const SkeletonCard: React.FC<SkeletonCardProps> = ({ delay = 0 }) => {
   return (
     <div 
       className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 animate-pulse"
@@ -67,4 +67,6 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({ delay = 0 }) => {
   );
 };
 
+// Exportar ambos como default (padrão do projeto)
 export default Skeleton;
+export { SkeletonCard };

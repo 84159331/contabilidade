@@ -26,6 +26,7 @@ const EsbocosPage = lazyWithRetry(() => import('./pages/public/EsbocosPage'));
 const EsbocoDetalhePage = lazyWithRetry(() => import('./pages/public/EsbocoDetalhePage'));
 const EventsPage = lazyWithRetry(() => import('./pages/public/EventsPage'));
 const CadastroPublicoPage = lazyWithRetry(() => import('./pages/public/CadastroPublicoPage'));
+const AgradecimentoPage = lazyWithRetry(() => import('./pages/public/AgradecimentoPage'));
 const Login = lazyWithRetry(() => import('./pages/Login'));
 const Logout = lazyWithRetry(() => import('./pages/Logout'));
 const LoginDebug = lazyWithRetry(() => import('./pages/LoginDebug'));
@@ -51,7 +52,7 @@ function App() {
                     <LoadingSpinner size="lg" text="Carregando página..." />
                   </div>
                 }>
-                  <Routes>
+                <Routes>
                   <Route element={<PublicLayout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/sobre" element={<AboutPage />} />
@@ -66,13 +67,14 @@ function App() {
                     <Route path="/esbocos/:id" element={<EsbocoDetalhePage />} />
                     <Route path="/eventos" element={<EventsPage />} />
                     <Route path="/cadastro" element={<CadastroPublicoPage />} />
+                    <Route path="/cadastro/obrigado" element={<AgradecimentoPage />} />
                   </Route>
                   <Route path="/login-debug" element={<LoginDebug />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
                   <Route path="/tesouraria/*" element={<TesourariaApp />} />
-                  </Routes>
-                </Suspense>
+                </Routes>
+              </Suspense>
               </ErrorBoundary>
             </Router>
           </AuthProvider>
