@@ -20,6 +20,11 @@ import Button from '../components/Button';
 type ReportType = 'monthly' | 'yearly' | 'contributions' | 'categories' | 'cashflow';
 
 const Reports: React.FC = () => {
+  // #region agent log
+  const reportComponents = {MonthlyBalanceReport,YearlyBalanceReport,MemberContributionsReport,CategoryReport,CashFlowReport};
+  const reportComponentStatus = Object.entries(reportComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:22',message:'Report components status',data:reportComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+  // #endregion
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState<any>(null);
@@ -206,10 +211,25 @@ const Reports: React.FC = () => {
   };
 
   const renderReport = () => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:208',message:'renderReport called',data:{activeReport,hasMonthlyBalanceReport:!!MonthlyBalanceReport,hasYearlyBalanceReport:!!YearlyBalanceReport,hasMemberContributionsReport:!!MemberContributionsReport,hasCategoryReport:!!CategoryReport,hasCashFlowReport:!!CashFlowReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+    // #endregion
     switch (activeReport) {
       case 'monthly':
+        if (!MonthlyBalanceReport) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:211',message:'MonthlyBalanceReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+          // #endregion
+          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
+        }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'yearly':
+        if (!YearlyBalanceReport) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:218',message:'YearlyBalanceReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+          // #endregion
+          return <div>Erro: YearlyBalanceReport não encontrado</div>;
+        }
         return (
           <YearlyBalanceReport
             onDataLoaded={handleSetReportData}
@@ -217,6 +237,12 @@ const Reports: React.FC = () => {
           />
         );
       case 'contributions':
+        if (!MemberContributionsReport) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:227',message:'MemberContributionsReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+          // #endregion
+          return <div>Erro: MemberContributionsReport não encontrado</div>;
+        }
         return (
           <MemberContributionsReport
             onDataLoaded={handleSetReportData}
@@ -224,6 +250,12 @@ const Reports: React.FC = () => {
           />
         );
       case 'categories':
+        if (!CategoryReport) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:236',message:'CategoryReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+          // #endregion
+          return <div>Erro: CategoryReport não encontrado</div>;
+        }
         return (
           <CategoryReport
             onDataLoaded={handleSetReportData}
@@ -231,6 +263,12 @@ const Reports: React.FC = () => {
           />
         );
       case 'cashflow':
+        if (!CashFlowReport) {
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:245',message:'CashFlowReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+          // #endregion
+          return <div>Erro: CashFlowReport não encontrado</div>;
+        }
         return (
           <CashFlowReport
             onDataLoaded={handleSetReportData}
@@ -238,6 +276,9 @@ const Reports: React.FC = () => {
           />
         );
       default:
+        if (!MonthlyBalanceReport) {
+          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
+        }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
     }
   };

@@ -26,6 +26,9 @@ const FeriasPastores = lazyWithRetry(() => import('./pages/FeriasPastores'));
 const CadastroMembro = lazyWithRetry(() => import('./pages/CadastroMembro'));
 
 function TesourariaApp() {
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:28',message:'TesourariaApp render started',data:{hasLayout:!!Layout,hasErrorBoundary:!!ErrorBoundary,hasPageErrorFallback:!!PageErrorFallback,hasPageSkeleton:!!PageSkeleton,hasSmartLoading:!!SmartLoading,hasLoginFirebase:!!LoginFirebase},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+  // #endregion
   const { user, loading } = useAuth();
   
   // Invalidar cache quando a rota muda
@@ -79,9 +82,17 @@ function TesourariaApp() {
     );
   }
 
+  // #region agent log
+  const lazyComponents = {Dashboard,Members,Transactions,Reports,Categories,CellGroupsAdmin,WhatsAppPage,BooksManagement,Events,EsbocosAdminPage,FeriasPastores,CadastroMembro};
+  const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:82',message:'Lazy components status',data:lazyComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+  // #endregion
   // Validação apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!Layout || !ErrorBoundary || !PageErrorFallback || !PageSkeleton || !SmartLoading) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:85',message:'Critical component missing',data:{Layout:!!Layout,ErrorBoundary:!!ErrorBoundary,PageErrorFallback:!!PageErrorFallback,PageSkeleton:!!PageSkeleton,SmartLoading:!!SmartLoading},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
       console.error('❌ Componente crítico não encontrado!');
       return <div>Erro: Componente não encontrado</div>;
     }

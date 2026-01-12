@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';
 import { FaYoutube } from 'react-icons/fa';
@@ -10,6 +9,15 @@ import {
   InformationCircleIcon,
   HeartIcon
 } from '@heroicons/react/24/outline';
+
+// Importação segura do framer-motion (após imports normais)
+let motion: any;
+try {
+  const framerMotion = require('framer-motion');
+  motion = framerMotion?.motion || null;
+} catch (error) {
+  motion = null;
+}
 
 // VALIDAÇÃO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicialização)
 const FaYoutubeIcon: React.FC<{ className?: string }> = ({ className }) => {
@@ -101,32 +109,71 @@ const AgradecimentoPage: React.FC = () => {
     // Verificar se motion está disponível e tem as propriedades necessárias
     if (motion && typeof motion === 'object' && motion !== null) {
       const motionAny = motion as any;
-      if (motionAny.div && typeof motionAny.div === 'function') {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:100',message:'Checking motion components',data:{hasMotion:!!motion,hasMotionDiv:!!motionAny.div,hasMotionH1:!!motionAny.h1,hasMotionP:!!motionAny.p,motionDivType:typeof motionAny.div,motionH1Type:typeof motionAny.h1,motionPType:typeof motionAny.p},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
+      // #endregion
+      if (motionAny.div && typeof motionAny.div === 'function' && motionAny.div !== undefined && motionAny.div !== null) {
         MotionDiv = motionAny.div;
+      } else {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:107',message:'motion.div is invalid, using fallback',data:{motionDivValue:motionAny.div,motionDivType:typeof motionAny.div},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
+        // #endregion
+        MotionDiv = FallbackDiv;
       }
-      if (motionAny.h1 && typeof motionAny.h1 === 'function') {
+      if (motionAny.h1 && typeof motionAny.h1 === 'function' && motionAny.h1 !== undefined && motionAny.h1 !== null) {
         MotionH1 = motionAny.h1;
+      } else {
+        MotionH1 = FallbackH1;
       }
-      if (motionAny.p && typeof motionAny.p === 'function') {
+      if (motionAny.p && typeof motionAny.p === 'function' && motionAny.p !== undefined && motionAny.p !== null) {
         MotionP = motionAny.p;
+      } else {
+        MotionP = FallbackP;
       }
+    } else {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:120',message:'motion is not available, using fallbacks',data:{motionType:typeof motion,motionValue:motion},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
+      // #endregion
+      MotionDiv = FallbackDiv;
+      MotionH1 = FallbackH1;
+      MotionP = FallbackP;
     }
   } catch (error) {
     // Se houver erro, usar fallbacks (já definidos acima)
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:127',message:'Error initializing motion, using fallbacks',data:{error:error instanceof Error?error.message:String(error)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
+    // #endregion
     if (process.env.NODE_ENV === 'development') {
       console.warn('⚠️ Erro ao inicializar motion components, usando fallbacks HTML:', error);
     }
+    MotionDiv = FallbackDiv;
+    MotionH1 = FallbackH1;
+    MotionP = FallbackP;
   }
   
   // VALIDAÇÃO FINAL: Garantir que os componentes não estão undefined
-  if (!MotionDiv || typeof MotionDiv !== 'function') {
+  if (!MotionDiv || typeof MotionDiv !== 'function' || MotionDiv === undefined || MotionDiv === null) {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:137',message:'MotionDiv validation failed, using fallback',data:{MotionDivType:typeof MotionDiv,MotionDivValue:MotionDiv},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
+    // #endregion
     MotionDiv = FallbackDiv;
   }
-  if (!MotionH1 || typeof MotionH1 !== 'function') {
+  if (!MotionH1 || typeof MotionH1 !== 'function' || MotionH1 === undefined || MotionH1 === null) {
     MotionH1 = FallbackH1;
   }
-  if (!MotionP || typeof MotionP !== 'function') {
+  if (!MotionP || typeof MotionP !== 'function' || MotionP === undefined || MotionP === null) {
     MotionP = FallbackP;
+  }
+  
+  // VALIDAÇÃO EXTRA: Garantir que os fallbacks também estão definidos
+  if (!FallbackDiv || typeof FallbackDiv !== 'function') {
+    MotionDiv = ({ children, className, ...props }: any) => <div className={className} {...props}>{children}</div>;
+  }
+  if (!FallbackH1 || typeof FallbackH1 !== 'function') {
+    MotionH1 = ({ children, className, ...props }: any) => <h1 className={className} {...props}>{children}</h1>;
+  }
+  if (!FallbackP || typeof FallbackP !== 'function') {
+    MotionP = ({ children, className, ...props }: any) => <p className={className} {...props}>{children}</p>;
   }
 
   const handleCancelRedirect = () => {
@@ -141,12 +188,10 @@ const AgradecimentoPage: React.FC = () => {
   // VALIDAÇÃO FINAL DOS COMPONENTES ANTES DO RENDER
   // Garantir que todos os componentes críticos estão definidos
   if (!SEOHead || typeof SEOHead !== 'function') {
-    console.error('❌ SEOHead está undefined!');
     return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
   
   if (!SafeImage || typeof SafeImage !== 'function') {
-    console.error('❌ SafeImage está undefined!');
     return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
 

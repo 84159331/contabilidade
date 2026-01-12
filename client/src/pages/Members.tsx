@@ -11,6 +11,38 @@ import MemberList from '../components/MemberList';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
 
+// Validação de componentes importados (apenas para logging em desenvolvimento)
+const validateComponents = () => {
+  if (process.env.NODE_ENV !== 'development') {
+    return true; // Em produção, confiar nos imports
+  }
+  
+  const components = {
+    LoadingSpinner,
+    MemberForm,
+    MemberList,
+    Modal,
+    Button,
+    PlusIcon,
+    MagnifyingGlassIcon,
+    LinkIcon
+  };
+  
+  const invalid = Object.entries(components).filter(([name, comp]) => {
+    const isValid = comp !== undefined && comp !== null;
+    if (!isValid) {
+      console.error(`❌ Componente ${name} está undefined ou inválido:`, typeof comp, comp);
+    }
+    return !isValid;
+  });
+  
+  if (invalid.length > 0) {
+    console.warn('⚠️ Componentes inválidos encontrados:', invalid.map(([name]) => name));
+    // Não bloquear renderização, apenas avisar
+  }
+  return true; // Sempre retornar true para não bloquear renderização
+};
+
 interface Member {
   id: number | string;
   name: string;
@@ -211,12 +243,24 @@ const Members: React.FC = () => {
         setIsDeleting(true);
         const memberId = String(id);
         console.log('🗑️ Iniciando exclusão do membro:', memberId, 'Tipo:', typeof id);
+        
+        // Remover do estado local imediatamente para evitar render com membro deletado
+        setMembers(prevMembers => {
+          const filtered = prevMembers.filter(m => String(m.id) !== memberId);
+          console.log('🔄 Removendo membro do estado local. Antes:', prevMembers.length, 'Depois:', filtered.length);
+          return filtered;
+        });
+        
         await membersAPI.deleteMember(memberId);
         toast.success('Membro deletado com sucesso!');
-        await loadMembers(true); // Forçar recarga
+        
+        // Recarregar para garantir sincronização
+        await loadMembers(true);
       } catch (error: any) {
         console.error('❌ Erro na exclusão:', error);
         toast.error(error.response?.data?.error || error.message || 'Erro ao deletar membro');
+        // Em caso de erro, recarregar para restaurar estado
+        await loadMembers(true);
       } finally {
         setIsDeleting(false);
       }
@@ -267,13 +311,8 @@ const Members: React.FC = () => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
 
-  // Validação apenas em desenvolvimento
-  if (process.env.NODE_ENV === 'development') {
-    if (!LoadingSpinner || !MemberForm || !MemberList || !Modal || !Button) {
-      console.error('❌ Componente crítico não encontrado em Members!');
-      return <div>Erro: Componente não encontrado</div>;
-    }
-  }
+  // Validação de componentes (apenas para logging)
+  validateComponents();
 
   if (loading && members.length === 0) {
     return <LoadingSpinner />;
@@ -297,10 +336,10 @@ const Members: React.FC = () => {
             <LinkIcon className="h-4 w-4" />
             Link de Cadastro
           </Button>
-        <Button onClick={() => navigate('/tesouraria/members/new')} >
-          <PlusIcon className="h-4 w-4" />
-          Novo Membro
-        </Button>
+          <Button onClick={() => navigate('/tesouraria/members/new')} >
+            <PlusIcon className="h-4 w-4" />
+            Novo Membro
+          </Button>
         </div>
       </div>
 
@@ -346,7 +385,7 @@ const Members: React.FC = () => {
 
       {/* Members List */}
       <MemberList
-        members={members}
+        members={members || []}
         loading={loading}
         pagination={pagination}
         onEdit={handleEditMember}
@@ -356,19 +395,19 @@ const Members: React.FC = () => {
       />
 
       {/* Member Form Modal */}
-      {showForm && Modal && MemberForm && (
-      <Modal
-        isOpen={showForm}
-        onClose={handleCloseForm}
-        title={editingMember ? 'Editar Membro' : 'Novo Membro'}
-      >
-        <MemberForm
-          member={editingMember}
-            onSave={handleSaveMember}
+      {showForm && (
+        <Modal
+          isOpen={showForm}
           onClose={handleCloseForm}
+          title={editingMember ? 'Editar Membro' : 'Novo Membro'}
+        >
+          <MemberForm
+            member={editingMember}
+            onSave={handleSaveMember}
+            onClose={handleCloseForm}
             isSaving={editingMember ? isUpdating : isCreating}
-        />
-      </Modal>
+          />
+        </Modal>
       )}
     </div>
   );

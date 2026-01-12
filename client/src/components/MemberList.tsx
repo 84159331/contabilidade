@@ -3,6 +3,36 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import SkeletonLoader from './SkeletonLoader';
 import LoadingSpinner from './LoadingSpinner';
 
+// Validação de componentes importados
+const validateIcons = () => {
+  const icons = { PencilIcon, TrashIcon };
+  const invalid = Object.entries(icons).filter(([name, icon]) => {
+    const isValid = icon !== undefined && icon !== null && (typeof icon === 'function' || typeof icon === 'object');
+    if (!isValid) {
+      console.error(`❌ Ícone ${name} está undefined ou inválido:`, typeof icon, icon);
+    }
+    return !isValid;
+  });
+  return invalid.length === 0;
+};
+
+// Componentes seguros com fallback
+const SafePencilIcon: React.FC<{ className?: string }> = ({ className }) => {
+  if (PencilIcon && typeof PencilIcon === 'function') {
+    const Icon = PencilIcon as React.ComponentType<{ className?: string }>;
+    return <Icon className={className} />;
+  }
+  return <span className={className}>✏️</span>;
+};
+
+const SafeTrashIcon: React.FC<{ className?: string }> = ({ className }) => {
+  if (TrashIcon && typeof TrashIcon === 'function') {
+    const Icon = TrashIcon as React.ComponentType<{ className?: string }>;
+    return <Icon className={className} />;
+  }
+  return <span className={className}>🗑️</span>;
+};
+
 interface Member {
   id: number | string;
   name: string;
@@ -43,21 +73,115 @@ const MemberList: React.FC<MemberListProps> = ({
   isDeleting = false,
   onPageChange
 }) => {
-  const memoizedMembers = useMemo(() => members, [members]);
+  // Validar ícones
+  const iconsValid = validateIcons();
+  if (!iconsValid) {
+    console.warn('⚠️ Alguns ícones não estão disponíveis, usando fallbacks');
+  }
 
-  if (loading && members.length === 0) {
+  // Validar e filtrar membros válidos
+  const validMembers = useMemo(() => {
+    if (!Array.isArray(members)) {
+      console.error('❌ members não é um array:', typeof members, members);
+      return [];
+    }
+    return members.filter((member) => {
+      if (!member || typeof member !== 'object') {
+        console.warn('⚠️ Membro inválido encontrado:', member);
+        return false;
+      }
+      if (!member.id || (typeof member.id !== 'string' && typeof member.id !== 'number')) {
+        console.warn('⚠️ Membro sem ID válido:', member);
+        return false;
+      }
+      if (!member.name || typeof member.name !== 'string') {
+        console.warn('⚠️ Membro sem nome válido:', member);
+        return false;
+      }
+      return true;
+    });
+  }, [members]);
+
+  const memoizedMembers = useMemo(() => validMembers, [validMembers]);
+
+  // Helper para formatar data sem problemas de timezone
+  const formatDate = (dateString: string | undefined | null): string => {
+    if (!dateString) return '-';
+    
+    // Se já está no formato YYYY-MM-DD, converter diretamente
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+    }
+    
+    // Tentar converter de outros formatos
+    try {
+      // Se for string de data, fazer parse manual para evitar problemas de timezone
+      const parts = dateString.split(/[-\/]/);
+      if (parts.length === 3) {
+        let year, month, day;
+        
+        // Detectar formato (DD/MM/YYYY ou YYYY-MM-DD)
+        if (parts[0].length === 4) {
+          // YYYY-MM-DD ou YYYY/MM/DD
+          year = parseInt(parts[0], 10);
+          month = parseInt(parts[1], 10);
+          day = parseInt(parts[2], 10);
+        } else {
+          // DD/MM/YYYY ou DD-MM-YYYY
+          day = parseInt(parts[0], 10);
+          month = parseInt(parts[1], 10);
+          year = parseInt(parts[2], 10);
+        }
+        
+        // Validar e formatar
+        if (year >= 1900 && year <= 2100 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+          return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+        }
+      }
+      
+      // Fallback: usar Date
+      const date = new Date(dateString + 'T00:00:00Z');
+      if (!isNaN(date.getTime())) {
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const year = date.getUTCFullYear();
+        return `${day}/${month}/${year}`;
+      }
+    } catch (e) {
+      // Ignorar erros
+    }
+    
+    return '-';
+  };
+
+  // Validar componentes
+  if (!SkeletonLoader || typeof SkeletonLoader !== 'function' && typeof SkeletonLoader !== 'object') {
+    console.error('❌ SkeletonLoader está undefined ou inválido');
+  }
+
+  if (loading && validMembers.length === 0) {
+    if (SkeletonLoader && typeof SkeletonLoader === 'function') {
+      return (
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+          <SkeletonLoader type="table" count={5} />
+        </div>
+      );
+    }
     return (
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <SkeletonLoader type="table" count={5} />
+        <div className="text-center py-12">
+          <p className="text-gray-500">Carregando...</p>
+        </div>
       </div>
     );
   }
 
-  if (members.length === 0) {
+  if (validMembers.length === 0) {
     return (
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
         <div className="text-center py-12">
-          <p className="text-gray-500">Nenhum membro encontrado</p>
+          <p className="text-gray-500 dark:text-gray-400">Nenhum membro encontrado</p>
         </div>
       </div>
     );
@@ -75,6 +199,9 @@ const MemberList: React.FC<MemberListProps> = ({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Contato
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Aniversário
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Membro Desde
@@ -110,13 +237,16 @@ const MemberList: React.FC<MemberListProps> = ({
                     {member.phone && (
                       <div className="text-gray-500 dark:text-gray-400">{member.phone}</div>
                     )}
+                    {!member.email && !member.phone && (
+                      <span className="text-gray-400">-</span>
+                    )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {member.member_since ? 
-                    new Date(member.member_since).toLocaleDateString('pt-BR') : 
-                    '-'
-                  }
+                  {formatDate(member.birth_date)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {formatDate(member.member_since)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`badge ${
@@ -127,26 +257,23 @@ const MemberList: React.FC<MemberListProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
-                    {PencilIcon ? (
                     <button
-                      onClick={() => onEdit(member)}
+                      onClick={() => {
+                        if (member && onEdit && typeof onEdit === 'function') {
+                          onEdit(member);
+                        }
+                      }}
                       className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                       title="Editar"
                     >
-                      <PencilIcon className="h-4 w-4" />
+                      <SafePencilIcon className="h-4 w-4" />
                     </button>
-                    ) : (
-                      <button
-                        onClick={() => onEdit(member)}
-                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
-                        title="Editar"
-                      >
-                        ✏️
-                      </button>
-                    )}
-                    {TrashIcon ? (
                     <button
-                      onClick={() => onDelete(member.id)}
+                      onClick={() => {
+                        if (member && member.id && onDelete && typeof onDelete === 'function') {
+                          onDelete(member.id);
+                        }
+                      }}
                       disabled={isDeleting}
                       className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title="Deletar"
@@ -154,19 +281,9 @@ const MemberList: React.FC<MemberListProps> = ({
                       {isDeleting ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
                       ) : (
-                        <TrashIcon className="h-4 w-4" />
+                        <SafeTrashIcon className="h-4 w-4" />
                       )}
                     </button>
-                    ) : (
-                      <button
-                        onClick={() => onDelete(member.id)}
-                        disabled={isDeleting}
-                        className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        title="Deletar"
-                      >
-                        🗑️
-                      </button>
-                    )}
                   </div>
                 </td>
               </tr>
@@ -177,7 +294,14 @@ const MemberList: React.FC<MemberListProps> = ({
 
       {/* Mobile Cards */}
       <div className="md:hidden space-y-3 p-4">
-        {members.map((member) => (
+        {validMembers.map((member) => {
+          // Validação adicional dentro do map
+          if (!member || !member.id || !member.name) {
+            console.warn('⚠️ Membro inválido no map mobile:', member);
+            return null;
+          }
+          
+          return (
           <div key={member.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
@@ -196,26 +320,23 @@ const MemberList: React.FC<MemberListProps> = ({
                 }`}>
                   {member.status === 'active' ? 'Ativo' : 'Inativo'}
                 </span>
-                {PencilIcon ? (
                 <button
-                  onClick={() => onEdit(member)}
+                  onClick={() => {
+                    if (member && onEdit && typeof onEdit === 'function') {
+                      onEdit(member);
+                    }
+                  }}
                   className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                   title="Editar"
                 >
-                  <PencilIcon className="h-4 w-4" />
+                  <SafePencilIcon className="h-4 w-4" />
                 </button>
-                ) : (
-                  <button
-                    onClick={() => onEdit(member)}
-                    className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
-                    title="Editar"
-                  >
-                    ✏️
-                  </button>
-                )}
-                {TrashIcon ? (
                 <button
-                  onClick={() => onDelete(member.id)}
+                  onClick={() => {
+                    if (member && member.id && onDelete && typeof onDelete === 'function') {
+                      onDelete(member.id);
+                    }
+                  }}
                   disabled={isDeleting}
                   className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                   title="Deletar"
@@ -223,19 +344,9 @@ const MemberList: React.FC<MemberListProps> = ({
                   {isDeleting ? (
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
                   ) : (
-                    <TrashIcon className="h-4 w-4" />
+                    <SafeTrashIcon className="h-4 w-4" />
                   )}
                 </button>
-                ) : (
-                  <button
-                    onClick={() => onDelete(member.id)}
-                    disabled={isDeleting}
-                    className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    title="Deletar"
-                  >
-                    🗑️
-                  </button>
-                )}
               </div>
             </div>
             
@@ -257,17 +368,21 @@ const MemberList: React.FC<MemberListProps> = ({
                 </div>
               )}
               <div>
+                <span className="text-gray-500 dark:text-gray-400">Aniversário:</span>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {formatDate(member.birth_date)}
+                </p>
+              </div>
+              <div>
                 <span className="text-gray-500 dark:text-gray-400">Membro desde:</span>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  {member.member_since ? 
-                    new Date(member.member_since).toLocaleDateString('pt-BR') : 
-                    '-'
-                  }
+                  {formatDate(member.member_since)}
                 </p>
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Pagination */}

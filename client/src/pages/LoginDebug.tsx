@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
 const LoginDebug: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -91,13 +91,13 @@ const LoginDebug: React.FC = () => {
     addDebugInfo('🚀 Iniciando login...');
 
     try {
-      addDebugInfo(`Tentando login com: ${formData.username}`);
-      await login(formData.username, formData.password);
+      addDebugInfo(`Tentando login com: ${formData.email}`);
+      await login(formData.email, formData.password);
       addDebugInfo('✅ Login realizado com sucesso!');
       toast.success('Login realizado com sucesso!');
     } catch (error: any) {
       addDebugInfo(`❌ Erro no login: ${error.message}`);
-      toast.error(error.message);
+      toast.error(error.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -122,18 +122,19 @@ const LoginDebug: React.FC = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
               </label>
               <input
-                id="username"
-                name="username"
-                type="text"
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
                 required
-                value={formData.username}
+                value={formData.email}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="admin"
+                placeholder="seu@email.com"
               />
             </div>
             <div>

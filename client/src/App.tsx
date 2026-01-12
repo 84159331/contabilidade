@@ -32,14 +32,25 @@ const Logout = lazyWithRetry(() => import('./pages/Logout'));
 const LoginDebug = lazyWithRetry(() => import('./pages/LoginDebug'));
 
 function App() {
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:34',message:'App render started',data:{hasErrorBoundary:!!ErrorBoundary,hasPageErrorFallback:!!PageErrorFallback,hasLoadingSpinner:!!LoadingSpinner,hasPublicLayout:!!PublicLayout,hasTesourariaApp:!!TesourariaApp,hasHomePage:!!HomePage},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+  // #endregion
   // Validação apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!ErrorBoundary || !PageErrorFallback || !LoadingSpinner || !PublicLayout) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:38',message:'Critical component missing',data:{ErrorBoundary:!!ErrorBoundary,PageErrorFallback:!!PageErrorFallback,LoadingSpinner:!!LoadingSpinner,PublicLayout:!!PublicLayout},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
       console.error('❌ Componente crítico não encontrado!');
       return <div>Erro: Componente não encontrado</div>;
     }
   }
 
+  // #region agent log
+  const lazyComponents = {AboutPage,ContactPage,ConnectPage,WatchPage,GivePage,LocationsPage,BonsEstudosPage,BibliotecaPage,EsbocosPage,EsbocoDetalhePage,EventsPage,CadastroPublicoPage,AgradecimentoPage,Login,Logout,LoginDebug};
+  const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:43',message:'Lazy components status',data:lazyComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+  // #endregion
   return (
     <ErrorBoundary>
       <ThemeProvider>

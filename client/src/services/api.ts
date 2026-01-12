@@ -316,12 +316,56 @@ export const membersAPI = {
       const members = querySnapshot.docs.map(doc => {
         const data = doc.data();
         console.log('📄 Documento ID:', doc.id, 'Tipo:', typeof doc.id, 'Dados:', data);
+        
+        // Helper para converter Timestamp do Firestore para string de data (YYYY-MM-DD)
+        // Usa métodos UTC para evitar problemas de fuso horário
+        const convertDateToString = (dateValue: any): string => {
+          if (!dateValue) return '';
+          
+          // Se já é string no formato YYYY-MM-DD, retornar como está
+          if (typeof dateValue === 'string') {
+            // Validar formato YYYY-MM-DD
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+              return dateValue;
+            }
+            // Se for string em outro formato, tentar parsear
+            const dateMatch = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (dateMatch) {
+              return dateMatch[0]; // Retornar YYYY-MM-DD
+            }
+          }
+          
+          // Se é Timestamp do Firestore, usar métodos UTC para evitar problemas de timezone
+          if (dateValue && typeof dateValue.toDate === 'function') {
+            const date = dateValue.toDate();
+            // Usar métodos UTC para evitar problemas de fuso horário
+            const year = date.getUTCFullYear();
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(date.getUTCDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+          }
+          
+          // Se é Date, usar métodos UTC
+          if (dateValue instanceof Date) {
+            const year = dateValue.getUTCFullYear();
+            const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(dateValue.getUTCDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+          }
+          
+          return '';
+        };
+        
         return {
           id: doc.id, // Manter como string (ID do Firestore)
           name: data.name || 'Nome não informado',
           email: data.email || '',
           phone: data.phone || '',
+          address: data.address || '',
+          birth_date: convertDateToString(data.birth_date),
+          member_since: convertDateToString(data.member_since),
           status: data.status || 'active',
+          notes: data.notes || '',
           created_at: data.created_at || new Date(),
           updated_at: data.updated_at || new Date()
         };
@@ -341,8 +385,16 @@ export const membersAPI = {
       console.log('💾 Salvando membro no Firestore:', data);
       console.log('🔥 Firebase DB instance:', db);
       
+      // Preparar dados para criação, garantindo que todos os campos sejam incluídos
       const memberData = {
-        ...data,
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        address: data.address || '',
+        birth_date: data.birth_date || '',
+        member_since: data.member_since || '',
+        status: data.status || 'active',
+        notes: data.notes || '',
         created_at: new Date(),
         updated_at: new Date()
       };
@@ -387,10 +439,22 @@ export const membersAPI = {
       
       console.log('✅ Documento encontrado, procedendo com atualização...');
       
-      await updateDoc(memberRef, {
-        ...data,
+      // Preparar dados para atualização, garantindo que campos vazios sejam salvos como string vazia
+      const updateData: any = {
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        address: data.address || '',
+        birth_date: data.birth_date || '',
+        member_since: data.member_since || '',
+        status: data.status || 'active',
+        notes: data.notes || '',
         updated_at: new Date()
-      });
+      };
+      
+      console.log('📝 Dados preparados para atualização:', updateData);
+      
+      await updateDoc(memberRef, updateData);
       
       console.log('✅ Membro atualizado no Firestore com sucesso');
       return { data: { message: 'Membro atualizado com sucesso' } };

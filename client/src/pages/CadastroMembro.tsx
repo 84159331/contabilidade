@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import MemberForm from '../components/MemberForm';
-import { membrosService } from '../services/membros';
+import { membersAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
 const CadastroMembro: React.FC = () => {
@@ -9,31 +10,59 @@ const CadastroMembro: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSave = async (data: any) => {
+    // Validar dados antes de enviar
+    if (!data || typeof data !== 'object') {
+      console.error('❌ Dados inválidos para criar membro:', data);
+      toast.error('Dados inválidos para criar membro');
+      return;
+    }
+
     setIsSaving(true);
     try {
-      await membrosService.createMember(data);
-      // The success toast is already shown in the service
-      navigate('/members'); // Redirect to members list after successful registration
-    } catch (error) {
-      // The error is already handled and toasted in the service
+      console.log('✅ Criando membro com dados:', data);
+      await membersAPI.createMember(data);
+      toast.success('Membro criado com sucesso!');
+      navigate('/tesouraria/members'); // Redirect to members list after successful registration
+    } catch (error: any) {
+      console.error('❌ Erro ao criar membro:', error);
+      toast.error(error.response?.data?.error || error.message || 'Erro ao criar membro');
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleClose = () => {
-    navigate('/members'); // Redirect to members list if the user cancels
+    navigate('/tesouraria/members'); // Redirect to members list if the user cancels
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Cadastro de Novo Membro</h1>
-        <MemberForm
-          onSave={handleSave}
-          onClose={handleClose}
-          isSaving={isSaving}
-        />
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={handleClose}
+          className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+          aria-label="Voltar"
+        >
+          <ArrowLeftIcon className="h-5 w-5" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Cadastro de Novo Membro</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Preencha os dados do novo membro
+          </p>
+        </div>
+      </div>
+
+      {/* Form Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="p-6">
+          <MemberForm
+            onSave={handleSave}
+            onClose={handleClose}
+            isSaving={isSaving}
+          />
+        </div>
       </div>
     </div>
   );

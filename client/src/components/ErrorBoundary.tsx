@@ -25,6 +25,9 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:27',message:'Error caught in getDerivedStateFromError',data:{errorMessage:error.message,errorName:error.name,errorStack:error.stack?.substring(0,500)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+    // #endregion
     return {
       hasError: true,
       error
@@ -32,8 +35,20 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // #region agent log
+    const isUndefinedError = error.message.includes('undefined') || error.message.includes('Element type is invalid');
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:34',message:'Error caught in componentDidCatch',data:{errorMessage:error.message,errorName:error.name,isUndefinedError,componentStack:errorInfo.componentStack?.substring(0,1000),errorStack:error.stack?.substring(0,1000)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+    // #endregion
     // Log do erro
     logger.error('ErrorBoundary capturou um erro:', error, errorInfo);
+    
+    // Se for erro de componente undefined, logar mais detalhes
+    if (isUndefinedError) {
+      console.error('❌ ERRO DE COMPONENTE UNDEFINED DETECTADO:');
+      console.error('Mensagem:', error.message);
+      console.error('Stack:', error.stack);
+      console.error('Component Stack:', errorInfo.componentStack);
+    }
     
     this.setState({
       error,
@@ -60,10 +75,22 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   render() {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:62',message:'ErrorBoundary render',data:{hasError:this.state.hasError,hasFallback:!!this.props.fallback,fallbackType:typeof this.props.fallback},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
     if (this.state.hasError) {
       // Se houver um fallback customizado, usar ele
       if (this.props.fallback) {
-        return this.props.fallback;
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:66',message:'Returning custom fallback',data:{fallbackType:typeof this.props.fallback,fallbackIsUndefined:this.props.fallback===undefined},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+        // #endregion
+        // Validar que o fallback não é undefined
+        if (this.props.fallback === undefined || this.props.fallback === null) {
+          console.error('❌ ErrorBoundary: fallback é undefined ou null');
+          // Usar fallback padrão se o customizado for inválido
+        } else {
+          return this.props.fallback;
+        }
       }
 
       // Fallback padrão
@@ -119,6 +146,23 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    // Validar que children não é undefined
+    if (this.props.children === undefined || this.props.children === null) {
+      console.error('❌ ErrorBoundary: children é undefined ou null');
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Erro: Componente inválido
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Um componente necessário não foi encontrado.
+            </p>
+          </div>
+        </div>
+      );
+    }
+    
     return this.props.children;
   }
 }

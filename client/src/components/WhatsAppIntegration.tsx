@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChatBubbleLeftRightIcon,
   PhoneIcon,
@@ -18,6 +17,27 @@ import {
   UserGroupIcon
 } from '@heroicons/react/24/outline';
 import storage from '../utils/storage';
+
+// Importação segura do framer-motion com fallback
+let motion: any;
+let AnimatePresence: React.ComponentType<any>;
+try {
+  const framerMotion = require('framer-motion');
+  if (framerMotion && framerMotion.motion) {
+    motion = framerMotion.motion;
+  } else {
+    motion = { div: ({ children, ...props }: any) => <div {...props}>{children}</div> };
+  }
+  if (framerMotion && framerMotion.AnimatePresence) {
+    AnimatePresence = framerMotion.AnimatePresence;
+  } else {
+    AnimatePresence = ({ children }: any) => <>{children}</>;
+  }
+} catch (error) {
+  // Fallback se framer-motion não estiver disponível
+  motion = { div: ({ children, ...props }: any) => <div {...props}>{children}</div> };
+  AnimatePresence = ({ children }: any) => <>{children}</>;
+}
 
 interface WhatsAppContact {
   id: string;
@@ -51,6 +71,12 @@ interface WhatsAppIntegrationProps {
 }
 
 const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData }) => {
+  // #region agent log
+  const MotionDiv = motion?.div || (({ children, ...props }: any) => <div {...props}>{children}</div>);
+  const MotionButton = motion?.button || (({ children, ...props }: any) => <button {...props}>{children}</button>);
+  const hasAnimatePresence = AnimatePresence && typeof AnimatePresence !== 'undefined' && typeof AnimatePresence === 'function';
+  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:53',message:'WhatsAppIntegration render started',data:{hasMotion:!!motion,hasMotionDiv:!!motion?.div,hasMotionButton:!!motion?.button,hasAnimatePresence,AnimatePresenceType:typeof AnimatePresence},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
+  // #endregion
   const [contacts, setContacts] = useState<WhatsAppContact[]>([]);
   const [messages, setMessages] = useState<WhatsAppMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -399,7 +425,7 @@ Que Deus abençoe e fortaleça você! ✨
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -410,9 +436,9 @@ Que Deus abençoe e fortaleça você! ✨
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Contatos</span>
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{contacts.length}</p>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -425,9 +451,9 @@ Que Deus abençoe e fortaleça você! ✨
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {contacts.filter(c => c.isActive).length}
           </p>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -438,9 +464,9 @@ Que Deus abençoe e fortaleça você! ✨
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Mensagens</span>
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{messages.length}</p>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -453,7 +479,7 @@ Que Deus abençoe e fortaleça você! ✨
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {messages.filter(m => m.status === 'sent' || m.status === 'delivered' || m.status === 'read').length}
           </p>
-        </motion.div>
+        </MotionDiv>
       </div>
 
       {/* Contacts List */}
@@ -465,13 +491,23 @@ Que Deus abençoe e fortaleça você! ✨
           </h3>
           
           <div className="space-y-3">
-            <AnimatePresence initial={false}>
-              {contacts.map((contact, index) => {
-                const RoleIcon = getRoleIcon(contact.role);
-                const colorClass = getRoleColor(contact.role);
-                
-                return (
-                  <motion.div
+            {hasAnimatePresence ? (
+              <AnimatePresence initial={false}>
+                {contacts.map((contact, index) => {
+                  const RoleIcon = getRoleIcon(contact.role);
+                  const colorClass = getRoleColor(contact.role);
+                  
+                  // #region agent log
+                  if (!RoleIcon || typeof RoleIcon !== 'function') {
+                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:470',message:'RoleIcon is undefined',data:{role:contact.role,RoleIconType:typeof RoleIcon},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
+                  }
+                  if (!MotionDiv || typeof MotionDiv !== 'function') {
+                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:473',message:'MotionDiv is undefined',data:{MotionDivType:typeof MotionDiv},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
+                  }
+                  // #endregion
+                  
+                  return (
+                    <MotionDiv
                     key={contact.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -538,10 +574,47 @@ Que Deus abençoe e fortaleça você! ✨
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 );
               })}
             </AnimatePresence>
+            ) : (
+              <div className="space-y-3">
+                {contacts.map((contact) => {
+                  const RoleIcon = getRoleIcon(contact.role);
+                  const colorClass = getRoleColor(contact.role);
+                  return (
+                    <div
+                      key={contact.id}
+                      className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border-l-4 ${
+                        contact.isActive ? 'border-green-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className={`p-2 rounded-lg ${colorClass}`}>
+                              {RoleIcon && <RoleIcon className="h-5 w-5" />}
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                                {contact.name}
+                              </h4>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                {contact.phone}
+                              </p>
+                              <span className={`text-xs px-2 py-1 rounded-full ${colorClass}`}>
+                                {contact.role}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
@@ -552,14 +625,21 @@ Que Deus abençoe e fortaleça você! ✨
           </h3>
           
           <div className="space-y-3">
-            <AnimatePresence initial={false}>
-              {messages.slice(-5).reverse().map((message, index) => {
-                const contact = contacts.find(c => c.id === message.contactId);
-                const StatusIcon = getStatusIcon(message.status);
-                const statusColor = getStatusColor(message.status);
-                
-                return (
-                  <motion.div
+            {hasAnimatePresence ? (
+              <AnimatePresence initial={false}>
+                {messages.slice(-5).reverse().map((message, index) => {
+                  const contact = contacts.find(c => c.id === message.contactId);
+                  const StatusIcon = getStatusIcon(message.status);
+                  const statusColor = getStatusColor(message.status);
+                  
+                  // #region agent log
+                  if (!StatusIcon || typeof StatusIcon !== 'function') {
+                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:597',message:'StatusIcon is undefined',data:{status:message.status,StatusIconType:typeof StatusIcon},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
+                  }
+                  // #endregion
+                  
+                  return (
+                    <MotionDiv
                     key={message.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -589,10 +669,42 @@ Que Deus abençoe e fortaleça você! ✨
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 );
               })}
             </AnimatePresence>
+            ) : (
+              <div className="space-y-3">
+                {messages.slice(-5).reverse().map((message) => {
+                  const contact = contacts.find(c => c.id === message.contactId);
+                  const StatusIcon = getStatusIcon(message.status);
+                  const statusColor = getStatusColor(message.status);
+                  return (
+                    <div
+                      key={message.id}
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                              {contact?.name || 'Contato não encontrado'}
+                            </h4>
+                            {StatusIcon && <StatusIcon className={`h-4 w-4 ${statusColor}`} />}
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                            {message.message.length > 100 
+                              ? `${message.message.substring(0, 100)}...` 
+                              : message.message
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -605,7 +717,7 @@ Que Deus abençoe e fortaleça você! ✨
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {Object.entries(messageTemplates).map(([key, template]) => (
-            <motion.button
+            <MotionButton
               key={key}
               onClick={() => {
                 setNewMessage({ 
@@ -625,28 +737,29 @@ Que Deus abençoe e fortaleça você! ✨
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {template.template.substring(0, 100)}...
               </p>
-            </motion.button>
+            </MotionButton>
           ))}
         </div>
       </div>
 
       {/* Add Contact Modal */}
-      <AnimatePresence initial={false}>
-        {showContactForm ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-            onClick={() => setShowContactForm(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md"
-              onClick={(e) => e.stopPropagation()}
+      {hasAnimatePresence ? (
+        <AnimatePresence initial={false}>
+          {showContactForm ? (
+            <MotionDiv
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+              onClick={() => setShowContactForm(false)}
             >
+              <MotionDiv
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Adicionar Contato
               </h3>
@@ -710,28 +823,102 @@ Que Deus abençoe e fortaleça você! ✨
                   Adicionar
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
-      {/* Send Message Modal */}
-      <AnimatePresence initial={false}>
-        {showMessageForm && selectedContact ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+              </MotionDiv>
+            </MotionDiv>
+          ) : null}
+        </AnimatePresence>
+      ) : (
+        showContactForm && (
+          <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-            onClick={() => setShowMessageForm(false)}
+            onClick={() => setShowContactForm(false)}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl"
+            <div
+              className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md"
               onClick={(e) => e.stopPropagation()}
             >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Adicionar Contato
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Nome
+                  </label>
+                  <input
+                    type="text"
+                    value={newContact.name}
+                    onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Nome do contato"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Telefone (com código do país)
+                  </label>
+                  <input
+                    type="tel"
+                    value={newContact.phone}
+                    onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="+5511999999999"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Função
+                  </label>
+                  <select
+                    value={newContact.role}
+                    onChange={(e) => setNewContact({ ...newContact, role: e.target.value as any })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  >
+                    <option value="admin">Administrador</option>
+                    <option value="pastor">Pastor</option>
+                    <option value="tesoureiro">Tesoureiro</option>
+                    <option value="membro">Membro</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center justify-end space-x-3 mt-6">
+                <button
+                  onClick={() => setShowContactForm(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleAddContact}
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Adicionar
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      )}
+
+      {/* Send Message Modal */}
+      {hasAnimatePresence ? (
+        <AnimatePresence initial={false}>
+          {showMessageForm && selectedContact ? (
+            <MotionDiv
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+              onClick={() => setShowMessageForm(false)}
+            >
+              <MotionDiv
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl"
+                onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+              >
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Enviar Mensagem para {selectedContact.name}
               </h3>
@@ -797,10 +984,55 @@ Que Deus abençoe e fortaleça você! ✨
                   Enviar Mensagem
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+              </MotionDiv>
+            </MotionDiv>
+          ) : null}
+        </AnimatePresence>
+      ) : (
+        showMessageForm && selectedContact && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowMessageForm(false)}
+          >
+            <div
+              className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Enviar Mensagem para {selectedContact.name}
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Mensagem
+                  </label>
+                  <textarea
+                    value={newMessage.message}
+                    onChange={(e) => setNewMessage({ ...newMessage, message: e.target.value })}
+                    rows={6}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Digite sua mensagem..."
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-end space-x-3 mt-6">
+                <button
+                  onClick={() => setShowMessageForm(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSendMessage}
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Enviar Mensagem
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      )}
     </div>
   );
 };

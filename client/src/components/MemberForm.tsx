@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from './Button';
 
 interface Member {
@@ -33,27 +33,128 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const currentMemberIdRef = useRef<string | number | null>(null);
+
+  // Helper para formatar data para input type="date" (YYYY-MM-DD)
+  // Usa métodos UTC para evitar problemas de fuso horário
+  const formatDateForInput = (dateValue: string | undefined | null): string => {
+    if (!dateValue) return '';
+    
+    // Se já está no formato YYYY-MM-DD, retornar como está
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+      return dateValue;
+    }
+    
+    // Tentar extrair YYYY-MM-DD de strings em outros formatos
+    const dateMatch = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (dateMatch) {
+      return dateMatch[0]; // Retornar YYYY-MM-DD
+    }
+    
+    // Tentar converter de outros formatos usando UTC para evitar problemas de timezone
+    try {
+      // Se a string tem formato de data, fazer parse manual para evitar problemas de timezone
+      const parts = dateValue.split(/[-\/]/);
+      if (parts.length === 3) {
+        let year, month, day;
+        
+        // Detectar formato (DD/MM/YYYY ou YYYY-MM-DD)
+        if (parts[0].length === 4) {
+          // YYYY-MM-DD ou YYYY/MM/DD
+          year = parseInt(parts[0], 10);
+          month = parseInt(parts[1], 10);
+          day = parseInt(parts[2], 10);
+        } else {
+          // DD/MM/YYYY ou DD-MM-YYYY
+          day = parseInt(parts[0], 10);
+          month = parseInt(parts[1], 10);
+          year = parseInt(parts[2], 10);
+        }
+        
+        // Validar valores
+        if (year >= 1900 && year <= 2100 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+          return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+      }
+      
+      // Fallback: usar Date com UTC
+      const date = new Date(dateValue + 'T00:00:00Z'); // Adicionar hora UTC para evitar problemas
+      if (isNaN(date.getTime())) return '';
+      
+      // Usar métodos UTC para evitar problemas de fuso horário
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch (e) {
+      return '';
+    }
+  };
 
   useEffect(() => {
+    // Só atualizar quando o membro realmente mudar (comparar por ID)
     if (member) {
+      const memberId = member.id;
+      
+      // Se é o mesmo membro que já está sendo editado, não resetar os dados
+      if (currentMemberIdRef.current === memberId) {
+        return; // Preservar dados que o usuário pode estar editando
+      }
+      
+      // Novo membro ou membro diferente - carregar dados
+      currentMemberIdRef.current = memberId;
       setFormData({
         name: member.name || '',
         email: member.email || '',
         phone: member.phone || '',
         address: member.address || '',
-        birth_date: member.birth_date || '',
-        member_since: member.member_since || '',
+        birth_date: formatDateForInput(member.birth_date),
+        member_since: formatDateForInput(member.member_since),
         status: member.status || 'active',
         notes: member.notes || ''
       });
+    } else {
+      // Resetar apenas se realmente não há membro
+      if (currentMemberIdRef.current !== null) {
+        currentMemberIdRef.current = null;
+        // Resetar formulário apenas se estiver vazio (usuário pode estar preenchendo)
+        setFormData(prev => {
+          // Se o usuário já começou a preencher, não resetar
+          if (prev.name || prev.email || prev.phone || prev.birth_date) {
+            return prev;
+          }
+          // Resetar apenas se estiver completamente vazio
+          return {
+            name: '',
+            email: '',
+            phone: '',
+            address: '',
+            birth_date: '',
+            member_since: '',
+            status: 'active',
+            notes: ''
+          };
+        });
+      }
     }
-  }, [member]);
+  }, [member?.id]); // Depender apenas do ID para evitar re-renders desnecessários
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    
+    // Para campos de data, garantir que o valor seja preservado
+    let processedValue = value;
+    if (name === 'birth_date' || name === 'member_since') {
+      // Se o campo de data estiver vazio ou no formato correto, usar como está
+      if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        // Tentar converter se não estiver no formato correto
+        processedValue = formatDateForInput(value) || value;
+      }
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }));
     
     // Clear error when user starts typing
