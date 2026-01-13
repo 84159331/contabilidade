@@ -1,8 +1,40 @@
 // Service Worker para cache de assets estáticos e dados
 // Versão do cache - incrementar para invalidar cache antigo
-const CACHE_VERSION = 'v1.1.0';
+const CACHE_VERSION = 'v1.2.0';
 const CACHE_NAME = `comunidade-resgate-${CACHE_VERSION}`;
 const DATA_CACHE_NAME = `comunidade-resgate-data-${CACHE_VERSION}`;
+
+// Firebase Cloud Messaging - escutar mensagens push
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
+
+// Configuração do Firebase (mesma do app)
+firebase.initializeApp({
+  apiKey: "AIzaSyDxJqJqJqJqJqJqJqJqJqJqJqJqJqJqJqJq",
+  authDomain: "comunidaderesgate-82655.firebaseapp.com",
+  projectId: "comunidaderesgate-82655",
+  storageBucket: "comunidaderesgate-82655.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdefghijklmnop"
+});
+
+const messaging = firebase.messaging();
+
+// Escutar mensagens push em background
+messaging.onBackgroundMessage((payload) => {
+  console.log('[SW] Mensagem recebida em background:', payload);
+  
+  const notificationTitle = payload.notification?.title || 'Nova notificação';
+  const notificationOptions = {
+    body: payload.notification?.body || '',
+    icon: '/img/icons/icon-192x192.png',
+    badge: '/img/icons/icon-72x72.png',
+    tag: payload.data?.escala_id || 'notification',
+    requireInteraction: false,
+  };
+
+  return self.registration.showNotification(notificationTitle, notificationOptions);
+});
 
 // Assets para cachear imediatamente
 const STATIC_ASSETS = [

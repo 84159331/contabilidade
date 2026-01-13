@@ -1,0 +1,16 @@
+{
+  "appId": "com.comunidaderesgate.app",
+  "appName": "Comunidade CristÃ£ Resgate",
+  "webDir": "build",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://comunidaderesgate-82655.web.app",
+    "cleartext": false
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "",
+      "keystoreAlias": ""
+    }
+  }
+}

@@ -15,6 +15,9 @@
     "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.1",
+    "@capacitor/cli": "^8.0.1",
+    "@capacitor/core": "^8.0.1",
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@heroicons/react": "^2.0.18",
     "@types/moment": "^2.11.29",

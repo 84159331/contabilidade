@@ -1528,6 +1528,9 @@ export const eventsAPI = {
   }
 };
 
+// Exportar APIs de escalas
+export { ministeriosAPI, escalasAPI, rotacoesAPI } from './scalesAPI';
+
 export default {
   transactionsAPI,
   membersAPI,

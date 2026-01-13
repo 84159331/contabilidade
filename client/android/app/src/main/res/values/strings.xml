@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Comunidade CristÃ£ Resgate</string>
+    <string name="title_activity_main">Comunidade CristÃ£ Resgate</string>
+    <string name="package_name">com.comunidaderesgate.app</string>
+    <string name="custom_url_scheme">com.comunidaderesgate.app</string>
+</resources>

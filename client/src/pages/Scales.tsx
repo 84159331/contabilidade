@@ -1,0 +1,603 @@
+import React, { useState, useEffect } from 'react';
+import {
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
+  ClipboardDocumentListIcon,
+  CalendarIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+} from '@heroicons/react/24/outline';
+import { escalasAPI, ministeriosAPI, rotacoesAPI } from '../services/scalesAPI';
+import { membersAPI } from '../services/api';
+import type { Escala, EscalaFormData, Ministerio } from '../types/Scale';
+import Modal from '../components/Modal';
+import Button from '../components/Button';
+import { toast } from 'react-toastify';
+
+const Scales: React.FC = () => {
+  const [escalas, setEscalas] = useState<Escala[]>([]);
+  const [ministerios, setMinisterios] = useState<Ministerio[]>([]);
+  const [members, setMembers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [showAutoGenerate, setShowAutoGenerate] = useState(false);
+  const [editingEscala, setEditingEscala] = useState<Escala | null>(null);
+  const [selectedMinisterio, setSelectedMinisterio] = useState<string>('');
+  const [formData, setFormData] = useState<EscalaFormData>({
+    ministerio_id: '',
+    data: '',
+    membros: [],
+    observacoes: '',
+  });
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [escalasData, ministeriosData, membersData] = await Promise.all([
+        escalasAPI.getEscalas(),
+        ministeriosAPI.getMinisterios(),
+        membersAPI.getMembers(),
+      ]);
+      setEscalas(escalasData);
+      setMinisterios(ministeriosData);
+      setMembers(membersData.data?.members || []);
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      toast.error('Erro ao carregar dados');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const ministerio = ministerios.find(m => m.id === formData.ministerio_id);
+      if (!ministerio) {
+        toast.error('Ministério não encontrado');
+        return;
+      }
+
+      if (editingEscala) {
+        await escalasAPI.updateEscala(editingEscala.id, formData);
+        toast.success('Escala atualizada com sucesso!');
+      } else {
+        await escalasAPI.createEscala(formData, ministerio.nome);
+        toast.success('Escala criada com sucesso!');
+      }
+      setShowForm(false);
+      setEditingEscala(null);
+      resetForm();
+      loadData();
+    } catch (error) {
+      console.error('Erro ao salvar escala:', error);
+      toast.error('Erro ao salvar escala');
+    }
+  };
+
+  const handleEdit = (escala: Escala) => {
+    setEditingEscala(escala);
+    setFormData({
+      ministerio_id: escala.ministerio_id,
+      data: new Date(escala.data).toISOString().split('T')[0],
+      membros: escala.membros.map(m => ({
+        membro_id: m.membro_id,
+        funcao: m.funcao,
+        status: m.status,
+        observacoes: m.observacoes,
+      })),
+      observacoes: escala.observacoes || '',
+    });
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Tem certeza que deseja deletar esta escala?')) {
+      return;
+    }
+    try {
+      await escalasAPI.deleteEscala(id);
+      toast.success('Escala deletada com sucesso!');
+      loadData();
+    } catch (error) {
+      console.error('Erro ao deletar escala:', error);
+      toast.error('Erro ao deletar escala');
+    }
+  };
+
+  const handleAutoGenerate = async () => {
+    if (!selectedMinisterio) {
+      toast.error('Selecione um ministério');
+      return;
+    }
+
+    const ministerio = ministerios.find(m => m.id === selectedMinisterio);
+    if (!ministerio) {
+      toast.error('Ministério não encontrado');
+      return;
+    }
+
+    try {
+      // Calcular próxima data baseada na frequência
+      const hoje = new Date();
+      const proximaData = new Date(hoje);
+
+      if (ministerio.frequencia === 'semanal' && ministerio.dia_semana !== undefined) {
+        let diasParaProximo = (ministerio.dia_semana - hoje.getDay() + 7) % 7;
+        if (diasParaProximo === 0) diasParaProximo = 7; // Próxima semana
+        proximaData.setDate(hoje.getDate() + diasParaProximo);
+      } else if (ministerio.frequencia === 'quinzenal') {
+        proximaData.setDate(hoje.getDate() + 14);
+      } else if (ministerio.frequencia === 'mensal' && ministerio.dia_mes) {
+        proximaData.setDate(ministerio.dia_mes);
+        if (proximaData < hoje) {
+          proximaData.setMonth(proximaData.getMonth() + 1);
+        }
+      }
+
+      const escalaData = await rotacoesAPI.gerarProximaEscala(
+        selectedMinisterio,
+        proximaData,
+        ministerio.funcoes
+      );
+
+      if (escalaData) {
+        await escalasAPI.createEscala(escalaData, ministerio.nome);
+        toast.success('Escala gerada automaticamente!');
+        setShowAutoGenerate(false);
+        setSelectedMinisterio('');
+        loadData();
+      }
+    } catch (error) {
+      console.error('Erro ao gerar escala:', error);
+      toast.error('Erro ao gerar escala automaticamente');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      ministerio_id: '',
+      data: '',
+      membros: [],
+      observacoes: '',
+    });
+  };
+
+  const addMemberToEscala = () => {
+    const newMember = {
+      membro_id: '',
+      funcao: '',
+      status: 'pendente' as const,
+    };
+    setFormData({
+      ...formData,
+      membros: [...formData.membros, newMember],
+    });
+  };
+
+  const updateMemberInEscala = (index: number, field: string, value: any) => {
+    const updatedMembers = [...formData.membros];
+    updatedMembers[index] = {
+      ...updatedMembers[index],
+      [field]: value,
+    };
+    setFormData({
+      ...formData,
+      membros: updatedMembers,
+    });
+  };
+
+  const removeMemberFromEscala = (index: number) => {
+    setFormData({
+      ...formData,
+      membros: formData.membros.filter((_, i) => i !== index),
+    });
+  };
+
+  const getMemberName = (memberId: string) => {
+    const member = members.find(m => m.id === memberId);
+    return member?.name || 'Nome não encontrado';
+  };
+
+  const getMinisterioName = (ministerioId: string) => {
+    const ministerio = ministerios.find(m => m.id === ministerioId);
+    return ministerio?.nome || 'Ministério não encontrado';
+  };
+
+  const formatDate = (date: Date | string) => {
+    const d = new Date(date);
+    return d.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'confirmada':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'cancelada':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'concluida':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      default:
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'confirmada':
+        return <CheckCircleIcon className="h-5 w-5 text-green-600" />;
+      case 'cancelada':
+        return <XCircleIcon className="h-5 w-5 text-red-600" />;
+      default:
+        return <ClockIcon className="h-5 w-5 text-yellow-600" />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando escalas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Filtrar escalas futuras e passadas
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  const escalasFuturas = escalas.filter(e => new Date(e.data) >= hoje);
+  const escalasPassadas = escalas.filter(e => new Date(e.data) < hoje);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            Escalas
+          </h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Gerencie as escalas dos ministérios
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => {
+              resetForm();
+              setEditingEscala(null);
+              setShowForm(true);
+            }}
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <PlusIcon className="h-5 w-5" />
+            Nova Escala
+          </Button>
+          <Button
+            onClick={() => setShowAutoGenerate(true)}
+            className="flex items-center gap-2"
+          >
+            <CalendarIcon className="h-5 w-5" />
+            Gerar Automático
+          </Button>
+        </div>
+      </div>
+
+      {/* Escalas Futuras */}
+      {escalasFuturas.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Próximas Escalas
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {escalasFuturas.map((escala) => (
+              <div
+                key={escala.id}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <ClipboardDocumentListIcon className="h-5 w-5 text-primary-600" />
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {escala.ministerio_nome}
+                      </h3>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-gray-400" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {formatDate(escala.data)}
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded ${getStatusColor(
+                          escala.status
+                        )}`}
+                      >
+                        {getStatusIcon(escala.status)}
+                        {escala.status.charAt(0).toUpperCase() + escala.status.slice(1)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(escala)}
+                      className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                      aria-label="Editar"
+                    >
+                      <PencilIcon className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(escala.id)}
+                      className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                      aria-label="Deletar"
+                    >
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-2">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Membros Escalados
+                  </p>
+                  <div className="space-y-1">
+                    {escala.membros.map((membro, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {membro.membro_nome}
+                        </span>
+                        <span className="px-2 py-1 text-xs bg-primary-100 text-primary-800 rounded dark:bg-primary-900 dark:text-primary-200">
+                          {membro.funcao}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Escalas Passadas */}
+      {escalasPassadas.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Escalas Passadas
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {escalasPassadas.slice(0, 6).map((escala) => (
+              <div
+                key={escala.id}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 opacity-75"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {escala.ministerio_nome}
+                    </h3>
+                    <div className="mt-2 flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4 text-gray-400" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {formatDate(escala.data)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {escalas.length === 0 && (
+        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <ClipboardDocumentListIcon className="mx-auto h-12 w-12 text-gray-400" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+            Nenhuma escala encontrada
+          </h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Comece criando uma nova escala ou gerando automaticamente.
+          </p>
+        </div>
+      )}
+
+      {/* Modal de Formulário */}
+      <Modal
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setEditingEscala(null);
+          resetForm();
+        }}
+        title={editingEscala ? 'Editar Escala' : 'Nova Escala'}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Ministério *
+            </label>
+            <select
+              required
+              value={formData.ministerio_id}
+              onChange={(e) => setFormData({ ...formData, ministerio_id: e.target.value })}
+              className="input w-full"
+            >
+              <option value="">Selecione um ministério</option>
+              {ministerios
+                .filter(m => m.ativo)
+                .map((ministerio) => (
+                  <option key={ministerio.id} value={ministerio.id}>
+                    {ministerio.nome}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Data *
+            </label>
+            <input
+              type="date"
+              required
+              value={formData.data}
+              onChange={(e) => setFormData({ ...formData, data: e.target.value })}
+              className="input w-full"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Membros Escalados *
+              </label>
+              <Button type="button" onClick={addMemberToEscala} variant="secondary" size="sm">
+                Adicionar Membro
+              </Button>
+            </div>
+            <div className="space-y-2">
+              {formData.membros.map((membro, index) => (
+                <div key={index} className="flex gap-2">
+                  <select
+                    required
+                    value={membro.membro_id}
+                    onChange={(e) =>
+                      updateMemberInEscala(index, 'membro_id', e.target.value)
+                    }
+                    className="input flex-1"
+                  >
+                    <option value="">Selecione um membro</option>
+                    {members.map((member) => (
+                      <option key={member.id} value={member.id}>
+                        {member.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    required
+                    value={membro.funcao}
+                    onChange={(e) =>
+                      updateMemberInEscala(index, 'funcao', e.target.value)
+                    }
+                    className="input flex-1"
+                    placeholder="Função"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeMemberFromEscala(index)}
+                    className="px-3 py-2 text-red-600 hover:text-red-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Observações
+            </label>
+            <textarea
+              value={formData.observacoes}
+              onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+              className="input w-full"
+              rows={3}
+              placeholder="Observações sobre a escala..."
+            />
+          </div>
+
+          <div className="flex gap-2 pt-4">
+            <Button type="submit" className="flex-1">
+              {editingEscala ? 'Atualizar' : 'Criar'}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowForm(false);
+                setEditingEscala(null);
+                resetForm();
+              }}
+            >
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal de Geração Automática */}
+      <Modal
+        isOpen={showAutoGenerate}
+        onClose={() => {
+          setShowAutoGenerate(false);
+          setSelectedMinisterio('');
+        }}
+        title="Gerar Escala Automaticamente"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Ministério *
+            </label>
+            <select
+              required
+              value={selectedMinisterio}
+              onChange={(e) => setSelectedMinisterio(e.target.value)}
+              className="input w-full"
+            >
+              <option value="">Selecione um ministério</option>
+              {ministerios
+                .filter(m => m.ativo)
+                .map((ministerio) => (
+                  <option key={ministerio.id} value={ministerio.id}>
+                    {ministerio.nome}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Uma nova escala será gerada automaticamente baseada na rotação configurada do
+            ministério selecionado.
+          </p>
+
+          <div className="flex gap-2 pt-4">
+            <Button onClick={handleAutoGenerate} className="flex-1">
+              Gerar Escala
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setShowAutoGenerate(false);
+                setSelectedMinisterio('');
+              }}
+            >
+              Cancelar
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+export default Scales;
