@@ -12,10 +12,19 @@
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "test:ci": "react-scripts test --coverage --watchAll=false --ci",
     "eject": "react-scripts eject",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "cap:sync": "npx cap sync android",
+    "cap:open": "npx cap open android",
+    "apk:build": "npm run build && npx cap sync android",
+    "apk:generate": "powershell -ExecutionPolicy Bypass -File ./gerar-apk.ps1",
+    "apk:generate:signed": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-assinado.ps1",
+    "apk:generate:bundle": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-bundle.ps1",
+    "apk:generate:bundle:signed": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-bundle-assinado.ps1",
+    "apk:interactive": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-interativo.ps1"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
+    "@capacitor/app": "^8.0.0",
     "@capacitor/cli": "^8.0.1",
     "@capacitor/core": "^8.0.1",
     "@dataconnect/generated": "file:src/dataconnect-generated",

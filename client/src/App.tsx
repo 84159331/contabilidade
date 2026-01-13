@@ -12,6 +12,7 @@ import PullToRefresh from './components/PullToRefresh';
 import SwipeNavigation from './components/SwipeNavigation';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
+import AppUpdateChecker from './components/AppUpdateChecker';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // HomePage carregada imediatamente (primeira página)
@@ -99,6 +100,7 @@ function App() {
                     </Suspense>
                     <PWAInstallPrompt />
                     <OfflineIndicator />
+                    <AppUpdateChecker />
                   </SwipeNavigation>
                 </PullToRefresh>
               </ErrorBoundary>
