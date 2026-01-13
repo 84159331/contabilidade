@@ -279,42 +279,51 @@ const HomePage: React.FC = () => {
         type="website"
       />
       <div>
-      {/* Hero Section */}
+      {/* Hero Section - OTIMIZADO PARA MOBILE */}
       <div
-        className="relative h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles"
+        className="relative min-h-[60vh] sm:min-h-[70vh] md:h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles px-4"
       >
         <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
-        <div className="relative z-20 text-center">
-          <div className="mb-6 fade-in-up">
+        <div className="relative z-20 text-center max-w-4xl mx-auto py-8 sm:py-12">
+          <div className="mb-4 sm:mb-6 fade-in-up">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
               alt="Comunidade Cristã Resgate" 
-              className="mx-auto h-20 w-20 mb-4 opacity-90"
+              className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-3 sm:mb-4 opacity-90"
             />
           </div>
-          <h1 className="text-5xl font-bold font-heading mb-4 fade-in-up stagger-1">Bem-vindo à Comunidade Cristã Resgate</h1>
-          <p className="text-xl mb-8 fade-in-up stagger-2">Um lugar para pertencer, acreditar e se tornar.</p>
-          <Link to="/sobre" className="btn btn-primary text-lg py-3 px-8 fade-in-scale stagger-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 px-2 fade-in-up stagger-1 leading-tight">
+            Bem-vindo à Comunidade Cristã Resgate
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 px-4 fade-in-up stagger-2">
+            Um lugar para pertencer, acreditar e se tornar.
+          </p>
+          <Link 
+            to="/sobre" 
+            className="inline-block bg-white text-blue-600 hover:bg-gray-100 text-base sm:text-lg font-semibold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-3 min-h-[48px] flex items-center justify-center"
+          >
             Saiba Mais
           </Link>
         </div>
       </div>
 
-      {/* Quick Actions Section */}
-      <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold font-heading text-center mb-8 dark:text-white fade-in-up">Acesso Rápido</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Quick Actions Section - OTIMIZADO PARA MOBILE */}
+      <div className="py-8 sm:py-12 md:py-16 bg-white dark:bg-gray-800 bg-waves">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-center mb-6 sm:mb-8 dark:text-white fade-in-up px-2">
+            Acesso Rápido
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {quickActions.map((action, index) => (
               <Link
                 key={index}
                 to={action.link}
-                className={`${action.color} text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-${index + 1}`}
+                className={`${action.color} text-white p-5 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 fade-in-scale min-h-[140px] sm:min-h-[160px] flex flex-col justify-center touch-manipulation`}
               >
                 <div className="text-center">
-                  <action.icon className="h-12 w-12 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{action.title}</h3>
-                  <p className="text-sm opacity-90">{action.description}</p>
+                  <action.icon className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" />
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 leading-tight">{action.title}</h3>
+                  <p className="text-xs sm:text-sm opacity-90 leading-relaxed">{action.description}</p>
                 </div>
               </Link>
             ))}
@@ -322,29 +331,33 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Estudo de Hoje Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Estudo de Hoje</h2>
-            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Reflexão diária para fortalecer sua fé</p>
+      {/* Estudo de Hoje Section - OTIMIZADO PARA MOBILE */}
+      <div className="py-8 sm:py-12 md:py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
+              Estudo de Hoje
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
+              Reflexão diária para fortalecer sua fé
+            </p>
           </div>
           
           {loadingStudy ? (
             <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 dark:border-blue-400"></div>
+              <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-blue-600 dark:border-blue-400"></div>
             </div>
           ) : (
             <div className="max-w-4xl mx-auto">
-              <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8 fade-in-scale stagger-2">
-                <div className="text-center mb-6">
-                  <h3 className={`text-2xl font-bold font-heading mb-4 text-gray-900 dark:text-white transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
+              <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-5 sm:p-6 md:p-8 fade-in-scale stagger-2">
+                <div className="text-center mb-5 sm:mb-6">
+                  <h3 className={`text-xl sm:text-2xl font-bold font-heading mb-3 sm:mb-4 text-gray-900 dark:text-white transition-opacity duration-500 leading-tight ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
                     {dailyStudy.title}
                   </h3>
-                  <p className={`text-gray-600 dark:text-gray-300 mb-4 text-lg leading-relaxed transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
+                  <p className={`text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 mb-4 leading-relaxed transition-opacity duration-500 px-2 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
                     {dailyStudy.content}
                   </p>
-                  <div className={`flex items-center justify-center space-x-4 text-sm text-gray-500 dark:text-gray-400 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className={`flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 transition-opacity duration-500 ${showStudy ? 'opacity-100' : 'opacity-0'}`}>
                     <span className="flex items-center">
                       <BookOpenIcon className="h-4 w-4 mr-1" />
                       {dailyStudy.verse}
@@ -356,15 +369,15 @@ const HomePage: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-center space-x-4">
+                <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <Link
                     to="/bons-estudos"
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+                    className="bg-blue-600 text-white px-5 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center min-h-[48px] touch-manipulation"
                   >
                     <BookOpenIcon className="h-5 w-5 mr-2" />
                     Mais Estudos
                   </Link>
-                  <button className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors flex items-center">
+                  <button className="border border-blue-600 text-blue-600 px-5 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-600 hover:text-white transition-colors flex items-center justify-center min-h-[48px] touch-manipulation">
                     <ShareIcon className="h-5 w-5 mr-2" />
                     Compartilhar
                   </button>
@@ -378,25 +391,33 @@ const HomePage: React.FC = () => {
       {/* Próximos Eventos Section */}
       <EventsSection />
 
-      {/* Ministérios Section */}
-      <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">Nossos Ministérios</h2>
-            <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">Encontre seu lugar de serviço na comunidade</p>
+      {/* Ministérios Section - OTIMIZADO PARA MOBILE */}
+      <div className="py-8 sm:py-12 md:py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
+              Nossos Ministérios
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
+              Encontre seu lugar de serviço na comunidade
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {ministries.map((ministry, index) => (
-              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300 fade-in-scale stagger-${index + 2}">
-                <div className="mb-4">
-                  <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
-                    <ministry.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-5 sm:p-6 text-center hover:shadow-xl transition-all duration-300 fade-in-scale">
+                <div className="mb-3 sm:mb-4">
+                  <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-14 h-14 sm:w-16 sm:h-16 mx-auto flex items-center justify-center">
+                    <ministry.icon className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
                 
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{ministry.name}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{ministry.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">
+                  {ministry.name}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-3 sm:mb-4 leading-relaxed">
+                  {ministry.description}
+                </p>
                 
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center justify-center">
@@ -566,23 +587,25 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Call to Action Final */}
-      <div className="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white bg-flow bg-particles">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold font-heading mb-4 fade-in-up">Pronto para Começar sua Jornada?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90 fade-in-up stagger-1">
+      {/* Call to Action Final - OTIMIZADO PARA MOBILE */}
+      <div className="py-8 sm:py-12 md:py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white bg-flow bg-particles">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 fade-in-up leading-tight px-2">
+            Pronto para Começar sua Jornada?
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90 fade-in-up stagger-1 px-2">
             Junte-se à nossa comunidade e descubra o propósito que Deus tem para sua vida
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               to="/conecte"
-              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2"
+              className="bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2 min-h-[48px] flex items-center justify-center touch-manipulation"
             >
               Conectar-se
             </Link>
             <Link
               to="/sobre"
-              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-3"
+              className="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-3 min-h-[48px] flex items-center justify-center touch-manipulation"
             >
               Conhecer Mais
             </Link>

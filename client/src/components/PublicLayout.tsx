@@ -30,31 +30,31 @@ const PublicLayout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link 
               to="/" 
-              className="flex items-center hover:opacity-80 transition-opacity"
+              className="flex items-center hover:opacity-80 transition-opacity flex-shrink-0"
               title="Voltar à página inicial"
               onClick={closeMobileMenu}
             >
               <SafeImage 
                 src="/img/ICONE-RESGATE.png" 
                 alt="Comunidade Cristã Resgate" 
-                className="h-10 w-10"
+                className="h-8 w-8 sm:h-10 sm:w-10"
                 priority={true}
                 loading="eager"
               />
             </Link>
 
-            {/* Desktop Navigation Menu */}
-            <nav className="hidden md:flex space-x-8 items-center font-heading">
+            {/* Desktop Navigation Menu - COMPLETAMENTE OCULTO NO MOBILE */}
+            <nav className="hidden lg:flex space-x-6 xl:space-x-8 items-center font-heading">
               {navigationLinks.map((link) => (
                 <Link 
                   key={link.to}
                   to={link.to} 
-                  className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  className="text-sm xl:text-base hover:text-primary-600 dark:hover:text-primary-400 transition-colors whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
@@ -62,29 +62,31 @@ const PublicLayout: React.FC = () => {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
               <button 
                 onClick={() => setSearchOpen(true)}
                 className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:text-primary-600 dark:hover:text-primary-400 transition-colors touch-manipulation" 
                 title="Buscar"
                 aria-label="Buscar"
               >
-                <MagnifyingGlassIcon className="h-6 w-6" />
+                <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
-              <ThemeToggle />
+              <div className="hidden sm:block">
+                <ThemeToggle />
+              </div>
               <a 
                 href="/tesouraria/login" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hidden sm:inline-block bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 min-h-[44px] rounded-lg font-medium transition-colors touch-manipulation"
+                className="hidden md:inline-block bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 min-h-[44px] rounded-lg text-sm font-medium transition-colors touch-manipulation whitespace-nowrap"
               >
                 Tesouraria
               </a>
               
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu Button - VISÍVEL APENAS NO MOBILE */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-manipulation"
+                className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-manipulation"
                 aria-label="Menu"
                 aria-expanded={mobileMenuOpen}
               >
@@ -97,29 +99,34 @@ const PublicLayout: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile Menu */}
+          {/* Mobile Menu - MELHORADO */}
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-              <nav className="flex flex-col space-y-1 pt-4">
+            <div className="lg:hidden mt-3 pb-3 border-t border-gray-200 dark:border-gray-700">
+              <nav className="flex flex-col space-y-1 pt-3">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.to}
                     to={link.to}
                     onClick={closeMobileMenu}
-                    className="px-4 py-3 min-h-[44px] flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-heading touch-manipulation"
+                    className="px-4 py-3 min-h-[48px] flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-heading touch-manipulation text-base"
                   >
                     {link.label}
                   </Link>
                 ))}
-                <a
-                  href="/tesouraria/login"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMobileMenu}
-                  className="px-4 py-3 min-h-[44px] flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors touch-manipulation"
-                >
-                  Tesouraria
-                </a>
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <div className="px-4 py-2">
+                    <ThemeToggle />
+                  </div>
+                  <a
+                    href="/tesouraria/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeMobileMenu}
+                    className="mt-2 px-4 py-3 min-h-[48px] flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors touch-manipulation text-base"
+                  >
+                    Tesouraria
+                  </a>
+                </div>
               </nav>
             </div>
           )}

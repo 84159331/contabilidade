@@ -13,15 +13,16 @@ const ThemeToggle: React.FC = () => {
   ];
 
   return (
-    <div className="flex items-center space-x-2">
-      {/* Toggle rápido */}
+    <div className="flex items-center space-x-1 sm:space-x-2">
+      {/* Toggle rápido - sempre visível */}
       <motion.button
         onClick={toggleTheme}
-        className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         title={`Tema atual: ${themes.find(t => t.key === theme)?.label}`}
         data-theme-toggle
+        aria-label="Alternar tema"
       >
         <motion.div
           animate={{ rotate: isDark ? 180 : 0 }}
@@ -35,8 +36,8 @@ const ThemeToggle: React.FC = () => {
         </motion.div>
       </motion.button>
 
-      {/* Seletor de tema completo */}
-      <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+      {/* Seletor de tema completo - OCULTO NO MOBILE */}
+      <div className="hidden md:flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
         {themes.map((themeOption) => {
           const Icon = themeOption.icon;
           const isActive = theme === themeOption.key;
@@ -45,7 +46,7 @@ const ThemeToggle: React.FC = () => {
             <motion.button
               key={themeOption.key}
               onClick={() => setTheme(themeOption.key)}
-              className={`relative px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`relative px-2 xl:px-3 py-1.5 rounded-md text-xs xl:text-sm font-medium transition-colors ${
                 isActive
                   ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -53,9 +54,9 @@ const ThemeToggle: React.FC = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="flex items-center space-x-1.5">
-                <Icon className="h-4 w-4" />
-                <span>{themeOption.label}</span>
+              <div className="flex items-center space-x-1 xl:space-x-1.5">
+                <Icon className="h-3 w-3 xl:h-4 xl:w-4" />
+                <span className="hidden xl:inline">{themeOption.label}</span>
               </div>
               {isActive && (
                 <motion.div
