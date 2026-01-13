@@ -54,21 +54,56 @@ const Ministries: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validação básica
+    if (!formData.nome || formData.nome.trim() === '') {
+      toast.error('Nome do ministério é obrigatório');
+      return;
+    }
+
     try {
+      console.log('📝 Iniciando salvamento do ministério...');
+      console.log('📝 Dados do formulário:', formData);
+      
       if (editingMinisterio) {
+        console.log('🔄 Atualizando ministério:', editingMinisterio.id);
         await ministeriosAPI.updateMinisterio(editingMinisterio.id, formData);
-        toast.success('Ministério atualizado com sucesso!');
+        console.log('✅ Ministério atualizado com sucesso');
+        // Toast já é exibido pela API
       } else {
-        await ministeriosAPI.createMinisterio(formData);
-        toast.success('Ministério criado com sucesso!');
+        console.log('➕ Criando novo ministério...');
+        const result = await ministeriosAPI.createMinisterio(formData);
+        console.log('📝 Resultado da criação:', result);
+        
+        if (!result) {
+          console.error('❌ Resultado null - criação falhou');
+          // Se retornou null, houve erro (já foi exibido toast pela API)
+          return;
+        }
+        console.log('✅ Ministério criado com sucesso:', result.id);
+        // Toast já é exibido pela API
       }
+      
       setShowForm(false);
       setEditingMinisterio(null);
       resetForm();
-      loadData();
-    } catch (error) {
-      console.error('Erro ao salvar ministério:', error);
-      toast.error('Erro ao salvar ministério');
+      
+      // Aguardar um pouco antes de recarregar para garantir que o Firestore atualizou
+      setTimeout(() => {
+        console.log('🔄 Recarregando lista de ministérios...');
+        loadData();
+      }, 500);
+    } catch (error: any) {
+      console.error('❌ Erro ao salvar ministério:', error);
+      console.error('❌ Tipo do erro:', typeof error);
+      console.error('❌ Mensagem do erro:', error?.message);
+      console.error('❌ Stack do erro:', error?.stack);
+      
+      // Toast já foi exibido pela API, mas garantir que aparece
+      const errorMessage = error?.message || 'Erro ao salvar ministério. Verifique o console para mais detalhes.';
+      if (!errorMessage.includes('obrigatório')) {
+        toast.error(errorMessage);
+      }
     }
   };
 
@@ -158,7 +193,7 @@ const Ministries: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 py-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
@@ -182,21 +217,21 @@ const Ministries: React.FC = () => {
       </div>
 
       {ministerios.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <MusicalNoteIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+        <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <MusicalNoteIcon className="mx-auto h-16 w-16 text-gray-400" />
+          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
             Nenhum ministério encontrado
           </h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Comece criando um novo ministério.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {ministerios.map((ministerio) => (
             <div
               key={ministerio.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -293,7 +328,7 @@ const Ministries: React.FC = () => {
         }}
         title={editingMinisterio ? 'Editar Ministério' : 'Novo Ministério'}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome do Ministério *

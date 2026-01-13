@@ -26,6 +26,10 @@ const FeriasPastores = lazyWithRetry(() => import('./pages/FeriasPastores'));
 const CadastroMembro = lazyWithRetry(() => import('./pages/CadastroMembro'));
 const Ministries = lazyWithRetry(() => import('./pages/Ministries'));
 const Scales = lazyWithRetry(() => import('./pages/Scales'));
+const MyScales = lazyWithRetry(() => import('./pages/MyScales'));
+const MobileDashboard = lazyWithRetry(() => import('./pages/MobileDashboard'));
+const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'));
+const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
 
 function TesourariaApp() {
   // #region agent log
@@ -125,6 +129,10 @@ function TesourariaApp() {
             <Route path="ferias-pastores" element={<FeriasPastores />} />
             <Route path="ministries" element={<Ministries />} />
             <Route path="scales" element={<Scales />} />
+            <Route path="my-scales" element={<MyScales />} />
+            <Route path="mobile-dashboard" element={<MobileDashboard />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="scale-reports" element={<ScaleReports />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
           </Routes>
         </SmartLoading>

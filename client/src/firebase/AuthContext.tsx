@@ -47,7 +47,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('✅ Login Firebase realizado com sucesso');
     } catch (error: any) {
       console.error('❌ Erro no login Firebase:', error);
-      throw new Error(error.message || 'Erro ao fazer login');
+      
+      // Preservar o erro original do Firebase para tratamento específico
+      const firebaseError = error;
+      
+      // Criar erro com código do Firebase para tratamento específico
+      const customError: any = new Error(firebaseError.message || 'Erro ao fazer login');
+      customError.code = firebaseError.code;
+      
+      throw customError;
     }
   };
 

@@ -9,7 +9,8 @@ const LoginFirebase: React.FC = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Começa oculta
+  const [error, setError] = useState<string>('');
   const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,13 +23,40 @@ const LoginFirebase: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(''); // Limpar erro anterior
 
     try {
       await login(formData.email, formData.password);
       toast.success('Login realizado com sucesso!');
+      // Limpar senha após login bem-sucedido
+      setFormData({ ...formData, password: '' });
     } catch (error: any) {
       console.error('Erro no login:', error);
-      toast.error(error.message || 'Erro ao fazer login');
+      
+      // Mensagens de erro mais amigáveis
+      let errorMessage = 'Erro ao fazer login';
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'Usuário não encontrado. Verifique o email.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Senha incorreta. Tente novamente.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Email inválido. Verifique o formato.';
+      } else if (error.code === 'auth/user-disabled') {
+        errorMessage = 'Esta conta foi desabilitada. Entre em contato com o administrador.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+      toast.error(errorMessage, {
+        position: 'top-center',
+        autoClose: 5000,
+      });
     } finally {
       setLoading(false);
     }
@@ -100,15 +128,21 @@ const LoginFirebase: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
-                    className="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className={`block w-full pl-10 pr-12 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                      error ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                    }`}
                     placeholder="Sua senha"
                     value={formData.password}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setError(''); // Limpar erro ao digitar
+                    }}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center z-10"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   >
                     {showPassword ? (
                       <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
@@ -117,6 +151,14 @@ const LoginFirebase: React.FC = () => {
                     )}
                   </button>
                 </div>
+                {error && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
+                    <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    {error}
+                  </p>
+                )}
               </div>
 
               {/* Opções Adicionais */}

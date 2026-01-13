@@ -72,7 +72,7 @@ const PublicLayout: React.FC = () => {
                 <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
               <div className="hidden sm:block">
-                <ThemeToggle />
+              <ThemeToggle />
               </div>
               <a 
                 href="/tesouraria/login" 
@@ -117,15 +117,15 @@ const PublicLayout: React.FC = () => {
                   <div className="px-4 py-2">
                     <ThemeToggle />
                   </div>
-                  <a
-                    href="/tesouraria/login"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={closeMobileMenu}
+                <a
+                  href="/tesouraria/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
                     className="mt-2 px-4 py-3 min-h-[48px] flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors touch-manipulation text-base"
-                  >
-                    Tesouraria
-                  </a>
+                >
+                  Tesouraria
+                </a>
                 </div>
               </nav>
             </div>

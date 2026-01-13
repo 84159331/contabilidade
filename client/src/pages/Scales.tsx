@@ -12,8 +12,10 @@ import {
 import { escalasAPI, ministeriosAPI, rotacoesAPI } from '../services/scalesAPI';
 import { membersAPI } from '../services/api';
 import type { Escala, EscalaFormData, Ministerio } from '../types/Scale';
+import { CHURCH_ROLES } from '../types/ChurchRole';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
+import ScaleWhatsApp from '../components/ScaleWhatsApp';
 import { toast } from 'react-toastify';
 
 const Scales: React.FC = () => {
@@ -332,6 +334,7 @@ const Scales: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
+                    <ScaleWhatsApp escala={escala} className="!px-2 !py-1 text-xs" />
                     <button
                       onClick={() => handleEdit(escala)}
                       className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
@@ -472,9 +475,28 @@ const Scales: React.FC = () => {
                 Adicionar Membro
               </Button>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {formData.membros.map((membro, index) => (
-                <div key={index} className="flex gap-2">
+                <div key={index} className="flex gap-2 items-start">
+                  {/* Seleção de Função (primeiro) */}
+                  <select
+                    required
+                    value={membro.funcao}
+                    onChange={(e) =>
+                      updateMemberInEscala(index, 'funcao', e.target.value)
+                    }
+                    className="input flex-1 min-w-[180px]"
+                    title="Selecione a função da igreja"
+                  >
+                    <option value="">Selecione a função</option>
+                    {CHURCH_ROLES.map((role) => (
+                      <option key={role.value} value={role.value}>
+                        {role.label}
+                      </option>
+                    ))}
+                  </select>
+                  
+                  {/* Seleção de Membro (segundo) */}
                   <select
                     required
                     value={membro.membro_id}
@@ -482,28 +504,23 @@ const Scales: React.FC = () => {
                       updateMemberInEscala(index, 'membro_id', e.target.value)
                     }
                     className="input flex-1"
+                    title="Selecione o membro"
                   >
-                    <option value="">Selecione um membro</option>
+                    <option value="">Selecione o membro</option>
                     {members.map((member) => (
                       <option key={member.id} value={member.id}>
                         {member.name}
                       </option>
                     ))}
                   </select>
-                  <input
-                    type="text"
-                    required
-                    value={membro.funcao}
-                    onChange={(e) =>
-                      updateMemberInEscala(index, 'funcao', e.target.value)
-                    }
-                    className="input flex-1"
-                    placeholder="Função"
-                  />
+                  
+                  {/* Botão Remover */}
                   <button
                     type="button"
                     onClick={() => removeMemberFromEscala(index)}
-                    className="px-3 py-2 text-red-600 hover:text-red-800"
+                    className="px-3 py-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    title="Remover membro"
+                    aria-label="Remover membro"
                   >
                     ×
                   </button>

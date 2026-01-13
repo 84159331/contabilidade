@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../firebase/AuthContext';
+import { useUserRole } from '../hooks/useUserRole';
 import { NotificationCenter } from '../contexts/NotificationContext';
 import ThemeToggle from './ThemeToggle';
 import TabTransition from './TabTransition';
@@ -45,11 +46,13 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { role, isAdmin, isLider, isMembro } = useUserRole();
   const location = useLocation();
   
   // Pré-carrega componentes baseado na navegação
   usePreloadComponents();
 
+  // Menu completo para todos os usuários
   const navigation: NavItem[] = [
     { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Gerenciar' },
@@ -62,9 +65,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'heading', name: 'Escalas' },
     { type: 'link', name: 'Ministérios', href: '/tesouraria/ministries', icon: MusicalNoteIcon },
     { type: 'link', name: 'Escalas', href: '/tesouraria/scales', icon: ClipboardDocumentListIcon },
+    { type: 'link', name: 'Minhas Escalas', href: '/tesouraria/my-scales', icon: ClipboardDocumentListIcon },
+    { type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
+    { type: 'link', name: 'Notificações', href: '/tesouraria/notifications', icon: ChatBubbleLeftRightIcon },
+    { type: 'link', name: 'Dashboard Mobile', href: '/tesouraria/mobile-dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Administração' },
     { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
     { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
@@ -76,12 +83,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Função de renderização corrigida
   const renderNav = () => {
-    return navigation.map((item) => {
+    return navigation.map((item, index) => {
       if (item.type === 'link') {
         const Icon = item.icon; // O ícone é atribuído a uma variável com letra maiúscula
         return (
           <Link
-            key={item.name}
+            key={`${item.href}-${index}`} // Chave única usando href + index
             to={item.href}
             onClick={() => setSidebarOpen(false)}
             className={`group flex items-center px-3 py-3 min-h-[44px] text-sm font-medium rounded-md transition-colors touch-manipulation ${
@@ -97,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       }
       // Renderiza o subtítulo
       return (
-        <div key={item.name} className="pt-6 pb-2 px-2">
+        <div key={`${item.name}-${index}`} className="pt-6 pb-2 px-2">
           <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider dark:text-gray-500">
             {item.name}
           </h3>
