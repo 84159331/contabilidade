@@ -390,8 +390,8 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <button type="submit" className="btn btn-primary">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
+            <button type="submit" className="btn btn-primary min-h-[44px] w-full sm:w-auto">
               Buscar
             </button>
             <button

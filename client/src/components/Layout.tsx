@@ -79,14 +79,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             key={item.name}
             to={item.href}
             onClick={() => setSidebarOpen(false)}
-            className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`group flex items-center px-3 py-3 min-h-[44px] text-sm font-medium rounded-md transition-colors touch-manipulation ${
               isCurrentPath(item.href)
                 ? 'bg-primary-100 text-primary-900 dark:bg-primary-900 dark:text-primary-100'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
             }`}
           >
-            <Icon className="mr-3 h-5 w-5" />
-            {item.name}
+            <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
+            <span>{item.name}</span>
           </Link>
         );
       }
@@ -133,7 +133,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
-          <nav className="flex-1 space-y-1 px-2 py-4">
+          <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
             {renderNav()}
           </nav>
         </div>
@@ -169,11 +169,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="lg:pl-72">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-2 border-b border-gray-100 bg-white/80 backdrop-blur-sm px-3 shadow-sm sm:gap-x-4 sm:px-4 lg:gap-x-6 lg:px-8 dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="sticky top-0 z-40 flex h-14 sm:h-16 shrink-0 items-center gap-x-2 border-b border-gray-100 bg-white/80 backdrop-blur-sm px-2 sm:px-3 shadow-sm sm:gap-x-4 sm:px-4 lg:gap-x-6 lg:px-8 dark:border-gray-800 dark:bg-gray-900/80">
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-gray-700 lg:hidden dark:text-gray-300"
+            className="-m-2.5 p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 lg:hidden dark:text-gray-300 touch-manipulation"
             onClick={() => setSidebarOpen(true)}
+            aria-label="Abrir menu"
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
@@ -190,9 +191,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </span>
                 <button
                   onClick={logout}
-                  className="flex items-center gap-x-1 text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  className="flex items-center gap-x-1 min-w-[44px] min-h-[44px] px-2 justify-center text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white touch-manipulation"
+                  aria-label="Sair"
                 >
-                  <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                  <ArrowRightOnRectangleIcon className="h-5 w-5 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Sair</span>
                 </button>
               </div>
@@ -201,10 +203,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         {/* Page content */}
-        <main className="py-4 sm:py-6">
-          <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
+        <main className="py-2 sm:py-4 lg:py-6">
+          <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
             <TabTransition transitionKey={location.pathname}>
-              <div className="bg-white/90 dark:bg-gray-900/90 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm sm:shadow-md p-4 sm:p-6 lg:p-8">
+              <div className="bg-white/90 dark:bg-gray-900/90 border border-gray-100 dark:border-gray-800 rounded-xl sm:rounded-2xl shadow-sm sm:shadow-md p-3 sm:p-4 md:p-6 lg:p-8">
                 {children}
               </div>
             </TabTransition>

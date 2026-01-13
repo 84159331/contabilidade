@@ -156,8 +156,8 @@ const ContactPage: React.FC = () => {
                     id="name"
                     value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                      errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                    className={`input ${
+                      errors.name ? 'border-red-500' : ''
                     }`}
                     placeholder="Seu nome completo"
                   />
@@ -174,8 +174,8 @@ const ContactPage: React.FC = () => {
                     id="email"
                     value={formData.email}
                     onChange={(e) => handleChange('email', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                      errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                    className={`input ${
+                      errors.email ? 'border-red-500' : ''
                     }`}
                     placeholder="seu@email.com"
                   />
@@ -192,8 +192,8 @@ const ContactPage: React.FC = () => {
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     rows={5}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                      errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                    className={`input min-h-[120px] resize-y ${
+                      errors.message ? 'border-red-500' : ''
                     }`}
                     placeholder="Sua mensagem..."
                   />

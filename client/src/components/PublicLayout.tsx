@@ -30,7 +30,7 @@ const PublicLayout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link 
@@ -60,10 +60,10 @@ const PublicLayout: React.FC = () => {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button 
                 onClick={() => setSearchOpen(true)}
-                className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors" 
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:text-primary-600 dark:hover:text-primary-400 transition-colors touch-manipulation" 
                 title="Buscar"
                 aria-label="Buscar"
               >
@@ -74,7 +74,7 @@ const PublicLayout: React.FC = () => {
                 href="/tesouraria/login" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hidden sm:inline-block bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="hidden sm:inline-block bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 min-h-[44px] rounded-lg font-medium transition-colors touch-manipulation"
               >
                 Tesouraria
               </a>
@@ -82,7 +82,7 @@ const PublicLayout: React.FC = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-manipulation"
                 aria-label="Menu"
                 aria-expanded={mobileMenuOpen}
               >
@@ -98,13 +98,13 @@ const PublicLayout: React.FC = () => {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-              <nav className="flex flex-col space-y-2 pt-4">
+              <nav className="flex flex-col space-y-1 pt-4">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.to}
                     to={link.to}
                     onClick={closeMobileMenu}
-                    className="px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-heading"
+                    className="px-4 py-3 min-h-[44px] flex items-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-heading touch-manipulation"
                   >
                     {link.label}
                   </Link>
@@ -114,7 +114,7 @@ const PublicLayout: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={closeMobileMenu}
-                  className="px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors text-center"
+                  className="px-4 py-3 min-h-[44px] flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors touch-manipulation"
                 >
                   Tesouraria
                 </a>
@@ -131,9 +131,9 @@ const PublicLayout: React.FC = () => {
         <Outlet />
       </main>
 
-      <footer className="bg-gray-800 text-gray-300 pt-16 pb-8 dark:bg-black">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-gray-800 text-gray-300 pt-12 sm:pt-16 pb-6 sm:pb-8 dark:bg-black">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             <div>
               <div className="flex items-center mb-4">
                 <img 

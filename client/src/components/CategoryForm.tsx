@@ -41,6 +41,15 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
     }
   }, [category]);
 
+  // Auto-scroll para campo ativo quando teclado aparece (mobile)
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (window.innerWidth <= 640) {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -85,27 +94,28 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose}></div>
 
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <form onSubmit={handleSubmit}>
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full w-full max-h-[95vh] flex flex-col m-2 sm:m-0">
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1">
+            <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white pr-2">
                   {category ? 'Editar Categoria' : 'Nova Categoria'}
                 </h3>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 touch-manipulation"
+                  aria-label="Fechar"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 sm:space-y-5 overflow-y-auto flex-1">
                 {/* Nome e Tipo */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="name" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Nome *
                     </label>
                     <input
@@ -115,6 +125,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                       className={`input mt-1 ${errors.name ? 'border-red-500' : ''}`}
                       value={formData.name}
                       onChange={handleChange}
+                      onFocus={handleInputFocus}
                       placeholder="Nome da categoria"
                     />
                     {errors.name && (
@@ -123,7 +134,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                   </div>
 
                   <div>
-                    <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="type" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Tipo *
                     </label>
                     <select
@@ -132,6 +143,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                       className={`input mt-1 ${errors.type ? 'border-red-500' : ''}`}
                       value={formData.type}
                       onChange={handleChange}
+                      onFocus={handleInputFocus}
                     >
                       <option value="income">Receita</option>
                       <option value="expense">Despesa</option>
@@ -144,23 +156,24 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
 
                 {/* Descrição */}
                 <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Descrição
                   </label>
                   <textarea
                     id="description"
                     name="description"
                     rows={3}
-                    className="input mt-1"
+                    className="input mt-1 min-h-[100px] resize-y"
                     value={formData.description}
                     onChange={handleChange}
+                    onFocus={handleInputFocus}
                     placeholder="Descrição da categoria..."
                   />
                 </div>
 
                 {/* Valor Padrão (default_amount) */}
                 <div>
-                  <label htmlFor="default_amount" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="default_amount" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Valor Padrão (opcional)
                   </label>
                   <input
@@ -170,6 +183,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                     className="input mt-1"
                     value={formData.default_amount}
                     onChange={handleChange}
+                    onFocus={handleInputFocus}
                     placeholder="Ex: 100.00"
                     step="0.01" // Permite valores decimais
                   />
@@ -177,35 +191,35 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
 
                 {/* Cor */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="color" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Cor
                   </label>
-                  {/* Original color input was here, now just a text input for simplicity */}
                   <input
                     type="text"
                     name="color"
                     id="color"
                     value={formData.color}
                     onChange={handleChange}
+                    onFocus={handleInputFocus}
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="input mt-1"
                     placeholder="#RRGGBB"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3 sm:gap-0 flex-shrink-0 border-t border-gray-200 dark:border-gray-700">
               <button
                 type="submit"
-                className="btn btn-primary sm:ml-3 sm:w-auto w-full"
+                className="btn btn-primary sm:ml-3 sm:w-auto w-full min-h-[44px]"
               >
                 {category ? 'Atualizar' : 'Criar'}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="btn btn-secondary mt-3 sm:mt-0 sm:w-auto w-full"
+                className="btn btn-secondary mt-3 sm:mt-0 sm:w-auto w-full min-h-[44px]"
               >
                 Cancelar
               </button>

@@ -38,17 +38,17 @@ const CadastroMembro: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <button
           onClick={handleClose}
-          className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+          className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors touch-manipulation flex-shrink-0"
           aria-label="Voltar"
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Cadastro de Novo Membro</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Cadastro de Novo Membro</h1>
+          <p className="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             Preencha os dados do novo membro
           </p>
         </div>
@@ -56,7 +56,7 @@ const CadastroMembro: React.FC = () => {
 
       {/* Form Card */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <MemberForm
             onSave={handleSave}
             onClose={handleClose}

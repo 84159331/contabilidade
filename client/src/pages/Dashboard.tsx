@@ -72,19 +72,19 @@ const Dashboard: React.FC = () => {
 
   return (
     <PageTransition>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
-          <p className="mt-1 text-md text-slate-600 dark:text-gray-400">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+          <p className="mt-1 text-sm sm:text-md text-slate-600 dark:text-gray-400">
             Visão geral das finanças da igreja
           </p>
         </div>
         <button
           onClick={refresh}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 min-h-[44px] text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation w-full sm:w-auto"
           title="Atualizar dados"
         >
           <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -93,7 +93,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Receitas */}
         <AnimatedCard delay={0}>
           <div className="p-5">

@@ -203,12 +203,22 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
     }
   };
 
+  // Auto-scroll para campo ativo quando teclado aparece (mobile)
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (window.innerWidth <= 640) {
+      // Pequeno delay para garantir que o teclado apareceu
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-4">
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="space-y-4 sm:space-y-5">
         {/* Nome */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="name" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
             Nome *
           </label>
           <input
@@ -218,7 +228,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             className={`input mt-1 ${errors.name ? 'border-red-500' : ''}`}
             value={formData.name}
             onChange={handleChange}
+            onFocus={handleInputFocus}
             placeholder="Nome completo"
+            autoComplete="name"
           />
           {errors.name && (
             <p className="mt-1 text-sm text-red-600">{errors.name}</p>
@@ -228,7 +240,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
         {/* Email e Telefone */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
               Email
             </label>
             <input
@@ -238,7 +250,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               className={`input mt-1 ${errors.email ? 'border-red-500' : ''}`}
               value={formData.email}
               onChange={handleChange}
+              onFocus={handleInputFocus}
               placeholder="email@exemplo.com"
+              autoComplete="email"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -246,7 +260,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="phone" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
               Telefone
             </label>
             <input
@@ -256,7 +270,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               className={`input mt-1 ${errors.phone ? 'border-red-500' : ''}`}
               value={formData.phone}
               onChange={handleChange}
+              onFocus={handleInputFocus}
               placeholder="(11) 99999-9999"
+              autoComplete="tel"
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
@@ -266,7 +282,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
 
         {/* Endereço */}
         <div>
-          <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="address" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
             Endereço
           </label>
           <input
@@ -276,14 +292,16 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             className="input mt-1"
             value={formData.address}
             onChange={handleChange}
+            onFocus={handleInputFocus}
             placeholder="Endereço completo"
+            autoComplete="street-address"
           />
         </div>
 
         {/* Data de Nascimento e Membro Desde */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="birth_date" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
               Data de Nascimento
             </label>
             <input
@@ -293,11 +311,12 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               className="input mt-1"
               value={formData.birth_date}
               onChange={handleChange}
+              onFocus={handleInputFocus}
             />
           </div>
 
           <div>
-            <label htmlFor="member_since" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="member_since" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
               Membro Desde
             </label>
             <input
@@ -307,13 +326,14 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               className="input mt-1"
               value={formData.member_since}
               onChange={handleChange}
+              onFocus={handleInputFocus}
             />
           </div>
         </div>
 
         {/* Status */}
         <div>
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="status" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
             Status
           </label>
           <select
@@ -322,6 +342,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             className="input mt-1"
             value={formData.status}
             onChange={handleChange}
+            onFocus={handleInputFocus}
           >
             <option value="active">Ativo</option>
             <option value="inactive">Inativo</option>
@@ -330,27 +351,28 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
 
         {/* Observações */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="notes" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
             Observações
           </label>
           <textarea
             id="notes"
             name="notes"
             rows={3}
-            className="input mt-1"
+            className="input mt-1 min-h-[100px] resize-y"
             value={formData.notes}
             onChange={handleChange}
+            onFocus={handleInputFocus}
             placeholder="Observações adicionais..."
           />
         </div>
       </div>
 
-      <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse mt-6 -mx-6 -mb-6 rounded-b-lg">
+      <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse mt-6 -mx-6 -mb-6 rounded-b-lg gap-3 sm:gap-0">
         {Button ? (
           <>
             <Button
               type="submit"
-              className="sm:ml-3 sm:w-auto w-full"
+              className="sm:ml-3 sm:w-auto w-full min-h-[44px]"
               loading={isSaving}
             >
               {member ? 'Atualizar' : 'Criar'}
@@ -359,7 +381,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               type="button"
               variant="secondary"
               onClick={onClose}
-              className="mt-3 sm:mt-0 sm:w-auto w-full"
+              className="mt-3 sm:mt-0 sm:w-auto w-full min-h-[44px]"
             >
               Cancelar
             </Button>

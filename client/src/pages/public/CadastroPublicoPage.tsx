@@ -264,8 +264,8 @@ const CadastroPublicoPage: React.FC = () => {
                       id="name"
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all ${
-                        errors.name ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300 dark:border-gray-600'
+                      className={`input ${
+                        errors.name ? 'border-red-500 ring-2 ring-red-200' : ''
                       }`}
                       placeholder="Digite seu nome completo"
                       disabled={isSubmitting}
@@ -288,8 +288,8 @@ const CadastroPublicoPage: React.FC = () => {
                       id="email"
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all ${
-                        errors.email ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300 dark:border-gray-600'
+                      className={`input ${
+                        errors.email ? 'border-red-500 ring-2 ring-red-200' : ''
                       }`}
                       placeholder="seu@email.com"
                       disabled={isSubmitting}
@@ -312,8 +312,8 @@ const CadastroPublicoPage: React.FC = () => {
                       id="phone"
                       value={formData.phone}
                       onChange={(e) => handleChange('phone', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all ${
-                        errors.phone ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300 dark:border-gray-600'
+                      className={`input ${
+                        errors.phone ? 'border-red-500 ring-2 ring-red-200' : ''
                       }`}
                       placeholder="(61) 99999-9999"
                       disabled={isSubmitting}
@@ -336,7 +336,7 @@ const CadastroPublicoPage: React.FC = () => {
                       id="address"
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                      className="input"
                       placeholder="Endereço completo (opcional)"
                       disabled={isSubmitting}
                     />
@@ -353,8 +353,8 @@ const CadastroPublicoPage: React.FC = () => {
                       id="birth_date"
                       value={formData.birth_date}
                       onChange={(e) => handleChange('birth_date', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all ${
-                        errors.birth_date ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300 dark:border-gray-600'
+                      className={`input ${
+                        errors.birth_date ? 'border-red-500 ring-2 ring-red-200' : ''
                       }`}
                       disabled={isSubmitting}
                     />
@@ -369,7 +369,7 @@ const CadastroPublicoPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting || isSuccess}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-6 min-h-[56px] rounded-lg font-semibold text-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg touch-manipulation"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center">

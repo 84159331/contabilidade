@@ -257,33 +257,35 @@ const MemberList: React.FC<MemberListProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
-                    <button
-                      onClick={() => {
-                        if (member && onEdit && typeof onEdit === 'function') {
-                          onEdit(member);
-                        }
-                      }}
-                      className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
-                      title="Editar"
-                    >
-                      <SafePencilIcon className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (member && member.id && onDelete && typeof onDelete === 'function') {
-                          onDelete(member.id);
-                        }
-                      }}
-                      disabled={isDeleting}
-                      className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      title="Deletar"
-                    >
-                      {isDeleting ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
-                      ) : (
-                        <SafeTrashIcon className="h-4 w-4" />
-                      )}
-                    </button>
+                <button
+                  onClick={() => {
+                    if (member && onEdit && typeof onEdit === 'function') {
+                      onEdit(member);
+                    }
+                  }}
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
+                  title="Editar"
+                  aria-label="Editar membro"
+                >
+                  <SafePencilIcon className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => {
+                    if (member && member.id && onDelete && typeof onDelete === 'function') {
+                      onDelete(member.id);
+                    }
+                  }}
+                  disabled={isDeleting}
+                  className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title="Deletar"
+                  aria-label="Deletar membro"
+                >
+                  {isDeleting ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
+                  ) : (
+                    <SafeTrashIcon className="h-5 w-5" />
+                  )}
+                </button>
                   </div>
                 </td>
               </tr>
@@ -293,7 +295,7 @@ const MemberList: React.FC<MemberListProps> = ({
       </div>
 
       {/* Mobile Cards */}
-      <div className="md:hidden space-y-3 p-4">
+      <div className="md:hidden space-y-3 p-3 sm:p-4">
         {validMembers.map((member) => {
           // Validação adicional dentro do map
           if (!member || !member.id || !member.name) {
@@ -302,7 +304,7 @@ const MemberList: React.FC<MemberListProps> = ({
           }
           
           return (
-          <div key={member.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+          <div key={member.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-5 border border-gray-200 dark:border-gray-600 w-full">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white">
@@ -326,10 +328,11 @@ const MemberList: React.FC<MemberListProps> = ({
                       onEdit(member);
                     }
                   }}
-                  className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
                   title="Editar"
+                  aria-label="Editar membro"
                 >
-                  <SafePencilIcon className="h-4 w-4" />
+                  <SafePencilIcon className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => {
@@ -338,13 +341,14 @@ const MemberList: React.FC<MemberListProps> = ({
                     }
                   }}
                   disabled={isDeleting}
-                  className={`text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
                   title="Deletar"
+                  aria-label="Deletar membro"
                 >
                   {isDeleting ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-danger-600"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
                   ) : (
-                    <SafeTrashIcon className="h-4 w-4" />
+                    <SafeTrashIcon className="h-5 w-5" />
                   )}
                 </button>
               </div>

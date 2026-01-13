@@ -161,24 +161,24 @@ const Categories: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Categorias</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Categorias</h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie as categorias de receitas e despesas
           </p>
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="btn btn-primary flex items-center gap-2"
+          className="btn btn-primary flex items-center gap-2 min-h-[44px] w-full sm:w-auto justify-center"
         >
-          <PlusIcon className="h-4 w-4" />
-          Nova Categoria
+          <PlusIcon className="h-5 w-5" />
+          <span>Nova Categoria</span>
         </button>
       </div>
 
       {/* Filter */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow">
         <div className="flex items-center gap-4">
           <div>
             <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
