@@ -11,7 +11,8 @@
     "test:watch": "react-scripts test --watch",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "test:ci": "react-scripts test --coverage --watchAll=false --ci",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",

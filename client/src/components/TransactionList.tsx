@@ -133,17 +133,19 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   <div className="flex items-center justify-end space-x-2">
                     <button
                       onClick={() => onEdit(transaction)}
-                      className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                      className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
                       title="Editar"
+                      aria-label="Editar transação"
                     >
-                      <PencilIcon className="h-4 w-4" />
+                      <PencilIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => onDelete(transaction.id)}
-                      className="text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300"
+                      className="min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation"
                       title="Deletar"
+                      aria-label="Deletar transação"
                     >
-                      <TrashIcon className="h-4 w-4" />
+                      <TrashIcon className="h-5 w-5" />
                     </button>
                   </div>
                 </td>

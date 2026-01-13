@@ -75,10 +75,6 @@ const Dashboard: React.FC = () => {
     await refresh();
   };
 
-  const handleRefresh = async () => {
-    await refresh();
-  };
-
   return (
     <PageTransition>
       <PullToRefresh onRefresh={handleRefresh}>

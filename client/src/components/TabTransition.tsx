@@ -7,17 +7,25 @@ interface TabTransitionProps {
 }
 
 const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }) => {
+  // Verificar se deve reduzir animações
+  const prefersReducedMotion = typeof window !== 'undefined' && 
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  const isMobileDevice = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const shouldAnimate = !prefersReducedMotion && !isMobileDevice;
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={transitionKey}
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldAnimate ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{
+        exit={shouldAnimate ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
+        transition={shouldAnimate ? {
           duration: 0.2,
           ease: "easeInOut"
-        }}
+        } : { duration: 0 }}
+        style={{ willChange: shouldAnimate ? 'transform, opacity' : 'auto' }}
         className="w-full"
       >
         {children}

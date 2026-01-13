@@ -1,7 +1,8 @@
-// Service Worker para cache de assets estáticos
+// Service Worker para cache de assets estáticos e dados
 // Versão do cache - incrementar para invalidar cache antigo
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v1.1.0';
 const CACHE_NAME = `comunidade-resgate-${CACHE_VERSION}`;
+const DATA_CACHE_NAME = `comunidade-resgate-data-${CACHE_VERSION}`;
 
 // Assets para cachear imediatamente
 const STATIC_ASSETS = [
@@ -9,6 +10,13 @@ const STATIC_ASSETS = [
   '/static/js/bundle.js',
   '/static/css/main.css',
   '/manifest.json',
+];
+
+// URLs de API para cachear dados
+const API_CACHE_PATTERNS = [
+  /\/api\/members/,
+  /\/api\/transactions/,
+  /\/api\/categories/,
 ];
 
 // Estratégias de cache
@@ -46,8 +54,9 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          // Limpar caches antigos
-          if (cacheName !== CACHE_NAME) {
+          // Limpar caches antigos (tanto de assets quanto de dados)
+          if (cacheName !== CACHE_NAME && cacheName !== DATA_CACHE_NAME && 
+              cacheName.startsWith('comunidade-resgate')) {
             console.log('[SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
@@ -60,10 +69,26 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim();
 });
 
+// Verificar se é uma requisição de dados do Firestore
+function isDataRequest(request) {
+  const url = new URL(request.url);
+  // Firestore usa URLs específicas
+  return url.hostname.includes('firestore.googleapis.com') ||
+         url.hostname.includes('firebaseio.com') ||
+         API_CACHE_PATTERNS.some(pattern => pattern.test(url.pathname));
+}
+
 // Interceptar requisições
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  // Verificar se é uma requisição de dados (Firestore)
+  if (isDataRequest(request)) {
+    // Dados: Network First com cache
+    event.respondWith(networkFirstWithDataCache(request));
+    return;
+  }
 
   // Ignorar requisições não-GET
   if (request.method !== 'GET') {
@@ -152,6 +177,44 @@ async function staleWhileRevalidate(request) {
 
   // Retornar cache imediatamente se disponível, senão esperar rede
   return cachedResponse || fetchPromise;
+}
+
+// Estratégia: Network First com cache de dados
+async function networkFirstWithDataCache(request) {
+  const dataCache = await caches.open(DATA_CACHE_NAME);
+  
+  try {
+    // Tentar buscar na rede primeiro
+    const networkResponse = await fetch(request);
+    
+    // Cachear resposta bem-sucedida
+    if (networkResponse.ok) {
+      dataCache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('[SW] Rede falhou, tentando cache de dados:', error);
+    
+    // Se falhar, tentar cache
+    const cachedResponse = await dataCache.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    // Se não houver cache, retornar resposta offline
+    return new Response(
+      JSON.stringify({ 
+        error: 'Offline', 
+        message: 'Sem conexão e dados não disponíveis no cache' 
+      }),
+      { 
+        status: 503, 
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
 }
 
 // Mensagens do Service Worker

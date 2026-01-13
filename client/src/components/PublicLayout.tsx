@@ -43,6 +43,8 @@ const PublicLayout: React.FC = () => {
                 src="/img/ICONE-RESGATE.png" 
                 alt="Comunidade Cristã Resgate" 
                 className="h-10 w-10"
+                priority={true}
+                loading="eager"
               />
             </Link>
 

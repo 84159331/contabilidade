@@ -11,6 +11,7 @@ import PageErrorFallback from './components/PageErrorFallback';
 import PullToRefresh from './components/PullToRefresh';
 import SwipeNavigation from './components/SwipeNavigation';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // HomePage carregada imediatamente (primeira página)
@@ -97,6 +98,7 @@ function App() {
                     </Routes>
                     </Suspense>
                     <PWAInstallPrompt />
+                    <OfflineIndicator />
                   </SwipeNavigation>
                 </PullToRefresh>
               </ErrorBoundary>

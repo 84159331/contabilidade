@@ -6,6 +6,7 @@ import App from './App';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerServiceWorker } from './utils/registerServiceWorker';
+import { offlineSync } from './utils/offlineSync';
 
 // Interceptor GLOBAL para PREVENIR componentes undefined - SEMPRE ATIVO
 const originalCreateElement = React.createElement;
