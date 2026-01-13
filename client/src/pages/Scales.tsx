@@ -87,7 +87,14 @@ const Scales: React.FC = () => {
     setEditingEscala(escala);
     setFormData({
       ministerio_id: escala.ministerio_id,
-      data: new Date(escala.data).toISOString().split('T')[0],
+      data: (() => {
+        // Corrigir problema de timezone ao editar
+        const date = new Date(escala.data);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      })(),
       membros: escala.membros.map(m => ({
         membro_id: m.membro_id,
         funcao: m.funcao,
@@ -213,7 +220,19 @@ const Scales: React.FC = () => {
   };
 
   const formatDate = (date: Date | string) => {
-    const d = new Date(date);
+    // Corrigir problema de timezone - criar data local sem conversão UTC
+    let d: Date;
+    if (typeof date === 'string') {
+      // Se for string no formato ISO ou YYYY-MM-DD, criar data local
+      const dateStr = date.split('T')[0]; // Remove hora se houver
+      const [year, month, day] = dateStr.split('-').map(Number);
+      d = new Date(year, month - 1, day); // month é 0-indexed
+    } else {
+      d = new Date(date);
+      // Criar nova data local para evitar problemas de timezone
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+    
     return d.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -256,11 +275,22 @@ const Scales: React.FC = () => {
     );
   }
 
-  // Filtrar escalas futuras e passadas
+  // Filtrar escalas futuras e passadas (corrigido para timezone)
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
-  const escalasFuturas = escalas.filter(e => new Date(e.data) >= hoje);
-  const escalasPassadas = escalas.filter(e => new Date(e.data) < hoje);
+  const hojeLocal = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  
+  const escalasFuturas = escalas.filter(e => {
+    const escalaDate = new Date(e.data);
+    const escalaLocal = new Date(escalaDate.getFullYear(), escalaDate.getMonth(), escalaDate.getDate());
+    return escalaLocal >= hojeLocal;
+  });
+  
+  const escalasPassadas = escalas.filter(e => {
+    const escalaDate = new Date(e.data);
+    const escalaLocal = new Date(escalaDate.getFullYear(), escalaDate.getMonth(), escalaDate.getDate());
+    return escalaLocal < hojeLocal;
+  });
 
   return (
     <div className="space-y-6">

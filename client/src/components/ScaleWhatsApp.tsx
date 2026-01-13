@@ -10,7 +10,19 @@ interface ScaleWhatsAppProps {
 
 export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className = '' }) => {
   const formatDate = (date: Date | string) => {
-    const d = new Date(date);
+    // Corrigir problema de timezone - usar data local
+    let d: Date;
+    if (typeof date === 'string') {
+      // Se for string no formato YYYY-MM-DD, criar data local
+      const [year, month, day] = date.split('T')[0].split('-').map(Number);
+      d = new Date(year, month - 1, day);
+    } else {
+      d = new Date(date);
+      // Ajustar para timezone local se necessário
+      const offset = d.getTimezoneOffset();
+      d = new Date(d.getTime() - (offset * 60 * 1000));
+    }
+    
     return d.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -19,7 +31,17 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
   };
 
   const formatTime = (date: Date | string) => {
-    const d = new Date(date);
+    // Corrigir problema de timezone
+    let d: Date;
+    if (typeof date === 'string') {
+      const [year, month, day] = date.split('T')[0].split('-').map(Number);
+      const timePart = date.includes('T') ? date.split('T')[1] : '00:00';
+      const [hours, minutes] = timePart.split(':').map(Number);
+      d = new Date(year, month - 1, day, hours || 0, minutes || 0);
+    } else {
+      d = new Date(date);
+    }
+    
     return d.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
@@ -30,22 +52,27 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
     const date = formatDate(escala.data);
     const time = formatTime(escala.data);
     
+    // Mensagem formatada com negrito e ícones
     let message = `🎵 *ESCALA - ${escala.ministerio_nome}*\n\n`;
-    message += `📅 ${date} às ${time}\n\n`;
-    message += `👥 *Membros Escalados:*\n`;
+    message += `📅 *Data:* ${date}\n`;
+    message += `🕐 *Horário:* ${time}\n\n`;
+    message += `👥 *Membros Escalados:*\n\n`;
     
     escala.membros.forEach((membro, index) => {
       const statusEmoji = membro.status === 'confirmado' ? '✅' : 
                          membro.status === 'substituido' ? '🔄' : 
                          membro.status === 'ausente' ? '❌' : '⏳';
-      message += `${statusEmoji} ${membro.membro_nome} - ${membro.funcao}\n`;
+      
+      // Destacar nome em negrito e função
+      message += `${statusEmoji} *${membro.membro_nome}* - ${membro.funcao}\n`;
     });
     
-    if (escala.observacoes) {
+    if (escala.observacoes && escala.observacoes.trim()) {
       message += `\n📝 *Observações:*\n${escala.observacoes}\n`;
     }
     
-    message += `\n✅ Confirme sua presença no app!`;
+    message += `\n✅ *Confirme sua presença no app!*\n\n`;
+    message += `_Comunidade Cristã Resgate_`;
     
     return message;
   };

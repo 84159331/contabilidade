@@ -25,12 +25,30 @@ import type {
 } from '../types/Scale';
 
 // Helper para converter Timestamp do Firestore
+// Helper para converter Timestamp do Firestore (corrigido para timezone)
 const convertTimestamp = (timestamp: any): Date => {
   if (!timestamp) return new Date();
-  if (timestamp.toDate) return timestamp.toDate();
-  if (timestamp instanceof Date) return timestamp;
-  if (typeof timestamp === 'string') return new Date(timestamp);
-  return new Date();
+  
+  let date: Date;
+  if (timestamp.toDate) {
+    // Timestamp do Firestore
+    date = timestamp.toDate();
+  } else if (timestamp instanceof Date) {
+    date = timestamp;
+  } else if (typeof timestamp === 'string') {
+    // Se for string no formato YYYY-MM-DD, criar data local
+    if (timestamp.match(/^\d{4}-\d{2}-\d{2}/)) {
+      const [year, month, day] = timestamp.split('T')[0].split('-').map(Number);
+      date = new Date(year, month - 1, day);
+    } else {
+      date = new Date(timestamp);
+    }
+  } else {
+    date = new Date();
+  }
+  
+  // Retornar data local sem conversão de timezone
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
 // API para Ministérios
@@ -350,7 +368,19 @@ export const escalasAPI = {
 
       const escalasRef = collection(db, 'escalas');
       const now = Timestamp.now();
-      const dataTimestamp = Timestamp.fromDate(new Date(data.data));
+      
+      // Corrigir problema de timezone - criar data local sem conversão UTC
+      let dataDate: Date;
+      if (typeof data.data === 'string') {
+        // Se for string no formato YYYY-MM-DD, criar data local
+        const [year, month, day] = data.data.split('-').map(Number);
+        dataDate = new Date(year, month - 1, day); // month é 0-indexed
+      } else {
+        dataDate = new Date(data.data);
+        // Garantir que é data local
+        dataDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
+      }
+      const dataTimestamp = Timestamp.fromDate(dataDate);
 
       const escalaData = {
         ministerio_id: data.ministerio_id,
@@ -421,7 +451,16 @@ export const escalasAPI = {
       };
 
       if (data.data) {
-        updateData.data = Timestamp.fromDate(new Date(data.data));
+        // Corrigir problema de timezone ao atualizar
+        let dataDate: Date;
+        if (typeof data.data === 'string') {
+          const [year, month, day] = data.data.split('-').map(Number);
+          dataDate = new Date(year, month - 1, day);
+        } else {
+          dataDate = new Date(data.data);
+          dataDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
+        }
+        updateData.data = Timestamp.fromDate(dataDate);
       }
 
       if (data.membros) {
