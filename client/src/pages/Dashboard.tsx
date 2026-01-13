@@ -19,6 +19,7 @@ import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import MemberStats from '../components/MemberStats';
 import BirthdayNotifications from '../components/BirthdayNotifications';
+import PullToRefresh from '../components/PullToRefresh';
 
 const Dashboard: React.FC = () => {
   const { stats, memberStats, loading, error, refresh } = useDashboardData();
@@ -70,9 +71,18 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  const handleRefresh = async () => {
+    await refresh();
+  };
+
+  const handleRefresh = async () => {
+    await refresh();
+  };
+
   return (
     <PageTransition>
-      <div className="space-y-4 sm:space-y-6">
+      <PullToRefresh onRefresh={handleRefresh}>
+        <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
         <div>
@@ -225,7 +235,8 @@ const Dashboard: React.FC = () => {
 
         {/* Quick Actions */}
         <QuickActions />
-      </div>
+        </div>
+      </PullToRefresh>
     </PageTransition>
   );
 };

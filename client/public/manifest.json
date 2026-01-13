@@ -1,15 +1,48 @@
 {
-  "short_name": "Comunidade Cristã Resgate",
+  "short_name": "Resgate",
   "name": "Comunidade Cristã Resgate - Sistema de Contabilidade",
+  "description": "Sistema completo de gestão e contabilidade para igrejas",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/ICONE-RESGATE.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "theme_color": "#3B82F6",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "categories": ["finance", "productivity", "business"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Acesse o painel principal",
+      "url": "/tesouraria/dashboard",
+      "icons": [{ "src": "img/ICONE-RESGATE.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Membros",
+      "short_name": "Membros",
+      "description": "Gerencie os membros",
+      "url": "/tesouraria/members",
+      "icons": [{ "src": "img/ICONE-RESGATE.png", "sizes": "96x96" }]
+    }
+  ]
 }

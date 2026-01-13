@@ -8,6 +8,9 @@ import TesourariaApp from './TesourariaApp';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingSpinner from './components/LoadingSpinner';
 import PageErrorFallback from './components/PageErrorFallback';
+import PullToRefresh from './components/PullToRefresh';
+import SwipeNavigation from './components/SwipeNavigation';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // HomePage carregada imediatamente (primeira página)
@@ -51,6 +54,11 @@ function App() {
   const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
   fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:43',message:'Lazy components status',data:lazyComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
   // #endregion
+  
+  const handleRefresh = async () => {
+    window.location.reload();
+  };
+
   return (
     <ErrorBoundary>
       <ThemeProvider>
@@ -58,12 +66,14 @@ function App() {
           <AuthProvider>
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <ErrorBoundary fallback={<PageErrorFallback />}>
-                <Suspense fallback={
-                  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                    <LoadingSpinner size="lg" text="Carregando página..." />
-                  </div>
-                }>
-                <Routes>
+                <PullToRefresh onRefresh={handleRefresh}>
+                  <SwipeNavigation>
+                    <Suspense fallback={
+                      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                        <LoadingSpinner size="lg" text="Carregando página..." />
+                      </div>
+                    }>
+                    <Routes>
                   <Route element={<PublicLayout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/sobre" element={<AboutPage />} />
@@ -84,8 +94,11 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
                   <Route path="/tesouraria/*" element={<TesourariaApp />} />
-                </Routes>
-              </Suspense>
+                    </Routes>
+                    </Suspense>
+                    <PWAInstallPrompt />
+                  </SwipeNavigation>
+                </PullToRefresh>
               </ErrorBoundary>
             </Router>
           </AuthProvider>
