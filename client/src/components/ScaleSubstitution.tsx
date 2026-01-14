@@ -84,6 +84,7 @@ const ScaleSubstitution: React.FC<ScaleSubstitutionProps> = ({
         funcao: membroEscalado.funcao,
         status: 'pendente' as const,
         observacoes: `Substituição de ${membroEscalado.membro_nome}`,
+        substituido_por: undefined,
       });
 
       await escalasAPI.updateEscala(escala.id, {

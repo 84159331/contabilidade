@@ -1,4 +1,4 @@
-﻿// Tipos para sistema de notificaÃ§Ãµes
+// Tipos para sistema de notificaÃ§Ãµes
 
 export type NotificationType = 
   | 'nova_escala'

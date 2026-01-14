@@ -1,4 +1,4 @@
-﻿// Página de notificações melhorada - Estilo LouveApp
+// Página de notificações melhorada - Estilo LouveApp
 import React, { useState } from 'react';
 import { useNotifications } from '../hooks/useNotifications';
 import { useUserRole } from '../hooks/useUserRole';

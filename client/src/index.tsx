@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './setupLogger';
 import './index.css';
@@ -18,15 +18,15 @@ const SafeFallbackComponent: React.FC<{ componentName?: string }> = ({ component
     style: { margin: '1rem' }
   }, React.createElement('p', {
     className: 'text-yellow-800 dark:text-yellow-200 text-sm'
-  }, `âš ï¸ Componente "${componentName}" nÃ£o pÃ´de ser carregado. Por favor, recarregue a pÃ¡gina.`));
+  }, `⚠️ Componente "${componentName}" não pôde ser carregado. Por favor, recarregue a página.`));
 };
 
 // Cache para evitar logs repetitivos
 const undefinedComponentLogs = new Map<string, number>();
-const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por componente
+const MAX_LOG_FREQUENCY = 5000; // Log no máximo a cada 5 segundos por componente
 
 (React as any).createElement = function(type: any, props: any, ...children: any[]) {
-  // PREVENÃ‡ÃƒO: Se o tipo for undefined/null, substituir por fallback ANTES de chamar React.createElement
+  // PREVENÇÃO: Se o tipo for undefined/null, substituir por fallback ANTES de chamar React.createElement
   if (type === undefined || type === null) {
     const errorInfo = new Error().stack || '';
     
@@ -34,7 +34,7 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
     let componentName = 'Unknown';
     let sourceInfo = '';
     
-    // Extrair informaÃ§Ãµes do stack trace
+    // Extrair informações do stack trace
     const stackLines = errorInfo.split('\n');
     for (const line of stackLines) {
       // Procurar por nomes de arquivos conhecidos
@@ -107,7 +107,7 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
             } else if (fileName.includes('Cadastro')) {
               sourceInfo = 'CadastroPublicoPage';
             } else if (fileName.includes('index.tsx') || fileName.includes('index.ts')) {
-              // Se for do index.tsx, Ã© provavelmente do prÃ³prio interceptor - suprimir
+              // Se for do index.tsx, é provavelmente do próprio interceptor - suprimir
               sourceInfo = 'index-interceptor';
             }
           } else {
@@ -148,9 +148,9 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
       
       // Log mais detalhado para Unknown
       if (isUnknown) {
-        console.error(`ðŸ” COMPONENTE UNDEFINED DETECTADO (Unknown):`, {
+        console.error(`🔍 COMPONENTE UNDEFINED DETECTADO (Unknown):`, {
           componentName,
-          sourceInfo: sourceInfo || 'nÃ£o identificado',
+          sourceInfo: sourceInfo || 'não identificado',
           fileName,
           allFiles,
           props: propKeys,
@@ -161,7 +161,7 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
           stackTrace: stackPreview.slice(0, 5).join('\n')
         });
       } else {
-        console.warn(`âš ï¸ Componente undefined detectado: "${componentName}" (${sourceInfo || 'origem desconhecida'}). Substituindo por fallback seguro.`, {
+        console.warn(`⚠️ Componente undefined detectado: "${componentName}" (${sourceInfo || 'origem desconhecida'}). Substituindo por fallback seguro.`, {
           fileName,
           props: propKeys,
           className: className.substring(0, 50),
@@ -170,33 +170,33 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
       }
     }
     
-    // SUBSTITUIR por componente seguro ao invÃ©s de lanÃ§ar erro
+    // SUBSTITUIR por componente seguro ao invés de lançar erro
     // Para react-toastify, AgradecimentoPage, CadastroPublicoPage, framer-motion e index-interceptor, usar um fallback silencioso
     if (sourceInfo === 'react-toastify' || sourceInfo === 'AgradecimentoPage' || sourceInfo === 'framer-motion' || sourceInfo === 'CadastroPublicoPage' || sourceInfo === 'index-interceptor') {
-      // Para esses casos, retornar null ao invÃ©s de fallback visual (jÃ¡ tÃªm validaÃ§Ãµes internas)
+      // Para esses casos, retornar null ao invés de fallback visual (já têm validações internas)
       return null;
     }
     
     return originalCreateElement.apply(this, [SafeFallbackComponent, { componentName, ...props }, ...children] as any);
   }
   
-  // Verificar se Ã© um objeto invÃ¡lido (nÃ£o Ã© string, funÃ§Ã£o, nem elemento React vÃ¡lido)
+  // Verificar se é um objeto inválido (não é string, função, nem elemento React válido)
   if (typeof type === 'object' && type !== null) {
-    // Elementos React vÃ¡lidos tÃªm $$typeof
+    // Elementos React válidos têm $$typeof
     if (type.$$typeof) {
-      // Ã‰ um elemento React vÃ¡lido, prosseguir normalmente
+      // É um elemento React válido, prosseguir normalmente
       return originalCreateElement.apply(this, [type, props, ...children] as any);
     }
     
     // Pode ser um componente lazy ou memoizado (tem _payload ou type)
     if ((type as any)._payload || (type as any).type || (type as any).render) {
-      // Ã‰ um componente lazy/memoizado vÃ¡lido, prosseguir
+      // É um componente lazy/memoizado válido, prosseguir
       return originalCreateElement.apply(this, [type, props, ...children] as any);
     }
     
-    // Objeto invÃ¡lido - substituir por fallback
+    // Objeto inválido - substituir por fallback
     if (process.env.NODE_ENV === 'development') {
-      console.error('âŒ React.createElement chamado com objeto invÃ¡lido. Substituindo por fallback seguro.', {
+      console.error('❌ React.createElement chamado com objeto inválido. Substituindo por fallback seguro.', {
         type: String(type),
         keys: Object.keys(type || {})
       });
@@ -205,14 +205,14 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
     return originalCreateElement.apply(this, [SafeFallbackComponent, { componentName, ...props }, ...children] as any);
   }
   
-  // Verificar se Ã© uma funÃ§Ã£o vÃ¡lida
+  // Verificar se é uma função válida
   if (typeof type === 'function') {
     try {
       const typeName = type.name || type.displayName || 'Anonymous';
-      // Se o nome da funÃ§Ã£o for 'undefined' ou 'null', Ã© suspeito
+      // Se o nome da função for 'undefined' ou 'null', é suspeito
       if (typeName === 'undefined' || typeName === 'null') {
         if (process.env.NODE_ENV === 'development') {
-          console.error('âŒ FunÃ§Ã£o com nome invÃ¡lido detectada. Substituindo por fallback seguro.', { typeName });
+          console.error('❌ Função com nome inválido detectada. Substituindo por fallback seguro.', { typeName });
         }
         const componentName = props?.componentName || props?.id || typeName;
         return originalCreateElement.apply(this, [SafeFallbackComponent, { componentName, ...props }, ...children] as any);
@@ -222,29 +222,27 @@ const MAX_LOG_FREQUENCY = 5000; // Log no mÃ¡ximo a cada 5 segundos por compon
     }
   }
   
-  // Tipo vÃ¡lido (string, funÃ§Ã£o vÃ¡lida, ou elemento React) - renderizar normalmente
+  // Tipo válido (string, função válida, ou elemento React) - renderizar normalmente
   try {
     return originalCreateElement.apply(this, [type, props, ...children] as any);
   } catch (error) {
     // Se houver erro ao renderizar, substituir por fallback
     if (process.env.NODE_ENV === 'development') {
-      console.error('âŒ Erro ao renderizar componente. Substituindo por fallback seguro.', error);
+      console.error('❌ Erro ao renderizar componente. Substituindo por fallback seguro.', error);
     }
     const componentName = typeof type === 'function' ? (type.name || 'Unknown') : String(type);
     return originalCreateElement.apply(this, [SafeFallbackComponent, { componentName, originalError: error instanceof Error ? error.message : String(error) }, ...children] as any);
   }
 };
 
-// Handler global de erros para capturar erros nÃ£o tratados
+// Handler global de erros para capturar erros não tratados
 if (typeof window !== 'undefined') {
   window.addEventListener('error', (event) => {
-    if (event.message && (event.message.includes('undefined') || event.message.includes('Element type is invalid'))) {
-    }
+    // Tratamento de erros globais (removidos logs de debugging)
   });
   
   window.addEventListener('unhandledrejection', (event) => {
-    if (event.reason && (String(event.reason).includes('undefined') || String(event.reason).includes('Element type is invalid'))) {
-    }
+    // Tratamento de rejeições não tratadas (removidos logs de debugging)
   });
 }
 
@@ -269,7 +267,7 @@ root.render(
   </React.StrictMode>
 );
 
-// Registrar Service Worker em produÃ§Ã£o
+// Registrar Service Worker em produção
 if (process.env.NODE_ENV === 'production') {
   registerServiceWorker();
 }

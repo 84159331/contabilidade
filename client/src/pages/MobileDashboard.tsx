@@ -1,4 +1,4 @@
-﻿// Dashboard Mobile otimizado para membros - Estilo LouveApp
+// Dashboard Mobile otimizado para membros - Estilo LouveApp
 import React, { useState, useEffect } from 'react';
 import { useUserRole } from '../hooks/useUserRole';
 import { useNotifications } from '../hooks/useNotifications';

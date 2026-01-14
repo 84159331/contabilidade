@@ -1,4 +1,4 @@
-﻿// Página para membros visualizarem suas escalas - Estilo LouveApp Mobile
+// Página para membros visualizarem suas escalas - Estilo LouveApp Mobile
 import React, { useState, useEffect } from 'react';
 import { useUserRole } from '../hooks/useUserRole';
 import { escalasAPI } from '../services/scalesAPI';

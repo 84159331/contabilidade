@@ -1,4 +1,4 @@
-﻿// API para gestÃ£o de escalas e ministÃ©rios
+// API para gestÃ£o de escalas e ministÃ©rios
 import { db } from '../firebase/config';
 import {
   collection,
