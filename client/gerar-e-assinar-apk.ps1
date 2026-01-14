@@ -150,10 +150,14 @@ if (-not $apkIsSigned) {
     Start-Sleep -Seconds 2
     
     # Abrir script de assinatura em nova janela do PowerShell
-    $scriptPath = Join-Path $PSScriptRoot "assinar-apk.ps1"
+    # Tentar usar script definitivo primeiro
+    $scriptPath = Join-Path $PSScriptRoot "assinar-apk-definitivo.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        $scriptPath = Join-Path $PSScriptRoot "assinar-apk.ps1"
+    }
     
     if (Test-Path $scriptPath) {
-        Write-Host "🚀 Executando script de assinatura..." -ForegroundColor Green
+        Write-Host "Executando script de assinatura..." -ForegroundColor Green
         Write-Host ""
         Write-Host "========================================" -ForegroundColor Cyan
         Write-Host ""
