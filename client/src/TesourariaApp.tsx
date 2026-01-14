@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+﻿import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './firebase/AuthContext';
 import { useCacheInvalidation } from './hooks/useRouteRefresh';
@@ -11,7 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import PageErrorFallback from './components/PageErrorFallback';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
-// Lazy loading com retry para componentes pesados (previne páginas brancas)
+// Lazy loading com retry para componentes pesados (previne pÃ¡ginas brancas)
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
 const Members = lazyWithRetry(() => import('./pages/Members'));
 const Transactions = lazyWithRetry(() => import('./pages/Transactions'));
@@ -32,17 +32,14 @@ const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
 
 function TesourariaApp() {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:28',message:'TesourariaApp render started',data:{hasLayout:!!Layout,hasErrorBoundary:!!ErrorBoundary,hasPageErrorFallback:!!PageErrorFallback,hasPageSkeleton:!!PageSkeleton,hasSmartLoading:!!SmartLoading,hasLoginFirebase:!!LoginFirebase},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-  // #endregion
   const { user, loading } = useAuth();
   
   // Invalidar cache quando a rota muda
   useCacheInvalidation();
 
-  // Limpar cache quando componente monta ou usuário muda
+  // Limpar cache quando componente monta ou usuÃ¡rio muda
   useEffect(() => {
-    // Limpar caches antigos para forçar recarregamento
+    // Limpar caches antigos para forÃ§ar recarregamento
     try {
       const cacheKeys = [
         'dashboard_cache',
@@ -62,10 +59,10 @@ function TesourariaApp() {
             const parsed = JSON.parse(cached);
             if (parsed.lastFetch && (now - parsed.lastFetch) > MAX_CACHE_AGE) {
               sessionStorage.removeItem(key);
-              console.log('🧹 Cache antigo removido:', key);
+              console.log('ðŸ§¹ Cache antigo removido:', key);
             }
           } catch (e) {
-            // Se não conseguir parsear, remove
+            // Se nÃ£o conseguir parsear, remove
             sessionStorage.removeItem(key);
           }
         }
@@ -88,19 +85,13 @@ function TesourariaApp() {
     );
   }
 
-  // #region agent log
   const lazyComponents = {Dashboard,Members,Transactions,Reports,Categories,CellGroupsAdmin,WhatsAppPage,BooksManagement,Events,EsbocosAdminPage,FeriasPastores,CadastroMembro};
   const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:82',message:'Lazy components status',data:lazyComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-  // #endregion
-  // Validação apenas em desenvolvimento
+  // ValidaÃ§Ã£o apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!Layout || !ErrorBoundary || !PageErrorFallback || !PageSkeleton || !SmartLoading) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TesourariaApp.tsx:85',message:'Critical component missing',data:{Layout:!!Layout,ErrorBoundary:!!ErrorBoundary,PageErrorFallback:!!PageErrorFallback,PageSkeleton:!!PageSkeleton,SmartLoading:!!SmartLoading},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
-      console.error('❌ Componente crítico não encontrado!');
-      return <div>Erro: Componente não encontrado</div>;
+      console.error('âŒ Componente crÃ­tico nÃ£o encontrado!');
+      return <div>Erro: Componente nÃ£o encontrado</div>;
     }
   }
   

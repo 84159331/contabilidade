@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -72,26 +72,26 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
     try {
       let imageUrl = formData.image;
       
-      console.log('📝 EventForm - Iniciando submit');
-      console.log('📝 EventForm - imageFile:', imageFile ? imageFile.name : 'null');
-      console.log('📝 EventForm - formData.image:', formData.image ? formData.image.substring(0, 50) + '...' : 'vazio');
+      console.log('ðŸ“ EventForm - Iniciando submit');
+      console.log('ðŸ“ EventForm - imageFile:', imageFile ? imageFile.name : 'null');
+      console.log('ðŸ“ EventForm - formData.image:', formData.image ? formData.image.substring(0, 50) + '...' : 'vazio');
       
       // Upload da imagem se houver arquivo
       if (imageFile) {
-        console.log('📤 EventForm - Fazendo upload da imagem...');
-        console.log('📤 EventForm - Arquivo:', imageFile.name, imageFile.size, imageFile.type);
+        console.log('ðŸ“¤ EventForm - Fazendo upload da imagem...');
+        console.log('ðŸ“¤ EventForm - Arquivo:', imageFile.name, imageFile.size, imageFile.type);
         
         try {
           imageUrl = await eventsAPI.uploadEventImage(imageFile);
-          console.log('✅ EventForm - Upload concluído com sucesso');
-          console.log('✅ EventForm - URL gerada:', imageUrl.substring(0, 50) + '...');
-          console.log('✅ EventForm - É base64?', imageUrl.startsWith('data:'));
+          console.log('âœ… EventForm - Upload concluÃ­do com sucesso');
+          console.log('âœ… EventForm - URL gerada:', imageUrl.substring(0, 50) + '...');
+          console.log('âœ… EventForm - Ã‰ base64?', imageUrl.startsWith('data:'));
         } catch (uploadError) {
-          console.error('❌ EventForm - Erro no upload:', uploadError);
+          console.error('âŒ EventForm - Erro no upload:', uploadError);
           throw uploadError;
         }
       } else {
-        console.log('ℹ️ EventForm - Nenhum arquivo para upload');
+        console.log('â„¹ï¸ EventForm - Nenhum arquivo para upload');
       }
 
       const eventData = {
@@ -99,21 +99,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
         image: imageUrl
       };
 
-      console.log('💾 EventForm - Dados finais do evento:');
-      console.log('💾 EventForm - Título:', eventData.title);
-      console.log('💾 EventForm - Imagem:', eventData.image ? 'Sim' : 'Não');
-      console.log('💾 EventForm - Imagem é base64?', eventData.image?.startsWith('data:'));
-      console.log('💾 EventForm - Tamanho da imagem:', eventData.image?.length || 0);
+      console.log('ðŸ’¾ EventForm - Dados finais do evento:');
+      console.log('ðŸ’¾ EventForm - TÃ­tulo:', eventData.title);
+      console.log('ðŸ’¾ EventForm - Imagem:', eventData.image ? 'Sim' : 'NÃ£o');
+      console.log('ðŸ’¾ EventForm - Imagem Ã© base64?', eventData.image?.startsWith('data:'));
+      console.log('ðŸ’¾ EventForm - Tamanho da imagem:', eventData.image?.length || 0);
 
       if (event?.id) {
-        console.log('🔄 EventForm - Atualizando evento existente:', event.id);
+        console.log('ðŸ”„ EventForm - Atualizando evento existente:', event.id);
         await eventsAPI.updateEvent(event.id, eventData);
       } else {
-        console.log('➕ EventForm - Criando novo evento');
+        console.log('âž• EventForm - Criando novo evento');
         await eventsAPI.createEvent(eventData);
       }
 
-      console.log('✅ EventForm - Evento salvo com sucesso');
+      console.log('âœ… EventForm - Evento salvo com sucesso');
       onSave(eventData);
       onClose();
     } catch (error) {
@@ -139,10 +139,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Título */}
+          {/* TÃ­tulo */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Título do Evento
+              TÃ­tulo do Evento
             </label>
             <input
               type="text"
@@ -150,15 +150,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
               value={formData.title}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="Ex: Culto de Celebração"
+              placeholder="Ex: Culto de CelebraÃ§Ã£o"
               required
             />
           </div>
 
-          {/* Descrição */}
+          {/* DescriÃ§Ã£o */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Descrição
+              DescriÃ§Ã£o
             </label>
             <textarea
               name="description"
@@ -189,7 +189,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <ClockIcon className="h-4 w-4 inline mr-1" />
-                Horário
+                HorÃ¡rio
               </label>
               <input
                 type="time"
@@ -281,7 +281,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* Botões */}
+          {/* BotÃµes */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"

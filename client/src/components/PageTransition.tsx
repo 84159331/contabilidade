@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+﻿import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
@@ -7,7 +7,7 @@ interface PageTransitionProps {
 }
 
 const PageTransition: React.FC<PageTransitionProps> = memo(({ children, className = '' }) => {
-  // Verificar se deve reduzir animações
+  // Verificar se deve reduzir animaÃ§Ãµes
   const prefersReducedMotion = typeof window !== 'undefined' && 
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   

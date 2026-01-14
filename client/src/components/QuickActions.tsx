@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   PlusIcon, 
@@ -23,7 +23,7 @@ const QuickActions: React.FC = () => {
   const actions: QuickAction[] = [
     {
       id: 'transaction',
-      label: 'Nova Transação',
+      label: 'Nova TransaÃ§Ã£o',
       icon: CurrencyDollarIcon,
       href: '/tesouraria/transactions',
       color: 'bg-green-500 hover:bg-green-600'
@@ -37,7 +37,7 @@ const QuickActions: React.FC = () => {
     },
     {
       id: 'report',
-      label: 'Relatório',
+      label: 'RelatÃ³rio',
       icon: ChartBarIcon,
       href: '/tesouraria/reports',
       color: 'bg-purple-500 hover:bg-purple-600'

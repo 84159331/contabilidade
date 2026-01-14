@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   ChatBubbleLeftRightIcon,
   PhoneIcon,
@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import storage from '../utils/storage';
 
-// Importação segura do framer-motion com fallback
+// ImportaÃ§Ã£o segura do framer-motion com fallback
 let motion: any;
 let AnimatePresence: React.ComponentType<any>;
 try {
@@ -34,7 +34,7 @@ try {
     AnimatePresence = ({ children }: any) => <>{children}</>;
   }
 } catch (error) {
-  // Fallback se framer-motion não estiver disponível
+  // Fallback se framer-motion nÃ£o estiver disponÃ­vel
   motion = { div: ({ children, ...props }: any) => <div {...props}>{children}</div> };
   AnimatePresence = ({ children }: any) => <>{children}</>;
 }
@@ -71,12 +71,9 @@ interface WhatsAppIntegrationProps {
 }
 
 const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData }) => {
-  // #region agent log
   const MotionDiv = motion?.div || (({ children, ...props }: any) => <div {...props}>{children}</div>);
   const MotionButton = motion?.button || (({ children, ...props }: any) => <button {...props}>{children}</button>);
   const hasAnimatePresence = AnimatePresence && typeof AnimatePresence !== 'undefined' && typeof AnimatePresence === 'function';
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:53',message:'WhatsAppIntegration render started',data:{hasMotion:!!motion,hasMotionDiv:!!motion?.div,hasMotionButton:!!motion?.button,hasAnimatePresence,AnimatePresenceType:typeof AnimatePresence},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
-  // #endregion
   const [contacts, setContacts] = useState<WhatsAppContact[]>([]);
   const [messages, setMessages] = useState<WhatsAppMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -98,61 +95,61 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
   // Templates de mensagens
   const messageTemplates = {
     financial: {
-      name: 'Relatório Financeiro',
-      template: `📊 *Relatório Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
+      name: 'RelatÃ³rio Financeiro',
+      template: `ðŸ“Š *RelatÃ³rio Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
 
-💰 *Receitas Totais:* R$ {{totalIncome}}
-💸 *Despesas Totais:* R$ {{totalExpenses}}
-💵 *Saldo Atual:* R$ {{balance}}
+ðŸ’° *Receitas Totais:* R$ {{totalIncome}}
+ðŸ’¸ *Despesas Totais:* R$ {{totalExpenses}}
+ðŸ’µ *Saldo Atual:* R$ {{balance}}
 
-📈 *Resumo:*
-• Crescimento mensal: {{growth}}%
-• Meta atingida: {{goalProgress}}%
+ðŸ“ˆ *Resumo:*
+â€¢ Crescimento mensal: {{growth}}%
+â€¢ Meta atingida: {{goalProgress}}%
 
-🙏 Obrigado pela confiança na gestão da nossa igreja!`
+ðŸ™ Obrigado pela confianÃ§a na gestÃ£o da nossa igreja!`
     },
     welcome: {
       name: 'Boas-vindas',
-      template: `🎉 *Bem-vindo à Comunidade Cristã Resgate!*
+      template: `ðŸŽ‰ *Bem-vindo Ã  Comunidade CristÃ£ Resgate!*
 
-É uma alegria tê-lo conosco! 🙏
+Ã‰ uma alegria tÃª-lo conosco! ðŸ™
 
-📅 *Próximos eventos:*
-• Culto de domingo: 9h e 19h
-• Reunião de oração: Quarta-feira 19h30
-• Escola Bíblica: Domingo 8h
+ðŸ“… *PrÃ³ximos eventos:*
+â€¢ Culto de domingo: 9h e 19h
+â€¢ ReuniÃ£o de oraÃ§Ã£o: Quarta-feira 19h30
+â€¢ Escola BÃ­blica: Domingo 8h
 
-📱 *Contato:*
-• WhatsApp: (11) 1234-5678
-• Email: cresgate012@gmail.com
+ðŸ“± *Contato:*
+â€¢ WhatsApp: (11) 1234-5678
+â€¢ Email: cresgate012@gmail.com
 
-Que Deus abençoe sua vida! ✨`
+Que Deus abenÃ§oe sua vida! âœ¨`
     },
     reminder: {
       name: 'Lembrete de Evento',
-      template: `⏰ *Lembrete de Evento*
+      template: `â° *Lembrete de Evento*
 
-📅 *{{eventName}}*
-🕐 *Horário:* {{eventTime}}
-📍 *Local:* {{eventLocation}}
+ðŸ“… *{{eventName}}*
+ðŸ• *HorÃ¡rio:* {{eventTime}}
+ðŸ“ *Local:* {{eventLocation}}
 
-Não esqueça de participar! Sua presença é muito importante para nós. 🙏
+NÃ£o esqueÃ§a de participar! Sua presenÃ§a Ã© muito importante para nÃ³s. ðŸ™
 
-*Comunidade Cristã Resgate*`
+*Comunidade CristÃ£ Resgate*`
     },
     prayer: {
-      name: 'Pedido de Oração',
-      template: `🙏 *Pedido de Oração*
+      name: 'Pedido de OraÃ§Ã£o',
+      template: `ðŸ™ *Pedido de OraÃ§Ã£o*
 
-Olá {{name}}! 
+OlÃ¡ {{name}}! 
 
-Recebemos seu pedido de oração e nossa equipe já está intercedendo por você.
+Recebemos seu pedido de oraÃ§Ã£o e nossa equipe jÃ¡ estÃ¡ intercedendo por vocÃª.
 
-*"Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles."* - Mateus 18:20
+*"Porque onde estiverem dois ou trÃªs reunidos em meu nome, ali estou no meio deles."* - Mateus 18:20
 
-Que Deus abençoe e fortaleça você! ✨
+Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
 
-*Comunidade Cristã Resgate*`
+*Comunidade CristÃ£ Resgate*`
     }
   };
 
@@ -173,7 +170,7 @@ Que Deus abençoe e fortaleça você! ✨
       const exampleContacts: WhatsAppContact[] = [
         {
           id: '1',
-          name: 'Apóstolo Isac',
+          name: 'ApÃ³stolo Isac',
           phone: '+5511999999999',
           role: 'pastor',
           isActive: true,
@@ -181,7 +178,7 @@ Que Deus abençoe e fortaleça você! ✨
         },
         {
           id: '2',
-          name: 'Apóstola Elaine',
+          name: 'ApÃ³stola Elaine',
           phone: '+5511888888888',
           role: 'pastor',
           isActive: true,
@@ -393,7 +390,7 @@ Que Deus abençoe e fortaleça você! ✨
           <ChatBubbleLeftRightIcon className="h-8 w-8 text-green-500" />
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Integração WhatsApp
+              IntegraÃ§Ã£o WhatsApp
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Gerencie contatos e envie mensagens via WhatsApp
@@ -497,14 +494,10 @@ Que Deus abençoe e fortaleça você! ✨
                   const RoleIcon = getRoleIcon(contact.role);
                   const colorClass = getRoleColor(contact.role);
                   
-                  // #region agent log
                   if (!RoleIcon || typeof RoleIcon !== 'function') {
-                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:470',message:'RoleIcon is undefined',data:{role:contact.role,RoleIconType:typeof RoleIcon},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
                   }
                   if (!MotionDiv || typeof MotionDiv !== 'function') {
-                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:473',message:'MotionDiv is undefined',data:{MotionDivType:typeof MotionDiv},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
                   }
-                  // #endregion
                   
                   return (
                     <MotionDiv
@@ -632,11 +625,8 @@ Que Deus abençoe e fortaleça você! ✨
                   const StatusIcon = getStatusIcon(message.status);
                   const statusColor = getStatusColor(message.status);
                   
-                  // #region agent log
                   if (!StatusIcon || typeof StatusIcon !== 'function') {
-                    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'WhatsAppIntegration.tsx:597',message:'StatusIcon is undefined',data:{status:message.status,StatusIconType:typeof StatusIcon},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'K'})}).catch(()=>{});
                   }
-                  // #endregion
                   
                   return (
                     <MotionDiv
@@ -651,7 +641,7 @@ Que Deus abençoe e fortaleça você! ✨
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
                           <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {contact?.name || 'Contato não encontrado'}
+                            {contact?.name || 'Contato nÃ£o encontrado'}
                           </h4>
                           <StatusIcon className={`h-4 w-4 ${statusColor}`} />
                         </div>
@@ -664,7 +654,7 @@ Que Deus abençoe e fortaleça você! ✨
                         <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
                           <span>{message.type}</span>
                           {message.sentAt && (
-                            <span>• {message.sentAt.toLocaleString('pt-BR')}</span>
+                            <span>â€¢ {message.sentAt.toLocaleString('pt-BR')}</span>
                           )}
                         </div>
                       </div>
@@ -688,7 +678,7 @@ Que Deus abençoe e fortaleça você! ✨
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
                             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {contact?.name || 'Contato não encontrado'}
+                              {contact?.name || 'Contato nÃ£o encontrado'}
                             </h4>
                             {StatusIcon && <StatusIcon className={`h-4 w-4 ${statusColor}`} />}
                           </div>
@@ -780,7 +770,7 @@ Que Deus abençoe e fortaleça você! ✨
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Telefone (com código do país)
+                    Telefone (com cÃ³digo do paÃ­s)
                   </label>
                   <input
                     type="tel"
@@ -793,7 +783,7 @@ Que Deus abençoe e fortaleça você! ✨
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Função
+                    FunÃ§Ã£o
                   </label>
                   <select
                     value={newContact.role}
@@ -855,7 +845,7 @@ Que Deus abençoe e fortaleça você! ✨
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Telefone (com código do país)
+                    Telefone (com cÃ³digo do paÃ­s)
                   </label>
                   <input
                     type="tel"
@@ -867,7 +857,7 @@ Que Deus abençoe e fortaleça você! ✨
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Função
+                    FunÃ§Ã£o
                   </label>
                   <select
                     value={newContact.role}
@@ -949,7 +939,7 @@ Que Deus abençoe e fortaleça você! ✨
                     >
                       <option value="text">Texto</option>
                       <option value="template">Template</option>
-                      <option value="media">Mídia</option>
+                      <option value="media">MÃ­dia</option>
                     </select>
                   </div>
                   

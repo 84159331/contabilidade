@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   CakeIcon,
@@ -50,7 +50,7 @@ const BirthdayNotifications: React.FC = () => {
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-              Aniversários
+              AniversÃ¡rios
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Nenhum aniversariante hoje ou nesta semana
@@ -85,7 +85,7 @@ const BirthdayNotifications: React.FC = () => {
           </div>
           <div className="text-left">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-              Aniversários
+              AniversÃ¡rios
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {safeTodayBirthdays.length > 0 
@@ -204,7 +204,7 @@ const BirthdayNotifications: React.FC = () => {
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
                               {dayNumber} de {monthName} ({dayName})
-                              {member.phone && ` • ${member.phone}`}
+                              {member.phone && ` â€¢ ${member.phone}`}
                             </p>
                           </div>
                         </motion.div>
@@ -214,11 +214,11 @@ const BirthdayNotifications: React.FC = () => {
                 </div>
               )}
 
-              {/* Status da última notificação */}
+              {/* Status da Ãºltima notificaÃ§Ã£o */}
               {lastNotification && (
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span>Última notificação:</span>
+                    <span>Ãšltima notificaÃ§Ã£o:</span>
                     <div className="flex items-center space-x-2">
                       {lastNotification.emailSent && (
                         <span className="flex items-center space-x-1 text-green-600 dark:text-green-400">

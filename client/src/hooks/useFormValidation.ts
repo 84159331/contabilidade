@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import { ValidationError } from '../utils/errors';
 
 export interface ValidationRule {
@@ -35,7 +35,7 @@ export const useFormValidation = <T extends Record<string, any>>(
 
     // Required
     if (rule.required && (value === null || value === undefined || value === '')) {
-      return 'Este campo é obrigatório';
+      return 'Este campo Ã© obrigatÃ³rio';
     }
 
     // Skip other validations if value is empty and not required
@@ -43,40 +43,40 @@ export const useFormValidation = <T extends Record<string, any>>(
 
     // Min length
     if (rule.minLength && typeof value === 'string' && value.length < rule.minLength) {
-      return `Mínimo de ${rule.minLength} caracteres`;
+      return `MÃ­nimo de ${rule.minLength} caracteres`;
     }
 
     // Max length
     if (rule.maxLength && typeof value === 'string' && value.length > rule.maxLength) {
-      return `Máximo de ${rule.maxLength} caracteres`;
+      return `MÃ¡ximo de ${rule.maxLength} caracteres`;
     }
 
     // Pattern
     if (rule.pattern && typeof value === 'string' && !rule.pattern.test(value)) {
-      return 'Formato inválido';
+      return 'Formato invÃ¡lido';
     }
 
     // Email
     if (rule.email && typeof value === 'string') {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        return 'Email inválido';
+        return 'Email invÃ¡lido';
       }
     }
 
     // Number
     if (rule.number && isNaN(Number(value))) {
-      return 'Deve ser um número';
+      return 'Deve ser um nÃºmero';
     }
 
     // Min (for numbers)
     if (rule.min !== undefined && Number(value) < rule.min) {
-      return `Valor mínimo: ${rule.min}`;
+      return `Valor mÃ­nimo: ${rule.min}`;
     }
 
     // Max (for numbers)
     if (rule.max !== undefined && Number(value) > rule.max) {
-      return `Valor máximo: ${rule.max}`;
+      return `Valor mÃ¡ximo: ${rule.max}`;
     }
 
     // Custom validation

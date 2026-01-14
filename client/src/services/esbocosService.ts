@@ -1,4 +1,4 @@
-// Serviço para gerenciar esboços de pregação (mock em memória)
+﻿// ServiÃ§o para gerenciar esboÃ§os de pregaÃ§Ã£o (mock em memÃ³ria)
 
 export type TemaPrincipal =
   | 'FAMILIA'
@@ -100,7 +100,7 @@ export interface UpdateEsbocoStatusDTO {
   motivoReprovacao?: string;
 }
 
-// Mock simples em memória – com persistência em localStorage para compartilhar entre páginas/abas
+// Mock simples em memÃ³ria â€“ com persistÃªncia em localStorage para compartilhar entre pÃ¡ginas/abas
 const STORAGE_KEY = 'esbocosDatabase';
 
 const loadFromStorage = (): Esboco[] => {
@@ -121,7 +121,7 @@ const saveToStorage = (data: Esboco[]) => {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch {
-    // falha silenciosa para não quebrar a UX
+    // falha silenciosa para nÃ£o quebrar a UX
   }
 };
 

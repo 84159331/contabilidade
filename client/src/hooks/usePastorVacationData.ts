@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { pastorVacationAPI, VacationEvent } from '../services/pastorVacationAPI';
 
 export const usePastorVacationData = () => {
@@ -49,7 +49,7 @@ export const usePastorVacationData = () => {
 
   const deleteVacation = useCallback(async (id: string) => {
     try {
-      // Otimização: remoção otimista (não mostrar loading)
+      // OtimizaÃ§Ã£o: remoÃ§Ã£o otimista (nÃ£o mostrar loading)
       setVacations(prev => prev.filter(v => v.id !== id));
       await pastorVacationAPI.deleteVacation(id);
     } catch (err) {

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface ModalProps {
@@ -8,13 +8,13 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-// Componente seguro para o ícone de fechar
+// Componente seguro para o Ã­cone de fechar
 const SafeXMarkIcon: React.FC<{ className?: string }> = ({ className }) => {
   if (XMarkIcon && typeof XMarkIcon === 'function') {
     const Icon = XMarkIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>✕</span>;
+  return <span className={className}>âœ•</span>;
 };
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
@@ -22,12 +22,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 
   // Validar props
   if (!onClose || typeof onClose !== 'function') {
-    console.error('❌ Modal: onClose não é uma função válida');
+    console.error('âŒ Modal: onClose nÃ£o Ã© uma funÃ§Ã£o vÃ¡lida');
     return null;
   }
 
   if (!title || typeof title !== 'string') {
-    console.warn('⚠️ Modal: title não é uma string válida');
+    console.warn('âš ï¸ Modal: title nÃ£o Ã© uma string vÃ¡lida');
   }
 
   return (
@@ -51,5 +51,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-// Memoizar para evitar re-renders desnecessários
+// Memoizar para evitar re-renders desnecessÃ¡rios
 export default React.memo(Modal);

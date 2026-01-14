@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
@@ -48,9 +48,9 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       
       setData(formattedData);
       onDataLoaded(formattedData);
-      console.log('✅ Relatório mensal carregado:', formattedData);
+      console.log('âœ… RelatÃ³rio mensal carregado:', formattedData);
     } catch (error) {
-      console.error('❌ Erro ao carregar relatório mensal:', error);
+      console.error('âŒ Erro ao carregar relatÃ³rio mensal:', error);
       
       // Em caso de erro, usar dados vazios
       const emptyData: MonthlyBalance = {
@@ -62,7 +62,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       setData(emptyData);
       onDataLoaded(emptyData);
       
-      toast.error('Erro ao carregar relatório mensal. Tente novamente.');
+      toast.error('Erro ao carregar relatÃ³rio mensal. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Nenhum dado disponível para o período selecionado</p>
+        <p className="text-gray-500">Nenhum dado disponÃ­vel para o perÃ­odo selecionado</p>
       </div>
     );
   }
@@ -115,7 +115,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
         </div>
         <div>
           <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-1">
-            Mês
+            MÃªs
           </label>
           <select
             id="month"
@@ -156,7 +156,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.income?.count || 0} transações
+                {data.income?.count || 0} transaÃ§Ãµes
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
             </div>
             <div className="mt-1">
               <div className="text-sm text-gray-500">
-                {data.expense?.count || 0} transações
+                {data.expense?.count || 0} transaÃ§Ãµes
               </div>
             </div>
           </div>
@@ -233,7 +233,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
         <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
           <div className="text-center">
             <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-            <p className="text-gray-500">Gráfico em desenvolvimento</p>
+            <p className="text-gray-500">GrÃ¡fico em desenvolvimento</p>
           </div>
         </div>
       </div>

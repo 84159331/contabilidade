@@ -1,4 +1,4 @@
-// Utilitário para otimização de imagens
+﻿// UtilitÃ¡rio para otimizaÃ§Ã£o de imagens
 
 export interface ImageOptimizationOptions {
   width?: number;
@@ -8,20 +8,20 @@ export interface ImageOptimizationOptions {
 }
 
 /**
- * Gera URL otimizada para imagem (usando serviços como Cloudinary, Imgix, etc.)
+ * Gera URL otimizada para imagem (usando serviÃ§os como Cloudinary, Imgix, etc.)
  * Por enquanto, retorna a URL original, mas pode ser estendido
  */
 export const getOptimizedImageUrl = (
   originalUrl: string,
   options: ImageOptimizationOptions = {}
 ): string => {
-  // Se já é uma URL de dados ou SVG, retornar como está
+  // Se jÃ¡ Ã© uma URL de dados ou SVG, retornar como estÃ¡
   if (originalUrl.startsWith('data:') || originalUrl.endsWith('.svg')) {
     return originalUrl;
   }
 
   // Por enquanto, retornar URL original
-  // TODO: Integrar com serviço de otimização de imagens (Cloudinary, Imgix, etc.)
+  // TODO: Integrar com serviÃ§o de otimizaÃ§Ã£o de imagens (Cloudinary, Imgix, etc.)
   return originalUrl;
 };
 
@@ -38,7 +38,7 @@ export const preloadImage = (src: string): Promise<void> => {
 };
 
 /**
- * Preload de múltiplas imagens
+ * Preload de mÃºltiplas imagens
  */
 export const preloadImages = async (sources: string[]): Promise<void> => {
   await Promise.all(sources.map(src => preloadImage(src).catch(() => {
@@ -73,7 +73,7 @@ export const createLazyImageLoader = (
   return observer;
 };
 
-// Versão corrigida
+// VersÃ£o corrigida
 export const observeLazyImage = (
   element: HTMLImageElement,
   callback: () => void,

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+﻿import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './firebase/AuthContext';
@@ -15,10 +15,10 @@ import OfflineIndicator from './components/OfflineIndicator';
 import AppUpdateChecker from './components/AppUpdateChecker';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
-// HomePage carregada imediatamente (primeira página)
+// HomePage carregada imediatamente (primeira pÃ¡gina)
 import HomePage from './pages/public/HomePage';
 
-// Páginas públicas com lazy loading e retry (carregadas sob demanda)
+// PÃ¡ginas pÃºblicas com lazy loading e retry (carregadas sob demanda)
 const AboutPage = lazyWithRetry(() => import('./pages/public/AboutPage'));
 const ContactPage = lazyWithRetry(() => import('./pages/public/ContactPage'));
 const ConnectPage = lazyWithRetry(() => import('./pages/public/ConnectPage'));
@@ -37,25 +37,16 @@ const Logout = lazyWithRetry(() => import('./pages/Logout'));
 const LoginDebug = lazyWithRetry(() => import('./pages/LoginDebug'));
 
 function App() {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:34',message:'App render started',data:{hasErrorBoundary:!!ErrorBoundary,hasPageErrorFallback:!!PageErrorFallback,hasLoadingSpinner:!!LoadingSpinner,hasPublicLayout:!!PublicLayout,hasTesourariaApp:!!TesourariaApp,hasHomePage:!!HomePage},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-  // #endregion
-  // Validação apenas em desenvolvimento
+  // ValidaÃ§Ã£o apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!ErrorBoundary || !PageErrorFallback || !LoadingSpinner || !PublicLayout) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:38',message:'Critical component missing',data:{ErrorBoundary:!!ErrorBoundary,PageErrorFallback:!!PageErrorFallback,LoadingSpinner:!!LoadingSpinner,PublicLayout:!!PublicLayout},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
-      console.error('❌ Componente crítico não encontrado!');
-      return <div>Erro: Componente não encontrado</div>;
+      console.error('âŒ Componente crÃ­tico nÃ£o encontrado!');
+      return <div>Erro: Componente nÃ£o encontrado</div>;
     }
   }
 
-  // #region agent log
   const lazyComponents = {AboutPage,ContactPage,ConnectPage,WatchPage,GivePage,LocationsPage,BonsEstudosPage,BibliotecaPage,EsbocosPage,EsbocoDetalhePage,EventsPage,CadastroPublicoPage,AgradecimentoPage,Login,Logout,LoginDebug};
   const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:43',message:'Lazy components status',data:lazyComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-  // #endregion
   
   const handleRefresh = async () => {
     window.location.reload();
@@ -72,7 +63,7 @@ function App() {
                   <SwipeNavigation>
                     <Suspense fallback={
                       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                        <LoadingSpinner size="lg" text="Carregando página..." />
+                        <LoadingSpinner size="lg" text="Carregando pÃ¡gina..." />
                       </div>
                     }>
                     <Routes>

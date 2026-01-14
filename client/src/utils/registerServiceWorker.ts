@@ -1,4 +1,4 @@
-// Registro do Service Worker para cache de assets
+﻿// Registro do Service Worker para cache de assets
 
 export function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -8,19 +8,19 @@ export function registerServiceWorker() {
       navigator.serviceWorker
         .register(swUrl)
         .then((registration) => {
-          console.log('✅ Service Worker registrado com sucesso:', registration.scope);
+          console.log('âœ… Service Worker registrado com sucesso:', registration.scope);
 
-          // Verificar atualizações periodicamente
+          // Verificar atualizaÃ§Ãµes periodicamente
           registration.addEventListener('updatefound', () => {
             const installingWorker = registration.installing;
             if (installingWorker) {
               installingWorker.addEventListener('statechange', () => {
                 if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Nova versão disponível
-                  console.log('🔄 Nova versão do Service Worker disponível');
+                  // Nova versÃ£o disponÃ­vel
+                  console.log('ðŸ”„ Nova versÃ£o do Service Worker disponÃ­vel');
                   
-                  // Opcional: Mostrar notificação ao usuário
-                  if (window.confirm('Uma nova versão está disponível. Deseja atualizar?')) {
+                  // Opcional: Mostrar notificaÃ§Ã£o ao usuÃ¡rio
+                  if (window.confirm('Uma nova versÃ£o estÃ¡ disponÃ­vel. Deseja atualizar?')) {
                     installingWorker.postMessage({ type: 'SKIP_WAITING' });
                     window.location.reload();
                   }
@@ -30,10 +30,10 @@ export function registerServiceWorker() {
           });
         })
         .catch((error) => {
-          console.error('❌ Erro ao registrar Service Worker:', error);
+          console.error('âŒ Erro ao registrar Service Worker:', error);
         });
 
-      // Verificar se há atualizações disponíveis
+      // Verificar se hÃ¡ atualizaÃ§Ãµes disponÃ­veis
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         window.location.reload();
       });

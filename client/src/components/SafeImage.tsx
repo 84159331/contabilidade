@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 interface SafeImageProps {
   src: string;
@@ -15,7 +15,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
   src,
   alt,
   className = '',
-  fallbackText = 'Imagem não disponível',
+  fallbackText = 'Imagem nÃ£o disponÃ­vel',
   fallbackElement,
   onError,
   loading = 'lazy',
@@ -32,17 +32,17 @@ const SafeImage: React.FC<SafeImageProps> = ({
   const maxRetries = 2;
   const loadTimeout = 10000; // 10 segundos timeout
 
-  // Função para adicionar cache busting se necessário e tratar blob URLs
+  // FunÃ§Ã£o para adicionar cache busting se necessÃ¡rio e tratar blob URLs
   const getImageSrc = useCallback((imageSrc: string, retry: number = 0) => {
     if (!imageSrc) return '';
     
-    // Se for blob URL, retornar vazio (blob URLs não funcionam após reload)
+    // Se for blob URL, retornar vazio (blob URLs nÃ£o funcionam apÃ³s reload)
     if (imageSrc.startsWith('blob:')) {
-      console.warn('Blob URL detectada e ignorada (não funciona após reload):', imageSrc);
+      console.warn('Blob URL detectada e ignorada (nÃ£o funciona apÃ³s reload):', imageSrc);
       return '';
     }
     
-    // Se for URL absoluta ou data URL, retornar como está
+    // Se for URL absoluta ou data URL, retornar como estÃ¡
     if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://') || imageSrc.startsWith('data:')) {
       // Adicionar cache busting apenas em retry
       if (retry > 0) {
@@ -105,7 +105,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
       setIsLoading(true);
       setHasError(false);
       
-      // Forçar reload da imagem com cache busting
+      // ForÃ§ar reload da imagem com cache busting
       if (imgRef.current) {
         const newSrc = getImageSrc(src, retryCount + 1);
         imgRef.current.src = newSrc;
@@ -147,7 +147,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
     if (!shouldLoad || hasError) return;
 
     timeoutRef.current = setTimeout(() => {
-      // Verificar se a imagem ainda está carregando
+      // Verificar se a imagem ainda estÃ¡ carregando
       if (imgRef.current && !imgRef.current.complete) {
         console.warn(`Image load timeout: ${src}`);
         handleError();
@@ -162,7 +162,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
     };
   }, [shouldLoad, hasError, src, handleError, loadTimeout]);
 
-  // Preload para imagens prioritárias (deve estar antes dos early returns)
+  // Preload para imagens prioritÃ¡rias (deve estar antes dos early returns)
   useEffect(() => {
     if (priority && src && !hasError) {
       const link = document.createElement('link');

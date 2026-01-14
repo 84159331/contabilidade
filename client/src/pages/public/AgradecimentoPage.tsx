@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';
@@ -10,7 +10,7 @@ import {
   HeartIcon
 } from '@heroicons/react/24/outline';
 
-// Importação segura do framer-motion (após imports normais)
+// ImportaÃ§Ã£o segura do framer-motion (apÃ³s imports normais)
 let motion: any;
 try {
   const framerMotion = require('framer-motion');
@@ -19,9 +19,9 @@ try {
   motion = null;
 }
 
-// VALIDAÇÃO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicialização)
+// VALIDAÃ‡ÃƒO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicializaÃ§Ã£o)
 const FaYoutubeIcon: React.FC<{ className?: string }> = ({ className }) => {
-  // Tentar usar FaYoutube se disponível, senão usar SVG fallback
+  // Tentar usar FaYoutube se disponÃ­vel, senÃ£o usar SVG fallback
   if (FaYoutube && typeof FaYoutube !== 'undefined') {
     const Icon = FaYoutube as any;
     return <Icon className={className} />;
@@ -47,11 +47,11 @@ const AgradecimentoPage: React.FC = () => {
   try {
     memberName = (location.state as any)?.memberName || null;
   } catch (error) {
-    console.warn('⚠️ Erro ao ler state da navegação:', error);
+    console.warn('âš ï¸ Erro ao ler state da navegaÃ§Ã£o:', error);
     memberName = null;
   }
 
-  // Redirecionamento automático após 5 segundos (com opção de cancelar)
+  // Redirecionamento automÃ¡tico apÃ³s 5 segundos (com opÃ§Ã£o de cancelar)
   // IMPORTANTE: Hooks devem estar ANTES de qualquer early return
   useEffect(() => {
     if (showRedirect) {
@@ -73,15 +73,15 @@ const AgradecimentoPage: React.FC = () => {
   }, [showRedirect]);
 
   // ============================================
-  // CRIAÇÃO DE COMPONENTES COM FALLBACKS SEGUROS
+  // CRIAÃ‡ÃƒO DE COMPONENTES COM FALLBACKS SEGUROS
   // ============================================
   // Criar aliases seguros para motion components com fallback
-  // Sempre garantir que há um componente válido, mesmo se motion estiver undefined
-  // IMPORTANTE: Ignorar props de animação (initial, animate, transition) nos fallbacks
+  // Sempre garantir que hÃ¡ um componente vÃ¡lido, mesmo se motion estiver undefined
+  // IMPORTANTE: Ignorar props de animaÃ§Ã£o (initial, animate, transition) nos fallbacks
   
-  // Fallback padrão que sempre funciona - usando React.forwardRef para compatibilidade
+  // Fallback padrÃ£o que sempre funciona - usando React.forwardRef para compatibilidade
   const FallbackDiv = React.forwardRef<HTMLDivElement, any>(({ children, className, ...props }, ref) => {
-    // Remover props de animação que podem causar erro
+    // Remover props de animaÃ§Ã£o que podem causar erro
     const { initial, animate, transition, ...restProps } = props;
     return <div ref={ref} className={className} {...restProps}>{children}</div>;
   });
@@ -99,25 +99,19 @@ const AgradecimentoPage: React.FC = () => {
   });
   FallbackP.displayName = 'FallbackP';
   
-  // Tentar usar motion se disponível, senão usar fallbacks
-  // IMPORTANTE: Sempre garantir que os componentes tenham um valor válido
+  // Tentar usar motion se disponÃ­vel, senÃ£o usar fallbacks
+  // IMPORTANTE: Sempre garantir que os componentes tenham um valor vÃ¡lido
   let MotionDiv: React.ComponentType<any> = FallbackDiv;
   let MotionH1: React.ComponentType<any> = FallbackH1;
   let MotionP: React.ComponentType<any> = FallbackP;
   
   try {
-    // Verificar se motion está disponível e tem as propriedades necessárias
+    // Verificar se motion estÃ¡ disponÃ­vel e tem as propriedades necessÃ¡rias
     if (motion && typeof motion === 'object' && motion !== null) {
       const motionAny = motion as any;
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:100',message:'Checking motion components',data:{hasMotion:!!motion,hasMotionDiv:!!motionAny.div,hasMotionH1:!!motionAny.h1,hasMotionP:!!motionAny.p,motionDivType:typeof motionAny.div,motionH1Type:typeof motionAny.h1,motionPType:typeof motionAny.p},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
-      // #endregion
       if (motionAny.div && typeof motionAny.div === 'function' && motionAny.div !== undefined && motionAny.div !== null) {
         MotionDiv = motionAny.div;
       } else {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:107',message:'motion.div is invalid, using fallback',data:{motionDivValue:motionAny.div,motionDivType:typeof motionAny.div},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
-        // #endregion
         MotionDiv = FallbackDiv;
       }
       if (motionAny.h1 && typeof motionAny.h1 === 'function' && motionAny.h1 !== undefined && motionAny.h1 !== null) {
@@ -131,31 +125,22 @@ const AgradecimentoPage: React.FC = () => {
         MotionP = FallbackP;
       }
     } else {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:120',message:'motion is not available, using fallbacks',data:{motionType:typeof motion,motionValue:motion},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
-      // #endregion
       MotionDiv = FallbackDiv;
       MotionH1 = FallbackH1;
       MotionP = FallbackP;
     }
   } catch (error) {
-    // Se houver erro, usar fallbacks (já definidos acima)
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:127',message:'Error initializing motion, using fallbacks',data:{error:error instanceof Error?error.message:String(error)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
-    // #endregion
+    // Se houver erro, usar fallbacks (jÃ¡ definidos acima)
     if (process.env.NODE_ENV === 'development') {
-      console.warn('⚠️ Erro ao inicializar motion components, usando fallbacks HTML:', error);
+      console.warn('âš ï¸ Erro ao inicializar motion components, usando fallbacks HTML:', error);
     }
     MotionDiv = FallbackDiv;
     MotionH1 = FallbackH1;
     MotionP = FallbackP;
   }
   
-  // VALIDAÇÃO FINAL: Garantir que os componentes não estão undefined
+  // VALIDAÃ‡ÃƒO FINAL: Garantir que os componentes nÃ£o estÃ£o undefined
   if (!MotionDiv || typeof MotionDiv !== 'function' || MotionDiv === undefined || MotionDiv === null) {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'AgradecimentoPage.tsx:137',message:'MotionDiv validation failed, using fallback',data:{MotionDivType:typeof MotionDiv,MotionDivValue:MotionDiv},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'J'})}).catch(()=>{});
-    // #endregion
     MotionDiv = FallbackDiv;
   }
   if (!MotionH1 || typeof MotionH1 !== 'function' || MotionH1 === undefined || MotionH1 === null) {
@@ -165,7 +150,7 @@ const AgradecimentoPage: React.FC = () => {
     MotionP = FallbackP;
   }
   
-  // VALIDAÇÃO EXTRA: Garantir que os fallbacks também estão definidos
+  // VALIDAÃ‡ÃƒO EXTRA: Garantir que os fallbacks tambÃ©m estÃ£o definidos
   if (!FallbackDiv || typeof FallbackDiv !== 'function') {
     MotionDiv = ({ children, className, ...props }: any) => <div className={className} {...props}>{children}</div>;
   }
@@ -185,22 +170,22 @@ const AgradecimentoPage: React.FC = () => {
     window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
   };
 
-  // VALIDAÇÃO FINAL DOS COMPONENTES ANTES DO RENDER
-  // Garantir que todos os componentes críticos estão definidos
+  // VALIDAÃ‡ÃƒO FINAL DOS COMPONENTES ANTES DO RENDER
+  // Garantir que todos os componentes crÃ­ticos estÃ£o definidos
   if (!SEOHead || typeof SEOHead !== 'function') {
-    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
+    return <div>Erro ao carregar pÃ¡gina. Por favor, recarregue.</div>;
   }
   
   if (!SafeImage || typeof SafeImage !== 'function') {
-    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
+    return <div>Erro ao carregar pÃ¡gina. Por favor, recarregue.</div>;
   }
 
   return (
     <div>
       <SEOHead
-        title="Obrigado por se Cadastrar - Comunidade Cristã Resgate"
-        description="Agradecemos seu cadastro! Seja bem-vindo à Comunidade Cristã Resgate."
-        keywords="agradecimento, cadastro, comunidade cristã resgate"
+        title="Obrigado por se Cadastrar - Comunidade CristÃ£ Resgate"
+        description="Agradecemos seu cadastro! Seja bem-vindo Ã  Comunidade CristÃ£ Resgate."
+        keywords="agradecimento, cadastro, comunidade cristÃ£ resgate"
         url="/cadastro/obrigado"
       />
 
@@ -241,9 +226,9 @@ const AgradecimentoPage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {memberName ? (
-              <>Bem-vindo, <strong>{memberName}</strong>! Estamos felizes em tê-lo conosco.</>
+              <>Bem-vindo, <strong>{memberName}</strong>! Estamos felizes em tÃª-lo conosco.</>
             ) : (
-              <>Bem-vindo à nossa família! Estamos felizes em tê-lo conosco.</>
+              <>Bem-vindo Ã  nossa famÃ­lia! Estamos felizes em tÃª-lo conosco.</>
             )}
           </MotionP>
         </MotionDiv>
@@ -265,7 +250,7 @@ const AgradecimentoPage: React.FC = () => {
                     <HeartIcon className="h-12 w-12 text-green-600 dark:text-green-400" />
                   </div>
                   <h2 className="text-3xl font-bold font-heading dark:text-white mb-4">
-                    Cadastro Realizado com Sucesso! 🎉
+                    Cadastro Realizado com Sucesso! ðŸŽ‰
                   </h2>
                   <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
                     Seus dados foram registrados automaticamente em nosso sistema.
@@ -282,16 +267,16 @@ const AgradecimentoPage: React.FC = () => {
                       </h3>
                       <ul className="space-y-2 text-blue-800 dark:text-blue-300 text-sm">
                         <li className="flex items-start">
-                          <span className="mr-2">✓</span>
-                          <span>Você receberá um contato da nossa equipe em breve para dar as boas-vindas</span>
+                          <span className="mr-2">âœ“</span>
+                          <span>VocÃª receberÃ¡ um contato da nossa equipe em breve para dar as boas-vindas</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="mr-2">✓</span>
-                          <span>Seus dados estão seguros e protegidos em nosso sistema</span>
+                          <span className="mr-2">âœ“</span>
+                          <span>Seus dados estÃ£o seguros e protegidos em nosso sistema</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="mr-2">✓</span>
-                          <span>Você já faz parte da nossa família e comunidade</span>
+                          <span className="mr-2">âœ“</span>
+                          <span>VocÃª jÃ¡ faz parte da nossa famÃ­lia e comunidade</span>
                         </li>
                       </ul>
                     </div>
@@ -310,7 +295,7 @@ const AgradecimentoPage: React.FC = () => {
                           Inscreva-se no nosso Canal do YouTube
                         </h3>
                         <p className="text-red-800 dark:text-red-300 text-sm">
-                          Acompanhe nossas mensagens, cultos e estudos bíblicos
+                          Acompanhe nossas mensagens, cultos e estudos bÃ­blicos
                         </p>
                       </div>
                     </div>
@@ -323,7 +308,7 @@ const AgradecimentoPage: React.FC = () => {
                     </button>
                   </div>
                   
-                  {/* Countdown para redirecionamento automático */}
+                  {/* Countdown para redirecionamento automÃ¡tico */}
                   {showRedirect && countdown !== null && countdown > 0 && (
                     <MotionDiv
                       initial={{ opacity: 0, y: 10 }}
@@ -350,27 +335,27 @@ const AgradecimentoPage: React.FC = () => {
                       try {
                         navigate('/');
                       } catch (error) {
-                        console.error('❌ Erro ao navegar:', error);
+                        console.error('âŒ Erro ao navegar:', error);
                         window.location.href = '/';
                       }
                     }}
                     className="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
                   >
                     <HomeIcon className="h-5 w-5 mr-2" />
-                    Voltar ao Início
+                    Voltar ao InÃ­cio
                   </button>
                   <button
                     onClick={() => {
                       try {
                         navigate('/sobre');
                       } catch (error) {
-                        console.error('❌ Erro ao navegar:', error);
+                        console.error('âŒ Erro ao navegar:', error);
                         window.location.href = '/sobre';
                       }
                     }}
                     className="flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-lg font-semibold transition-all transform hover:scale-105 hover:bg-blue-50 dark:hover:bg-gray-600"
                   >
-                    Conhecer Mais Sobre Nós
+                    Conhecer Mais Sobre NÃ³s
                   </button>
                 </div>
               </div>
@@ -380,14 +365,14 @@ const AgradecimentoPage: React.FC = () => {
                 <div className="text-center">
                   <SafeImage 
                     src="/img/ICONE-RESGATE.png" 
-                    alt="Comunidade Cristã Resgate" 
+                    alt="Comunidade CristÃ£ Resgate" 
                     className="mx-auto h-16 w-16 mb-4 opacity-90"
                   />
                   <h3 className="text-xl font-bold dark:text-white mb-2">
-                    Comunidade Cristã Resgate
+                    Comunidade CristÃ£ Resgate
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    Estamos aqui para caminhar juntos nesta jornada de fé e crescimento espiritual.
+                    Estamos aqui para caminhar juntos nesta jornada de fÃ© e crescimento espiritual.
                   </p>
                 </div>
               </div>

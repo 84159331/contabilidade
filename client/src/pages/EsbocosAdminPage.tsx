@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   CreateEsbocoDTO,
@@ -29,13 +29,13 @@ const statusLabels: Record<StatusEsboco, string> = {
 };
 
 const temas: { value: TemaPrincipal; label: string }[] = [
-  { value: 'FAMILIA', label: 'Família' },
-  { value: 'FE', label: 'Fé' },
+  { value: 'FAMILIA', label: 'FamÃ­lia' },
+  { value: 'FE', label: 'FÃ©' },
   { value: 'SANTIDADE', label: 'Santidade' },
   { value: 'AVIVAMENTO', label: 'Avivamento' },
   { value: 'CURAS', label: 'Curas' },
   { value: 'JOVENS', label: 'Jovens' },
-  { value: 'MISSOES', label: 'Missões' },
+  { value: 'MISSOES', label: 'MissÃµes' },
   { value: 'OUTRO', label: 'Outros temas' },
 ];
 
@@ -98,7 +98,7 @@ const EsbocosAdminPage: React.FC = () => {
       setErro(null);
     } catch (e) {
       console.error(e);
-      setErro('Não foi possível carregar os esboços.');
+      setErro('NÃ£o foi possÃ­vel carregar os esboÃ§os.');
     } finally {
       setLoading(false);
     }
@@ -115,14 +115,14 @@ const EsbocosAdminPage: React.FC = () => {
       await carregarEsbocos();
     } catch (e) {
       console.error(e);
-      setErro('Não foi possível atualizar o status do esboço.');
+      setErro('NÃ£o foi possÃ­vel atualizar o status do esboÃ§o.');
     } finally {
       setAtualizandoId(null);
     }
   };
 
   const removerEsboco = async (id: number) => {
-    const confirmar = window.confirm('Tem certeza que deseja remover este esboço definitivamente?');
+    const confirmar = window.confirm('Tem certeza que deseja remover este esboÃ§o definitivamente?');
     if (!confirmar) return;
 
     try {
@@ -131,7 +131,7 @@ const EsbocosAdminPage: React.FC = () => {
       await carregarEsbocos();
     } catch (e) {
       console.error(e);
-      setErro('Não foi possível remover o esboço.');
+      setErro('NÃ£o foi possÃ­vel remover o esboÃ§o.');
     } finally {
       setAtualizandoId(null);
     }
@@ -163,10 +163,10 @@ const EsbocosAdminPage: React.FC = () => {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Gerenciamento de Esboços
+                Gerenciamento de EsboÃ§os
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Gerencie os esboços de pregação da igreja
+                Gerencie os esboÃ§os de pregaÃ§Ã£o da igreja
               </p>
             </div>
             <button
@@ -174,14 +174,14 @@ const EsbocosAdminPage: React.FC = () => {
               className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              {mostrarForm ? 'Cancelar' : 'Novo Esboço'}
+              {mostrarForm ? 'Cancelar' : 'Novo EsboÃ§o'}
             </button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Formulário de criação */}
+        {/* FormulÃ¡rio de criaÃ§Ã£o */}
         {mostrarForm && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -189,7 +189,7 @@ const EsbocosAdminPage: React.FC = () => {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8"
           >
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              Novo esboço de pregação
+              Novo esboÃ§o de pregaÃ§Ã£o
             </h2>
 
             {mensagemCriacao && (
@@ -206,19 +206,19 @@ const EsbocosAdminPage: React.FC = () => {
                 setMensagemCriacao(null);
 
                 if (!form.titulo.trim() || !form.textoBiblicoBase.trim() || !form.autorNome.trim()) {
-                  setErro('Preencha pelo menos o título, o texto bíblico base e o nome do autor.');
+                  setErro('Preencha pelo menos o tÃ­tulo, o texto bÃ­blico base e o nome do autor.');
                   return;
                 }
 
                 if (!form.estrutura.introducao.trim()) {
-                  setErro('Preencha pelo menos a introdução do esboço.');
+                  setErro('Preencha pelo menos a introduÃ§Ã£o do esboÃ§o.');
                   return;
                 }
 
                 try {
                   setCriando(true);
                   await esbocosService.criarEsboco(form);
-                  setMensagemCriacao('Esboço criado com sucesso! Agora você pode gerenciá-lo na lista abaixo.');
+                  setMensagemCriacao('EsboÃ§o criado com sucesso! Agora vocÃª pode gerenciÃ¡-lo na lista abaixo.');
                   setForm({
                     titulo: '',
                     temaPrincipal: 'OUTRO',
@@ -244,7 +244,7 @@ const EsbocosAdminPage: React.FC = () => {
                   await carregarEsbocos();
                 } catch (e) {
                   console.error(e);
-                  setErro('Não foi possível criar o esboço. Tente novamente mais tarde.');
+                  setErro('NÃ£o foi possÃ­vel criar o esboÃ§o. Tente novamente mais tarde.');
                 } finally {
                   setCriando(false);
                 }
@@ -253,7 +253,7 @@ const EsbocosAdminPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Título *
+                    TÃ­tulo *
                   </label>
                   <input
                     type="text"
@@ -285,14 +285,14 @@ const EsbocosAdminPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Texto bíblico base *
+                    Texto bÃ­blico base *
                   </label>
                   <input
                     type="text"
                     value={form.textoBiblicoBase}
                     onChange={(e) => handleChange('textoBiblicoBase', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="Ex: João 3:16"
+                    placeholder="Ex: JoÃ£o 3:16"
                   />
                 </div>
                 <div>
@@ -310,7 +310,7 @@ const EsbocosAdminPage: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Introdução *
+                  IntroduÃ§Ã£o *
                 </label>
                 <textarea
                   value={form.estrutura.introducao}
@@ -324,7 +324,7 @@ const EsbocosAdminPage: React.FC = () => {
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                   <div key={num}>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Tópico {num}
+                      TÃ³pico {num}
                     </label>
                     <textarea
                       value={form.estrutura[`topico${num}` as keyof EstruturaEsboco] || ''}
@@ -341,7 +341,7 @@ const EsbocosAdminPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Conclusão
+                    ConclusÃ£o
                   </label>
                   <textarea
                     value={form.estrutura.conclusao || ''}
@@ -382,7 +382,7 @@ const EsbocosAdminPage: React.FC = () => {
                       <span className="ml-2">Salvando...</span>
                     </>
                   ) : (
-                    'Salvar Esboço'
+                    'Salvar EsboÃ§o'
                   )}
                 </button>
               </div>
@@ -404,7 +404,7 @@ const EsbocosAdminPage: React.FC = () => {
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Buscar por título, autor ou texto bíblico..."
+                  placeholder="Buscar por tÃ­tulo, autor ou texto bÃ­blico..."
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -441,13 +441,13 @@ const EsbocosAdminPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Estatísticas */}
+        {/* EstatÃ­sticas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
             <div className="flex items-center">
               <DocumentTextIcon className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Esboços</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total de EsboÃ§os</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{esbocos.length}</p>
               </div>
             </div>
@@ -472,7 +472,7 @@ const EsbocosAdminPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid de Esboços */}
+        {/* Grid de EsboÃ§os */}
         {loading ? (
           <div className="flex justify-center py-12">
             <LoadingSpinner />
@@ -481,11 +481,11 @@ const EsbocosAdminPage: React.FC = () => {
           <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
             <DocumentTextIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {esbocos.length === 0 ? 'Nenhum esboço cadastrado' : 'Nenhum esboço encontrado'}
+              {esbocos.length === 0 ? 'Nenhum esboÃ§o cadastrado' : 'Nenhum esboÃ§o encontrado'}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {esbocos.length === 0
-                ? 'Comece adicionando esboços de pregação'
+                ? 'Comece adicionando esboÃ§os de pregaÃ§Ã£o'
                 : 'Tente ajustar os filtros ou termo de busca'}
             </p>
             {esbocos.length === 0 && (
@@ -494,7 +494,7 @@ const EsbocosAdminPage: React.FC = () => {
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
-                Adicionar Primeiro Esboço
+                Adicionar Primeiro EsboÃ§o
               </button>
             )}
           </div>

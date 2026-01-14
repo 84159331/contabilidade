@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -36,16 +36,16 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     eventsAPI.migrateEventsImages();
     loadEvents();
     
-    // Listener para mudanças nos eventos (sincronização)
+    // Listener para mudanÃ§as nos eventos (sincronizaÃ§Ã£o)
     const handleStorageChange = () => {
-      console.log('🔄 Eventos atualizados, recarregando...');
+      console.log('ðŸ”„ Eventos atualizados, recarregando...');
       loadEvents();
     };
     
-    // Listener para mudanças no armazenamento local
+    // Listener para mudanÃ§as no armazenamento local
     const handleLocalStorageChange = (e: StorageEvent) => {
       if (e.key === 'cachedEvents') {
-        console.log('🔄 Cache de eventos atualizado, recarregando...');
+        console.log('ðŸ”„ Cache de eventos atualizado, recarregando...');
         loadEvents();
       }
     };
@@ -62,30 +62,30 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Carregando eventos para página inicial...');
+      console.log('ðŸ”„ Carregando eventos para pÃ¡gina inicial...');
       
       // Tentar carregar eventos da API real primeiro
       try {
         const eventsData = await eventsAPI.getEvents();
-        console.log('📊 Dados recebidos da API:', eventsData);
+        console.log('ðŸ“Š Dados recebidos da API:', eventsData);
         
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
           // Salvar no cache local
           storage.setJSON('cachedEvents', eventsData);
-          console.log('✅ Eventos carregados da API:', eventsData.length);
+          console.log('âœ… Eventos carregados da API:', eventsData.length);
         } else {
-          console.log('⚠️ Nenhum evento encontrado na API, verificando cache local');
+          console.log('âš ï¸ Nenhum evento encontrado na API, verificando cache local');
           loadFromCache();
         }
       } catch (apiError) {
-        console.log('⚠️ Erro na API, verificando cache local:', apiError);
+        console.log('âš ï¸ Erro na API, verificando cache local:', apiError);
         loadFromCache();
       }
       
       setLoading(false);
     } catch (error) {
-      console.error('❌ Erro ao carregar eventos:', error);
+      console.error('âŒ Erro ao carregar eventos:', error);
       setLoading(false);
     }
   };
@@ -94,20 +94,20 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     try {
       const cachedEvents = storage.getJSON<Event[]>('cachedEvents');
       if (cachedEvents && Array.isArray(cachedEvents) && cachedEvents.length > 0) {
-        console.log('🔍 Eventos do cache:', cachedEvents);
-        console.log('🔍 Primeiro evento:', cachedEvents[0]);
+        console.log('ðŸ” Eventos do cache:', cachedEvents);
+        console.log('ðŸ” Primeiro evento:', cachedEvents[0]);
         if (cachedEvents[0] && cachedEvents[0].image) {
-          console.log('🔍 Imagem do primeiro evento:', cachedEvents[0].image.substring(0, 50) + '...');
-          console.log('🔍 É base64?', cachedEvents[0].image.startsWith('data:'));
+          console.log('ðŸ” Imagem do primeiro evento:', cachedEvents[0].image.substring(0, 50) + '...');
+          console.log('ðŸ” Ã‰ base64?', cachedEvents[0].image.startsWith('data:'));
         }
         setEvents(cachedEvents);
-        console.log('✅ Eventos carregados do cache:', cachedEvents.length);
+        console.log('âœ… Eventos carregados do cache:', cachedEvents.length);
       } else {
-        // Se não há cache, criar um evento de teste para debug
+        // Se nÃ£o hÃ¡ cache, criar um evento de teste para debug
         const testEvent = {
           id: 'test-1',
           title: 'Evento de Teste',
-          description: 'Este é um evento de teste para verificar se o sistema está funcionando',
+          description: 'Este Ã© um evento de teste para verificar se o sistema estÃ¡ funcionando',
           date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 dias no futuro
           time: '19:00',
           location: 'Igreja Comunidade Resgate',
@@ -121,19 +121,19 @@ const EventsSection: React.FC<EventsSectionProps> = ({
           updated_at: new Date().toISOString()
         };
         setEvents([testEvent]);
-        console.log('⚠️ Nenhum evento no cache, criando evento de teste');
+        console.log('âš ï¸ Nenhum evento no cache, criando evento de teste');
       }
     } catch (error) {
-      console.error('❌ Erro ao carregar do cache:', error);
+      console.error('âŒ Erro ao carregar do cache:', error);
       setEvents([]);
     }
   };
 
 
   const formatDate = (dateString: string) => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // month é 0-indexed
+    const date = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -147,14 +147,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const isUpcoming = (dateString: string) => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = dateString.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    console.log('📅 Comparando datas:', {
+    console.log('ðŸ“… Comparando datas:', {
       eventDate: eventDate.toLocaleDateString('pt-BR'),
       today: today.toLocaleDateString('pt-BR'),
       isUpcoming: eventDate >= today
@@ -173,17 +173,17 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const handleDeleteEvent = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este evento?')) {
       try {
-        // Se for admin, chamar a função de exclusão passada como prop
+        // Se for admin, chamar a funÃ§Ã£o de exclusÃ£o passada como prop
         if (isAdmin && onDelete) {
           onDelete(id);
         } else {
-          // Para usuários normais, apenas remover da lista local
+          // Para usuÃ¡rios normais, apenas remover da lista local
           setEvents(prev => prev.filter(event => event.id !== id));
-          toast.success('Evento removido da visualização!');
+          toast.success('Evento removido da visualizaÃ§Ã£o!');
         }
-        console.log('✅ Evento excluído:', id);
+        console.log('âœ… Evento excluÃ­do:', id);
       } catch (error) {
-        console.error('❌ Erro ao excluir evento:', error);
+        console.error('âŒ Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
       }
     }
@@ -209,14 +209,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
-            Próximos Eventos
+            PrÃ³ximos Eventos
           </h2>
           <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
-            Participe dos nossos eventos e fortaleça sua fé junto conosco
+            Participe dos nossos eventos e fortaleÃ§a sua fÃ© junto conosco
           </p>
           {/* Debug info */}
           <div className="mt-2 text-xs text-gray-400">
-            {events.length} eventos carregados | {filteredEvents.length} próximos
+            {events.length} eventos carregados | {filteredEvents.length} prÃ³ximos
           </div>
         </div>
 
@@ -228,11 +228,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
               Nenhum evento encontrado
             </h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Não há eventos próximos no momento.
+              NÃ£o hÃ¡ eventos prÃ³ximos no momento.
             </p>
             {isAdmin && (
               <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
-                Crie eventos na seção de administração para vê-los aqui.
+                Crie eventos na seÃ§Ã£o de administraÃ§Ã£o para vÃª-los aqui.
               </p>
             )}
           </div>
@@ -256,14 +256,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                   </div>
                 )}
 
-                {/* Conteúdo */}
+                {/* ConteÃºdo */}
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {event.title}
                   </h3>
                   {isUpcoming(event.date) && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                      Próximo
+                      PrÃ³ximo
                     </span>
                   )}
                 </div>
@@ -274,7 +274,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                   </p>
                 )}
 
-                {/* Informações do Evento */}
+                {/* InformaÃ§Ãµes do Evento */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <CalendarIcon className="h-4 w-4 mr-2" />
@@ -314,7 +314,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                   </div>
                 )}
 
-                {/* Ações para Admin */}
+                {/* AÃ§Ãµes para Admin */}
                 {isAdmin && (
                   <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-600">
                     {onShare && (

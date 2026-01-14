@@ -1,4 +1,4 @@
-// Sistema de sincronização offline
+﻿// Sistema de sincronizaÃ§Ã£o offline
 
 import { offlineQueue, QueuedAction } from './offlineQueue';
 import { membersAPI, transactionsAPI, categoriesAPI } from '../services/api';
@@ -8,22 +8,22 @@ class OfflineSync {
   private syncListeners: Array<() => void> = [];
 
   constructor() {
-    // Escutar eventos de conexão
+    // Escutar eventos de conexÃ£o
     window.addEventListener('online', () => {
-      console.log('🌐 Conexão restaurada, iniciando sincronização...');
+      console.log('ðŸŒ ConexÃ£o restaurada, iniciando sincronizaÃ§Ã£o...');
       this.sync();
     });
 
     // Tentar sincronizar ao iniciar se estiver online
     if (navigator.onLine) {
-      // Aguardar um pouco para garantir que tudo está carregado
+      // Aguardar um pouco para garantir que tudo estÃ¡ carregado
       setTimeout(() => {
         this.sync();
       }, 2000);
     }
   }
 
-  // Adicionar listener para quando sincronização completar
+  // Adicionar listener para quando sincronizaÃ§Ã£o completar
   onSyncComplete(callback: () => void) {
     this.syncListeners.push(callback);
   }
@@ -38,15 +38,15 @@ class OfflineSync {
     this.syncListeners.forEach(callback => callback());
   }
 
-  // Sincronizar ações pendentes
+  // Sincronizar aÃ§Ãµes pendentes
   async sync(): Promise<void> {
     if (this.isProcessing) {
-      console.log('⏳ Sincronização já em andamento...');
+      console.log('â³ SincronizaÃ§Ã£o jÃ¡ em andamento...');
       return;
     }
 
     if (!navigator.onLine) {
-      console.log('📴 Sem conexão, não é possível sincronizar');
+      console.log('ðŸ“´ Sem conexÃ£o, nÃ£o Ã© possÃ­vel sincronizar');
       return;
     }
 
@@ -54,7 +54,7 @@ class OfflineSync {
 
     try {
       await offlineQueue.process(async (action) => {
-        console.log(`🔄 Processando ação: ${action.type} em ${action.collection}`, action.data);
+        console.log(`ðŸ”„ Processando aÃ§Ã£o: ${action.type} em ${action.collection}`, action.data);
 
         switch (action.collection) {
           case 'members':
@@ -67,19 +67,19 @@ class OfflineSync {
             await this.syncCategoryAction(action);
             break;
           default:
-            console.warn(`⚠️ Tipo de coleção não suportado: ${action.collection}`);
+            console.warn(`âš ï¸ Tipo de coleÃ§Ã£o nÃ£o suportado: ${action.collection}`);
         }
       });
 
       this.notifySyncComplete();
     } catch (error) {
-      console.error('❌ Erro durante sincronização:', error);
+      console.error('âŒ Erro durante sincronizaÃ§Ã£o:', error);
     } finally {
       this.isProcessing = false;
     }
   }
 
-  // Sincronizar ação de membro
+  // Sincronizar aÃ§Ã£o de membro
   private async syncMemberAction(action: QueuedAction): Promise<void> {
     switch (action.type) {
       case 'create':
@@ -94,7 +94,7 @@ class OfflineSync {
     }
   }
 
-  // Sincronizar ação de transação
+  // Sincronizar aÃ§Ã£o de transaÃ§Ã£o
   private async syncTransactionAction(action: QueuedAction): Promise<void> {
     switch (action.type) {
       case 'create':
@@ -109,7 +109,7 @@ class OfflineSync {
     }
   }
 
-  // Sincronizar ação de categoria
+  // Sincronizar aÃ§Ã£o de categoria
   private async syncCategoryAction(action: QueuedAction): Promise<void> {
     switch (action.type) {
       case 'create':
@@ -124,16 +124,16 @@ class OfflineSync {
     }
   }
 
-  // Verificar se há ações pendentes
+  // Verificar se hÃ¡ aÃ§Ãµes pendentes
   hasPendingActions(): boolean {
     return offlineQueue.getAll().length > 0;
   }
 
-  // Obter número de ações pendentes
+  // Obter nÃºmero de aÃ§Ãµes pendentes
   getPendingCount(): number {
     return offlineQueue.getAll().length;
   }
 }
 
-// Instância singleton
+// InstÃ¢ncia singleton
 export const offlineSync = new OfflineSync();

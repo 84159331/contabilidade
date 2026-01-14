@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, XMarkIcon, DocumentTextIcon, CalendarIcon, BookOpenIcon, VideoCameraIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,16 +23,16 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Mock data - em produção, isso viria de uma API ou busca no conteúdo
+  // Mock data - em produÃ§Ã£o, isso viria de uma API ou busca no conteÃºdo
   const searchableContent: SearchResult[] = [
-    { id: '1', title: 'Sobre Nós', description: 'Conheça nossa história, missão e valores', type: 'page', url: '/sobre', icon: DocumentTextIcon },
-    { id: '2', title: 'Conecte-se', description: 'Encontre uma célula e faça parte da nossa família', type: 'page', url: '/conecte', icon: MapPinIcon },
-    { id: '3', title: 'Assista', description: 'Vídeos de cultos e mensagens', type: 'video', url: '/assista', icon: VideoCameraIcon },
-    { id: '4', title: 'Contribua', description: 'Apoie nossa missão e ministérios', type: 'page', url: '/contribua', icon: DocumentTextIcon },
-    { id: '5', title: 'Localização', description: 'Encontre nossa igreja', type: 'page', url: '/localizacoes', icon: MapPinIcon },
-    { id: '6', title: 'Esboços', description: 'Esboços de pregação e estudos', type: 'esboco', url: '/esbocos', icon: BookOpenIcon },
+    { id: '1', title: 'Sobre NÃ³s', description: 'ConheÃ§a nossa histÃ³ria, missÃ£o e valores', type: 'page', url: '/sobre', icon: DocumentTextIcon },
+    { id: '2', title: 'Conecte-se', description: 'Encontre uma cÃ©lula e faÃ§a parte da nossa famÃ­lia', type: 'page', url: '/conecte', icon: MapPinIcon },
+    { id: '3', title: 'Assista', description: 'VÃ­deos de cultos e mensagens', type: 'video', url: '/assista', icon: VideoCameraIcon },
+    { id: '4', title: 'Contribua', description: 'Apoie nossa missÃ£o e ministÃ©rios', type: 'page', url: '/contribua', icon: DocumentTextIcon },
+    { id: '5', title: 'LocalizaÃ§Ã£o', description: 'Encontre nossa igreja', type: 'page', url: '/localizacoes', icon: MapPinIcon },
+    { id: '6', title: 'EsboÃ§os', description: 'EsboÃ§os de pregaÃ§Ã£o e estudos', type: 'esboco', url: '/esbocos', icon: BookOpenIcon },
     { id: '7', title: 'Biblioteca Digital', description: 'Livros e recursos espirituais', type: 'book', url: '/biblioteca', icon: BookOpenIcon },
-    { id: '8', title: 'Eventos', description: 'Próximos eventos e atividades', type: 'event', url: '/eventos', icon: CalendarIcon },
+    { id: '8', title: 'Eventos', description: 'PrÃ³ximos eventos e atividades', type: 'event', url: '/eventos', icon: CalendarIcon },
   ];
 
   useEffect(() => {
@@ -80,13 +80,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
 
   const getTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      page: 'Página',
+      page: 'PÃ¡gina',
       event: 'Evento',
       book: 'Livro',
-      esboco: 'Esboço',
-      video: 'Vídeo'
+      esboco: 'EsboÃ§o',
+      video: 'VÃ­deo'
     };
-    return labels[type] || 'Conteúdo';
+    return labels[type] || 'ConteÃºdo';
   };
 
     return (
@@ -120,7 +120,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Buscar páginas, eventos, livros, esboços..."
+                      placeholder="Buscar pÃ¡ginas, eventos, livros, esboÃ§os..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>

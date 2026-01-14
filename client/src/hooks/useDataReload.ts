@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../firebase/AuthContext';
 
 /**
- * Hook que força recarregamento de dados quando:
+ * Hook que forÃ§a recarregamento de dados quando:
  * - A rota muda
- * - O usuário autentica
- * - A página ganha foco após estar inativa
+ * - O usuÃ¡rio autentica
+ * - A pÃ¡gina ganha foco apÃ³s estar inativa
  */
 export const useDataReload = (reloadCallback: () => void) => {
   const location = useLocation();
@@ -16,7 +16,7 @@ export const useDataReload = (reloadCallback: () => void) => {
   const isFirstMountRef = useRef(true);
   const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Força recarregamento quando rota muda
+  // ForÃ§a recarregamento quando rota muda
   useEffect(() => {
     if (isFirstMountRef.current) {
       isFirstMountRef.current = false;
@@ -33,17 +33,17 @@ export const useDataReload = (reloadCallback: () => void) => {
       if (!authLoading) {
         // Pequeno delay para garantir que a nova rota foi renderizada
         reloadTimeoutRef.current = setTimeout(() => {
-          console.log('🔄 Recarregando dados - rota mudou:', location.pathname);
+          console.log('ðŸ”„ Recarregando dados - rota mudou:', location.pathname);
           reloadCallback();
         }, 150);
       }
     }
 
-    // Se o usuário mudou (login/logout)
+    // Se o usuÃ¡rio mudou (login/logout)
     if (previousUserRef.current !== user && !authLoading) {
       previousUserRef.current = user;
       reloadTimeoutRef.current = setTimeout(() => {
-        console.log('🔄 Recarregando dados - usuário mudou');
+        console.log('ðŸ”„ Recarregando dados - usuÃ¡rio mudou');
         reloadCallback();
       }, 150);
     }
@@ -55,7 +55,7 @@ export const useDataReload = (reloadCallback: () => void) => {
     };
   }, [location.pathname, user, authLoading, reloadCallback]);
 
-  // Recarregar quando a página ganha foco (se estava inativa por mais de 1 minuto)
+  // Recarregar quando a pÃ¡gina ganha foco (se estava inativa por mais de 1 minuto)
   useEffect(() => {
     let lastFocusTime = Date.now();
 
@@ -63,9 +63,9 @@ export const useDataReload = (reloadCallback: () => void) => {
       const now = Date.now();
       const timeSinceLastFocus = now - lastFocusTime;
       
-      // Se passou mais de 1 minuto desde a última vez que teve foco, recarregar
+      // Se passou mais de 1 minuto desde a Ãºltima vez que teve foco, recarregar
       if (timeSinceLastFocus > 60000 && !authLoading) {
-        console.log('🔄 Recarregando dados - página voltou ao foco após', Math.round(timeSinceLastFocus / 1000), 'segundos');
+        console.log('ðŸ”„ Recarregando dados - pÃ¡gina voltou ao foco apÃ³s', Math.round(timeSinceLastFocus / 1000), 'segundos');
         reloadCallback();
       }
       
@@ -105,10 +105,10 @@ export const useDataReload = (reloadCallback: () => void) => {
             const parsed = JSON.parse(cached);
             if (parsed.lastFetch && (now - parsed.lastFetch) > MAX_CACHE_AGE) {
               sessionStorage.removeItem(key);
-              console.log('🧹 Cache antigo removido:', key);
+              console.log('ðŸ§¹ Cache antigo removido:', key);
             }
           } catch (e) {
-            // Se não conseguir parsear, remove
+            // Se nÃ£o conseguir parsear, remove
             sessionStorage.removeItem(key);
           }
         }

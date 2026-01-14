@@ -7,14 +7,34 @@ Write-Host "  ASSINADOR DE APK" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Verificar se APK existe
-$apkPath = "android\app\build\outputs\apk\release\app-release-unsigned.apk"
-if (-not (Test-Path $apkPath)) {
-    Write-Host "ERRO: APK nao encontrado!" -ForegroundColor Red
-    Write-Host "Local esperado: $apkPath" -ForegroundColor Yellow
+# Verificar se APK existe (pode estar assinado ou não)
+$apkPathUnsigned = "android\app\build\outputs\apk\release\app-release-unsigned.apk"
+$apkPathSigned = "android\app\build\outputs\apk\release\app-release.apk"
+
+$apkPath = $null
+if (Test-Path $apkPathUnsigned) {
+    $apkPath = $apkPathUnsigned
+} elseif (Test-Path $apkPathSigned) {
+    Write-Host "⚠️  APK já está assinado!" -ForegroundColor Yellow
+    Write-Host "   Local: $apkPathSigned" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Deseja assinar novamente? (S/N)" -ForegroundColor Yellow
+    $resposta = Read-Host
+    if ($resposta -ne "S" -and $resposta -ne "s") {
+        Write-Host "Operação cancelada." -ForegroundColor Gray
+        exit 0
+    }
+    $apkPath = $apkPathSigned
+} else {
+    Write-Host "❌ ERRO: APK não encontrado!" -ForegroundColor Red
+    Write-Host "   Locais esperados:" -ForegroundColor Yellow
+    Write-Host "   - $apkPathUnsigned" -ForegroundColor Gray
+    Write-Host "   - $apkPathSigned" -ForegroundColor Gray
     Write-Host ""
     Write-Host "Gere o APK primeiro executando:" -ForegroundColor Yellow
-    Write-Host "  .\gerar-apk-bundle.ps1" -ForegroundColor Cyan
+    Write-Host "   .\gerar-e-assinar-apk.ps1" -ForegroundColor Cyan
+    Write-Host "   ou" -ForegroundColor Gray
+    Write-Host "   .\gerar-apk.ps1" -ForegroundColor Cyan
     exit 1
 }
 

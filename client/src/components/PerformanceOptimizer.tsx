@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 
 interface PerformanceOptimizerProps {
   children: React.ReactNode;
@@ -8,9 +8,9 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
   const [isOptimized, setIsOptimized] = useState(false);
 
   useEffect(() => {
-    // Otimizações de performance
+    // OtimizaÃ§Ãµes de performance
     const optimizePerformance = () => {
-      // 1. Prefetch de recursos críticos
+      // 1. Prefetch de recursos crÃ­ticos
       const prefetchResources = () => {
         const criticalResources = [
           '/static/css/main.css',
@@ -25,7 +25,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
         });
       };
 
-      // 2. Otimizações de imagem
+      // 2. OtimizaÃ§Ãµes de imagem
       const optimizeImages = () => {
         const images = document.querySelectorAll('img');
         images.forEach(img => {
@@ -35,18 +35,18 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
         });
       };
 
-      // 3. Otimizações de scroll
+      // 3. OtimizaÃ§Ãµes de scroll
       const optimizeScroll = () => {
-        // Remove scroll suave desnecessário durante carregamento
+        // Remove scroll suave desnecessÃ¡rio durante carregamento
         document.documentElement.style.scrollBehavior = 'auto';
         setTimeout(() => {
           document.documentElement.style.scrollBehavior = 'smooth';
         }, 1000);
       };
 
-      // 4. Otimizações de animação
+      // 4. OtimizaÃ§Ãµes de animaÃ§Ã£o
       const optimizeAnimations = () => {
-        // Reduz animações em dispositivos lentos
+        // Reduz animaÃ§Ãµes em dispositivos lentos
         const isSlowDevice = navigator.hardwareConcurrency <= 2;
         if (isSlowDevice) {
           document.documentElement.style.setProperty('--animation-duration', '0.1s');
@@ -61,7 +61,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({ children })
       setIsOptimized(true);
     };
 
-    // Executa otimizações após um pequeno delay
+    // Executa otimizaÃ§Ãµes apÃ³s um pequeno delay
     const timer = setTimeout(optimizePerformance, 100);
 
     return () => clearTimeout(timer);

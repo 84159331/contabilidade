@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   PlusIcon,
   PencilIcon,
@@ -55,33 +55,33 @@ const Ministries: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validação básica
+    // ValidaÃ§Ã£o bÃ¡sica
     if (!formData.nome || formData.nome.trim() === '') {
-      toast.error('Nome do ministério é obrigatório');
+      toast.error('Nome do ministÃ©rio Ã© obrigatÃ³rio');
       return;
     }
 
     try {
-      console.log('📝 Iniciando salvamento do ministério...');
-      console.log('📝 Dados do formulário:', formData);
+      console.log('ðŸ“ Iniciando salvamento do ministÃ©rio...');
+      console.log('ðŸ“ Dados do formulÃ¡rio:', formData);
       
       if (editingMinisterio) {
-        console.log('🔄 Atualizando ministério:', editingMinisterio.id);
+        console.log('ðŸ”„ Atualizando ministÃ©rio:', editingMinisterio.id);
         await ministeriosAPI.updateMinisterio(editingMinisterio.id, formData);
-        console.log('✅ Ministério atualizado com sucesso');
-        // Toast já é exibido pela API
+        console.log('âœ… MinistÃ©rio atualizado com sucesso');
+        // Toast jÃ¡ Ã© exibido pela API
       } else {
-        console.log('➕ Criando novo ministério...');
+        console.log('âž• Criando novo ministÃ©rio...');
         const result = await ministeriosAPI.createMinisterio(formData);
-        console.log('📝 Resultado da criação:', result);
+        console.log('ðŸ“ Resultado da criaÃ§Ã£o:', result);
         
         if (!result) {
-          console.error('❌ Resultado null - criação falhou');
-          // Se retornou null, houve erro (já foi exibido toast pela API)
+          console.error('âŒ Resultado null - criaÃ§Ã£o falhou');
+          // Se retornou null, houve erro (jÃ¡ foi exibido toast pela API)
           return;
         }
-        console.log('✅ Ministério criado com sucesso:', result.id);
-        // Toast já é exibido pela API
+        console.log('âœ… MinistÃ©rio criado com sucesso:', result.id);
+        // Toast jÃ¡ Ã© exibido pela API
       }
       
       setShowForm(false);
@@ -90,18 +90,18 @@ const Ministries: React.FC = () => {
       
       // Aguardar um pouco antes de recarregar para garantir que o Firestore atualizou
       setTimeout(() => {
-        console.log('🔄 Recarregando lista de ministérios...');
+        console.log('ðŸ”„ Recarregando lista de ministÃ©rios...');
         loadData();
       }, 500);
     } catch (error: any) {
-      console.error('❌ Erro ao salvar ministério:', error);
-      console.error('❌ Tipo do erro:', typeof error);
-      console.error('❌ Mensagem do erro:', error?.message);
-      console.error('❌ Stack do erro:', error?.stack);
+      console.error('âŒ Erro ao salvar ministÃ©rio:', error);
+      console.error('âŒ Tipo do erro:', typeof error);
+      console.error('âŒ Mensagem do erro:', error?.message);
+      console.error('âŒ Stack do erro:', error?.stack);
       
-      // Toast já foi exibido pela API, mas garantir que aparece
-      const errorMessage = error?.message || 'Erro ao salvar ministério. Verifique o console para mais detalhes.';
-      if (!errorMessage.includes('obrigatório')) {
+      // Toast jÃ¡ foi exibido pela API, mas garantir que aparece
+      const errorMessage = error?.message || 'Erro ao salvar ministÃ©rio. Verifique o console para mais detalhes.';
+      if (!errorMessage.includes('obrigatÃ³rio')) {
         toast.error(errorMessage);
       }
     }
@@ -123,16 +123,16 @@ const Ministries: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja deletar este ministério?')) {
+    if (!window.confirm('Tem certeza que deseja deletar este ministÃ©rio?')) {
       return;
     }
     try {
       await ministeriosAPI.deleteMinisterio(id);
-      toast.success('Ministério deletado com sucesso!');
+      toast.success('MinistÃ©rio deletado com sucesso!');
       loadData();
     } catch (error) {
-      console.error('Erro ao deletar ministério:', error);
-      toast.error('Erro ao deletar ministério');
+      console.error('Erro ao deletar ministÃ©rio:', error);
+      toast.error('Erro ao deletar ministÃ©rio');
     }
   };
 
@@ -178,7 +178,7 @@ const Ministries: React.FC = () => {
 
   const getMemberName = (memberId: string) => {
     const member = members.find(m => m.id === memberId);
-    return member?.name || 'Nome não encontrado';
+    return member?.name || 'Nome nÃ£o encontrado';
   };
 
   if (loading) {
@@ -186,7 +186,7 @@ const Ministries: React.FC = () => {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando ministérios...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando ministÃ©rios...</p>
         </div>
       </div>
     );
@@ -197,10 +197,10 @@ const Ministries: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-            Ministérios
+            MinistÃ©rios
           </h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Gerencie os ministérios da igreja e configure escalas
+            Gerencie os ministÃ©rios da igreja e configure escalas
           </p>
         </div>
         <Button
@@ -212,7 +212,7 @@ const Ministries: React.FC = () => {
           className="flex items-center gap-2"
         >
           <PlusIcon className="h-5 w-5" />
-          Novo Ministério
+          Novo MinistÃ©rio
         </Button>
       </div>
 
@@ -220,10 +220,10 @@ const Ministries: React.FC = () => {
         <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <MusicalNoteIcon className="mx-auto h-16 w-16 text-gray-400" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-            Nenhum ministério encontrado
+            Nenhum ministÃ©rio encontrado
           </h3>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Comece criando um novo ministério.
+            Comece criando um novo ministÃ©rio.
           </p>
         </div>
       ) : (
@@ -271,7 +271,7 @@ const Ministries: React.FC = () => {
               <div className="mt-4 space-y-3">
                 <div>
                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Funções
+                    FunÃ§Ãµes
                   </p>
                   <div className="mt-1 flex flex-wrap gap-2">
                     {ministerio.funcoes.map((funcao) => (
@@ -299,7 +299,7 @@ const Ministries: React.FC = () => {
 
                 <div>
                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Frequência
+                    FrequÃªncia
                   </p>
                   <div className="mt-1 flex items-center gap-2">
                     <CalendarIcon className="h-4 w-4 text-gray-400" />
@@ -307,7 +307,7 @@ const Ministries: React.FC = () => {
                       {ministerio.frequencia}
                       {ministerio.dia_semana !== undefined && (
                         <span className="ml-1">
-                          - {['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][ministerio.dia_semana]}
+                          - {['Domingo', 'Segunda', 'TerÃ§a', 'Quarta', 'Quinta', 'Sexta', 'SÃ¡bado'][ministerio.dia_semana]}
                         </span>
                       )}
                     </span>
@@ -326,12 +326,12 @@ const Ministries: React.FC = () => {
           setEditingMinisterio(null);
           resetForm();
         }}
-        title={editingMinisterio ? 'Editar Ministério' : 'Novo Ministério'}
+        title={editingMinisterio ? 'Editar MinistÃ©rio' : 'Novo MinistÃ©rio'}
       >
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Nome do Ministério *
+              Nome do MinistÃ©rio *
             </label>
             <input
               type="text"
@@ -339,26 +339,26 @@ const Ministries: React.FC = () => {
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
               className="input w-full"
-              placeholder="Ex: Louvor, Som, Recepção"
+              placeholder="Ex: Louvor, Som, RecepÃ§Ã£o"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Descrição
+              DescriÃ§Ã£o
             </label>
             <textarea
               value={formData.descricao}
               onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
               className="input w-full"
               rows={3}
-              placeholder="Descreva o ministério..."
+              placeholder="Descreva o ministÃ©rio..."
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Funções
+              FunÃ§Ãµes
             </label>
             <div className="flex gap-2 mb-2">
               <input
@@ -367,7 +367,7 @@ const Ministries: React.FC = () => {
                 onChange={(e) => setNewFuncao(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFuncao())}
                 className="input flex-1"
-                placeholder="Ex: Vocal, Instrumentista, Técnico"
+                placeholder="Ex: Vocal, Instrumentista, TÃ©cnico"
               />
               <Button type="button" onClick={addFuncao}>
                 Adicionar
@@ -385,7 +385,7 @@ const Ministries: React.FC = () => {
                     onClick={() => removeFuncao(funcao)}
                     className="text-primary-600 hover:text-primary-800"
                   >
-                    ×
+                    Ã—
                   </button>
                 </span>
               ))}
@@ -394,7 +394,7 @@ const Ministries: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Frequência
+              FrequÃªncia
             </label>
             <select
               value={formData.frequencia}
@@ -426,11 +426,11 @@ const Ministries: React.FC = () => {
               >
                 <option value={0}>Domingo</option>
                 <option value={1}>Segunda-feira</option>
-                <option value={2}>Terça-feira</option>
+                <option value={2}>TerÃ§a-feira</option>
                 <option value={3}>Quarta-feira</option>
                 <option value={4}>Quinta-feira</option>
                 <option value={5}>Sexta-feira</option>
-                <option value={6}>Sábado</option>
+                <option value={6}>SÃ¡bado</option>
               </select>
             </div>
           )}
@@ -476,7 +476,7 @@ const Ministries: React.FC = () => {
               className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
             <label htmlFor="ativo" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Ministério ativo
+              MinistÃ©rio ativo
             </label>
           </div>
 

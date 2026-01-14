@@ -1,11 +1,11 @@
-// Firebase Cloud Messaging utilities
+﻿// Firebase Cloud Messaging utilities
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { doc, updateDoc, getFirestore } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-// VAPID key - você precisa gerar isso no Firebase Console
+// VAPID key - vocÃª precisa gerar isso no Firebase Console
 // Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
 const VAPID_KEY = 'YOUR_VAPID_KEY_HERE'; // Substitua pela sua chave VAPID
 
@@ -17,21 +17,21 @@ export const initializeMessaging = async () => {
 
   // Verificar se o navegador suporta Service Worker
   if (!('serviceWorker' in navigator)) {
-    console.warn('Service Worker não suportado');
+    console.warn('Service Worker nÃ£o suportado');
     return null;
   }
 
-  // Verificar se o navegador suporta notificações
+  // Verificar se o navegador suporta notificaÃ§Ãµes
   if (!('Notification' in window)) {
-    console.warn('Notificações não suportadas');
+    console.warn('NotificaÃ§Ãµes nÃ£o suportadas');
     return null;
   }
 
   try {
-    // Firebase já está inicializado via config.ts
-    // Apenas obter instância do messaging
+    // Firebase jÃ¡ estÃ¡ inicializado via config.ts
+    // Apenas obter instÃ¢ncia do messaging
 
-    // Obter instância do messaging
+    // Obter instÃ¢ncia do messaging
     const { getMessaging } = await import('firebase/messaging');
     messaging = getMessaging();
 
@@ -42,7 +42,7 @@ export const initializeMessaging = async () => {
   }
 };
 
-// Solicitar permissão de notificações
+// Solicitar permissÃ£o de notificaÃ§Ãµes
 export const requestNotificationPermission = async (): Promise<string | null> => {
   try {
     if (!messaging) {
@@ -50,15 +50,15 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     }
 
     if (!messaging) {
-      console.warn('Messaging não disponível');
+      console.warn('Messaging nÃ£o disponÃ­vel');
       return null;
     }
 
-    // Solicitar permissão
+    // Solicitar permissÃ£o
     const permission = await Notification.requestPermission();
     
     if (permission === 'granted') {
-      console.log('✅ Permissão de notificação concedida');
+      console.log('âœ… PermissÃ£o de notificaÃ§Ã£o concedida');
       
       // Obter token FCM
       const token = await getToken(messaging, {
@@ -66,7 +66,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
       });
 
       if (token) {
-        console.log('✅ Token FCM obtido:', token);
+        console.log('âœ… Token FCM obtido:', token);
         
         // Salvar token no Firestore
         const auth = getAuth();
@@ -78,25 +78,25 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
             fcm_token: token,
             fcm_token_updated_at: new Date(),
           });
-          console.log('✅ Token salvo no Firestore');
+          console.log('âœ… Token salvo no Firestore');
         }
         
         return token;
       } else {
-        console.warn('⚠️ Token FCM não disponível');
+        console.warn('âš ï¸ Token FCM nÃ£o disponÃ­vel');
         return null;
       }
     } else {
-      console.warn('⚠️ Permissão de notificação negada');
+      console.warn('âš ï¸ PermissÃ£o de notificaÃ§Ã£o negada');
       return null;
     }
   } catch (error) {
-    console.error('❌ Erro ao solicitar permissão:', error);
+    console.error('âŒ Erro ao solicitar permissÃ£o:', error);
     return null;
   }
 };
 
-// Escutar mensagens quando o app está em primeiro plano
+// Escutar mensagens quando o app estÃ¡ em primeiro plano
 export const setupMessageListener = () => {
   if (!messaging) {
     initializeMessaging().then(() => {
@@ -114,11 +114,11 @@ const setupListener = () => {
   if (!messaging) return;
 
   onMessage(messaging, (payload) => {
-    console.log('📨 Mensagem recebida:', payload);
+    console.log('ðŸ“¨ Mensagem recebida:', payload);
     
-    // Mostrar notificação
+    // Mostrar notificaÃ§Ã£o
     if (payload.notification) {
-      const notificationTitle = payload.notification.title || 'Nova notificação';
+      const notificationTitle = payload.notification.title || 'Nova notificaÃ§Ã£o';
       const notificationOptions = {
         body: payload.notification.body || '',
         icon: '/img/icons/icon-192x192.png',
@@ -138,7 +138,7 @@ const setupListener = () => {
   });
 };
 
-// Verificar se já tem permissão
+// Verificar se jÃ¡ tem permissÃ£o
 export const checkNotificationPermission = (): boolean => {
   if (!('Notification' in window)) {
     return false;
@@ -146,7 +146,7 @@ export const checkNotificationPermission = (): boolean => {
   return Notification.permission === 'granted';
 };
 
-// Verificar se já tem token salvo
+// Verificar se jÃ¡ tem token salvo
 export const getStoredToken = async (): Promise<string | null> => {
   try {
     const auth = getAuth();

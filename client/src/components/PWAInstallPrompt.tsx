@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { XMarkIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -12,13 +12,13 @@ const PWAInstallPrompt: React.FC = () => {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Verificar se já está instalado
+    // Verificar se jÃ¡ estÃ¡ instalado
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
       return;
     }
 
-    // Verificar se já foi instalado anteriormente
+    // Verificar se jÃ¡ foi instalado anteriormente
     const installed = localStorage.getItem('pwa-installed');
     if (installed === 'true') {
       setIsInstalled(true);
@@ -29,7 +29,7 @@ const PWAInstallPrompt: React.FC = () => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       
-      // Mostrar prompt após 3 segundos
+      // Mostrar prompt apÃ³s 3 segundos
       setTimeout(() => {
         setShowPrompt(true);
       }, 3000);
@@ -68,7 +68,7 @@ const PWAInstallPrompt: React.FC = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    // Não mostrar novamente por 7 dias
+    // NÃ£o mostrar novamente por 7 dias
     localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
   };
 
@@ -101,7 +101,7 @@ const PWAInstallPrompt: React.FC = () => {
                 Instalar App
               </h3>
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                Instale para acesso rápido e offline
+                Instale para acesso rÃ¡pido e offline
               </p>
             </div>
           </div>

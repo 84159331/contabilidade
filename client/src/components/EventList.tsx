@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useCallback } from 'react';
+﻿import React, { memo, useMemo, useCallback } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -71,7 +71,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
                   </h3>
                   {isUpcoming(event.date) && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                      Próximo
+                      PrÃ³ximo
                     </span>
                   )}
                 </div>
@@ -134,7 +134,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               )}
             </div>
 
-            {/* Ações */}
+            {/* AÃ§Ãµes */}
             <div className="mt-4 flex justify-end space-x-2">
               <button
                 onClick={() => onShare(event)}
@@ -161,16 +161,16 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               </button>
               <button
                 onClick={() => {
-                  console.log('🗑️ EventList - Botão excluir clicado para evento:', event.title, 'ID:', event.id);
+                  console.log('ðŸ—‘ï¸ EventList - BotÃ£o excluir clicado para evento:', event.title, 'ID:', event.id);
                   if (event.id) {
                     onDelete(event.id);
                   } else {
-                    console.error('❌ EventList - ID do evento é inválido:', event);
+                    console.error('âŒ EventList - ID do evento Ã© invÃ¡lido:', event);
                   }
                 }}
                 className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!event.id}
-                title={!event.id ? 'ID do evento inválido' : 'Excluir evento'}
+                title={!event.id ? 'ID do evento invÃ¡lido' : 'Excluir evento'}
               >
                 <TrashIcon className="h-3 w-3 mr-1" />
                 Excluir

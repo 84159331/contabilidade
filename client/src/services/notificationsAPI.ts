@@ -1,4 +1,4 @@
-// API para gestão de notificações
+﻿// API para gestÃ£o de notificaÃ§Ãµes
 import { db } from '../firebase/config';
 import {
   collection,
@@ -28,9 +28,9 @@ const convertTimestamp = (timestamp: any): Date => {
   return new Date();
 };
 
-// API para Notificações
+// API para NotificaÃ§Ãµes
 export const notificationsAPI = {
-  // Criar notificação
+  // Criar notificaÃ§Ã£o
   createNotification: async (
     userId: string,
     type: NotificationType,
@@ -58,12 +58,12 @@ export const notificationsAPI = {
         createdAt: new Date(),
       };
     } catch (error) {
-      console.error('Erro ao criar notificação:', error);
+      console.error('Erro ao criar notificaÃ§Ã£o:', error);
       return null;
     }
   },
 
-  // Criar notificação agendada
+  // Criar notificaÃ§Ã£o agendada
   scheduleNotification: async (
     userId: string,
     type: NotificationType,
@@ -94,12 +94,12 @@ export const notificationsAPI = {
         scheduledFor,
       };
     } catch (error) {
-      console.error('Erro ao agendar notificação:', error);
+      console.error('Erro ao agendar notificaÃ§Ã£o:', error);
       return null;
     }
   },
 
-  // Obter notificações do usuário
+  // Obter notificaÃ§Ãµes do usuÃ¡rio
   getUserNotifications: async (
     userId: string,
     unreadOnly: boolean = false
@@ -140,7 +140,7 @@ export const notificationsAPI = {
         };
       });
     } catch (error) {
-      console.error('Erro ao buscar notificações:', error);
+      console.error('Erro ao buscar notificaÃ§Ãµes:', error);
       return [];
     }
   },
@@ -153,7 +153,7 @@ export const notificationsAPI = {
         read: true,
       });
     } catch (error) {
-      console.error('Erro ao marcar notificação como lida:', error);
+      console.error('Erro ao marcar notificaÃ§Ã£o como lida:', error);
     }
   },
 
@@ -168,13 +168,13 @@ export const notificationsAPI = {
     }
   },
 
-  // Deletar notificação
+  // Deletar notificaÃ§Ã£o
   deleteNotification: async (notificationId: string): Promise<void> => {
     try {
       const notificationRef = doc(db, 'notifications', notificationId);
       await deleteDoc(notificationRef);
     } catch (error) {
-      console.error('Erro ao deletar notificação:', error);
+      console.error('Erro ao deletar notificaÃ§Ã£o:', error);
     }
   },
 

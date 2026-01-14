@@ -1,4 +1,4 @@
-// Tipos para sistema de roles e permissões
+﻿// Tipos para sistema de roles e permissÃµes
 
 export type UserRole = 'membro' | 'lider' | 'admin';
 
@@ -7,8 +7,8 @@ export interface UserProfile {
   email: string;
   name: string;
   role: UserRole;
-  ministerio_id?: string; // ID do ministério (para líderes)
-  ministerio_nome?: string; // Nome do ministério (para líderes)
+  ministerio_id?: string; // ID do ministÃ©rio (para lÃ­deres)
+  ministerio_nome?: string; // Nome do ministÃ©rio (para lÃ­deres)
   phone?: string;
   photoURL?: string;
   createdAt?: Date | string;
@@ -94,7 +94,7 @@ export const hasPermission = (
   // Admin tem acesso total
   if (role === 'admin') return true;
   
-  // Verificar ação específica
+  // Verificar aÃ§Ã£o especÃ­fica
   return resourcePermission.actions.includes(action) || 
          resourcePermission.actions.includes('manage');
 };

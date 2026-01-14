@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import AddBookModal from '../components/AddBookModal';
@@ -39,17 +39,17 @@ const categorias = [
   'Todos',
   'Teologia',
   'Devocionais',
-  'Estudos Bíblicos',
-  'Fé',
-  'Esperança',
+  'Estudos BÃ­blicos',
+  'FÃ©',
+  'EsperanÃ§a',
   'Palavras de Coach',
-  'Palavras de Esperança',
+  'Palavras de EsperanÃ§a',
   'Biografias',
-  'História da Igreja',
-  'Liderança',
-  'Família',
+  'HistÃ³ria da Igreja',
+  'LideranÃ§a',
+  'FamÃ­lia',
   'Jovens',
-  'Crianças'
+  'CrianÃ§as'
 ];
 
 const BooksManagement: React.FC = () => {
@@ -66,7 +66,7 @@ const BooksManagement: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [livroParaEditar, setLivroParaEditar] = useState<Livro | null>(null);
   
-  console.log('🔍 BooksManagement - showAddModal:', showAddModal);
+  console.log('ðŸ” BooksManagement - showAddModal:', showAddModal);
 
   useEffect(() => {
     filtrarLivros();
@@ -159,7 +159,7 @@ const BooksManagement: React.FC = () => {
   };
 
   const handleClearLibrary = () => {
-    if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta ação não pode ser desfeita.')) {
+    if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
       setLivrosLista([]);
       storage.remove('biblioteca-livros');
       toast.success('Biblioteca limpa com sucesso!');
@@ -192,7 +192,7 @@ const BooksManagement: React.FC = () => {
               )}
               <button
                 onClick={() => {
-                  console.log('🔄 Botão Adicionar Livro clicado!');
+                  console.log('ðŸ”„ BotÃ£o Adicionar Livro clicado!');
                   setShowAddModal(true);
                 }}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
@@ -215,7 +215,7 @@ const BooksManagement: React.FC = () => {
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Buscar por título, autor ou palavra-chave..."
+                  placeholder="Buscar por tÃ­tulo, autor ou palavra-chave..."
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -236,7 +236,7 @@ const BooksManagement: React.FC = () => {
               </select>
             </div>
 
-            {/* Ordenação */}
+            {/* OrdenaÃ§Ã£o */}
             <div className="lg:w-48">
               <select
                 value={ordenacao}
@@ -244,7 +244,7 @@ const BooksManagement: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="destaque">Destaques</option>
-                <option value="titulo">Título A-Z</option>
+                <option value="titulo">TÃ­tulo A-Z</option>
                 <option value="autor">Autor A-Z</option>
                 <option value="downloads">Mais Baixados</option>
                 <option value="avaliacao">Melhor Avaliados</option>
@@ -253,7 +253,7 @@ const BooksManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* Estatísticas */}
+        {/* EstatÃ­sticas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
             <div className="flex items-center">
@@ -336,7 +336,7 @@ const BooksManagement: React.FC = () => {
                 </div>
               </div>
 
-              {/* Conteúdo */}
+              {/* ConteÃºdo */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                   {livro.titulo}
@@ -360,7 +360,7 @@ const BooksManagement: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Informações */}
+                {/* InformaÃ§Ãµes */}
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <div className="flex items-center">
                     <CalendarIcon className="h-4 w-4 mr-1" />
@@ -368,7 +368,7 @@ const BooksManagement: React.FC = () => {
                   </div>
                   <div className="flex items-center">
                     <BookOpenIcon className="h-4 w-4 mr-1" />
-                    <span>{livro.paginas} págs</span>
+                    <span>{livro.paginas} pÃ¡gs</span>
                   </div>
                   <div className="flex items-center">
                     <DocumentArrowDownIcon className="h-4 w-4 mr-1" />
@@ -380,7 +380,7 @@ const BooksManagement: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Botões de Ação */}
+                {/* BotÃµes de AÃ§Ã£o */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => window.open(livro.pdfUrl, '_blank')}
@@ -420,7 +420,7 @@ const BooksManagement: React.FC = () => {
           ))}
         </div>
 
-        {/* Mensagem quando não há resultados */}
+        {/* Mensagem quando nÃ£o hÃ¡ resultados */}
         {livrosFiltrados.length === 0 && (
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -429,14 +429,14 @@ const BooksManagement: React.FC = () => {
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {livrosLista.length === 0 
-                ? 'Comece adicionando livros à biblioteca digital'
+                ? 'Comece adicionando livros Ã  biblioteca digital'
                 : 'Tente ajustar os filtros ou termo de busca'
               }
             </p>
             {livrosLista.length === 0 && (
               <button
                 onClick={() => {
-                  console.log('🔄 Botão Adicionar Primeiro Livro clicado!');
+                  console.log('ðŸ”„ BotÃ£o Adicionar Primeiro Livro clicado!');
                   setShowAddModal(true);
                 }}
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"

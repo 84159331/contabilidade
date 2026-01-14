@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { ChartBarIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MonthlyBalanceReport from '../components/reports/MonthlyBalanceReport';
@@ -20,18 +20,15 @@ import Button from '../components/Button';
 type ReportType = 'monthly' | 'yearly' | 'contributions' | 'categories' | 'cashflow';
 
 const Reports: React.FC = () => {
-  // #region agent log
   const reportComponents = {MonthlyBalanceReport,YearlyBalanceReport,MemberContributionsReport,CategoryReport,CashFlowReport};
   const reportComponentStatus = Object.entries(reportComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
-  fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:22',message:'Report components status',data:reportComponentStatus,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-  // #endregion
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState<any>(null);
-  const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, período, etc.
+  const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, perÃ­odo, etc.
   const reportContainerRef = useRef<HTMLDivElement>(null);
   
-  // Informações da igreja (pode ser obtido de configurações ou deixar vazio)
+  // InformaÃ§Ãµes da igreja (pode ser obtido de configuraÃ§Ãµes ou deixar vazio)
   const churchInfo = {
     name: 'Minha Igreja', // Pode ser obtido de settings ou contexto
   };
@@ -39,20 +36,20 @@ const Reports: React.FC = () => {
   const reports = [
     {
       id: 'monthly' as ReportType,
-      name: 'Balanço Mensal',
-      description: 'Receitas e despesas por mês',
+      name: 'BalanÃ§o Mensal',
+      description: 'Receitas e despesas por mÃªs',
       icon: ChartBarIcon
     },
     {
       id: 'yearly' as ReportType,
-      name: 'Balanço Anual',
-      description: 'Visão geral do ano',
+      name: 'BalanÃ§o Anual',
+      description: 'VisÃ£o geral do ano',
       icon: ChartBarIcon
     },
     {
       id: 'contributions' as ReportType,
-      name: 'Contribuições',
-      description: 'Contribuições por membro',
+      name: 'ContribuiÃ§Ãµes',
+      description: 'ContribuiÃ§Ãµes por membro',
       icon: ChartBarIcon
     },
     {
@@ -70,12 +67,12 @@ const Reports: React.FC = () => {
   ];
 
   const handleSetReportData = (data: any) => {
-    // Para relatório anual, não salva aqui se for apenas array (o objeto completo virá via handleYearlyFullDataLoaded)
+    // Para relatÃ³rio anual, nÃ£o salva aqui se for apenas array (o objeto completo virÃ¡ via handleYearlyFullDataLoaded)
     if (activeReport === 'yearly' && Array.isArray(data)) {
-      // Ignora arrays no relatório anual - o objeto completo será passado via onFullDataLoaded
+      // Ignora arrays no relatÃ³rio anual - o objeto completo serÃ¡ passado via onFullDataLoaded
       return;
     }
-    // Para outros relatórios, salva normalmente
+    // Para outros relatÃ³rios, salva normalmente
     setReportData(data);
   };
 
@@ -83,16 +80,16 @@ const Reports: React.FC = () => {
     setReportMetadata(metadata);
   };
 
-  // Handler específico para o relatório anual que precisa do objeto completo
+  // Handler especÃ­fico para o relatÃ³rio anual que precisa do objeto completo
   const handleYearlyFullDataLoaded = (fullData: any) => {
-    // Sempre sobrescreve com o objeto completo para o relatório anual
+    // Sempre sobrescreve com o objeto completo para o relatÃ³rio anual
     setReportData(fullData);
   };
 
   const handleGeneratePdf = async () => {
     try {
       if (!reportData) {
-        toast.warning('Aguarde o carregamento dos dados do relatório');
+        toast.warning('Aguarde o carregamento dos dados do relatÃ³rio');
         return;
       }
 
@@ -120,7 +117,7 @@ const Reports: React.FC = () => {
             toast.success('PDF gerado com sucesso!');
           } else {
             toast.error('Dados insuficientes para gerar o PDF. Aguarde o carregamento completo.');
-            console.error('Dados do relatório anual:', reportData);
+            console.error('Dados do relatÃ³rio anual:', reportData);
           }
           break;
 
@@ -169,7 +166,7 @@ const Reports: React.FC = () => {
           break;
 
         default:
-          toast.error('Tipo de relatório não suportado');
+          toast.error('Tipo de relatÃ³rio nÃ£o suportado');
       }
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
@@ -187,17 +184,17 @@ const Reports: React.FC = () => {
           {
             'Tipo': 'Receitas',
             'Total': reportData.income.total,
-            'Transações': reportData.income.count
+            'TransaÃ§Ãµes': reportData.income.count
           },
           {
             'Tipo': 'Despesas',
             'Total': reportData.expense.total,
-            'Transações': reportData.expense.count
+            'TransaÃ§Ãµes': reportData.expense.count
           },
           {
             'Tipo': 'Saldo',
             'Total': reportData.balance,
-            'Transações': reportData.income.count + reportData.expense.count
+            'TransaÃ§Ãµes': reportData.income.count + reportData.expense.count
           }
         ];
       } else if (Array.isArray(reportData)) {
@@ -211,24 +208,15 @@ const Reports: React.FC = () => {
   };
 
   const renderReport = () => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:208',message:'renderReport called',data:{activeReport,hasMonthlyBalanceReport:!!MonthlyBalanceReport,hasYearlyBalanceReport:!!YearlyBalanceReport,hasMemberContributionsReport:!!MemberContributionsReport,hasCategoryReport:!!CategoryReport,hasCashFlowReport:!!CashFlowReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-    // #endregion
     switch (activeReport) {
       case 'monthly':
         if (!MonthlyBalanceReport) {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:211',message:'MonthlyBalanceReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-          // #endregion
-          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
+          return <div>Erro: MonthlyBalanceReport nÃ£o encontrado</div>;
         }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'yearly':
         if (!YearlyBalanceReport) {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:218',message:'YearlyBalanceReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-          // #endregion
-          return <div>Erro: YearlyBalanceReport não encontrado</div>;
+          return <div>Erro: YearlyBalanceReport nÃ£o encontrado</div>;
         }
         return (
           <YearlyBalanceReport
@@ -238,10 +226,7 @@ const Reports: React.FC = () => {
         );
       case 'contributions':
         if (!MemberContributionsReport) {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:227',message:'MemberContributionsReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-          // #endregion
-          return <div>Erro: MemberContributionsReport não encontrado</div>;
+          return <div>Erro: MemberContributionsReport nÃ£o encontrado</div>;
         }
         return (
           <MemberContributionsReport
@@ -251,10 +236,7 @@ const Reports: React.FC = () => {
         );
       case 'categories':
         if (!CategoryReport) {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:236',message:'CategoryReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-          // #endregion
-          return <div>Erro: CategoryReport não encontrado</div>;
+          return <div>Erro: CategoryReport nÃ£o encontrado</div>;
         }
         return (
           <CategoryReport
@@ -264,10 +246,7 @@ const Reports: React.FC = () => {
         );
       case 'cashflow':
         if (!CashFlowReport) {
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Reports.tsx:245',message:'CashFlowReport is undefined',data:{activeReport},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
-          // #endregion
-          return <div>Erro: CashFlowReport não encontrado</div>;
+          return <div>Erro: CashFlowReport nÃ£o encontrado</div>;
         }
         return (
           <CashFlowReport
@@ -277,7 +256,7 @@ const Reports: React.FC = () => {
         );
       default:
         if (!MonthlyBalanceReport) {
-          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
+          return <div>Erro: MonthlyBalanceReport nÃ£o encontrado</div>;
         }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
     }
@@ -287,7 +266,7 @@ const Reports: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">RelatÃ³rios</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Visualize e analise os dados financeiros da igreja
         </p>

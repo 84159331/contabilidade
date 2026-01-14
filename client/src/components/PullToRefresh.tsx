@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 
 interface PullToRefreshProps {
   onRefresh: () => Promise<void> | void;
@@ -27,7 +27,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
     if (!container) return;
 
     const handleTouchStart = (e: TouchEvent) => {
-      // Só ativar se estiver no topo da página
+      // SÃ³ ativar se estiver no topo da pÃ¡gina
       if (window.scrollY > 10) return;
       
       startY.current = e.touches[0].clientY;
@@ -49,7 +49,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
       if (distance > 0) {
         e.preventDefault();
         setIsPulling(true);
-        // Limitar a distância máxima
+        // Limitar a distÃ¢ncia mÃ¡xima
         const maxDistance = threshold * 2;
         setPullDistance(Math.min(distance, maxDistance));
       }

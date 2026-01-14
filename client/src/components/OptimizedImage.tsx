@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -16,13 +16,13 @@ interface OptimizedImageProps {
 }
 
 /**
- * Componente de imagem otimizado com suporte a WebP e fallback automático
+ * Componente de imagem otimizado com suporte a WebP e fallback automÃ¡tico
  * 
- * Características:
+ * CaracterÃ­sticas:
  * - Suporte a formato WebP com fallback para JPEG/PNG
  * - Lazy loading nativo
  * - Responsive images com srcset
- * - Fallback automático em caso de erro
+ * - Fallback automÃ¡tico em caso de erro
  */
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
@@ -41,7 +41,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Gerar srcset se não fornecido
+  // Gerar srcset se nÃ£o fornecido
   const generatedSrcSet = useMemo(() => {
     if (srcSet) return srcSet;
     if (webpSrc) {
@@ -75,7 +75,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         height={height}
         loading={loading}
         onError={() => {
-          // Se o fallback também falhar, não fazer nada
+          // Se o fallback tambÃ©m falhar, nÃ£o fazer nada
         }}
         onLoad={handleLoad}
       />
@@ -84,7 +84,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   return (
     <picture>
-      {/* WebP source se disponível */}
+      {/* WebP source se disponÃ­vel */}
       {webpSrc && !imageError && (
         <source
           srcSet={generatedSrcSet || webpSrc}

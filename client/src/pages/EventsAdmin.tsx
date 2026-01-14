@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -36,28 +36,28 @@ const EventsAdmin: React.FC = () => {
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Carregando eventos...');
+      console.log('ðŸ”„ Carregando eventos...');
       
       // Tentar carregar eventos da API real primeiro
       try {
         const eventsData = await eventsAPI.getEvents();
-        console.log('📊 Dados recebidos da API:', eventsData);
+        console.log('ðŸ“Š Dados recebidos da API:', eventsData);
         
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
-          console.log('✅ Eventos carregados da API:', eventsData.length);
+          console.log('âœ… Eventos carregados da API:', eventsData.length);
         } else {
-          console.log('⚠️ Nenhum evento encontrado na API, usando dados mock');
+          console.log('âš ï¸ Nenhum evento encontrado na API, usando dados mock');
           loadMockEvents();
         }
       } catch (apiError) {
-        console.log('⚠️ Erro na API, usando dados mock:', apiError);
+        console.log('âš ï¸ Erro na API, usando dados mock:', apiError);
         loadMockEvents();
       }
       
       setLoading(false);
     } catch (error) {
-      console.error('❌ Erro ao carregar eventos:', error);
+      console.error('âŒ Erro ao carregar eventos:', error);
       toast.error('Erro ao carregar eventos');
       setLoading(false);
     }
@@ -67,12 +67,12 @@ const EventsAdmin: React.FC = () => {
     const mockEvents: Event[] = [
       {
         id: '1',
-        title: 'Culto de Celebração',
-        description: 'Venha celebrar conosco a presença de Deus em nossas vidas',
+        title: 'Culto de CelebraÃ§Ã£o',
+        description: 'Venha celebrar conosco a presenÃ§a de Deus em nossas vidas',
         date: '2024-01-15',
         time: '19:00',
         location: 'Igreja Comunidade Resgate',
-        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+Celebração',
+        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+CelebraÃ§Ã£o',
         social_media: {
           instagram: true,
           facebook: true,
@@ -83,12 +83,12 @@ const EventsAdmin: React.FC = () => {
       },
       {
         id: '2',
-        title: 'Conferência de Jovens',
+        title: 'ConferÃªncia de Jovens',
         description: 'Um encontro especial para jovens com palestras e atividades',
         date: '2024-01-20',
         time: '14:00',
-        location: 'Auditório Principal',
-        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Conferência+de+Jovens',
+        location: 'AuditÃ³rio Principal',
+        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=ConferÃªncia+de+Jovens',
         social_media: {
           instagram: true,
           facebook: false,
@@ -99,12 +99,12 @@ const EventsAdmin: React.FC = () => {
       },
       {
         id: '3',
-        title: 'Reunião de Oração',
-        description: 'Momento especial de oração e comunhão',
+        title: 'ReuniÃ£o de OraÃ§Ã£o',
+        description: 'Momento especial de oraÃ§Ã£o e comunhÃ£o',
         date: '2024-01-25',
         time: '20:00',
-        location: 'Sala de Oração',
-        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Reunião+de+Oração',
+        location: 'Sala de OraÃ§Ã£o',
+        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=ReuniÃ£o+de+OraÃ§Ã£o',
         social_media: {
           instagram: false,
           facebook: true,
@@ -115,7 +115,7 @@ const EventsAdmin: React.FC = () => {
       }
     ];
     setEvents(mockEvents);
-    console.log('✅ Eventos mock carregados:', mockEvents.length);
+    console.log('âœ… Eventos mock carregados:', mockEvents.length);
   };
 
   const handleCreateEvent = () => {
@@ -139,23 +139,23 @@ const EventsAdmin: React.FC = () => {
   };
 
   const handleDeleteEvent = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
+    if (window.confirm('Tem certeza que deseja excluir este evento? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
       try {
         // Tentar excluir via API
         try {
           await eventsAPI.deleteEvent(id);
-          console.log('✅ Evento excluído via API:', id);
+          console.log('âœ… Evento excluÃ­do via API:', id);
         } catch (apiError) {
-          console.log('⚠️ Erro na API, removendo localmente:', apiError);
+          console.log('âš ï¸ Erro na API, removendo localmente:', apiError);
         }
         
         // Remover da lista local
         setEvents(prev => prev.filter(event => event.id !== id));
-        toast.success('Evento excluído com sucesso!');
-        // Disparar evento de sincronização
+        toast.success('Evento excluÃ­do com sucesso!');
+        // Disparar evento de sincronizaÃ§Ã£o
         window.dispatchEvent(new CustomEvent('eventsUpdated'));
       } catch (error) {
-        console.error('❌ Erro ao excluir evento:', error);
+        console.error('âŒ Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
       }
     }
@@ -170,31 +170,31 @@ const EventsAdmin: React.FC = () => {
         // Atualizar evento existente
         try {
           const updatedEvent = await eventsAPI.updateEvent(editingEvent.id!, eventData);
-          console.log('✅ Evento atualizado via API:', updatedEvent);
+          console.log('âœ… Evento atualizado via API:', updatedEvent);
           setEvents(prev => prev.map(event => 
             event.id === editingEvent.id 
               ? { ...event, ...eventData, updated_at: new Date().toISOString() }
               : event
           ));
           toast.success('Evento atualizado com sucesso!');
-          // Disparar evento de sincronização
+          // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         } catch (apiError) {
-          console.log('⚠️ Erro na API, atualizando localmente:', apiError);
+          console.log('âš ï¸ Erro na API, atualizando localmente:', apiError);
           setEvents(prev => prev.map(event => 
             event.id === editingEvent.id 
               ? { ...event, ...eventData, updated_at: new Date().toISOString() }
               : event
           ));
           toast.success('Evento atualizado localmente!');
-          // Disparar evento de sincronização
+          // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
       } else {
         // Criar novo evento
         try {
           const newEventFromAPI = await eventsAPI.createEvent(eventData);
-          console.log('✅ Evento criado via API:', newEventFromAPI);
+          console.log('âœ… Evento criado via API:', newEventFromAPI);
           setEvents(prev => {
             const updatedEvents = [...prev, newEventFromAPI];
             // Salvar no cache local
@@ -202,11 +202,11 @@ const EventsAdmin: React.FC = () => {
             return updatedEvents;
           });
           toast.success('Evento criado com sucesso!');
-          // Disparar evento de sincronização
+          // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
-          console.log('📡 Evento de sincronização disparado para página inicial');
+          console.log('ðŸ“¡ Evento de sincronizaÃ§Ã£o disparado para pÃ¡gina inicial');
         } catch (apiError) {
-          console.log('⚠️ Erro na API, criando localmente:', apiError);
+          console.log('âš ï¸ Erro na API, criando localmente:', apiError);
           const newEvent: Event = {
             ...eventData,
             id: Date.now().toString(),
@@ -220,12 +220,12 @@ const EventsAdmin: React.FC = () => {
             return updatedEvents;
           });
           toast.success('Evento criado localmente!');
-          // Disparar evento de sincronização
+          // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
       }
     } catch (error) {
-      console.error('❌ Erro ao salvar evento:', error);
+      console.error('âŒ Erro ao salvar evento:', error);
       toast.error('Erro ao salvar evento');
     }
   };
@@ -239,9 +239,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // month é 0-indexed
+    const date = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -255,9 +255,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const isUpcoming = (dateString: string) => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = dateString.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -265,9 +265,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const filteredEvents = events.filter(event => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = event.date.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -297,9 +297,9 @@ const EventsAdmin: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <CalendarIcon className="h-6 w-6 mr-2" />
-            Administração de Eventos
+            AdministraÃ§Ã£o de Eventos
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos que aparecem na página inicial</p>
+          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos que aparecem na pÃ¡gina inicial</p>
         </div>
         <div className="flex space-x-3">
           <button
@@ -340,7 +340,7 @@ const EventsAdmin: React.FC = () => {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            Próximos ({events.filter(e => {
+            PrÃ³ximos ({events.filter(e => {
               const [year, month, day] = e.date.split('-').map(Number);
               const eventDate = new Date(year, month - 1, day);
               const today = new Date();
@@ -377,7 +377,7 @@ const EventsAdmin: React.FC = () => {
               <p className="mt-1 text-sm text-gray-500">
                 {filter === 'all' 
                   ? 'Comece criando um novo evento.' 
-                  : 'Não há eventos para o filtro selecionado.'}
+                  : 'NÃ£o hÃ¡ eventos para o filtro selecionado.'}
               </p>
             </div>
           ) : (
@@ -400,7 +400,7 @@ const EventsAdmin: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Conteúdo */}
+                  {/* ConteÃºdo */}
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-900">
@@ -408,7 +408,7 @@ const EventsAdmin: React.FC = () => {
                       </h3>
                       {isUpcoming(event.date) && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          Próximo
+                          PrÃ³ximo
                         </span>
                       )}
                     </div>
@@ -458,7 +458,7 @@ const EventsAdmin: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Ações */}
+                    {/* AÃ§Ãµes */}
                     {viewMode === 'admin' && (
                       <div className="flex justify-end space-x-2 pt-4 border-t">
                         <button
@@ -499,7 +499,7 @@ const EventsAdmin: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de Formulário */}
+      {/* Modal de FormulÃ¡rio */}
       {showForm && (
         <EventForm
           event={editingEvent}
@@ -519,7 +519,7 @@ const EventsAdmin: React.FC = () => {
         />
       )}
 
-      {/* Modal de Compartilhamento Automático */}
+      {/* Modal de Compartilhamento AutomÃ¡tico */}
       {autoSharingEvent && (
         <AutoShareManager
           event={autoSharingEvent}

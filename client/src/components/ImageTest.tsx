@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const ImageTest: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -21,14 +21,14 @@ const ImageTest: React.FC = () => {
     reader.onload = () => {
       if (typeof reader.result === 'string') {
         setBase64Image(reader.result);
-        console.log('✅ Base64 gerado:', reader.result.substring(0, 100) + '...');
-        console.log('📏 Tamanho total:', reader.result.length);
+        console.log('âœ… Base64 gerado:', reader.result.substring(0, 100) + '...');
+        console.log('ðŸ“ Tamanho total:', reader.result.length);
       }
       setLoading(false);
     };
     
     reader.onerror = () => {
-      console.error('❌ Erro ao converter para base64');
+      console.error('âŒ Erro ao converter para base64');
       setLoading(false);
     };
     
@@ -38,7 +38,7 @@ const ImageTest: React.FC = () => {
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-        Teste de Conversão de Imagem
+        Teste de ConversÃ£o de Imagem
       </h2>
       
       <div className="space-y-4">
@@ -79,19 +79,19 @@ const ImageTest: React.FC = () => {
                 src={base64Image}
                 alt="Teste"
                 className="max-w-xs h-auto border border-gray-300 dark:border-gray-600 rounded"
-                onLoad={() => console.log('✅ Imagem carregada com sucesso')}
-                onError={() => console.log('❌ Erro ao carregar imagem')}
+                onLoad={() => console.log('âœ… Imagem carregada com sucesso')}
+                onError={() => console.log('âŒ Erro ao carregar imagem')}
               />
             </div>
 
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Informações do Base64
+                InformaÃ§Ãµes do Base64
               </h3>
               <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm font-mono text-gray-800 dark:text-gray-200">
                 <p>Tamanho: {base64Image.length} caracteres</p>
                 <p>Prefixo: {base64Image.substring(0, 30)}...</p>
-                <p>É válido: {base64Image.startsWith('data:') ? 'Sim' : 'Não'}</p>
+                <p>Ã‰ vÃ¡lido: {base64Image.startsWith('data:') ? 'Sim' : 'NÃ£o'}</p>
               </div>
             </div>
 
@@ -100,13 +100,13 @@ const ImageTest: React.FC = () => {
                 Teste com SafeImage
               </h3>
               <div className="border border-gray-300 dark:border-gray-600 rounded p-4">
-                {/* Aqui você pode testar com o SafeImage se quiser */}
+                {/* Aqui vocÃª pode testar com o SafeImage se quiser */}
                 <img
                   src={base64Image}
                   alt="Teste SafeImage"
                   className="max-w-xs h-auto"
-                  onLoad={() => console.log('✅ SafeImage carregou com sucesso')}
-                  onError={() => console.log('❌ SafeImage falhou')}
+                  onLoad={() => console.log('âœ… SafeImage carregou com sucesso')}
+                  onError={() => console.log('âŒ SafeImage falhou')}
                 />
               </div>
             </div>

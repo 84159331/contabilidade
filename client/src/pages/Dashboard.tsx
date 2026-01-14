@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { 
   CurrencyDollarIcon, 
   ArrowUpIcon, 
@@ -27,11 +27,11 @@ const Dashboard: React.FC = () => {
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
-  // Força recarregamento quando a rota muda ou quando necessário
+  // ForÃ§a recarregamento quando a rota muda ou quando necessÃ¡rio
   useEffect(() => {
-    // Se não há dados mas o loading terminou, forçar refresh
+    // Se nÃ£o hÃ¡ dados mas o loading terminou, forÃ§ar refresh
     if (!loading && !authLoading && !stats) {
-      console.log('🔄 Dashboard sem dados, forçando refresh...');
+      console.log('ðŸ”„ Dashboard sem dados, forÃ§ando refresh...');
       refresh();
     }
   }, [loading, authLoading, stats, refresh]);
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
             <p className="mt-1 text-md text-slate-600">
-              Visão geral das finanças da igreja
+              VisÃ£o geral das finanÃ§as da igreja
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
           <p className="mt-1 text-sm sm:text-md text-slate-600 dark:text-gray-400">
-            Visão geral das finanças da igreja
+            VisÃ£o geral das finanÃ§as da igreja
           </p>
         </div>
         <button
@@ -112,7 +112,7 @@ const Dashboard: React.FC = () => {
             />
             <div className="mt-1">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {stats?.income?.count || 0} transações
+                {stats?.income?.count || 0} transaÃ§Ãµes
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
             />
             <div className="mt-1">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {stats?.expense?.count || 0} transações
+                {stats?.expense?.count || 0} transaÃ§Ãµes
               </div>
             </div>
           </div>
@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
           <AnimatedCard delay={6}>
             <div className="p-6">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                Estatísticas dos Membros
+                EstatÃ­sticas dos Membros
               </h3>
               <MemberStats />
             </div>
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
         <AnimatedCard delay={7}>
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-              Transações Recentes
+              TransaÃ§Ãµes Recentes
             </h3>
           </div>
           <RecentTransactions />

@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
- * Hook que detecta mudanças de rota e permite invalidar caches/forçar recarregamento
- * Útil para garantir que componentes recarreguem dados ao navegar
+ * Hook que detecta mudanÃ§as de rota e permite invalidar caches/forÃ§ar recarregamento
+ * Ãštil para garantir que componentes recarreguem dados ao navegar
  */
 export const useRouteRefresh = (onRouteChange?: () => void) => {
   const location = useLocation();
@@ -46,7 +46,7 @@ export const useCacheInvalidation = () => {
 
   useEffect(() => {
     if (previousPathnameRef.current !== location.pathname) {
-      // Limpar caches específicos ao mudar de rota
+      // Limpar caches especÃ­ficos ao mudar de rota
       try {
         // Lista de chaves de cache a limpar
         const cacheKeys = [
@@ -60,7 +60,7 @@ export const useCacheInvalidation = () => {
           sessionStorage.removeItem(key);
         });
 
-        console.log('🧹 Cache limpo ao mudar de rota:', location.pathname);
+        console.log('ðŸ§¹ Cache limpo ao mudar de rota:', location.pathname);
       } catch (error) {
         console.warn('Erro ao limpar cache:', error);
       }

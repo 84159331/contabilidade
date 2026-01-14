@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';
@@ -20,34 +20,34 @@ interface Event {
 const events: Event[] = [
   {
     id: 1,
-    title: 'Culto de Celebração',
+    title: 'Culto de CelebraÃ§Ã£o',
     date: 'Todos os Domingos',
     time: '19:00',
     location: 'Templo Principal',
-    description: 'Um tempo de louvor, adoração e ensino da Palavra de Deus.',
-    image: '/img/Culto de Celebração - 22-01 [thumb].png',
+    description: 'Um tempo de louvor, adoraÃ§Ã£o e ensino da Palavra de Deus.',
+    image: '/img/Culto de CelebraÃ§Ã£o - 22-01 [thumb].png',
     type: 'culto',
     attendees: 250,
     color: 'blue'
   },
   {
     id: 2,
-    title: 'Estudo Bíblico',
+    title: 'Estudo BÃ­blico',
     date: 'Todas as Quartas-feiras',
     time: '19:30 - 21:00',
     location: 'Sala de Estudos',
-    description: 'Aprofunde seu conhecimento da Bíblia em nosso estudo semanal.',
+    description: 'Aprofunde seu conhecimento da BÃ­blia em nosso estudo semanal.',
     type: 'estudo',
     attendees: 45,
     color: 'green'
   },
   {
     id: 3,
-    title: 'Reunião de Oração',
+    title: 'ReuniÃ£o de OraÃ§Ã£o',
     date: 'Todas as Sextas-feiras',
     time: '07:00 - 08:00',
-    location: 'Capela de Oração',
-    description: 'Comece o dia com oração e comunhão.',
+    location: 'Capela de OraÃ§Ã£o',
+    description: 'Comece o dia com oraÃ§Ã£o e comunhÃ£o.',
     type: 'oracao',
     attendees: 30,
     color: 'purple'
@@ -55,10 +55,10 @@ const events: Event[] = [
   {
     id: 4,
     title: 'Grupo de Jovens',
-    date: 'Todos os Sábados',
+    date: 'Todos os SÃ¡bados',
     time: '18:00 - 20:00',
     location: 'Sala dos Jovens',
-    description: 'Um tempo de diversão, comunhão e crescimento para os jovens da nossa igreja.',
+    description: 'Um tempo de diversÃ£o, comunhÃ£o e crescimento para os jovens da nossa igreja.',
     type: 'jovens',
     attendees: 60,
     color: 'orange'
@@ -89,7 +89,7 @@ const EventsPage: React.FC = () => {
     const types = {
       culto: 'Culto',
       estudo: 'Estudo',
-      oracao: 'Oração',
+      oracao: 'OraÃ§Ã£o',
       jovens: 'Jovens'
     };
     return types[type as keyof typeof types] || 'Evento';
@@ -98,9 +98,9 @@ const EventsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <SEOHead
-        title="Eventos - Comunidade Cristã Resgate"
-        description="Participe dos nossos eventos, cultos, estudos bíblicos e atividades. Veja nossa programação completa e faça parte da nossa comunidade."
-        keywords="eventos, cultos, estudos bíblicos, programação, igreja brasília, comunidade cristã resgate"
+        title="Eventos - Comunidade CristÃ£ Resgate"
+        description="Participe dos nossos eventos, cultos, estudos bÃ­blicos e atividades. Veja nossa programaÃ§Ã£o completa e faÃ§a parte da nossa comunidade."
+        keywords="eventos, cultos, estudos bÃ­blicos, programaÃ§Ã£o, igreja brasÃ­lia, comunidade cristÃ£ resgate"
         url="/eventos"
         type="website"
       />
@@ -120,7 +120,7 @@ const EventsPage: React.FC = () => {
             />
             <h1 className="text-5xl font-bold font-heading mb-4">Eventos</h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
-              Participe dos nossos eventos e fortaleça sua fé junto conosco
+              Participe dos nossos eventos e fortaleÃ§a sua fÃ© junto conosco
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center">
@@ -133,7 +133,7 @@ const EventsPage: React.FC = () => {
               </div>
               <div className="flex items-center">
                 <HeartIcon className="h-5 w-5 mr-2" />
-                <span>Comunhão e Crescimento</span>
+                <span>ComunhÃ£o e Crescimento</span>
               </div>
             </div>
           </motion.div>

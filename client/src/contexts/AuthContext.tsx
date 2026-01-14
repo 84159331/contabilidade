@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authAPI } from '../services/api';
 import storage from '../utils/storage';
 
@@ -35,33 +35,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('🔄 AuthContext useEffect executado');
+    console.log('ðŸ”„ AuthContext useEffect executado');
     const token = storage.getString('token');
-    console.log('🔑 Token encontrado no armazenamento local:', token);
+    console.log('ðŸ”‘ Token encontrado no armazenamento local:', token);
     
-    // Verificação de token comentada - usando Firebase Auth
+    // VerificaÃ§Ã£o de token comentada - usando Firebase Auth
     /*
     if (token) {
-      console.log('🔍 Verificando token...');
+      console.log('ðŸ” Verificando token...');
       authAPI.verifyToken()
         .then((response) => {
-          console.log('✅ Token verificado com sucesso:', response.data);
+          console.log('âœ… Token verificado com sucesso:', response.data);
           setUser(response.data.user);
         })
         .catch((error) => {
-          console.error('❌ Erro na verificação do token:', error);
+          console.error('âŒ Erro na verificaÃ§Ã£o do token:', error);
           storage.remove('token');
         })
         .finally(() => {
           setLoading(false);
         });
     } else {
-      console.log('❌ Nenhum token encontrado');
+      console.log('âŒ Nenhum token encontrado');
       setLoading(false);
     }
     */
     
-    // Usar Firebase Auth em vez de verificação de token
+    // Usar Firebase Auth em vez de verificaÃ§Ã£o de token
     setLoading(false);
   }, []);
 

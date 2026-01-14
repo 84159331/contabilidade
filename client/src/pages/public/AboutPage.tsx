@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import SEOHead from '../../components/SEOHead';
 import { HeartIcon, UsersIcon, HandRaisedIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -7,9 +7,9 @@ const AboutPage: React.FC = () => {
   return (
     <div>
       <SEOHead
-        title="Sobre Nós - Comunidade Cristã Resgate"
-        description="Conheça a história, missão e valores da Comunidade Cristã Resgate. Uma igreja em Brasília-DF comprometida com a fé, comunidade e transparência."
-        keywords="sobre, história, missão, valores, igreja brasília, comunidade cristã resgate"
+        title="Sobre NÃ³s - Comunidade CristÃ£ Resgate"
+        description="ConheÃ§a a histÃ³ria, missÃ£o e valores da Comunidade CristÃ£ Resgate. Uma igreja em BrasÃ­lia-DF comprometida com a fÃ©, comunidade e transparÃªncia."
+        keywords="sobre, histÃ³ria, missÃ£o, valores, igreja brasÃ­lia, comunidade cristÃ£ resgate"
         url="/sobre"
         type="website"
       />
@@ -22,9 +22,9 @@ const AboutPage: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="relative z-10 text-center"
         >
-          <h1 className="text-5xl font-bold font-heading mb-4">Sobre Nós</h1>
+          <h1 className="text-5xl font-bold font-heading mb-4">Sobre NÃ³s</h1>
           <p className="text-xl opacity-90 max-w-2xl mx-auto">
-            Conheça nossa história, missão e valores que nos guiam como comunidade cristã
+            ConheÃ§a nossa histÃ³ria, missÃ£o e valores que nos guiam como comunidade cristÃ£
           </p>
         </motion.div>
       </div>
@@ -33,19 +33,19 @@ const AboutPage: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa História</h2>
+              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa HistÃ³ria</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                A Comunidade Cristã Resgate foi fundada em 1995 com a missão de ser um farol de esperança e fé na comunidade. 
-                Desde o início, nosso foco tem sido a adoração a Deus, o ensino da Bíblia e o serviço ao próximo.
+                A Comunidade CristÃ£ Resgate foi fundada em 1995 com a missÃ£o de ser um farol de esperanÃ§a e fÃ© na comunidade. 
+                Desde o inÃ­cio, nosso foco tem sido a adoraÃ§Ã£o a Deus, o ensino da BÃ­blia e o serviÃ§o ao prÃ³ximo.
               </p>
               <p className="text-gray-600 dark:text-gray-300">
-                Ao longo dos anos, crescemos de um pequeno grupo de fiéis para uma comunidade vibrante e diversificada. 
-                Nossos membros vêm de todas as esferas da vida, unidos por uma fé comum em Jesus Cristo.
+                Ao longo dos anos, crescemos de um pequeno grupo de fiÃ©is para uma comunidade vibrante e diversificada. 
+                Nossos membros vÃªm de todas as esferas da vida, unidos por uma fÃ© comum em Jesus Cristo.
               </p>
             </div>
             <div>
               <div className="bg-gray-200 dark:bg-gray-800 h-64 rounded-lg flex items-center justify-center">
-                <p className="text-gray-500 dark:text-gray-400">Imagem da História</p>
+                <p className="text-gray-500 dark:text-gray-400">Imagem da HistÃ³ria</p>
               </div>
             </div>
           </div>
@@ -53,19 +53,19 @@ const AboutPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-16">
             <div>
               <div className="bg-gray-200 dark:bg-gray-800 h-64 rounded-lg flex items-center justify-center">
-                <p className="text-gray-500 dark:text-gray-400">Imagem da Missão</p>
+                <p className="text-gray-500 dark:text-gray-400">Imagem da MissÃ£o</p>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa Missão e Visão</h2>
+              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa MissÃ£o e VisÃ£o</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Nossa missão é servir a Deus e à comunidade com amor, dedicação e transparência em todas as nossas ações. 
-                Nossa visão é ser uma igreja que impacta a sociedade através do evangelho, transformando vidas e comunidades.
+                Nossa missÃ£o Ã© servir a Deus e Ã  comunidade com amor, dedicaÃ§Ã£o e transparÃªncia em todas as nossas aÃ§Ãµes. 
+                Nossa visÃ£o Ã© ser uma igreja que impacta a sociedade atravÃ©s do evangelho, transformando vidas e comunidades.
               </p>
               <p className="text-gray-600 dark:text-gray-300">
-                Acreditamos na importância da transparência e da boa gestão dos recursos que Deus nos confia. 
-                É por isso que desenvolvemos este sistema de contabilidade, para garantir que cada doação seja 
-                administrada com a máxima responsabilidade e integridade.
+                Acreditamos na importÃ¢ncia da transparÃªncia e da boa gestÃ£o dos recursos que Deus nos confia. 
+                Ã‰ por isso que desenvolvemos este sistema de contabilidade, para garantir que cada doaÃ§Ã£o seja 
+                administrada com a mÃ¡xima responsabilidade e integridade.
               </p>
             </div>
           </div>
@@ -82,7 +82,7 @@ const AboutPage: React.FC = () => {
                 <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
                   <HeartIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Fé</h3>
+                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">FÃ©</h3>
                 <p className="text-gray-600 dark:text-gray-300">Acreditamos no poder de Deus para transformar vidas.</p>
               </motion.div>
               <motion.div 
@@ -106,8 +106,8 @@ const AboutPage: React.FC = () => {
                 <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
                   <HandRaisedIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">Serviço</h3>
-                <p className="text-gray-600 dark:text-gray-300">Servimos uns aos outros e à nossa cidade com alegria.</p>
+                <h3 className="text-xl font-bold font-heading mb-2 dark:text-white">ServiÃ§o</h3>
+                <p className="text-gray-600 dark:text-gray-300">Servimos uns aos outros e Ã  nossa cidade com alegria.</p>
               </motion.div>
             </div>
           </div>

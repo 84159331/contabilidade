@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { SignalSlashIcon, WifiIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
@@ -11,33 +11,33 @@ const OfflinePage: React.FC = () => {
         </div>
         
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Você está offline
+          VocÃª estÃ¡ offline
         </h1>
         
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          Parece que você não tem conexão com a internet no momento.
+          Parece que vocÃª nÃ£o tem conexÃ£o com a internet no momento.
         </p>
         
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            O que você ainda pode fazer:
+            O que vocÃª ainda pode fazer:
           </h2>
           
           <ul className="text-left space-y-3 text-gray-600 dark:text-gray-400">
             <li className="flex items-start">
-              <span className="text-green-500 mr-2">✓</span>
-              <span>Visualizar dados já carregados</span>
+              <span className="text-green-500 mr-2">âœ“</span>
+              <span>Visualizar dados jÃ¡ carregados</span>
             </li>
             <li className="flex items-start">
-              <span className="text-green-500 mr-2">✓</span>
-              <span>Navegar pelas páginas visitadas</span>
+              <span className="text-green-500 mr-2">âœ“</span>
+              <span>Navegar pelas pÃ¡ginas visitadas</span>
             </li>
             <li className="flex items-start">
-              <span className="text-green-500 mr-2">✓</span>
-              <span>Preencher formulários (serão salvos quando voltar online)</span>
+              <span className="text-green-500 mr-2">âœ“</span>
+              <span>Preencher formulÃ¡rios (serÃ£o salvos quando voltar online)</span>
             </li>
             <li className="flex items-start">
-              <span className="text-yellow-500 mr-2">⚠</span>
+              <span className="text-yellow-500 mr-2">âš </span>
               <span>Algumas funcionalidades podem estar limitadas</span>
             </li>
           </ul>
@@ -56,12 +56,12 @@ const OfflinePage: React.FC = () => {
             to="/"
             className="block w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-medium transition-colors min-h-[44px] flex items-center justify-center"
           >
-            Voltar para página inicial
+            Voltar para pÃ¡gina inicial
           </Link>
         </div>
         
         <p className="mt-8 text-sm text-gray-500 dark:text-gray-400">
-          Quando sua conexão for restaurada, seus dados serão sincronizados automaticamente.
+          Quando sua conexÃ£o for restaurada, seus dados serÃ£o sincronizados automaticamente.
         </p>
       </div>
     </div>

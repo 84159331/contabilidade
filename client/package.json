@@ -18,6 +18,10 @@
     "apk:build": "npm run build && npx cap sync android",
     "apk:generate": "powershell -ExecutionPolicy Bypass -File ./gerar-apk.ps1",
     "apk:generate:signed": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-assinado.ps1",
+    "apk:generate:full": "powershell -ExecutionPolicy Bypass -File ./gerar-e-assinar-apk.ps1",
+    "apk:auto": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-automatico.ps1",
+    "apk": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-completo-auto.ps1",
+    "apk:sign": "powershell -ExecutionPolicy Bypass -File ./assinar-apk.ps1",
     "apk:generate:bundle": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-bundle.ps1",
     "apk:generate:bundle:signed": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-bundle-assinado.ps1",
     "apk:interactive": "powershell -ExecutionPolicy Bypass -File ./gerar-apk-interativo.ps1"

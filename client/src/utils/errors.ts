@@ -1,8 +1,8 @@
-import { logger } from './logger';
+﻿import { logger } from './logger';
 import { toast } from 'react-toastify';
 
 /**
- * Classe base para erros customizados da aplicação
+ * Classe base para erros customizados da aplicaÃ§Ã£o
  */
 export class AppError extends Error {
   public readonly code: string;
@@ -24,13 +24,13 @@ export class AppError extends Error {
     this.isOperational = isOperational;
     this.context = context;
 
-    // Mantém o stack trace correto
+    // MantÃ©m o stack trace correto
     Error.captureStackTrace?.(this, this.constructor);
   }
 }
 
 /**
- * Erro de validação
+ * Erro de validaÃ§Ã£o
  */
 export class ValidationError extends AppError {
   constructor(message: string, field?: string) {
@@ -46,31 +46,31 @@ export class ValidationError extends AppError {
 }
 
 /**
- * Erro de autenticação
+ * Erro de autenticaÃ§Ã£o
  */
 export class AuthenticationError extends AppError {
-  constructor(message: string = 'Não autenticado') {
+  constructor(message: string = 'NÃ£o autenticado') {
     super(message, 'AUTHENTICATION_ERROR', 401, true);
     this.name = 'AuthenticationError';
   }
 }
 
 /**
- * Erro de autorização
+ * Erro de autorizaÃ§Ã£o
  */
 export class AuthorizationError extends AppError {
-  constructor(message: string = 'Não autorizado') {
+  constructor(message: string = 'NÃ£o autorizado') {
     super(message, 'AUTHORIZATION_ERROR', 403, true);
     this.name = 'AuthorizationError';
   }
 }
 
 /**
- * Erro de recurso não encontrado
+ * Erro de recurso nÃ£o encontrado
  */
 export class NotFoundError extends AppError {
   constructor(resource: string = 'Recurso') {
-    super(`${resource} não encontrado`, 'NOT_FOUND_ERROR', 404, true);
+    super(`${resource} nÃ£o encontrado`, 'NOT_FOUND_ERROR', 404, true);
     this.name = 'NotFoundError';
   }
 }
@@ -79,7 +79,7 @@ export class NotFoundError extends AppError {
  * Erro de API/Network
  */
 export class NetworkError extends AppError {
-  constructor(message: string = 'Erro de conexão com o servidor') {
+  constructor(message: string = 'Erro de conexÃ£o com o servidor') {
     super(message, 'NETWORK_ERROR', 0, false);
     this.name = 'NetworkError';
   }
@@ -90,13 +90,13 @@ export class NetworkError extends AppError {
  */
 export class ErrorHandler {
   /**
-   * Trata um erro e retorna uma mensagem amigável
+   * Trata um erro e retorna uma mensagem amigÃ¡vel
    */
   static handle(error: unknown, showToast: boolean = true): string {
     let errorMessage = 'Ocorreu um erro inesperado. Tente novamente.';
     let errorCode = 'UNKNOWN_ERROR';
 
-    // Se for uma instância de AppError
+    // Se for uma instÃ¢ncia de AppError
     if (error instanceof AppError) {
       errorMessage = error.message;
       errorCode = error.code;
@@ -105,14 +105,14 @@ export class ErrorHandler {
       if (error.isOperational) {
         logger.warn(`Erro operacional [${error.code}]:`, error.message, error.context);
       } else {
-        logger.error(`Erro crítico [${error.code}]:`, error, error.context);
+        logger.error(`Erro crÃ­tico [${error.code}]:`, error, error.context);
       }
     }
-    // Se for um Error padrão
+    // Se for um Error padrÃ£o
     else if (error instanceof Error) {
       errorMessage = error.message;
       errorCode = 'STANDARD_ERROR';
-      logger.error('Erro padrão:', error);
+      logger.error('Erro padrÃ£o:', error);
     }
     // Se for uma resposta de API (axios)
     else if (error && typeof error === 'object' && 'response' in error) {
@@ -121,13 +121,13 @@ export class ErrorHandler {
       const data = apiError.response?.data;
 
       if (status === 401) {
-        errorMessage = 'Sua sessão expirou. Por favor, faça login novamente.';
+        errorMessage = 'Sua sessÃ£o expirou. Por favor, faÃ§a login novamente.';
         errorCode = 'SESSION_EXPIRED';
       } else if (status === 403) {
-        errorMessage = 'Você não tem permissão para realizar esta ação.';
+        errorMessage = 'VocÃª nÃ£o tem permissÃ£o para realizar esta aÃ§Ã£o.';
         errorCode = 'FORBIDDEN';
       } else if (status === 404) {
-        errorMessage = 'Recurso não encontrado.';
+        errorMessage = 'Recurso nÃ£o encontrado.';
         errorCode = 'NOT_FOUND';
       } else if (status === 500) {
         errorMessage = 'Erro interno do servidor. Tente novamente mais tarde.';
@@ -160,7 +160,7 @@ export class ErrorHandler {
   }
 
   /**
-   * Verifica se o erro é operacional (pode ser tratado pelo usuário)
+   * Verifica se o erro Ã© operacional (pode ser tratado pelo usuÃ¡rio)
    */
   static isOperational(error: unknown): boolean {
     if (error instanceof AppError) {
@@ -170,7 +170,7 @@ export class ErrorHandler {
   }
 
   /**
-   * Extrai código de erro
+   * Extrai cÃ³digo de erro
    */
   static getErrorCode(error: unknown): string {
     if (error instanceof AppError) {
@@ -184,7 +184,7 @@ export class ErrorHandler {
 }
 
 /**
- * Wrapper para funções assíncronas com tratamento de erro automático
+ * Wrapper para funÃ§Ãµes assÃ­ncronas com tratamento de erro automÃ¡tico
  */
 export function withErrorHandling<T extends (...args: any[]) => Promise<any>>(
   fn: T,
@@ -194,7 +194,7 @@ export function withErrorHandling<T extends (...args: any[]) => Promise<any>>(
     try {
       return await fn(...args);
     } catch (error) {
-      const message = errorMessage || 'Erro ao executar operação';
+      const message = errorMessage || 'Erro ao executar operaÃ§Ã£o';
       ErrorHandler.handle(error);
       throw error;
     }

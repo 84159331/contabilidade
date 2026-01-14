@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { db } from '../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
 import { User } from '../types/User';
@@ -31,7 +31,7 @@ const VacationForm: React.FC<VacationFormProps> = ({ onSave, onClose, initialDat
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const pastor = users.find(user => user.id === formData.pastorId);
-    const title = pastor ? `Férias do Pastor ${pastor.name}` : 'Férias';
+    const title = pastor ? `FÃ©rias do Pastor ${pastor.name}` : 'FÃ©rias';
     const pastorName = pastor ? pastor.name : '';
     onSave({ ...formData, title, pastorName });
   };
@@ -54,7 +54,7 @@ const VacationForm: React.FC<VacationFormProps> = ({ onSave, onClose, initialDat
         </select>
       </div>
       <div className="mb-4">
-        <label htmlFor="start" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Início</label>
+        <label htmlFor="start" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de InÃ­cio</label>
         <input
           type="date"
           id="start"

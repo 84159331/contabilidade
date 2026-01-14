@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
+﻿import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { reportsAPI } from '../services/api';
 import { useAuth } from '../firebase/AuthContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -34,19 +34,19 @@ const FinancialSummary: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
 
   const loadYearlyData = useCallback(async (year: number) => {
-    // Aguardar autenticação terminar
+    // Aguardar autenticaÃ§Ã£o terminar
     if (authLoading) {
       return;
     }
 
     setLoading(true);
     try {
-      // Usar API de relatório anual que já funciona
+      // Usar API de relatÃ³rio anual que jÃ¡ funciona
       const response = await reportsAPI.getYearlyBalance(year);
       const reportData = response.data;
 
       if (reportData && reportData.monthlyData) {
-        // Converter para formato do gráfico com nomes abreviados
+        // Converter para formato do grÃ¡fico com nomes abreviados
         const formattedData = reportData.monthlyData.map((month: MonthlyData) => ({
           ...month,
           month: MONTH_NAMES_SHORT[parseInt(month.month) - 1] || month.month,
@@ -55,7 +55,7 @@ const FinancialSummary: React.FC = () => {
         setMonthlyData(formattedData);
         setYearlyTotal(reportData.yearlyTotal || { income: 0, expense: 0, balance: 0 });
       } else {
-        // Se não houver dados, criar estrutura vazia
+        // Se nÃ£o houver dados, criar estrutura vazia
         const emptyData = MONTH_NAMES_SHORT.map((name, index) => ({
           month: name,
           monthName: name,
@@ -91,7 +91,7 @@ const FinancialSummary: React.FC = () => {
     setSelectedYear(parseInt(e.target.value, 10));
   }, []);
 
-  // Calcular estatísticas
+  // Calcular estatÃ­sticas
   const stats = useMemo(() => {
     if (monthlyData.length === 0) {
       return {
@@ -117,7 +117,7 @@ const FinancialSummary: React.FC = () => {
       current.balance < worst.balance ? current : worst
     , monthlyData[0]);
 
-    // Calcular crescimento (comparar últimos 6 meses com primeiros 6 meses)
+    // Calcular crescimento (comparar Ãºltimos 6 meses com primeiros 6 meses)
     const firstHalf = monthlyData.slice(0, 6).reduce((sum, m) => sum + m.balance, 0);
     const secondHalf = monthlyData.slice(6, 12).reduce((sum, m) => sum + m.balance, 0);
     const growthRate = firstHalf !== 0 ? ((secondHalf - firstHalf) / Math.abs(firstHalf)) * 100 : 0;
@@ -132,7 +132,7 @@ const FinancialSummary: React.FC = () => {
     };
   }, [monthlyData]);
 
-  // Formatação de moeda
+  // FormataÃ§Ã£o de moeda
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -154,10 +154,10 @@ const FinancialSummary: React.FC = () => {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500 dark:text-gray-400 mb-4">
-          Nenhum dado financeiro disponível para {selectedYear}
+          Nenhum dado financeiro disponÃ­vel para {selectedYear}
         </p>
         <p className="text-sm text-gray-400 dark:text-gray-500">
-          Registre transações para visualizar o resumo financeiro
+          Registre transaÃ§Ãµes para visualizar o resumo financeiro
         </p>
       </div>
     );
@@ -165,7 +165,7 @@ const FinancialSummary: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* Seletor de ano e estatísticas rápidas */}
+      {/* Seletor de ano e estatÃ­sticas rÃ¡pidas */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <select
           value={selectedYear}
@@ -177,18 +177,18 @@ const FinancialSummary: React.FC = () => {
           ))}
         </select>
 
-        {/* Cards de resumo rápido */}
+        {/* Cards de resumo rÃ¡pido */}
         <div className="flex gap-2 text-xs">
           <div className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full">
-            <span className="font-medium">Média Receitas:</span> {formatCurrency(stats.avgIncome)}
+            <span className="font-medium">MÃ©dia Receitas:</span> {formatCurrency(stats.avgIncome)}
           </div>
           <div className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-full">
-            <span className="font-medium">Média Despesas:</span> {formatCurrency(stats.avgExpense)}
+            <span className="font-medium">MÃ©dia Despesas:</span> {formatCurrency(stats.avgExpense)}
           </div>
         </div>
       </div>
 
-      {/* Gráfico de barras - Receitas vs Despesas */}
+      {/* GrÃ¡fico de barras - Receitas vs Despesas */}
       <div style={{ width: '100%', height: 250 }}>
         <ResponsiveContainer>
           <BarChart
@@ -238,10 +238,10 @@ const FinancialSummary: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Gráfico de linha - Saldo mensal */}
+      {/* GrÃ¡fico de linha - Saldo mensal */}
       <div style={{ width: '100%', height: 180 }} className="mt-4">
         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Evolução do Saldo Mensal
+          EvoluÃ§Ã£o do Saldo Mensal
         </h4>
         <ResponsiveContainer>
           <LineChart
@@ -284,12 +284,12 @@ const FinancialSummary: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Estatísticas e insights */}
+      {/* EstatÃ­sticas e insights */}
       <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <ArrowTrendingUpIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <span className="text-gray-600 dark:text-gray-400">Melhor Mês:</span>
+            <span className="text-gray-600 dark:text-gray-400">Melhor MÃªs:</span>
             <span className="font-semibold text-gray-900 dark:text-white">
               {stats.bestMonth?.month || 'N/A'}
             </span>
@@ -300,7 +300,7 @@ const FinancialSummary: React.FC = () => {
           
           <div className="flex items-center gap-2 text-sm">
             <ArrowTrendingDownIcon className="h-4 w-4 text-red-600 dark:text-red-400" />
-            <span className="text-gray-600 dark:text-gray-400">Mês Desafiador:</span>
+            <span className="text-gray-600 dark:text-gray-400">MÃªs Desafiador:</span>
             <span className="font-semibold text-gray-900 dark:text-white">
               {stats.worstMonth?.month || 'N/A'}
             </span>
@@ -312,7 +312,7 @@ const FinancialSummary: React.FC = () => {
 
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-600 dark:text-gray-400">Saldo Médio:</span>
+            <span className="text-gray-600 dark:text-gray-400">Saldo MÃ©dio:</span>
             <span className={`font-semibold ${stats.avgBalance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               {formatCurrency(stats.avgBalance)}
             </span>

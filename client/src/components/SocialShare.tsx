@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   ShareIcon,
   PhotoIcon,
@@ -23,21 +23,21 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
     {
       id: 'instagram',
       name: 'Instagram',
-      icon: '📷',
+      icon: 'ðŸ“·',
       color: 'bg-pink-500',
       description: 'Compartilhar no Instagram Stories'
     },
     {
       id: 'facebook',
       name: 'Facebook',
-      icon: '👥',
+      icon: 'ðŸ‘¥',
       color: 'bg-blue-600',
       description: 'Publicar no Facebook'
     },
     {
       id: 'whatsapp',
       name: 'WhatsApp',
-      icon: '💬',
+      icon: 'ðŸ’¬',
       color: 'bg-green-500',
       description: 'Enviar para grupos do WhatsApp'
     }
@@ -53,7 +53,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
 
   const generateShareText = () => {
     const date = new Date(event.date).toLocaleDateString('pt-BR');
-    const defaultMessage = `🎉 ${event.title}\n\n📅 ${date} às ${event.time}\n📍 ${event.location}\n\n${event.description || ''}\n\n#IgrejaComunidadeResgate #Evento`;
+    const defaultMessage = `ðŸŽ‰ ${event.title}\n\nðŸ“… ${date} Ã s ${event.time}\nðŸ“ ${event.location}\n\n${event.description || ''}\n\n#IgrejaComunidadeResgate #Evento`;
     
     return customMessage || defaultMessage;
   };
@@ -121,7 +121,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
   const copyToClipboard = async () => {
     const shareText = generateShareText();
     await navigator.clipboard.writeText(shareText);
-    toast.success('Texto copiado para a área de transferência!');
+    toast.success('Texto copiado para a Ã¡rea de transferÃªncia!');
   };
 
   return (
@@ -136,7 +136,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
           >
-            ✕
+            âœ•
           </button>
         </div>
 
@@ -145,8 +145,8 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 mb-2">{event.title}</h3>
             <div className="text-sm text-gray-600 space-y-1">
-              <p>📅 {new Date(event.date).toLocaleDateString('pt-BR')} às {event.time}</p>
-              <p>📍 {event.location}</p>
+              <p>ðŸ“… {new Date(event.date).toLocaleDateString('pt-BR')} Ã s {event.time}</p>
+              <p>ðŸ“ {event.location}</p>
               {event.description && <p>{event.description}</p>}
             </div>
             {event.image && (
@@ -170,7 +170,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
               onChange={(e) => setCustomMessage(e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Personalize a mensagem que será compartilhada..."
+              placeholder="Personalize a mensagem que serÃ¡ compartilhada..."
             />
           </div>
 
@@ -212,7 +212,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
             </div>
           </div>
 
-          {/* Botões */}
+          {/* BotÃµes */}
           <div className="flex justify-between pt-4 border-t">
             <button
               onClick={copyToClipboard}

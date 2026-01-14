@@ -1,4 +1,4 @@
-// Hook para gerenciar notificações
+﻿// Hook para gerenciar notificaÃ§Ãµes
 import { useState, useEffect } from 'react';
 import { useAuth } from '../firebase/AuthContext';
 import { notificationsAPI } from '../services/notificationsAPI';
@@ -17,7 +17,7 @@ export const useNotifications = (unreadOnly: boolean = false) => {
       return;
     }
 
-    // Carregar notificações iniciais
+    // Carregar notificaÃ§Ãµes iniciais
     const loadNotifications = async () => {
       try {
         setLoading(true);
@@ -25,7 +25,7 @@ export const useNotifications = (unreadOnly: boolean = false) => {
         setNotifications(userNotifications);
         setUnreadCount(userNotifications.filter(n => !n.read).length);
       } catch (error) {
-        console.error('Erro ao carregar notificações:', error);
+        console.error('Erro ao carregar notificaÃ§Ãµes:', error);
       } finally {
         setLoading(false);
       }
@@ -33,7 +33,7 @@ export const useNotifications = (unreadOnly: boolean = false) => {
 
     loadNotifications();
 
-    // Escutar mudanças em tempo real
+    // Escutar mudanÃ§as em tempo real
     const unsubscribe = notificationsAPI.subscribeToNotifications(user.uid, (newNotifications) => {
       setNotifications(newNotifications);
       setUnreadCount(newNotifications.filter(n => !n.read).length);

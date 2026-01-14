@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+﻿import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { ExclamationTriangleIcon, ArrowPathIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { logger } from '../utils/logger';
 
@@ -25,9 +25,6 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:27',message:'Error caught in getDerivedStateFromError',data:{errorMessage:error.message,errorName:error.name,errorStack:error.stack?.substring(0,500)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
-    // #endregion
     return {
       hasError: true,
       error
@@ -35,16 +32,13 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // #region agent log
     const isUndefinedError = error.message.includes('undefined') || error.message.includes('Element type is invalid');
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:34',message:'Error caught in componentDidCatch',data:{errorMessage:error.message,errorName:error.name,isUndefinedError,componentStack:errorInfo.componentStack?.substring(0,1000),errorStack:error.stack?.substring(0,1000)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
-    // #endregion
     // Log do erro
     logger.error('ErrorBoundary capturou um erro:', error, errorInfo);
     
     // Se for erro de componente undefined, logar mais detalhes
     if (isUndefinedError) {
-      console.error('❌ ERRO DE COMPONENTE UNDEFINED DETECTADO:');
+      console.error('âŒ ERRO DE COMPONENTE UNDEFINED DETECTADO:');
       console.error('Mensagem:', error.message);
       console.error('Stack:', error.stack);
       console.error('Component Stack:', errorInfo.componentStack);
@@ -55,7 +49,7 @@ class ErrorBoundary extends Component<Props, State> {
       errorInfo
     });
 
-    // Callback opcional para tratamento externo (ex: enviar para serviço de monitoramento)
+    // Callback opcional para tratamento externo (ex: enviar para serviÃ§o de monitoramento)
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
@@ -75,25 +69,19 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   render() {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:62',message:'ErrorBoundary render',data:{hasError:this.state.hasError,hasFallback:!!this.props.fallback,fallbackType:typeof this.props.fallback},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
-    // #endregion
     if (this.state.hasError) {
       // Se houver um fallback customizado, usar ele
       if (this.props.fallback) {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/6193fe1a-e637-43ea-9bad-a5f0d02278f6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.tsx:66',message:'Returning custom fallback',data:{fallbackType:typeof this.props.fallback,fallbackIsUndefined:this.props.fallback===undefined},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
-        // #endregion
-        // Validar que o fallback não é undefined
+        // Validar que o fallback nÃ£o Ã© undefined
         if (this.props.fallback === undefined || this.props.fallback === null) {
-          console.error('❌ ErrorBoundary: fallback é undefined ou null');
-          // Usar fallback padrão se o customizado for inválido
+          console.error('âŒ ErrorBoundary: fallback Ã© undefined ou null');
+          // Usar fallback padrÃ£o se o customizado for invÃ¡lido
         } else {
           return this.props.fallback;
         }
       }
 
-      // Fallback padrão
+      // Fallback padrÃ£o
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
           <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
@@ -134,7 +122,7 @@ class ErrorBoundary extends Component<Props, State> {
                 className="flex-1 flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <HomeIcon className="h-4 w-4 mr-2" />
-                Recarregar Página
+                Recarregar PÃ¡gina
               </button>
             </div>
 
@@ -146,17 +134,17 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // Validar que children não é undefined
+    // Validar que children nÃ£o Ã© undefined
     if (this.props.children === undefined || this.props.children === null) {
-      console.error('❌ ErrorBoundary: children é undefined ou null');
+      console.error('âŒ ErrorBoundary: children Ã© undefined ou null');
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Erro: Componente inválido
+              Erro: Componente invÃ¡lido
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Um componente necessário não foi encontrado.
+              Um componente necessÃ¡rio nÃ£o foi encontrado.
             </p>
           </div>
         </div>

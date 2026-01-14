@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
+﻿import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { transactionsAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
@@ -80,16 +80,16 @@ const RecentTransactions: React.FC = () => {
         
         // Usar dados mock
         setTransactions(mockDashboardData.recentTransactions);
-        console.log('Dados mock de transações carregados:', mockDashboardData.recentTransactions);
+        console.log('Dados mock de transaÃ§Ãµes carregados:', mockDashboardData.recentTransactions);
       } else {
         // Usar API real do Firestore
-        console.log('🔥 Carregando transações recentes do Firestore...');
+        console.log('ðŸ”¥ Carregando transaÃ§Ãµes recentes do Firestore...');
         const response = await transactionsAPI.getRecentTransactions(5);
         setTransactions(response.data);
-        console.log('✅ Transações recentes carregadas do Firestore:', response.data.length);
+        console.log('âœ… TransaÃ§Ãµes recentes carregadas do Firestore:', response.data.length);
       }
     } catch (error) {
-      console.error('Erro ao carregar transações:', error);
+      console.error('Erro ao carregar transaÃ§Ãµes:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setTransactions(mockDashboardData.recentTransactions);
@@ -115,7 +115,7 @@ const RecentTransactions: React.FC = () => {
   if (transactions.length === 0) {
     return (
       <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-        Nenhuma transação encontrada
+        Nenhuma transaÃ§Ã£o encontrada
       </div>
     );
   }
@@ -127,7 +127,7 @@ const RecentTransactions: React.FC = () => {
           <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Descrição
+                DescriÃ§Ã£o
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Categoria

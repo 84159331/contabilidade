@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon não utilizado
+// Removido DocumentArrowDownIcon nÃ£o utilizado
 
 interface CashFlowData {
   period: string;
@@ -46,12 +46,12 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         end_date: endDate,
         period
       });
-      // A API já retorna array diretamente
+      // A API jÃ¡ retorna array diretamente
       const cashFlowData = Array.isArray(response.data) ? response.data : [];
       setData(cashFlowData);
       onDataLoaded(cashFlowData);
       
-      // Passa metadados para geração de PDF
+      // Passa metadados para geraÃ§Ã£o de PDF
       if (onMetadataLoaded) {
         onMetadataLoaded({
           startDate,
@@ -60,8 +60,8 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         });
       }
     } catch (error) {
-      toast.error('Erro ao carregar relatório de fluxo de caixa');
-      console.error('Erro ao carregar relatório:', error);
+      toast.error('Erro ao carregar relatÃ³rio de fluxo de caixa');
+      console.error('Erro ao carregar relatÃ³rio:', error);
     } finally {
       setLoading(false);
     }
@@ -96,7 +96,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       <div className="flex gap-4 items-end">
         <div>
           <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-            Data Início
+            Data InÃ­cio
           </label>
           <input
             type="date"
@@ -120,7 +120,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         </div>
         <div>
           <label htmlFor="period" className="block text-sm font-medium text-gray-700 mb-1">
-            Período
+            PerÃ­odo
           </label>
           <select
             id="period"
@@ -128,7 +128,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
             value={period}
             onChange={(e) => setPeriod(e.target.value as 'daily' | 'weekly' | 'monthly')}
           >
-            <option value="daily">Diário</option>
+            <option value="daily">DiÃ¡rio</option>
             <option value="weekly">Semanal</option>
             <option value="monthly">Mensal</option>
           </select>
@@ -216,13 +216,13 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       <div className="bg-white shadow rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">
-            Fluxo de Caixa - {period === 'daily' ? 'Diário' : period === 'weekly' ? 'Semanal' : 'Mensal'}
+            Fluxo de Caixa - {period === 'daily' ? 'DiÃ¡rio' : period === 'weekly' ? 'Semanal' : 'Mensal'}
           </h3>
         </div>
         
         {data.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhum dado encontrado no período selecionado</p>
+            <p className="text-gray-500">Nenhum dado encontrado no perÃ­odo selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -230,7 +230,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Período
+                    PerÃ­odo
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Receitas

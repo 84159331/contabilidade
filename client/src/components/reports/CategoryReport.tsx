@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon não utilizado
+// Removido DocumentArrowDownIcon nÃ£o utilizado
 
 interface CategoryData {
   id: string;
@@ -54,7 +54,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         })
       ]);
       
-      // As APIs já retornam arrays diretamente
+      // As APIs jÃ¡ retornam arrays diretamente
       const incomeData = Array.isArray(incomeResponse.data) ? incomeResponse.data : [];
       const expenseData = Array.isArray(expenseResponse.data) ? expenseResponse.data : [];
       
@@ -67,7 +67,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       ];
       onDataLoaded(combinedData);
       
-      // Passa metadados para geração de PDF
+      // Passa metadados para geraÃ§Ã£o de PDF
       if (onMetadataLoaded) {
         onMetadataLoaded({
           incomeData,
@@ -78,8 +78,8 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       }
 
     } catch (error) {
-      toast.error('Erro ao carregar relatório por categoria');
-      console.error('Erro ao carregar relatório:', error);
+      toast.error('Erro ao carregar relatÃ³rio por categoria');
+      console.error('Erro ao carregar relatÃ³rio:', error);
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       <div className="flex gap-4 items-end">
         <div>
           <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-            Data Início
+            Data InÃ­cio
           </label>
           <input
             type="date"
@@ -183,7 +183,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         
         {incomeData.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma receita encontrada no período selecionado</p>
+            <p className="text-gray-500">Nenhuma receita encontrada no perÃ­odo selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -194,13 +194,13 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                     Categoria
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Transações
+                    TransaÃ§Ãµes
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Média
+                    MÃ©dia
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     %
@@ -251,7 +251,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         
         {expenseData.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma despesa encontrada no período selecionado</p>
+            <p className="text-gray-500">Nenhuma despesa encontrada no perÃ­odo selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -262,13 +262,13 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                     Categoria
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Transações
+                    TransaÃ§Ãµes
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Média
+                    MÃ©dia
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     %

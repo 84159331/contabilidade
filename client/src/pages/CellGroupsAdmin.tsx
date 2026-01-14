@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   PlusIcon,
   PencilIcon,
@@ -61,17 +61,17 @@ const CellGroupsAdmin: React.FC = () => {
 
 // Carregar grupos do armazenamento local
   useEffect(() => {
-    // Limpar dados antigos que possam ter horários incorretos
+    // Limpar dados antigos que possam ter horÃ¡rios incorretos
     const clearOldData = () => {
       const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
       if (savedGroups && Array.isArray(savedGroups)) {
-        // Verificar se algum grupo tem horário antigo
+        // Verificar se algum grupo tem horÃ¡rio antigo
         const hasOldSchedule = savedGroups.some(
           (group: CellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
         );
 
         if (hasOldSchedule) {
-          console.log('🔄 Detectados horários antigos, atualizando...');
+          console.log('ðŸ”„ Detectados horÃ¡rios antigos, atualizando...');
           storage.remove('cellGroups');
           storage.remove('publicCellGroups');
           storage.remove('cellGroupsLastSync');
@@ -85,7 +85,7 @@ const CellGroupsAdmin: React.FC = () => {
     
     const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
     if (savedGroups && Array.isArray(savedGroups)) {
-      // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
+      // Atualizar horÃ¡rios para garantir que sejam "Quarta-Feira 20:00hrs"
       const updatedGroups = savedGroups.map((group: CellGroup) => ({
         ...group,
         meetings: 'Quarta-Feira 20:00hrs',
@@ -94,13 +94,13 @@ const CellGroupsAdmin: React.FC = () => {
       }));
       setGroups(updatedGroups);
     } else {
-      // Grupos padrão
+      // Grupos padrÃ£o
       const defaultGroups: CellGroup[] = [
         {
           id: 'family',
-          title: 'Célula Resgate Veredas',
+          title: 'CÃ©lula Resgate Veredas',
           subtitle: 'Crescendo Juntos',
-          description: 'Um grupo para casais e famílias que buscam crescer juntos na fé e no relacionamento.',
+          description: 'Um grupo para casais e famÃ­lias que buscam crescer juntos na fÃ© e no relacionamento.',
           image: '/img/family-group.jpg',
           icon: 'HomeIcon',
           color: 'blue',
@@ -119,9 +119,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'youth',
-          title: 'Célula Resgate Vendinha',
-          subtitle: 'Geração de Impacto',
-          description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
+          title: 'CÃ©lula Resgate Vendinha',
+          subtitle: 'GeraÃ§Ã£o de Impacto',
+          description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleÃ§a sua fÃ©.',
           image: '/img/youth-group.jpg',
           icon: 'SparklesIcon',
           color: 'blue',
@@ -140,9 +140,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'women',
-          title: 'Célula Resgate Quadra 45',
-          subtitle: 'Mulheres de Fé',
-          description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
+          title: 'CÃ©lula Resgate Quadra 45',
+          subtitle: 'Mulheres de FÃ©',
+          description: 'Um espaÃ§o seguro para mulheres compartilharem experiÃªncias, orarem e se apoiarem mutuamente.',
           image: '/img/women-group.jpg',
           icon: 'HeartIcon',
           color: 'green',
@@ -161,9 +161,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'men',
-          title: 'Célula Resgate Quadra 34',
-          subtitle: 'Homens de Propósito',
-          description: 'Homens de fé se reúnem para discutir desafios, buscar sabedoria e fortalecer seu propósito.',
+          title: 'CÃ©lula Resgate Quadra 34',
+          subtitle: 'Homens de PropÃ³sito',
+          description: 'Homens de fÃ© se reÃºnem para discutir desafios, buscar sabedoria e fortalecer seu propÃ³sito.',
           image: '/img/men-group.jpg',
           icon: 'UserGroupIcon',
           color: 'green',
@@ -185,11 +185,11 @@ const CellGroupsAdmin: React.FC = () => {
     }
   }, []);
 
-  // Salvar grupos no armazenamento local sempre que houver mudanças
+  // Salvar grupos no armazenamento local sempre que houver mudanÃ§as
   useEffect(() => {
     if (groups.length > 0) {
       storage.setJSON('cellGroups', groups);
-      // Também salvar uma versão pública para o site
+      // TambÃ©m salvar uma versÃ£o pÃºblica para o site
       storage.setJSON(
         'publicCellGroups',
         groups.map(group => ({
@@ -197,14 +197,14 @@ const CellGroupsAdmin: React.FC = () => {
           title: group.title,
           subtitle: group.subtitle,
           description: group.description,
-          image: group.image || '', // Incluir imagem na sincronização
+          image: group.image || '', // Incluir imagem na sincronizaÃ§Ã£o
           icon: group.icon,
           color: group.color,
-          members: 0, // Sempre mostrar 0 para não exibir quantidade
+          members: 0, // Sempre mostrar 0 para nÃ£o exibir quantidade
           meetings: group.meetings,
           location: group.location,
           leader: group.leader,
-          features: [], // Sempre array vazio para não exibir atividades
+          features: [], // Sempre array vazio para nÃ£o exibir atividades
           isPopular: group.isPopular,
           isActive: group.isActive,
           maxMembers: group.maxMembers
@@ -387,10 +387,10 @@ const CellGroupsAdmin: React.FC = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          Administração de Células Resgate
+          AdministraÃ§Ã£o de CÃ©lulas Resgate
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Gerencie as células da igreja, líderes e membros
+          Gerencie as cÃ©lulas da igreja, lÃ­deres e membros
         </p>
       </div>
 
@@ -438,7 +438,7 @@ const CellGroupsAdmin: React.FC = () => {
           </button>
           <button
             onClick={() => {
-              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irá restaurar os dados padrão.')) {
+              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irÃ¡ restaurar os dados padrÃ£o.')) {
                 storage.remove('cellGroups');
                 storage.remove('publicCellGroups');
                 storage.remove('cellGroupsLastSync');
@@ -447,7 +447,7 @@ const CellGroupsAdmin: React.FC = () => {
             }}
             className="px-4 py-2 bg-red-600 text-white border border-red-600 rounded-lg font-medium hover:bg-red-700"
           >
-            🔄 Resetar Dados
+            ðŸ”„ Resetar Dados
           </button>
         </div>
       </div>
@@ -493,7 +493,7 @@ const CellGroupsAdmin: React.FC = () => {
               {/* Upload de Imagem */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Imagem da Célula:
+                  Imagem da CÃ©lula:
                 </label>
                 <ImageUpload
                   currentImage={group.image}
@@ -506,14 +506,14 @@ const CellGroupsAdmin: React.FC = () => {
               {/* Leader Section */}
               <div className="mb-4 space-y-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Líder do Grupo:
+                  LÃ­der do Grupo:
                 </label>
                 <input
                   type="text"
                   value={group.leader}
                   onChange={(e) => handleLeaderChange(group.id, 'leader', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  placeholder="Nome do Líder"
+                  placeholder="Nome do LÃ­der"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <input
@@ -546,7 +546,7 @@ const CellGroupsAdmin: React.FC = () => {
                     value={group.location}
                     onChange={(e) => handleLeaderChange(group.id, 'location', e.target.value)}
                     className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                    placeholder="Local da célula"
+                    placeholder="Local da cÃ©lula"
                   />
                 </div>
               </div>
@@ -616,7 +616,7 @@ const CellGroupsAdmin: React.FC = () => {
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.name ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                   required
                 />
-                {memberFormErrors.name && <p className="text-red-500 text-xs mt-1">O nome é obrigatório.</p>}
+                {memberFormErrors.name && <p className="text-red-500 text-xs mt-1">O nome Ã© obrigatÃ³rio.</p>}
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -630,7 +630,7 @@ const CellGroupsAdmin: React.FC = () => {
                   onChange={handleMemberFormChange}
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.email ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                 />
-                {memberFormErrors.email && <p className="text-red-500 text-xs mt-1">Email inválido.</p>}
+                {memberFormErrors.email && <p className="text-red-500 text-xs mt-1">Email invÃ¡lido.</p>}
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -644,7 +644,7 @@ const CellGroupsAdmin: React.FC = () => {
                   onChange={handleMemberFormChange}
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.phone ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                 />
-                {memberFormErrors.phone && <p className="text-red-500 text-xs mt-1">Telefone inválido (apenas números, 10-11 dígitos).</p>}
+                {memberFormErrors.phone && <p className="text-red-500 text-xs mt-1">Telefone invÃ¡lido (apenas nÃºmeros, 10-11 dÃ­gitos).</p>}
               </div>
               <button
                 type="submit"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CreateEsbocoDTO,
@@ -10,22 +10,22 @@ import {
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const temas: { value: TemaPrincipal; label: string }[] = [
-  { value: 'FAMILIA', label: 'Família' },
-  { value: 'FE', label: 'Fé' },
+  { value: 'FAMILIA', label: 'FamÃ­lia' },
+  { value: 'FE', label: 'FÃ©' },
   { value: 'SANTIDADE', label: 'Santidade' },
   { value: 'AVIVAMENTO', label: 'Avivamento' },
   { value: 'CURAS', label: 'Curas' },
   { value: 'JOVENS', label: 'Jovens' },
-  { value: 'MISSOES', label: 'Missões' },
+  { value: 'MISSOES', label: 'MissÃµes' },
   { value: 'OUTRO', label: 'Outros temas' },
 ];
 
 const tiposCulto: { value: TipoCulto; label: string }[] = [
   { value: 'DOMINGO', label: 'Culto de Domingo' },
-  { value: 'CELULA', label: 'Célula' },
+  { value: 'CELULA', label: 'CÃ©lula' },
   { value: 'JOVENS', label: 'Jovens' },
   { value: 'ENSINO', label: 'Ensino' },
-  { value: 'ORACAO', label: 'Oração' },
+  { value: 'ORACAO', label: 'OraÃ§Ã£o' },
   { value: 'SANTA_CEIA', label: 'Santa Ceia' },
   { value: 'OUTRO', label: 'Outro' },
 ];
@@ -75,27 +75,27 @@ const NovoEsbocoPage: React.FC = () => {
     setSucesso(null);
 
     if (!form.titulo.trim() || !form.textoBiblicoBase.trim() || !form.autorNome.trim()) {
-      setErro('Preencha pelo menos o título, o texto bíblico base e o nome do autor.');
+      setErro('Preencha pelo menos o tÃ­tulo, o texto bÃ­blico base e o nome do autor.');
       return;
     }
 
     if (!form.estrutura.introducao.trim()) {
-      setErro('Preencha pelo menos a introdução do esboço.');
+      setErro('Preencha pelo menos a introduÃ§Ã£o do esboÃ§o.');
       return;
     }
 
     try {
       setLoading(true);
       const criado = await esbocosService.criarEsboco(form);
-      setSucesso('Esboço enviado com sucesso! Ele será analisado pela liderança antes de ser publicado.');
-      // Redirecionar após alguns segundos para a página de lista
+      setSucesso('EsboÃ§o enviado com sucesso! Ele serÃ¡ analisado pela lideranÃ§a antes de ser publicado.');
+      // Redirecionar apÃ³s alguns segundos para a pÃ¡gina de lista
       setTimeout(() => {
         navigate('/esbocos');
       }, 2000);
-      console.log('Esboço criado:', criado);
+      console.log('EsboÃ§o criado:', criado);
     } catch (e) {
       console.error(e);
-      setErro('Não foi possível enviar o esboço. Tente novamente mais tarde.');
+      setErro('NÃ£o foi possÃ­vel enviar o esboÃ§o. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -107,10 +107,10 @@ const NovoEsbocoPage: React.FC = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           <header className="mb-8">
             <h1 className="text-3xl md:text-4xl font-extrabold font-heading text-gray-900 dark:text-white mb-3">
-              Enviar Esboço de Pregação
+              Enviar EsboÃ§o de PregaÃ§Ã£o
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl">
-              Compartilhe um esboço que Deus colocou no seu coração. Ele será revisado pela liderança antes de ser disponibilizado para toda a igreja.
+              Compartilhe um esboÃ§o que Deus colocou no seu coraÃ§Ã£o. Ele serÃ¡ revisado pela lideranÃ§a antes de ser disponibilizado para toda a igreja.
             </p>
           </header>
 
@@ -132,14 +132,14 @@ const NovoEsbocoPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Título do esboço *
+                  TÃ­tulo do esboÃ§o *
                 </label>
                 <input
                   type="text"
                   value={form.titulo}
                   onChange={(e) => handleChange('titulo', e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Ex: O Amor que Restaura Famílias"
+                  placeholder="Ex: O Amor que Restaura FamÃ­lias"
                   required
                 />
               </div>
@@ -167,14 +167,14 @@ const NovoEsbocoPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Texto bíblico base *
+                  Texto bÃ­blico base *
                 </label>
                 <input
                   type="text"
                   value={form.textoBiblicoBase}
                   onChange={(e) => handleChange('textoBiblicoBase', e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Ex: João 3:16"
+                  placeholder="Ex: JoÃ£o 3:16"
                   required
                 />
               </div>
@@ -216,14 +216,14 @@ const NovoEsbocoPage: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Igreja / Ministério
+                  Igreja / MinistÃ©rio
                 </label>
                 <input
                   type="text"
                   value={form.autorIgreja || ''}
                   onChange={(e) => handleChange('autorIgreja', e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Ex: Comunidade Cristã Resgate"
+                  placeholder="Ex: Comunidade CristÃ£ Resgate"
                 />
               </div>
             </div>
@@ -231,7 +231,7 @@ const NovoEsbocoPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Duração estimada (minutos)
+                  DuraÃ§Ã£o estimada (minutos)
                 </label>
                 <input
                   type="number"
@@ -251,7 +251,7 @@ const NovoEsbocoPage: React.FC = () => {
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Palavras-chave / Tags (separadas por vírgula)
+                  Palavras-chave / Tags (separadas por vÃ­rgula)
                 </label>
                 <input
                   type="text"
@@ -266,7 +266,7 @@ const NovoEsbocoPage: React.FC = () => {
                     )
                   }
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Ex: família, aliança, restauração"
+                  placeholder="Ex: famÃ­lia, alianÃ§a, restauraÃ§Ã£o"
                 />
               </div>
             </div>
@@ -274,14 +274,14 @@ const NovoEsbocoPage: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Introdução *
+                  IntroduÃ§Ã£o *
                 </label>
                 <textarea
                   value={form.estrutura.introducao}
                   onChange={(e) => handleEstruturaChange('introducao', e.target.value)}
                   rows={4}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Apresente o contexto bíblico e a direção geral da mensagem..."
+                  placeholder="Apresente o contexto bÃ­blico e a direÃ§Ã£o geral da mensagem..."
                   required
                 />
               </div>
@@ -289,7 +289,7 @@ const NovoEsbocoPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tópico 1
+                    TÃ³pico 1
                   </label>
                   <textarea
                     value={form.estrutura.topico1 || ''}
@@ -301,7 +301,7 @@ const NovoEsbocoPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tópico 2
+                    TÃ³pico 2
                   </label>
                   <textarea
                     value={form.estrutura.topico2 || ''}
@@ -315,7 +315,7 @@ const NovoEsbocoPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tópico 3
+                    TÃ³pico 3
                   </label>
                   <textarea
                     value={form.estrutura.topico3 || ''}
@@ -327,7 +327,7 @@ const NovoEsbocoPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Conclusão
+                    ConclusÃ£o
                   </label>
                   <textarea
                     value={form.estrutura.conclusao || ''}
@@ -347,14 +347,14 @@ const NovoEsbocoPage: React.FC = () => {
                   onChange={(e) => handleEstruturaChange('apelo', e.target.value)}
                   rows={3}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-                  placeholder="Sugestão de apelo, oração ou momento de entrega..."
+                  placeholder="SugestÃ£o de apelo, oraÃ§Ã£o ou momento de entrega..."
                 />
               </div>
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Ao enviar, você concorda que o esboço poderá ser editado pela liderança para correções teológicas e de linguagem.
+                Ao enviar, vocÃª concorda que o esboÃ§o poderÃ¡ ser editado pela lideranÃ§a para correÃ§Ãµes teolÃ³gicas e de linguagem.
               </p>
               <button
                 type="submit"
@@ -367,7 +367,7 @@ const NovoEsbocoPage: React.FC = () => {
                     <span className="ml-2">Enviando...</span>
                   </>
                 ) : (
-                  'Enviar esboço'
+                  'Enviar esboÃ§o'
                 )}
               </button>
             </div>

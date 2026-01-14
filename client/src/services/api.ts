@@ -1,4 +1,4 @@
-// Serviço de API integrado com Firebase Firestore
+﻿// ServiÃ§o de API integrado com Firebase Firestore
 import { db } from '../firebase/config';
 import { 
   collection, 
@@ -20,13 +20,13 @@ import {
 import { toast } from 'react-toastify';
 import storage from '../utils/storage';
 
-// API para transações (usando Firebase Firestore)
+// API para transaÃ§Ãµes (usando Firebase Firestore)
 export const transactionsAPI = {
   getTransactions: async (params?: any) => {
     try {
-      console.log('🔥 Buscando transações no Firestore...');
+      console.log('ðŸ”¥ Buscando transaÃ§Ãµes no Firestore...');
       
-      // Buscar transações
+      // Buscar transaÃ§Ãµes
       const transactionsRef = collection(db, 'transactions');
       const q = query(transactionsRef, orderBy('created_at', 'desc'));
       const querySnapshot = await getDocs(q);
@@ -51,7 +51,7 @@ export const transactionsAPI = {
         const data = doc.data();
         return {
           id: doc.id, // Manter como string para compatibilidade com Firebase
-          description: data.description || 'Descrição não informada',
+          description: data.description || 'DescriÃ§Ã£o nÃ£o informada',
           amount: data.amount || 0,
           type: data.type || 'income',
           transaction_date: data.transaction_date || new Date(),
@@ -61,23 +61,23 @@ export const transactionsAPI = {
           created_at: data.created_at || new Date(),
           updated_at: data.updated_at || new Date(),
           // Adicionar nomes das categorias e membros
-          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
-          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria nÃ£o encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro nÃ£o encontrado' : ''
         };
       });
       
-      console.log('✅ Transações carregadas do Firestore:', transactions.length);
+      console.log('âœ… TransaÃ§Ãµes carregadas do Firestore:', transactions.length);
       return { data: { transactions, total: transactions.length } };
     } catch (error) {
-      console.error('❌ Erro ao buscar transações:', error);
+      console.error('âŒ Erro ao buscar transaÃ§Ãµes:', error);
       return { data: { transactions: [], total: 0 } };
     }
   },
 
   createTransaction: async (data: any) => {
     try {
-      console.log('💾 Salvando transação no Firestore:', data);
-      console.log('🔥 Firebase DB instance:', db);
+      console.log('ðŸ’¾ Salvando transaÃ§Ã£o no Firestore:', data);
+      console.log('ðŸ”¥ Firebase DB instance:', db);
       
       const transactionData = {
         ...data,
@@ -85,32 +85,32 @@ export const transactionsAPI = {
         updated_at: new Date()
       };
       
-      console.log('📝 Dados da transação preparados:', transactionData);
+      console.log('ðŸ“ Dados da transaÃ§Ã£o preparados:', transactionData);
       
       const transactionsRef = collection(db, 'transactions');
-      console.log('📂 Referência da coleção criada:', transactionsRef);
+      console.log('ðŸ“‚ ReferÃªncia da coleÃ§Ã£o criada:', transactionsRef);
       
       const docRef = await addDoc(transactionsRef, transactionData);
-      console.log('✅ Transação salva no Firestore com ID:', docRef.id);
+      console.log('âœ… TransaÃ§Ã£o salva no Firestore com ID:', docRef.id);
       
       return {
         data: {
-          message: 'Transação criada com sucesso',
+          message: 'TransaÃ§Ã£o criada com sucesso',
           transaction: { id: docRef.id, ...transactionData }
         }
       };
     } catch (error: any) {
-      console.error('❌ Erro ao criar transação:', error);
-      console.error('❌ Detalhes do erro:', error.message);
-      console.error('❌ Stack trace:', error.stack);
-      toast.error('Erro ao salvar transação: ' + error.message);
+      console.error('âŒ Erro ao criar transaÃ§Ã£o:', error);
+      console.error('âŒ Detalhes do erro:', error.message);
+      console.error('âŒ Stack trace:', error.stack);
+      toast.error('Erro ao salvar transaÃ§Ã£o: ' + error.message);
       throw error;
     }
   },
 
   updateTransaction: async (id: string, data: any) => {
     try {
-      console.log('🔄 Atualizando transação no Firestore:', id);
+      console.log('ðŸ”„ Atualizando transaÃ§Ã£o no Firestore:', id);
       
       const transactionRef = doc(db, 'transactions', id);
       await updateDoc(transactionRef, {
@@ -118,42 +118,42 @@ export const transactionsAPI = {
         updated_at: new Date()
       });
       
-      console.log('✅ Transação atualizada no Firestore');
-      return { data: { message: 'Transação atualizada com sucesso' } };
+      console.log('âœ… TransaÃ§Ã£o atualizada no Firestore');
+      return { data: { message: 'TransaÃ§Ã£o atualizada com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao atualizar transação:', error);
-      toast.error('Erro ao atualizar transação');
+      console.error('âŒ Erro ao atualizar transaÃ§Ã£o:', error);
+      toast.error('Erro ao atualizar transaÃ§Ã£o');
       throw error;
     }
   },
 
   deleteTransaction: async (id: string) => {
     try {
-      console.log('🗑️ Deletando transação do Firestore:', id);
-      console.log('🔍 Tipo do ID:', typeof id);
-      console.log('🔍 Valor do ID:', id);
+      console.log('ðŸ—‘ï¸ Deletando transaÃ§Ã£o do Firestore:', id);
+      console.log('ðŸ” Tipo do ID:', typeof id);
+      console.log('ðŸ” Valor do ID:', id);
       
       const transactionRef = doc(db, 'transactions', id);
-      console.log('📂 Referência criada:', transactionRef);
+      console.log('ðŸ“‚ ReferÃªncia criada:', transactionRef);
       
       await deleteDoc(transactionRef);
       
-      console.log('✅ Transação deletada do Firestore com sucesso');
-      return { data: { message: 'Transação deletada com sucesso' } };
+      console.log('âœ… TransaÃ§Ã£o deletada do Firestore com sucesso');
+      return { data: { message: 'TransaÃ§Ã£o deletada com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao deletar transação:', error);
-      console.error('❌ Detalhes do erro:', error);
-      toast.error('Erro ao deletar transação: ' + (error as Error).message);
+      console.error('âŒ Erro ao deletar transaÃ§Ã£o:', error);
+      console.error('âŒ Detalhes do erro:', error);
+      toast.error('Erro ao deletar transaÃ§Ã£o: ' + (error as Error).message);
       throw error;
     }
   },
 
   getSummary: async () => {
     try {
-      console.log('📊 Calculando resumo financeiro...');
+      console.log('ðŸ“Š Calculando resumo financeiro...');
       const transactionsRef = collection(db, 'transactions');
       
-      // Otimizar: buscar apenas campos necessários e processar em paralelo
+      // Otimizar: buscar apenas campos necessÃ¡rios e processar em paralelo
       const querySnapshot = await getDocs(transactionsRef);
       
       // Processar de forma mais eficiente
@@ -161,7 +161,7 @@ export const transactionsAPI = {
       let totalExpense = 0;
       let transactionCount = 0;
       
-      // Usar for loop simples que é mais rápido que forEach
+      // Usar for loop simples que Ã© mais rÃ¡pido que forEach
       const docs = querySnapshot.docs;
       for (let i = 0; i < docs.length; i++) {
         const data = docs[i].data();
@@ -181,10 +181,10 @@ export const transactionsAPI = {
         transactionCount
       };
       
-      console.log('✅ Resumo calculado:', summary);
+      console.log('âœ… Resumo calculado:', summary);
       return { data: summary };
     } catch (error) {
-      console.error('❌ Erro ao calcular resumo:', error);
+      console.error('âŒ Erro ao calcular resumo:', error);
       return { data: { totalIncome: 0, totalExpense: 0, balance: 0, transactionCount: 0 } };
     }
   },
@@ -196,7 +196,7 @@ export const transactionsAPI = {
       const transaction = transactionDoc.docs.find(doc => doc.id === id);
       
       if (!transaction) {
-        throw new Error('Transação não encontrada');
+        throw new Error('TransaÃ§Ã£o nÃ£o encontrada');
       }
       
       const data = transaction.data();
@@ -238,7 +238,7 @@ export const transactionsAPI = {
         } 
       };
     } catch (error) {
-      console.error('❌ Erro ao buscar transação:', error);
+      console.error('âŒ Erro ao buscar transaÃ§Ã£o:', error);
       throw error;
     }
   },
@@ -253,9 +253,9 @@ export const transactionsAPI = {
 
   getRecentTransactions: async (limit: number = 5) => {
     try {
-      console.log('🔥 Buscando transações recentes no Firestore...');
+      console.log('ðŸ”¥ Buscando transaÃ§Ãµes recentes no Firestore...');
       
-      // Buscar transações
+      // Buscar transaÃ§Ãµes
       const transactionsRef = collection(db, 'transactions');
       const q = query(transactionsRef, orderBy('created_at', 'desc'), limitToLast(limit));
       const querySnapshot = await getDocs(q);
@@ -280,7 +280,7 @@ export const transactionsAPI = {
         const data = doc.data();
         return {
           id: doc.id,
-          description: data.description || 'Descrição não informada',
+          description: data.description || 'DescriÃ§Ã£o nÃ£o informada',
           amount: data.amount || 0,
           type: data.type || 'income',
           transaction_date: data.transaction_date || new Date(),
@@ -290,15 +290,15 @@ export const transactionsAPI = {
           created_at: data.created_at || new Date(),
           updated_at: data.updated_at || new Date(),
           // Adicionar nomes das categorias e membros
-          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
-          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria nÃ£o encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro nÃ£o encontrado' : ''
         };
       });
       
-      console.log('✅ Transações recentes carregadas do Firestore:', transactions.length);
+      console.log('âœ… TransaÃ§Ãµes recentes carregadas do Firestore:', transactions.length);
       return { data: transactions };
     } catch (error) {
-      console.error('❌ Erro ao buscar transações recentes:', error);
+      console.error('âŒ Erro ao buscar transaÃ§Ãµes recentes:', error);
       return { data: [] };
     }
   }
@@ -308,21 +308,21 @@ export const transactionsAPI = {
 export const membersAPI = {
   getMembers: async () => {
     try {
-      console.log('🔥 Buscando membros no Firestore...');
+      console.log('ðŸ”¥ Buscando membros no Firestore...');
       const membersRef = collection(db, 'members');
       const q = query(membersRef, orderBy('created_at', 'desc'));
       const querySnapshot = await getDocs(q);
       
       const members = querySnapshot.docs.map(doc => {
         const data = doc.data();
-        console.log('📄 Documento ID:', doc.id, 'Tipo:', typeof doc.id, 'Dados:', data);
+        console.log('ðŸ“„ Documento ID:', doc.id, 'Tipo:', typeof doc.id, 'Dados:', data);
         
         // Helper para converter Timestamp do Firestore para string de data (YYYY-MM-DD)
-        // Usa métodos UTC para evitar problemas de fuso horário
+        // Usa mÃ©todos UTC para evitar problemas de fuso horÃ¡rio
         const convertDateToString = (dateValue: any): string => {
           if (!dateValue) return '';
           
-          // Se já é string no formato YYYY-MM-DD, retornar como está
+          // Se jÃ¡ Ã© string no formato YYYY-MM-DD, retornar como estÃ¡
           if (typeof dateValue === 'string') {
             // Validar formato YYYY-MM-DD
             if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
@@ -335,17 +335,17 @@ export const membersAPI = {
             }
           }
           
-          // Se é Timestamp do Firestore, usar métodos UTC para evitar problemas de timezone
+          // Se Ã© Timestamp do Firestore, usar mÃ©todos UTC para evitar problemas de timezone
           if (dateValue && typeof dateValue.toDate === 'function') {
             const date = dateValue.toDate();
-            // Usar métodos UTC para evitar problemas de fuso horário
+            // Usar mÃ©todos UTC para evitar problemas de fuso horÃ¡rio
             const year = date.getUTCFullYear();
             const month = String(date.getUTCMonth() + 1).padStart(2, '0');
             const day = String(date.getUTCDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
           }
           
-          // Se é Date, usar métodos UTC
+          // Se Ã© Date, usar mÃ©todos UTC
           if (dateValue instanceof Date) {
             const year = dateValue.getUTCFullYear();
             const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
@@ -358,7 +358,7 @@ export const membersAPI = {
         
         return {
           id: doc.id, // Manter como string (ID do Firestore)
-          name: data.name || 'Nome não informado',
+          name: data.name || 'Nome nÃ£o informado',
           email: data.email || '',
           phone: data.phone || '',
           address: data.address || '',
@@ -371,21 +371,21 @@ export const membersAPI = {
         };
       });
       
-      console.log('✅ Membros carregados do Firestore:', members.length);
-      console.log('🔍 IDs dos membros:', members.map(m => ({ id: m.id, type: typeof m.id })));
+      console.log('âœ… Membros carregados do Firestore:', members.length);
+      console.log('ðŸ” IDs dos membros:', members.map(m => ({ id: m.id, type: typeof m.id })));
       return { data: { members, total: members.length } };
     } catch (error) {
-      console.error('❌ Erro ao buscar membros:', error);
+      console.error('âŒ Erro ao buscar membros:', error);
       return { data: { members: [], total: 0 } };
     }
   },
 
   createMember: async (data: any) => {
     try {
-      console.log('💾 Salvando membro no Firestore:', data);
-      console.log('🔥 Firebase DB instance:', db);
+      console.log('ðŸ’¾ Salvando membro no Firestore:', data);
+      console.log('ðŸ”¥ Firebase DB instance:', db);
       
-      // Preparar dados para criação, garantindo que todos os campos sejam incluídos
+      // Preparar dados para criaÃ§Ã£o, garantindo que todos os campos sejam incluÃ­dos
       const memberData = {
         name: data.name || '',
         email: data.email || '',
@@ -399,13 +399,13 @@ export const membersAPI = {
         updated_at: new Date()
       };
       
-      console.log('📝 Dados do membro preparados:', memberData);
+      console.log('ðŸ“ Dados do membro preparados:', memberData);
       
       const membersRef = collection(db, 'members');
-      console.log('📂 Referência da coleção criada:', membersRef);
+      console.log('ðŸ“‚ ReferÃªncia da coleÃ§Ã£o criada:', membersRef);
       
       const docRef = await addDoc(membersRef, memberData);
-      console.log('✅ Membro salvo no Firestore com ID:', docRef.id);
+      console.log('âœ… Membro salvo no Firestore com ID:', docRef.id);
       
       return {
         data: {
@@ -414,9 +414,9 @@ export const membersAPI = {
         }
       };
     } catch (error: any) {
-      console.error('❌ Erro ao criar membro:', error);
-      console.error('❌ Detalhes do erro:', error.message);
-      console.error('❌ Stack trace:', error.stack);
+      console.error('âŒ Erro ao criar membro:', error);
+      console.error('âŒ Detalhes do erro:', error.message);
+      console.error('âŒ Stack trace:', error.stack);
       toast.error('Erro ao salvar membro: ' + error.message);
       throw error;
     }
@@ -424,22 +424,22 @@ export const membersAPI = {
 
   updateMember: async (id: string, data: any) => {
     try {
-      console.log('🔄 Atualizando membro no Firestore:');
+      console.log('ðŸ”„ Atualizando membro no Firestore:');
       console.log('  - ID recebido:', id, 'Tipo:', typeof id);
-      console.log('  - Dados para atualização:', data);
+      console.log('  - Dados para atualizaÃ§Ã£o:', data);
       
       // Verificar se o documento existe antes de tentar atualizar
       const memberRef = doc(db, 'members', id);
       const memberSnap = await getDoc(memberRef);
       
       if (!memberSnap.exists()) {
-        console.error('❌ Documento não encontrado no Firestore:', id);
-        throw new Error(`Membro com ID ${id} não encontrado no Firestore`);
+        console.error('âŒ Documento nÃ£o encontrado no Firestore:', id);
+        throw new Error(`Membro com ID ${id} nÃ£o encontrado no Firestore`);
       }
       
-      console.log('✅ Documento encontrado, procedendo com atualização...');
+      console.log('âœ… Documento encontrado, procedendo com atualizaÃ§Ã£o...');
       
-      // Preparar dados para atualização, garantindo que campos vazios sejam salvos como string vazia
+      // Preparar dados para atualizaÃ§Ã£o, garantindo que campos vazios sejam salvos como string vazia
       const updateData: any = {
         name: data.name || '',
         email: data.email || '',
@@ -452,15 +452,15 @@ export const membersAPI = {
         updated_at: new Date()
       };
       
-      console.log('📝 Dados preparados para atualização:', updateData);
+      console.log('ðŸ“ Dados preparados para atualizaÃ§Ã£o:', updateData);
       
       await updateDoc(memberRef, updateData);
       
-      console.log('✅ Membro atualizado no Firestore com sucesso');
+      console.log('âœ… Membro atualizado no Firestore com sucesso');
       return { data: { message: 'Membro atualizado com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao atualizar membro:', error);
-      console.error('❌ Detalhes do erro:', error);
+      console.error('âŒ Erro ao atualizar membro:', error);
+      console.error('âŒ Detalhes do erro:', error);
       toast.error('Erro ao atualizar membro: ' + (error as Error).message);
       throw error;
     }
@@ -468,7 +468,7 @@ export const membersAPI = {
 
   deleteMember: async (id: string) => {
     try {
-      console.log('🗑️ Deletando membro do Firestore:');
+      console.log('ðŸ—‘ï¸ Deletando membro do Firestore:');
       console.log('  - ID recebido:', id, 'Tipo:', typeof id);
       
       // Verificar se o documento existe antes de tentar deletar
@@ -476,19 +476,19 @@ export const membersAPI = {
       const memberSnap = await getDoc(memberRef);
       
       if (!memberSnap.exists()) {
-        console.error('❌ Documento não encontrado no Firestore:', id);
-        throw new Error(`Membro com ID ${id} não encontrado no Firestore`);
+        console.error('âŒ Documento nÃ£o encontrado no Firestore:', id);
+        throw new Error(`Membro com ID ${id} nÃ£o encontrado no Firestore`);
       }
       
-      console.log('✅ Documento encontrado, procedendo com exclusão...');
+      console.log('âœ… Documento encontrado, procedendo com exclusÃ£o...');
       
       await deleteDoc(memberRef);
       
-      console.log('✅ Membro deletado do Firestore com sucesso');
+      console.log('âœ… Membro deletado do Firestore com sucesso');
       return { data: { message: 'Membro deletado com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao deletar membro:', error);
-      console.error('❌ Detalhes do erro:', error);
+      console.error('âŒ Erro ao deletar membro:', error);
+      console.error('âŒ Detalhes do erro:', error);
       toast.error('Erro ao deletar membro: ' + (error as Error).message);
       throw error;
     }
@@ -496,28 +496,28 @@ export const membersAPI = {
 
   getMember: async (id: string) => {
     try {
-      console.log('🔍 Buscando membro no Firestore:', id);
+      console.log('ðŸ” Buscando membro no Firestore:', id);
       const memberRef = doc(db, 'members', id);
       const memberSnap = await getDoc(memberRef);
       
       if (!memberSnap.exists()) {
-        throw new Error('Membro não encontrado');
+        throw new Error('Membro nÃ£o encontrado');
       }
       
       return { data: { id: memberSnap.id, ...memberSnap.data() } };
     } catch (error) {
-      console.error('❌ Erro ao buscar membro:', error);
+      console.error('âŒ Erro ao buscar membro:', error);
       throw error;
     }
   },
 
   getMemberStats: async () => {
     try {
-      console.log('📊 Calculando estatísticas de membros...');
+      console.log('ðŸ“Š Calculando estatÃ­sticas de membros...');
       const membersRef = collection(db, 'members');
       const querySnapshot = await getDocs(membersRef);
       
-      // Processar de forma mais eficiente (for loop é mais rápido)
+      // Processar de forma mais eficiente (for loop Ã© mais rÃ¡pido)
       let total = 0;
       let active = 0;
       let inactive = 0;
@@ -535,10 +535,10 @@ export const membersAPI = {
       
       const stats = { total, active, inactive };
       
-      console.log('✅ Estatísticas calculadas:', stats);
+      console.log('âœ… EstatÃ­sticas calculadas:', stats);
       return { data: stats };
     } catch (error) {
-      console.error('❌ Erro ao calcular estatísticas:', error);
+      console.error('âŒ Erro ao calcular estatÃ­sticas:', error);
       return { data: { total: 0, active: 0, inactive: 0 } };
     }
   },
@@ -552,30 +552,30 @@ export const membersAPI = {
 export const categoriesAPI = {
   getCategories: async () => {
     try {
-      console.log('🔥 Buscando categorias no Firestore...');
+      console.log('ðŸ”¥ Buscando categorias no Firestore...');
       const categoriesRef = collection(db, 'categories');
       const querySnapshot = await getDocs(categoriesRef);
       
       const categories = querySnapshot.docs.map(doc => ({
         id: doc.id, // Manter como string (ID do Firestore)
-        name: doc.data().name || 'Categoria não informada',
+        name: doc.data().name || 'Categoria nÃ£o informada',
         type: doc.data().type || 'income',
         color: doc.data().color || '#3B82F6',
         description: doc.data().description || '',
-        transaction_count: 0, // Será calculado posteriormente se necessário
-        total_amount: 0, // Será calculado posteriormente se necessário
+        transaction_count: 0, // SerÃ¡ calculado posteriormente se necessÃ¡rio
+        total_amount: 0, // SerÃ¡ calculado posteriormente se necessÃ¡rio
         created_at: doc.data().created_at || new Date(),
         updated_at: doc.data().updated_at || new Date()
       }));
       
-      // Se não há categorias salvas, criar algumas padrão
+      // Se nÃ£o hÃ¡ categorias salvas, criar algumas padrÃ£o
       if (categories.length === 0) {
-        console.log('📝 Criando categorias padrão...');
+        console.log('ðŸ“ Criando categorias padrÃ£o...');
         const defaultCategories = [
-          { name: 'Dízimos', type: 'income', description: 'Dízimos dos membros', color: '#10B981' },
+          { name: 'DÃ­zimos', type: 'income', description: 'DÃ­zimos dos membros', color: '#10B981' },
           { name: 'Ofertas', type: 'income', description: 'Ofertas especiais', color: '#3B82F6' },
-          { name: 'Utilidades', type: 'expense', description: 'Contas de água, luz, telefone', color: '#EF4444' },
-          { name: 'Manutenção', type: 'expense', description: 'Manutenção do prédio', color: '#F97316' }
+          { name: 'Utilidades', type: 'expense', description: 'Contas de Ã¡gua, luz, telefone', color: '#EF4444' },
+          { name: 'ManutenÃ§Ã£o', type: 'expense', description: 'ManutenÃ§Ã£o do prÃ©dio', color: '#F97316' }
         ];
         
         for (const category of defaultCategories) {
@@ -586,37 +586,37 @@ export const categoriesAPI = {
           });
         }
         
-        // Buscar novamente após criar as categorias padrão
+        // Buscar novamente apÃ³s criar as categorias padrÃ£o
         const newQuerySnapshot = await getDocs(categoriesRef);
         const newCategories = newQuerySnapshot.docs.map(doc => ({
           id: doc.id, // Manter como string (ID do Firestore)
-          name: doc.data().name || 'Categoria não informada',
+          name: doc.data().name || 'Categoria nÃ£o informada',
           type: doc.data().type || 'income',
           color: doc.data().color || '#3B82F6',
           description: doc.data().description || '',
-          transaction_count: 0, // Será calculado posteriormente se necessário
-          total_amount: 0, // Será calculado posteriormente se necessário
+          transaction_count: 0, // SerÃ¡ calculado posteriormente se necessÃ¡rio
+          total_amount: 0, // SerÃ¡ calculado posteriormente se necessÃ¡rio
           created_at: doc.data().created_at || new Date(),
           updated_at: doc.data().updated_at || new Date()
         }));
         
-        console.log('✅ Categorias padrão criadas:', newCategories.length);
+        console.log('âœ… Categorias padrÃ£o criadas:', newCategories.length);
         return { data: { categories: newCategories, total: newCategories.length } };
       }
       
-      console.log('✅ Categorias carregadas do Firestore:', categories.length);
+      console.log('âœ… Categorias carregadas do Firestore:', categories.length);
       return { data: { categories, total: categories.length } };
     } catch (error) {
-      console.error('❌ Erro ao buscar categorias:', error);
+      console.error('âŒ Erro ao buscar categorias:', error);
       return { data: { categories: [], total: 0 } };
     }
   },
 
   createCategory: async (data: any) => {
     try {
-      console.log('💾 Iniciando salvamento da categoria no Firestore...');
-      console.log('📝 Dados recebidos:', data);
-      console.log('🔥 Firebase DB instance:', db);
+      console.log('ðŸ’¾ Iniciando salvamento da categoria no Firestore...');
+      console.log('ðŸ“ Dados recebidos:', data);
+      console.log('ðŸ”¥ Firebase DB instance:', db);
       
       const categoryData = {
         ...data,
@@ -624,13 +624,13 @@ export const categoriesAPI = {
         updated_at: new Date()
       };
       
-      console.log('📋 Dados preparados para salvamento:', categoryData);
+      console.log('ðŸ“‹ Dados preparados para salvamento:', categoryData);
       
       const categoriesRef = collection(db, 'categories');
-      console.log('📂 Referência da coleção criada:', categoriesRef);
+      console.log('ðŸ“‚ ReferÃªncia da coleÃ§Ã£o criada:', categoriesRef);
       
       const docRef = await addDoc(categoriesRef, categoryData);
-      console.log('✅ Categoria salva no Firestore com ID:', docRef.id);
+      console.log('âœ… Categoria salva no Firestore com ID:', docRef.id);
       
       const result = {
         data: {
@@ -639,12 +639,12 @@ export const categoriesAPI = {
         }
       };
       
-      console.log('📤 Retornando resultado:', result);
+      console.log('ðŸ“¤ Retornando resultado:', result);
       return result;
     } catch (error: any) {
-      console.error('❌ Erro ao criar categoria:', error);
-      console.error('❌ Detalhes do erro:', error.message);
-      console.error('❌ Stack trace:', error.stack);
+      console.error('âŒ Erro ao criar categoria:', error);
+      console.error('âŒ Detalhes do erro:', error.message);
+      console.error('âŒ Stack trace:', error.stack);
       toast.error('Erro ao salvar categoria: ' + error.message);
       throw error;
     }
@@ -652,7 +652,7 @@ export const categoriesAPI = {
 
   updateCategory: async (id: string, data: any) => {
     try {
-      console.log('🔄 Atualizando categoria no Firestore:', id);
+      console.log('ðŸ”„ Atualizando categoria no Firestore:', id);
       
       const categoryRef = doc(db, 'categories', id);
       await updateDoc(categoryRef, {
@@ -660,10 +660,10 @@ export const categoriesAPI = {
         updated_at: new Date()
       });
       
-      console.log('✅ Categoria atualizada no Firestore');
+      console.log('âœ… Categoria atualizada no Firestore');
       return { data: { message: 'Categoria atualizada com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao atualizar categoria:', error);
+      console.error('âŒ Erro ao atualizar categoria:', error);
       toast.error('Erro ao atualizar categoria');
       throw error;
     }
@@ -671,15 +671,15 @@ export const categoriesAPI = {
 
   deleteCategory: async (id: string) => {
     try {
-      console.log('🗑️ Deletando categoria do Firestore:', id);
+      console.log('ðŸ—‘ï¸ Deletando categoria do Firestore:', id);
       
       const categoryRef = doc(db, 'categories', id);
       await deleteDoc(categoryRef);
       
-      console.log('✅ Categoria deletada do Firestore');
+      console.log('âœ… Categoria deletada do Firestore');
       return { data: { message: 'Categoria deletada com sucesso' } };
     } catch (error) {
-      console.error('❌ Erro ao deletar categoria:', error);
+      console.error('âŒ Erro ao deletar categoria:', error);
       toast.error('Erro ao deletar categoria');
       throw error;
     }
@@ -692,12 +692,12 @@ export const categoriesAPI = {
       const category = querySnapshot.docs.find(doc => doc.id === id);
       
       if (!category) {
-        throw new Error('Categoria não encontrada');
+        throw new Error('Categoria nÃ£o encontrada');
       }
       
       return { data: { id: category.id, ...category.data() } };
     } catch (error) {
-      console.error('❌ Erro ao buscar categoria:', error);
+      console.error('âŒ Erro ao buscar categoria:', error);
       throw error;
     }
   },
@@ -754,16 +754,16 @@ const toDate = (dateValue: any): Date => {
   return new Date();
 };
 
-// Helper para formatar mês com zero à esquerda
+// Helper para formatar mÃªs com zero Ã  esquerda
 const formatMonth = (month: number): string => {
   return month.toString().padStart(2, '0');
 };
 
 export const reportsAPI = {
-  // Relatório de balanço mensal
+  // RelatÃ³rio de balanÃ§o mensal
   getMonthlyBalance: async (year: number, month: number) => {
     try {
-      console.log(`📊 Gerando relatório mensal: ${year}-${formatMonth(month)}`);
+      console.log(`ðŸ“Š Gerando relatÃ³rio mensal: ${year}-${formatMonth(month)}`);
       
       const transactionsRef = collection(db, 'transactions');
       const querySnapshot = await getDocs(transactionsRef);
@@ -777,7 +777,7 @@ export const reportsAPI = {
         const transactionYear = transactionDate.getFullYear();
         const transactionMonth = transactionDate.getMonth() + 1;
         
-        // Verificar se a transação pertence ao mês/ano especificado
+        // Verificar se a transaÃ§Ã£o pertence ao mÃªs/ano especificado
         if (transactionYear === year && transactionMonth === month) {
           const amount = parseFloat(data.amount) || 0;
           
@@ -800,10 +800,10 @@ export const reportsAPI = {
         period: { year, month }
       };
       
-      console.log('✅ Relatório mensal gerado:', result);
+      console.log('âœ… RelatÃ³rio mensal gerado:', result);
       return { data: result };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório mensal:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio mensal:', error);
       return { 
         data: { 
           income: { total: 0, count: 0 },
@@ -815,16 +815,16 @@ export const reportsAPI = {
     }
   },
 
-  // Relatório de balanço anual
+  // RelatÃ³rio de balanÃ§o anual
   getYearlyBalance: async (year: number) => {
     try {
-      console.log(`📊 Gerando relatório anual: ${year}`);
+      console.log(`ðŸ“Š Gerando relatÃ³rio anual: ${year}`);
       
       const transactionsRef = collection(db, 'transactions');
       const querySnapshot = await getDocs(transactionsRef);
       
       const monthNames = [
-        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Janeiro', 'Fevereiro', 'MarÃ§o', 'Abril', 'Maio', 'Junho',
         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
       ];
       
@@ -846,7 +846,7 @@ export const reportsAPI = {
         const transactionYear = transactionDate.getFullYear();
         const transactionMonth = transactionDate.getMonth() + 1;
         
-        // Verificar se a transação pertence ao ano especificado
+        // Verificar se a transaÃ§Ã£o pertence ao ano especificado
         if (transactionYear === year) {
           const amount = parseFloat(data.amount) || 0;
           const monthIndex = transactionMonth - 1;
@@ -877,10 +877,10 @@ export const reportsAPI = {
         yearlyTotal
       };
       
-      console.log('✅ Relatório anual gerado:', result);
+      console.log('âœ… RelatÃ³rio anual gerado:', result);
       return { data: result };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório anual:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio anual:', error);
       return { 
         data: { 
           year,
@@ -891,10 +891,10 @@ export const reportsAPI = {
     }
   },
 
-  // Relatório de contribuições por membro
+  // RelatÃ³rio de contribuiÃ§Ãµes por membro
   getMemberContributions: async (params?: any) => {
     try {
-      console.log('📊 Gerando relatório de contribuições por membro');
+      console.log('ðŸ“Š Gerando relatÃ³rio de contribuiÃ§Ãµes por membro');
       
       const { start_date, end_date } = params || {};
       const transactionsRef = collection(db, 'transactions');
@@ -911,7 +911,7 @@ export const reportsAPI = {
         membersMap[doc.id] = doc.data();
       });
       
-      // Agrupar contribuições por membro
+      // Agrupar contribuiÃ§Ãµes por membro
       const contributionsMap: Record<string, {
         member: any;
         contributions: Array<{ amount: number; date: Date }>;
@@ -968,18 +968,18 @@ export const reportsAPI = {
         })
         .sort((a, b) => b.total_contributed - a.total_contributed);
       
-      console.log('✅ Relatório de contribuições gerado:', contributions.length, 'membros');
+      console.log('âœ… RelatÃ³rio de contribuiÃ§Ãµes gerado:', contributions.length, 'membros');
       return { data: contributions };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório de contribuições:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio de contribuiÃ§Ãµes:', error);
       return { data: [] };
     }
   },
 
-  // Relatório de receitas por categoria
+  // RelatÃ³rio de receitas por categoria
   getIncomeByCategory: async (params?: any) => {
     try {
-      console.log('📊 Gerando relatório de receitas por categoria');
+      console.log('ðŸ“Š Gerando relatÃ³rio de receitas por categoria');
       
       const { start_date, end_date } = params || {};
       const transactionsRef = collection(db, 'transactions');
@@ -1017,7 +1017,7 @@ export const reportsAPI = {
         };
       });
       
-      // Processar transações
+      // Processar transaÃ§Ãµes
       transactionsSnapshot.docs.forEach(doc => {
         const data = doc.data();
         const categoryId = data.category_id;
@@ -1042,18 +1042,18 @@ export const reportsAPI = {
         }))
         .sort((a, b) => b.total_amount - a.total_amount);
       
-      console.log('✅ Relatório de receitas por categoria gerado:', result.length, 'categorias');
+      console.log('âœ… RelatÃ³rio de receitas por categoria gerado:', result.length, 'categorias');
       return { data: result };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório de receitas por categoria:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio de receitas por categoria:', error);
       return { data: [] };
     }
   },
 
-  // Relatório de despesas por categoria
+  // RelatÃ³rio de despesas por categoria
   getExpenseByCategory: async (params?: any) => {
     try {
-      console.log('📊 Gerando relatório de despesas por categoria');
+      console.log('ðŸ“Š Gerando relatÃ³rio de despesas por categoria');
       
       const { start_date, end_date } = params || {};
       const transactionsRef = collection(db, 'transactions');
@@ -1091,7 +1091,7 @@ export const reportsAPI = {
         };
       });
       
-      // Processar transações
+      // Processar transaÃ§Ãµes
       transactionsSnapshot.docs.forEach(doc => {
         const data = doc.data();
         const categoryId = data.category_id;
@@ -1116,18 +1116,18 @@ export const reportsAPI = {
         }))
         .sort((a, b) => b.total_amount - a.total_amount);
       
-      console.log('✅ Relatório de despesas por categoria gerado:', result.length, 'categorias');
+      console.log('âœ… RelatÃ³rio de despesas por categoria gerado:', result.length, 'categorias');
       return { data: result };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório de despesas por categoria:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio de despesas por categoria:', error);
       return { data: [] };
     }
   },
 
-  // Relatório de fluxo de caixa
+  // RelatÃ³rio de fluxo de caixa
   getCashFlow: async (params?: any) => {
     try {
-      console.log('📊 Gerando relatório de fluxo de caixa');
+      console.log('ðŸ“Š Gerando relatÃ³rio de fluxo de caixa');
       
       const { start_date, end_date, period = 'monthly' } = params || {};
       
@@ -1147,7 +1147,7 @@ export const reportsAPI = {
         const data = doc.data();
         const transactionDate = toDate(data.transaction_date);
         
-        // Verificar se está no período
+        // Verificar se estÃ¡ no perÃ­odo
         if (transactionDate < startDate || transactionDate > endDate) return;
         
         let periodKey = '';
@@ -1185,22 +1185,22 @@ export const reportsAPI = {
         periodData.balance = periodData.income - periodData.expense;
       });
       
-      // Ordenar por período
+      // Ordenar por perÃ­odo
       const result = Object.values(periodDataMap).sort((a, b) => {
         return a.period.localeCompare(b.period);
       });
       
-      console.log('✅ Relatório de fluxo de caixa gerado:', result.length, 'períodos');
+      console.log('âœ… RelatÃ³rio de fluxo de caixa gerado:', result.length, 'perÃ­odos');
       return { data: result };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório de fluxo de caixa:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio de fluxo de caixa:', error);
       return { data: [] };
     }
   },
 
   getTopContributors: async (params?: any) => {
     try {
-      console.log('📊 Gerando relatório de top contribuintes');
+      console.log('ðŸ“Š Gerando relatÃ³rio de top contribuintes');
       
       const contributions = await reportsAPI.getMemberContributions(params);
       const topContributors = contributions.data
@@ -1212,13 +1212,13 @@ export const reportsAPI = {
       
       return { data: topContributors };
     } catch (error) {
-      console.error('❌ Erro ao gerar relatório de top contribuintes:', error);
+      console.error('âŒ Erro ao gerar relatÃ³rio de top contribuintes:', error);
       return { data: [] };
     }
   }
 };
 
-// Helper para calcular número da semana
+// Helper para calcular nÃºmero da semana
 const getWeekNumber = (date: Date): string => {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = d.getUTCDay() || 7;
@@ -1231,22 +1231,22 @@ const getWeekNumber = (date: Date): string => {
 export const eventsAPI = {
   getEvents: async () => {
     try {
-      console.log('🔥 Buscando eventos no Firestore...');
-      console.log('📊 Database:', db);
+      console.log('ðŸ”¥ Buscando eventos no Firestore...');
+      console.log('ðŸ“Š Database:', db);
       
       const eventsRef = collection(db, 'events');
-      console.log('📊 Events collection ref:', eventsRef);
+      console.log('ðŸ“Š Events collection ref:', eventsRef);
       
       const q = query(eventsRef, orderBy('date', 'asc'));
-      console.log('📊 Query:', q);
+      console.log('ðŸ“Š Query:', q);
       
       const querySnapshot = await getDocs(q);
-      console.log('📊 Query snapshot:', querySnapshot);
-      console.log('📊 Docs count:', querySnapshot.docs.length);
+      console.log('ðŸ“Š Query snapshot:', querySnapshot);
+      console.log('ðŸ“Š Docs count:', querySnapshot.docs.length);
       
       const events = querySnapshot.docs.map(doc => {
         const data = doc.data();
-        console.log('📊 Doc data:', doc.id, data);
+        console.log('ðŸ“Š Doc data:', doc.id, data);
         return {
           id: doc.id,
           title: data.title,
@@ -1261,14 +1261,14 @@ export const eventsAPI = {
         };
       });
       
-      console.log('✅ Eventos carregados:', events.length);
-      console.log('📊 Eventos:', events);
+      console.log('âœ… Eventos carregados:', events.length);
+      console.log('ðŸ“Š Eventos:', events);
       return events;
     } catch (error) {
-      console.error('❌ Erro ao buscar eventos:', error);
+      console.error('âŒ Erro ao buscar eventos:', error);
       if (error instanceof Error) {
-        console.error('❌ Error details:', error.message);
-        console.error('❌ Error stack:', error.stack);
+        console.error('âŒ Error details:', error.message);
+        console.error('âŒ Error stack:', error.stack);
       }
       return [];
     }
@@ -1276,8 +1276,8 @@ export const eventsAPI = {
 
   createEvent: async (eventData: any) => {
     try {
-      console.log('🔥 Criando evento no Firestore...');
-      console.log('📝 Dados do evento:', eventData);
+      console.log('ðŸ”¥ Criando evento no Firestore...');
+      console.log('ðŸ“ Dados do evento:', eventData);
       
       const eventsRef = collection(db, 'events');
       const eventToCreate = {
@@ -1286,30 +1286,30 @@ export const eventsAPI = {
         updated_at: new Date().toISOString()
       };
       
-      console.log('📝 Dados preparados:', eventToCreate);
+      console.log('ðŸ“ Dados preparados:', eventToCreate);
       
       const docRef = await addDoc(eventsRef, eventToCreate);
-      console.log('✅ Evento criado com ID:', docRef.id);
+      console.log('âœ… Evento criado com ID:', docRef.id);
       
       return { id: docRef.id, ...eventToCreate };
     } catch (error) {
-      console.error('❌ Erro ao criar evento:', error);
+      console.error('âŒ Erro ao criar evento:', error);
       throw error;
     }
   },
 
   updateEvent: async (id: string, eventData: any) => {
     try {
-      console.log('🔥 Atualizando evento no Firestore...');
-      console.log('📝 ID do evento:', id);
-      console.log('📝 Dados para atualizar:', eventData);
+      console.log('ðŸ”¥ Atualizando evento no Firestore...');
+      console.log('ðŸ“ ID do evento:', id);
+      console.log('ðŸ“ Dados para atualizar:', eventData);
       
       const eventRef = doc(db, 'events', id);
       
       // Verificar se o documento existe
       const eventSnap = await getDoc(eventRef);
       if (!eventSnap.exists()) {
-        throw new Error('Evento não encontrado');
+        throw new Error('Evento nÃ£o encontrado');
       }
       
       const updateData = {
@@ -1318,32 +1318,32 @@ export const eventsAPI = {
       };
       
       await updateDoc(eventRef, updateData);
-      console.log('✅ Evento atualizado com sucesso');
+      console.log('âœ… Evento atualizado com sucesso');
       
       return { id, ...updateData };
     } catch (error) {
-      console.error('❌ Erro ao atualizar evento:', error);
+      console.error('âŒ Erro ao atualizar evento:', error);
       throw error;
     }
   },
 
   deleteEvent: async (id: string) => {
     try {
-      console.log('🗑️ deleteEvent - Iniciando exclusão do evento:', id);
+      console.log('ðŸ—‘ï¸ deleteEvent - Iniciando exclusÃ£o do evento:', id);
       
-      // Verificar se o ID é válido
+      // Verificar se o ID Ã© vÃ¡lido
       if (!id || id.trim() === '') {
-        throw new Error('ID do evento é inválido');
+        throw new Error('ID do evento Ã© invÃ¡lido');
       }
       
-      // Criar referência do documento
+      // Criar referÃªncia do documento
       const eventRef = doc(db, 'events', id);
-      console.log('📝 deleteEvent - Referência do documento:', eventRef.path);
+      console.log('ðŸ“ deleteEvent - ReferÃªncia do documento:', eventRef.path);
       
       // Verificar se o documento existe
       const eventSnap = await getDoc(eventRef);
       if (!eventSnap.exists()) {
-        console.log('⚠️ deleteEvent - Documento não encontrado, tentando busca alternativa...');
+        console.log('âš ï¸ deleteEvent - Documento nÃ£o encontrado, tentando busca alternativa...');
         
         // Buscar por ID em todos os documentos
         const eventsQuery = query(collection(db, 'events'));
@@ -1357,17 +1357,17 @@ export const eventsAPI = {
         });
         
         if (foundDoc) {
-          console.log('✅ deleteEvent - Documento encontrado por busca:', foundDoc.id);
+          console.log('âœ… deleteEvent - Documento encontrado por busca:', foundDoc.id);
           await deleteDoc(doc(db, 'events', foundDoc.id));
         } else {
-          throw new Error(`Evento com ID ${id} não encontrado`);
+          throw new Error(`Evento com ID ${id} nÃ£o encontrado`);
         }
       } else {
-        console.log('✅ deleteEvent - Documento encontrado, procedendo com exclusão...');
+        console.log('âœ… deleteEvent - Documento encontrado, procedendo com exclusÃ£o...');
         await deleteDoc(eventRef);
       }
       
-      console.log('✅ deleteEvent - Evento deletado com sucesso do Firestore');
+      console.log('âœ… deleteEvent - Evento deletado com sucesso do Firestore');
       
       // Limpar do cache local
       try {
@@ -1375,20 +1375,20 @@ export const eventsAPI = {
         if (cachedEvents && Array.isArray(cachedEvents)) {
           const updatedEvents = cachedEvents.filter((event: any) => event.id !== id);
           storage.setJSON('cachedEvents', updatedEvents);
-          console.log('✅ deleteEvent - Evento removido do cache local');
+          console.log('âœ… deleteEvent - Evento removido do cache local');
           
-          // Disparar evento de sincronização
+          // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
       } catch (cacheError) {
-        console.error('⚠️ deleteEvent - Erro ao limpar cache local:', cacheError);
+        console.error('âš ï¸ deleteEvent - Erro ao limpar cache local:', cacheError);
       }
       
       return true;
     } catch (error) {
-      console.error('❌ deleteEvent - Erro ao deletar evento:', error);
+      console.error('âŒ deleteEvent - Erro ao deletar evento:', error);
       if (error instanceof Error) {
-        console.error('❌ deleteEvent - Mensagem de erro:', error.message);
+        console.error('âŒ deleteEvent - Mensagem de erro:', error.message);
       }
       throw error;
     }
@@ -1396,53 +1396,53 @@ export const eventsAPI = {
 
   uploadEventImage: async (file: File) => {
     try {
-      console.log('🔥 Fazendo upload da imagem do evento...');
-      console.log('📁 Arquivo:', file.name, file.size, file.type);
+      console.log('ðŸ”¥ Fazendo upload da imagem do evento...');
+      console.log('ðŸ“ Arquivo:', file.name, file.size, file.type);
       
-      // Converter arquivo para base64 para persistência
+      // Converter arquivo para base64 para persistÃªncia
       const base64Image = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
           if (typeof reader.result === 'string') {
-            console.log('✅ Base64 gerado com sucesso, tamanho:', reader.result.length);
-            console.log('🔍 Primeiros 100 caracteres:', reader.result.substring(0, 100));
+            console.log('âœ… Base64 gerado com sucesso, tamanho:', reader.result.length);
+            console.log('ðŸ” Primeiros 100 caracteres:', reader.result.substring(0, 100));
             resolve(reader.result);
           } else {
             reject(new Error('Falha ao converter imagem para base64'));
           }
         };
         reader.onerror = (error) => {
-          console.error('❌ Erro no FileReader:', error);
+          console.error('âŒ Erro no FileReader:', error);
           reject(new Error('Erro ao ler arquivo'));
         };
         reader.readAsDataURL(file);
       });
       
-      console.log('✅ Imagem convertida para base64, tamanho total:', base64Image.length);
+      console.log('âœ… Imagem convertida para base64, tamanho total:', base64Image.length);
       return base64Image;
     } catch (error) {
-      console.error('❌ Erro ao fazer upload da imagem:', error);
+      console.error('âŒ Erro ao fazer upload da imagem:', error);
       throw error;
     }
   },
 
-  // Função para testar permissões do Firestore
+  // FunÃ§Ã£o para testar permissÃµes do Firestore
   testFirestorePermissions: async () => {
     try {
-      console.log('🔍 testFirestorePermissions - Testando permissões...');
+      console.log('ðŸ” testFirestorePermissions - Testando permissÃµes...');
       
       // Testar leitura
-      console.log('📖 testFirestorePermissions - Testando leitura...');
+      console.log('ðŸ“– testFirestorePermissions - Testando leitura...');
       const testQuery = query(collection(db, 'events'), limit(1));
       const testSnapshot = await getDocs(testQuery);
-      console.log('✅ testFirestorePermissions - Leitura OK, documentos encontrados:', testSnapshot.size);
+      console.log('âœ… testFirestorePermissions - Leitura OK, documentos encontrados:', testSnapshot.size);
       
-      // Testar escrita (criar documento temporário)
-      console.log('✍️ testFirestorePermissions - Testando escrita...');
+      // Testar escrita (criar documento temporÃ¡rio)
+      console.log('âœï¸ testFirestorePermissions - Testando escrita...');
       const testDocRef = doc(collection(db, 'events'));
       const testData = {
-        title: 'Teste de Permissão',
-        description: 'Documento temporário para teste',
+        title: 'Teste de PermissÃ£o',
+        description: 'Documento temporÃ¡rio para teste',
         date: new Date().toISOString().split('T')[0],
         time: '00:00',
         location: 'Teste',
@@ -1451,79 +1451,79 @@ export const eventsAPI = {
       };
       
       await setDoc(testDocRef, testData);
-      console.log('✅ testFirestorePermissions - Escrita OK, documento criado:', testDocRef.id);
+      console.log('âœ… testFirestorePermissions - Escrita OK, documento criado:', testDocRef.id);
       
-      // Testar exclusão
-      console.log('🗑️ testFirestorePermissions - Testando exclusão...');
+      // Testar exclusÃ£o
+      console.log('ðŸ—‘ï¸ testFirestorePermissions - Testando exclusÃ£o...');
       await deleteDoc(testDocRef);
-      console.log('✅ testFirestorePermissions - Exclusão OK');
+      console.log('âœ… testFirestorePermissions - ExclusÃ£o OK');
       
-      console.log('✅ testFirestorePermissions - Todas as permissões OK');
+      console.log('âœ… testFirestorePermissions - Todas as permissÃµes OK');
       return true;
     } catch (error) {
-      console.error('❌ testFirestorePermissions - Erro:', error);
+      console.error('âŒ testFirestorePermissions - Erro:', error);
       if (error instanceof Error) {
-        console.error('❌ testFirestorePermissions - Mensagem:', error.message);
-        console.error('❌ testFirestorePermissions - Código:', (error as any).code);
+        console.error('âŒ testFirestorePermissions - Mensagem:', error.message);
+        console.error('âŒ testFirestorePermissions - CÃ³digo:', (error as any).code);
       }
       return false;
     }
   },
 
-  // Função para limpar URLs temporárias antigas e migrar eventos
+  // FunÃ§Ã£o para limpar URLs temporÃ¡rias antigas e migrar eventos
   migrateEventsImages: () => {
     try {
-      console.log('🔄 migrateEventsImages - Iniciando migração...');
+      console.log('ðŸ”„ migrateEventsImages - Iniciando migraÃ§Ã£o...');
       
       // Carregar eventos do armazenamento local
       const cachedEvents = storage.getJSON<any[]>('cachedEvents');
-      console.log('📦 migrateEventsImages - Cache encontrado:', !!cachedEvents);
+      console.log('ðŸ“¦ migrateEventsImages - Cache encontrado:', !!cachedEvents);
       
       if (!cachedEvents || !Array.isArray(cachedEvents)) {
-        console.log('ℹ️ migrateEventsImages - Nenhum evento encontrado no cache');
+        console.log('â„¹ï¸ migrateEventsImages - Nenhum evento encontrado no cache');
         return;
       }
 
       const events = cachedEvents;
-      console.log('📊 migrateEventsImages - Eventos no cache:', events.length);
+      console.log('ðŸ“Š migrateEventsImages - Eventos no cache:', events.length);
       
       if (events.length > 0) {
-        console.log('🔍 migrateEventsImages - Primeiro evento:', events[0]);
+        console.log('ðŸ” migrateEventsImages - Primeiro evento:', events[0]);
         if (events[0].image) {
-          console.log('🖼️ migrateEventsImages - Primeira imagem:', events[0].image.substring(0, 50) + '...');
-          console.log('🖼️ migrateEventsImages - É blob?', events[0].image.startsWith('blob:'));
-          console.log('🖼️ migrateEventsImages - É base64?', events[0].image.startsWith('data:'));
+          console.log('ðŸ–¼ï¸ migrateEventsImages - Primeira imagem:', events[0].image.substring(0, 50) + '...');
+          console.log('ðŸ–¼ï¸ migrateEventsImages - Ã‰ blob?', events[0].image.startsWith('blob:'));
+          console.log('ðŸ–¼ï¸ migrateEventsImages - Ã‰ base64?', events[0].image.startsWith('data:'));
         }
       }
       
       let hasChanges = false;
 
-      // Verificar se há eventos com URLs temporárias
+      // Verificar se hÃ¡ eventos com URLs temporÃ¡rias
       const updatedEvents = events.map((event: any) => {
         if (event.image && typeof event.image === 'string' && event.image.startsWith('blob:')) {
-          console.log('🗑️ migrateEventsImages - Removendo URL temporária do evento:', event.title);
+          console.log('ðŸ—‘ï¸ migrateEventsImages - Removendo URL temporÃ¡ria do evento:', event.title);
           hasChanges = true;
           return {
             ...event,
-            image: '' // Remover imagem temporária
+            image: '' // Remover imagem temporÃ¡ria
           };
         }
         return event;
       });
 
-      // Salvar eventos atualizados se houver mudanças
+      // Salvar eventos atualizados se houver mudanÃ§as
       if (hasChanges) {
         storage.setJSON('cachedEvents', updatedEvents);
-        console.log('✅ migrateEventsImages - Eventos migrados com sucesso');
+        console.log('âœ… migrateEventsImages - Eventos migrados com sucesso');
         
-        // Disparar evento de sincronização
+        // Disparar evento de sincronizaÃ§Ã£o
         window.dispatchEvent(new CustomEvent('eventsUpdated'));
-        console.log('📡 migrateEventsImages - Evento de sincronização disparado');
+        console.log('ðŸ“¡ migrateEventsImages - Evento de sincronizaÃ§Ã£o disparado');
       } else {
-        console.log('ℹ️ migrateEventsImages - Nenhuma migração necessária');
+        console.log('â„¹ï¸ migrateEventsImages - Nenhuma migraÃ§Ã£o necessÃ¡ria');
       }
     } catch (error) {
-      console.error('❌ migrateEventsImages - Erro ao migrar eventos:', error);
+      console.error('âŒ migrateEventsImages - Erro ao migrar eventos:', error);
     }
   }
 };

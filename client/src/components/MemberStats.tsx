@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { membersAPI } from '../services/api';
 import { mockDashboardData, simulateApiDelay } from '../services/mockData';
@@ -27,18 +27,18 @@ const MemberStats: React.FC = () => {
         
         // Usar dados mock
         setStats(mockDashboardData.memberStats);
-        console.log('Dados mock de estatísticas carregados:', mockDashboardData.memberStats);
+        console.log('Dados mock de estatÃ­sticas carregados:', mockDashboardData.memberStats);
       } else {
         // Usar dados reais do Firestore
         const response = await membersAPI.getMemberStats();
         setStats(response.data);
       }
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error('Erro ao carregar estatÃ­sticas:', error);
       
       // Em caso de erro, usar dados mock como fallback
       setStats(mockDashboardData.memberStats);
-      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
+      // toast.info('Usando dados de demonstraÃ§Ã£o'); // Removido - notificaÃ§Ãµes desabilitadas
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ const MemberStats: React.FC = () => {
   if (!stats) {
     return (
       <div className="text-center text-gray-500 py-8">
-        Nenhum dado disponível
+        Nenhum dado disponÃ­vel
       </div>
     );
   }
@@ -92,7 +92,7 @@ const MemberStats: React.FC = () => {
         </div>
       </div>
 
-      {/* Gráfico de status */}
+      {/* GrÃ¡fico de status */}
       <div className="space-y-3">
         {/* Membros Ativos */}
         <div className="space-y-1">

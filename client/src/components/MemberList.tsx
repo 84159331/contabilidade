@@ -1,15 +1,15 @@
-import React, { memo, useMemo } from 'react';
+﻿import React, { memo, useMemo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import SkeletonLoader from './SkeletonLoader';
 import LoadingSpinner from './LoadingSpinner';
 
-// Validação de componentes importados
+// ValidaÃ§Ã£o de componentes importados
 const validateIcons = () => {
   const icons = { PencilIcon, TrashIcon };
   const invalid = Object.entries(icons).filter(([name, icon]) => {
     const isValid = icon !== undefined && icon !== null && (typeof icon === 'function' || typeof icon === 'object');
     if (!isValid) {
-      console.error(`❌ Ícone ${name} está undefined ou inválido:`, typeof icon, icon);
+      console.error(`âŒ Ãcone ${name} estÃ¡ undefined ou invÃ¡lido:`, typeof icon, icon);
     }
     return !isValid;
   });
@@ -22,7 +22,7 @@ const SafePencilIcon: React.FC<{ className?: string }> = ({ className }) => {
     const Icon = PencilIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>✏️</span>;
+  return <span className={className}>âœï¸</span>;
 };
 
 const SafeTrashIcon: React.FC<{ className?: string }> = ({ className }) => {
@@ -30,7 +30,7 @@ const SafeTrashIcon: React.FC<{ className?: string }> = ({ className }) => {
     const Icon = TrashIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>🗑️</span>;
+  return <span className={className}>ðŸ—‘ï¸</span>;
 };
 
 interface Member {
@@ -73,29 +73,29 @@ const MemberList: React.FC<MemberListProps> = ({
   isDeleting = false,
   onPageChange
 }) => {
-  // Validar ícones
+  // Validar Ã­cones
   const iconsValid = validateIcons();
   if (!iconsValid) {
-    console.warn('⚠️ Alguns ícones não estão disponíveis, usando fallbacks');
+    console.warn('âš ï¸ Alguns Ã­cones nÃ£o estÃ£o disponÃ­veis, usando fallbacks');
   }
 
-  // Validar e filtrar membros válidos
+  // Validar e filtrar membros vÃ¡lidos
   const validMembers = useMemo(() => {
     if (!Array.isArray(members)) {
-      console.error('❌ members não é um array:', typeof members, members);
+      console.error('âŒ members nÃ£o Ã© um array:', typeof members, members);
       return [];
     }
     return members.filter((member) => {
       if (!member || typeof member !== 'object') {
-        console.warn('⚠️ Membro inválido encontrado:', member);
+        console.warn('âš ï¸ Membro invÃ¡lido encontrado:', member);
         return false;
       }
       if (!member.id || (typeof member.id !== 'string' && typeof member.id !== 'number')) {
-        console.warn('⚠️ Membro sem ID válido:', member);
+        console.warn('âš ï¸ Membro sem ID vÃ¡lido:', member);
         return false;
       }
       if (!member.name || typeof member.name !== 'string') {
-        console.warn('⚠️ Membro sem nome válido:', member);
+        console.warn('âš ï¸ Membro sem nome vÃ¡lido:', member);
         return false;
       }
       return true;
@@ -108,7 +108,7 @@ const MemberList: React.FC<MemberListProps> = ({
   const formatDate = (dateString: string | undefined | null): string => {
     if (!dateString) return '-';
     
-    // Se já está no formato YYYY-MM-DD, converter diretamente
+    // Se jÃ¡ estÃ¡ no formato YYYY-MM-DD, converter diretamente
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
       const [year, month, day] = dateString.split('-').map(Number);
       return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
@@ -157,7 +157,7 @@ const MemberList: React.FC<MemberListProps> = ({
 
   // Validar componentes
   if (!SkeletonLoader || typeof SkeletonLoader !== 'function' && typeof SkeletonLoader !== 'object') {
-    console.error('❌ SkeletonLoader está undefined ou inválido');
+    console.error('âŒ SkeletonLoader estÃ¡ undefined ou invÃ¡lido');
   }
 
   if (loading && validMembers.length === 0) {
@@ -201,7 +201,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 Contato
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Aniversário
+                AniversÃ¡rio
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Membro Desde
@@ -210,7 +210,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 Status
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Ações
+                AÃ§Ãµes
               </th>
             </tr>
           </thead>
@@ -297,9 +297,9 @@ const MemberList: React.FC<MemberListProps> = ({
       {/* Mobile Cards */}
       <div className="md:hidden space-y-3 p-3 sm:p-4">
         {validMembers.map((member) => {
-          // Validação adicional dentro do map
+          // ValidaÃ§Ã£o adicional dentro do map
           if (!member || !member.id || !member.name) {
-            console.warn('⚠️ Membro inválido no map mobile:', member);
+            console.warn('âš ï¸ Membro invÃ¡lido no map mobile:', member);
             return null;
           }
           
@@ -372,7 +372,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 </div>
               )}
               <div>
-                <span className="text-gray-500 dark:text-gray-400">Aniversário:</span>
+                <span className="text-gray-500 dark:text-gray-400">AniversÃ¡rio:</span>
                 <p className="font-medium text-gray-900 dark:text-white">
                   {formatDate(member.birth_date)}
                 </p>
@@ -405,7 +405,7 @@ const MemberList: React.FC<MemberListProps> = ({
               disabled={pagination.page === pagination.pages}
               className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Próximo
+              PrÃ³ximo
             </button>
           </div>
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
@@ -415,7 +415,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 <span className="font-medium">
                   {((pagination.page - 1) * pagination.limit) + 1}
                 </span>{' '}
-                até{' '}
+                atÃ©{' '}
                 <span className="font-medium">
                   {Math.min(pagination.page * pagination.limit, pagination.total)}
                 </span>{' '}
@@ -459,7 +459,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   disabled={pagination.page === pagination.pages}
                   className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Próximo
+                  PrÃ³ximo
                 </button>
               </nav>
             </div>

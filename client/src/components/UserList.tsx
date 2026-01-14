@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline'; // Adicionado
 
 interface User {
@@ -18,26 +18,26 @@ const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
   return (
     <div className="bg-white shadow-xl rounded-xl overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-800">Usuários Cadastrados</h2>
+        <h2 className="text-xl font-semibold text-gray-800">UsuÃ¡rios Cadastrados</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Usuário
+                UsuÃ¡rio
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Email
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Função
+                FunÃ§Ã£o
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Criado em
               </th>
               <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Ações</span>
+                <span className="sr-only">AÃ§Ãµes</span>
               </th>
             </tr>
           </thead>
@@ -45,7 +45,7 @@ const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
             {users.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                  Nenhum usuário encontrado.
+                  Nenhum usuÃ¡rio encontrado.
                 </td>
               </tr>
             ) : (
@@ -73,7 +73,7 @@ const UserList: React.FC<UserListProps> = ({ users, onDelete }) => {
                     <button
                       onClick={() => onDelete(user.id.toString())}
                       className="text-danger-600 hover:text-danger-900 ml-4"
-                      title="Remover Usuário"
+                      title="Remover UsuÃ¡rio"
                     >
                       <TrashIcon className="h-5 w-5" />
                     </button>

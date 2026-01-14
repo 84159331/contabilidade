@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 import { EyeIcon, EyeSlashIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline';
@@ -9,7 +9,7 @@ const LoginFirebase: React.FC = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Começa oculta
+  const [showPassword, setShowPassword] = useState(false); // ComeÃ§a oculta
   const [error, setError] = useState<string>('');
   const { login } = useAuth();
 
@@ -28,20 +28,20 @@ const LoginFirebase: React.FC = () => {
     try {
       await login(formData.email, formData.password);
       toast.success('Login realizado com sucesso!');
-      // Limpar senha após login bem-sucedido
+      // Limpar senha apÃ³s login bem-sucedido
       setFormData({ ...formData, password: '' });
     } catch (error: any) {
       console.error('Erro no login:', error);
       
-      // Mensagens de erro mais amigáveis
+      // Mensagens de erro mais amigÃ¡veis
       let errorMessage = 'Erro ao fazer login';
       
       if (error.code === 'auth/user-not-found') {
-        errorMessage = 'Usuário não encontrado. Verifique o email.';
+        errorMessage = 'UsuÃ¡rio nÃ£o encontrado. Verifique o email.';
       } else if (error.code === 'auth/wrong-password') {
         errorMessage = 'Senha incorreta. Tente novamente.';
       } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Email inválido. Verifique o formato.';
+        errorMessage = 'Email invÃ¡lido. Verifique o formato.';
       } else if (error.code === 'auth/user-disabled') {
         errorMessage = 'Esta conta foi desabilitada. Entre em contato com o administrador.';
       } else if (error.code === 'auth/too-many-requests') {
@@ -72,7 +72,7 @@ const LoginFirebase: React.FC = () => {
             <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm mb-4">
               <img 
                 src="/img/ICONE-RESGATE.png" 
-                alt="Comunidade Cristã Resgate" 
+                alt="Comunidade CristÃ£ Resgate" 
                 className="h-10 w-10 object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -83,11 +83,11 @@ const LoginFirebase: React.FC = () => {
               Sistema de Tesouraria
             </h2>
             <p className="mt-2 text-blue-100 text-sm">
-              Comunidade Cristã Resgate
+              Comunidade CristÃ£ Resgate
             </p>
           </div>
 
-          {/* Formulário */}
+          {/* FormulÃ¡rio */}
           <div className="px-8 py-8">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Campo Email */}
@@ -161,7 +161,7 @@ const LoginFirebase: React.FC = () => {
                 )}
               </div>
 
-              {/* Opções Adicionais */}
+              {/* OpÃ§Ãµes Adicionais */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input 
@@ -182,7 +182,7 @@ const LoginFirebase: React.FC = () => {
                 </div>
               </div>
 
-              {/* Botão de Login */}
+              {/* BotÃ£o de Login */}
               <div>
                 <button
                   type="submit"
@@ -208,23 +208,23 @@ const LoginFirebase: React.FC = () => {
           {/* Footer */}
           <div className="bg-gray-50 dark:bg-gray-700 px-8 py-4 text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              © 2024 Comunidade Cristã Resgate. Todos os direitos reservados.
+              Â© 2024 Comunidade CristÃ£ Resgate. Todos os direitos reservados.
             </p>
           </div>
         </div>
 
-        {/* Informações de Acesso */}
+        {/* InformaÃ§Ãµes de Acesso */}
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              🚀 Primeiro Acesso?
+              ðŸš€ Primeiro Acesso?
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Entre em contato com o administrador do sistema para obter suas credenciais de acesso.
             </p>
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                📧 Contato: cresgate012@gmail.com
+                ðŸ“§ Contato: cresgate012@gmail.com
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon não utilizado
+// Removido DocumentArrowDownIcon nÃ£o utilizado
 
 interface MonthlyData {
   month: string;
@@ -47,13 +47,13 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
         setData(reportData);
         // Passa o array mensal para compatibilidade (pode ser usado por outros componentes)
         onDataLoaded(reportData.monthlyData);
-        // Passa o objeto completo para geração de PDF (chamado depois para sobrescrever)
+        // Passa o objeto completo para geraÃ§Ã£o de PDF (chamado depois para sobrescrever)
         if (onFullDataLoaded) {
           onFullDataLoaded(reportData);
         }
-        console.log('✅ Relatório anual carregado:', reportData);
+        console.log('âœ… RelatÃ³rio anual carregado:', reportData);
       } else {
-        // Dados vazios se não houver dados
+        // Dados vazios se nÃ£o houver dados
         const emptyData: YearlyBalance = {
           year,
           monthlyData: [],
@@ -66,8 +66,8 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
         }
       }
     } catch (error) {
-      console.error('❌ Erro ao carregar relatório anual:', error);
-      toast.error('Erro ao carregar relatório anual. Tente novamente.');
+      console.error('âŒ Erro ao carregar relatÃ³rio anual:', error);
+      toast.error('Erro ao carregar relatÃ³rio anual. Tente novamente.');
       
       // Dados vazios em caso de erro
       const emptyData: YearlyBalance = {
@@ -96,7 +96,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Nenhum dado disponível para o ano selecionado</p>
+        <p className="text-gray-500">Nenhum dado disponÃ­vel para o ano selecionado</p>
       </div>
     );
   }
@@ -216,7 +216,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Mês
+                  MÃªs
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Receitas

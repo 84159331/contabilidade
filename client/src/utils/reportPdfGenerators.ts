@@ -1,6 +1,6 @@
-import PDFGenerator, { PDF_CONFIG } from './pdfGenerator';
+﻿import PDFGenerator, { PDF_CONFIG } from './pdfGenerator';
 
-// Interfaces para os dados dos relatórios
+// Interfaces para os dados dos relatÃ³rios
 interface MonthlyBalance {
   income: { total: number; count: number };
   expense: { total: number; count: number };
@@ -58,7 +58,7 @@ interface ChurchInfo {
   email?: string;
 }
 
-// Gerador para Balanço Mensal
+// Gerador para BalanÃ§o Mensal
 export const generateMonthlyBalancePDF = (
   data: MonthlyBalance,
   churchInfo?: ChurchInfo
@@ -68,7 +68,7 @@ export const generateMonthlyBalancePDF = (
   const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
   
   const generator = new PDFGenerator({
-    title: 'Balanço Mensal',
+    title: 'BalanÃ§o Mensal',
     subtitle: `${capitalizedMonth} de ${data.period.year}`,
     churchInfo,
     period: `${capitalizedMonth} de ${data.period.year}`
@@ -77,8 +77,8 @@ export const generateMonthlyBalancePDF = (
   // Resumo executivo
   generator.addSection('Resumo Executivo', 14);
   generator.addText(
-    `Este relatório apresenta o balanço financeiro do mês de ${capitalizedMonth} de ${data.period.year}, ` +
-    `detalhando as receitas e despesas registradas no período.`,
+    `Este relatÃ³rio apresenta o balanÃ§o financeiro do mÃªs de ${capitalizedMonth} de ${data.period.year}, ` +
+    `detalhando as receitas e despesas registradas no perÃ­odo.`,
     10
   );
   generator.addSpacing(5);
@@ -86,7 +86,7 @@ export const generateMonthlyBalancePDF = (
   // Cards de resumo
   generator.addSummaryCard('Total de Receitas', data.income.total, 'success');
   generator.addSummaryCard('Total de Despesas', data.expense.total, 'danger');
-  generator.addSummaryCard('Saldo do Mês', data.balance, data.balance >= 0 ? 'success' : 'danger');
+  generator.addSummaryCard('Saldo do MÃªs', data.balance, data.balance >= 0 ? 'success' : 'danger');
   generator.finishCardRow();
   generator.addSpacing(5);
 
@@ -100,14 +100,14 @@ export const generateMonthlyBalancePDF = (
   ];
 
   generator.addTable(
-    ['Categoria', 'Transações', 'Valor Total'],
+    ['Categoria', 'TransaÃ§Ãµes', 'Valor Total'],
     summaryRows,
     [60, 50, 40]
   );
 
-  // Análise percentual
+  // AnÃ¡lise percentual
   generator.addSpacing(5);
-  generator.addSection('Análise Percentual', 12);
+  generator.addSection('AnÃ¡lise Percentual', 12);
   
   const total = Math.abs(data.income.total) + Math.abs(data.expense.total);
   const incomePercent = total > 0 ? ((data.income.total / total) * 100).toFixed(1) : '0';
@@ -119,15 +119,15 @@ export const generateMonthlyBalancePDF = (
   if (data.balance >= 0) {
     generator.addText(
       `O saldo positivo de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.balance)} ` +
-      `indica uma situação financeira saudável no período.`,
+      `indica uma situaÃ§Ã£o financeira saudÃ¡vel no perÃ­odo.`,
       10,
       false,
       PDF_CONFIG.colors.success
     );
   } else {
     generator.addText(
-      `Atenção: O saldo negativo de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Math.abs(data.balance))} ` +
-      `requer atenção na gestão financeira.`,
+      `AtenÃ§Ã£o: O saldo negativo de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Math.abs(data.balance))} ` +
+      `requer atenÃ§Ã£o na gestÃ£o financeira.`,
       10,
       false,
       PDF_CONFIG.colors.danger
@@ -137,13 +137,13 @@ export const generateMonthlyBalancePDF = (
   generator.save(`Balanco_Mensal_${capitalizedMonth}_${data.period.year}.pdf`);
 };
 
-// Gerador para Balanço Anual
+// Gerador para BalanÃ§o Anual
 export const generateYearlyBalancePDF = (
   data: YearlyBalance,
   churchInfo?: ChurchInfo
 ): void => {
   const generator = new PDFGenerator({
-    title: 'Balanço Anual',
+    title: 'BalanÃ§o Anual',
     subtitle: `Ano ${data.year}`,
     churchInfo,
     period: `Ano ${data.year}`
@@ -152,7 +152,7 @@ export const generateYearlyBalancePDF = (
   // Resumo executivo
   generator.addSection('Resumo Executivo Anual', 14);
   generator.addText(
-    `Este relatório apresenta o balanço financeiro do ano de ${data.year}, ` +
+    `Este relatÃ³rio apresenta o balanÃ§o financeiro do ano de ${data.year}, ` +
     `com o detalhamento mensal das receitas, despesas e saldos.`,
     10
   );
@@ -169,9 +169,9 @@ export const generateYearlyBalancePDF = (
   generator.finishCardRow();
   generator.addSpacing(5);
 
-  // Gráfico de barras mensal
+  // GrÃ¡fico de barras mensal
   if (data.monthlyData.length > 0) {
-    generator.addSection('Evolução Mensal', 12);
+    generator.addSection('EvoluÃ§Ã£o Mensal', 12);
     
     const chartData = data.monthlyData.slice(0, 6).map(month => ({
       label: month.monthName.substring(0, 3),
@@ -194,22 +194,22 @@ export const generateYearlyBalancePDF = (
   ]);
 
   generator.addTable(
-    ['Mês', 'Receitas', 'Despesas', 'Saldo'],
+    ['MÃªs', 'Receitas', 'Despesas', 'Saldo'],
     monthlyRows,
     [45, 40, 40, 35]
   );
 
-  // Análise anual
+  // AnÃ¡lise anual
   generator.addSpacing(5);
-  generator.addSection('Análise Anual', 12);
+  generator.addSection('AnÃ¡lise Anual', 12);
   
   const avgMonthlyIncome = data.yearlyTotal.income / 12;
   const avgMonthlyExpense = data.yearlyTotal.expense / 12;
   const avgMonthlyBalance = data.yearlyTotal.balance / 12;
   
-  generator.addText(`Média mensal de receitas: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyIncome)}`, 10);
-  generator.addText(`Média mensal de despesas: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyExpense)}`, 10);
-  generator.addText(`Média mensal de saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyBalance)}`, 10);
+  generator.addText(`MÃ©dia mensal de receitas: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyIncome)}`, 10);
+  generator.addText(`MÃ©dia mensal de despesas: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyExpense)}`, 10);
+  generator.addText(`MÃ©dia mensal de saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(avgMonthlyBalance)}`, 10);
 
   const bestMonth = data.monthlyData.reduce((best, current) => 
     current.balance > best.balance ? current : best
@@ -219,13 +219,13 @@ export const generateYearlyBalancePDF = (
   );
 
   generator.addSpacing(3);
-  generator.addText(`Melhor mês: ${bestMonth.monthName} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(bestMonth.balance)})`, 10, true);
-  generator.addText(`Mês mais desafiador: ${worstMonth.monthName} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(worstMonth.balance)})`, 10, true);
+  generator.addText(`Melhor mÃªs: ${bestMonth.monthName} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(bestMonth.balance)})`, 10, true);
+  generator.addText(`MÃªs mais desafiador: ${worstMonth.monthName} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(worstMonth.balance)})`, 10, true);
 
   generator.save(`Balanco_Anual_${data.year}.pdf`);
 };
 
-// Gerador para Relatório por Categoria
+// Gerador para RelatÃ³rio por Categoria
 export const generateCategoryReportPDF = (
   incomeData: CategoryData[],
   expenseData: CategoryData[],
@@ -237,8 +237,8 @@ export const generateCategoryReportPDF = (
   const endDateFormatted = new Date(endDate).toLocaleDateString('pt-BR');
   
   const generator = new PDFGenerator({
-    title: 'Relatório por Categoria',
-    subtitle: `Período: ${startDateFormatted} a ${endDateFormatted}`,
+    title: 'RelatÃ³rio por Categoria',
+    subtitle: `PerÃ­odo: ${startDateFormatted} a ${endDateFormatted}`,
     churchInfo,
     period: `${startDateFormatted} a ${endDateFormatted}`
   });
@@ -250,8 +250,8 @@ export const generateCategoryReportPDF = (
   // Resumo executivo
   generator.addSection('Resumo Executivo', 14);
   generator.addText(
-    `Este relatório apresenta a análise detalhada de receitas e despesas por categoria ` +
-    `no período de ${startDateFormatted} a ${endDateFormatted}.`,
+    `Este relatÃ³rio apresenta a anÃ¡lise detalhada de receitas e despesas por categoria ` +
+    `no perÃ­odo de ${startDateFormatted} a ${endDateFormatted}.`,
     10
   );
   generator.addSpacing(5);
@@ -279,13 +279,13 @@ export const generateCategoryReportPDF = (
     });
 
     generator.addTable(
-      ['Categoria', 'Transações', 'Total', 'Média', 'Percentual'],
+      ['Categoria', 'TransaÃ§Ãµes', 'Total', 'MÃ©dia', 'Percentual'],
       incomeRows,
       [35, 25, 30, 30, 20]
     );
     generator.addSpacing(5);
 
-    // Gráfico de receitas
+    // GrÃ¡fico de receitas
     if (incomeData.length > 0 && incomeData.length <= 6) {
       const chartData = incomeData.map(cat => ({
         label: cat.name.substring(0, 10),
@@ -313,13 +313,13 @@ export const generateCategoryReportPDF = (
     });
 
     generator.addTable(
-      ['Categoria', 'Transações', 'Total', 'Média', 'Percentual'],
+      ['Categoria', 'TransaÃ§Ãµes', 'Total', 'MÃ©dia', 'Percentual'],
       expenseRows,
       [35, 25, 30, 30, 20]
     );
     generator.addSpacing(5);
 
-    // Gráfico de despesas
+    // GrÃ¡fico de despesas
     if (expenseData.length > 0 && expenseData.length <= 6) {
       const chartData = expenseData.map(cat => ({
         label: cat.name.substring(0, 10),
@@ -330,9 +330,9 @@ export const generateCategoryReportPDF = (
     }
   }
 
-  // Análise
+  // AnÃ¡lise
   generator.addSpacing(5);
-  generator.addSection('Análise e Observações', 12);
+  generator.addSection('AnÃ¡lise e ObservaÃ§Ãµes', 12);
   
   if (incomeData.length > 0) {
     const topIncomeCategory = incomeData.reduce((top, current) => 
@@ -371,11 +371,11 @@ export const generateCashFlowPDF = (
 ): void => {
   const startDateFormatted = new Date(startDate).toLocaleDateString('pt-BR');
   const endDateFormatted = new Date(endDate).toLocaleDateString('pt-BR');
-  const periodLabel = period === 'daily' ? 'Diário' : period === 'weekly' ? 'Semanal' : 'Mensal';
+  const periodLabel = period === 'daily' ? 'DiÃ¡rio' : period === 'weekly' ? 'Semanal' : 'Mensal';
   
   const generator = new PDFGenerator({
     title: 'Fluxo de Caixa',
-    subtitle: `Período ${periodLabel}: ${startDateFormatted} a ${endDateFormatted}`,
+    subtitle: `PerÃ­odo ${periodLabel}: ${startDateFormatted} a ${endDateFormatted}`,
     churchInfo,
     period: `${startDateFormatted} a ${endDateFormatted}`
   });
@@ -387,8 +387,8 @@ export const generateCashFlowPDF = (
   // Resumo executivo
   generator.addSection('Resumo Executivo', 14);
   generator.addText(
-    `Este relatório apresenta o fluxo de caixa ${periodLabel.toLowerCase()} detalhado ` +
-    `no período de ${startDateFormatted} a ${endDateFormatted}.`,
+    `Este relatÃ³rio apresenta o fluxo de caixa ${periodLabel.toLowerCase()} detalhado ` +
+    `no perÃ­odo de ${startDateFormatted} a ${endDateFormatted}.`,
     10
   );
   generator.addSpacing(5);
@@ -400,7 +400,7 @@ export const generateCashFlowPDF = (
   generator.finishCardRow();
   generator.addSpacing(5);
 
-  // Função para formatar período
+  // FunÃ§Ã£o para formatar perÃ­odo
   const formatPeriod = (periodStr: string): string => {
     if (period === 'daily') {
       return new Date(periodStr).toLocaleDateString('pt-BR');
@@ -423,15 +423,15 @@ export const generateCashFlowPDF = (
   ]);
 
   generator.addTable(
-    ['Período', 'Receitas', 'Despesas', 'Saldo'],
+    ['PerÃ­odo', 'Receitas', 'Despesas', 'Saldo'],
     flowRows,
     [50, 35, 35, 30]
   );
 
-  // Gráfico se tiver dados suficientes
+  // GrÃ¡fico se tiver dados suficientes
   if (data.length > 0 && data.length <= 12) {
     generator.addSpacing(5);
-    generator.addSection(`Evolução do Saldo ${periodLabel}`, 12);
+    generator.addSection(`EvoluÃ§Ã£o do Saldo ${periodLabel}`, 12);
     
     const chartData = data.map(item => ({
       label: period === 'daily' ? new Date(item.period).getDate().toString() :
@@ -444,16 +444,16 @@ export const generateCashFlowPDF = (
     generator.addBarChart(chartData);
   }
 
-  // Análise
+  // AnÃ¡lise
   generator.addSpacing(5);
-  generator.addSection('Análise do Fluxo de Caixa', 12);
+  generator.addSection('AnÃ¡lise do Fluxo de Caixa', 12);
   
   const positivePeriods = data.filter(item => item.balance >= 0).length;
   const negativePeriods = data.filter(item => item.balance < 0).length;
   const positivePercentage = data.length > 0 ? ((positivePeriods / data.length) * 100).toFixed(1) : '0';
   
-  generator.addText(`Períodos com saldo positivo: ${positivePeriods} de ${data.length} (${positivePercentage}%)`, 10);
-  generator.addText(`Períodos com saldo negativo: ${negativePeriods} de ${data.length}`, 10);
+  generator.addText(`PerÃ­odos com saldo positivo: ${positivePeriods} de ${data.length} (${positivePercentage}%)`, 10);
+  generator.addText(`PerÃ­odos com saldo negativo: ${negativePeriods} de ${data.length}`, 10);
   
   if (data.length > 0) {
     const bestPeriod = data.reduce((best, current) => 
@@ -465,12 +465,12 @@ export const generateCashFlowPDF = (
     
     generator.addSpacing(3);
     generator.addText(
-      `Melhor período: ${formatPeriod(bestPeriod.period)} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(bestPeriod.balance)})`,
+      `Melhor perÃ­odo: ${formatPeriod(bestPeriod.period)} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(bestPeriod.balance)})`,
       10,
       true
     );
     generator.addText(
-      `Período mais desafiador: ${formatPeriod(worstPeriod.period)} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(worstPeriod.balance)})`,
+      `PerÃ­odo mais desafiador: ${formatPeriod(worstPeriod.period)} (Saldo: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(worstPeriod.balance)})`,
       10,
       true
     );
@@ -479,7 +479,7 @@ export const generateCashFlowPDF = (
   generator.save(`Fluxo_Caixa_${periodLabel}_${startDateFormatted.replace(/\//g, '-')}.pdf`);
 };
 
-// Gerador para Contribuições por Membro
+// Gerador para ContribuiÃ§Ãµes por Membro
 export const generateMemberContributionsPDF = (
   data: MemberContribution[],
   startDate: string,
@@ -490,8 +490,8 @@ export const generateMemberContributionsPDF = (
   const endDateFormatted = new Date(endDate).toLocaleDateString('pt-BR');
   
   const generator = new PDFGenerator({
-    title: 'Relatório de Contribuições por Membro',
-    subtitle: `Período: ${startDateFormatted} a ${endDateFormatted}`,
+    title: 'RelatÃ³rio de ContribuiÃ§Ãµes por Membro',
+    subtitle: `PerÃ­odo: ${startDateFormatted} a ${endDateFormatted}`,
     churchInfo,
     period: `${startDateFormatted} a ${endDateFormatted}`
   });
@@ -504,8 +504,8 @@ export const generateMemberContributionsPDF = (
   // Resumo executivo
   generator.addSection('Resumo Executivo', 14);
   generator.addText(
-    `Este relatório apresenta o detalhamento das contribuições realizadas por cada membro ` +
-    `no período de ${startDateFormatted} a ${endDateFormatted}.`,
+    `Este relatÃ³rio apresenta o detalhamento das contribuiÃ§Ãµes realizadas por cada membro ` +
+    `no perÃ­odo de ${startDateFormatted} a ${endDateFormatted}.`,
     10
   );
   generator.addSpacing(5);
@@ -513,17 +513,17 @@ export const generateMemberContributionsPDF = (
   // Cards de resumo
   generator.addSummaryCard('Total Arrecadado', totalContributions, 'success');
   generator.addSummaryCard('Contribuintes', data.length, 'primary', 'membros');
-  generator.addSummaryCard('Total Contribuições', totalCount, 'primary', 'transações');
+  generator.addSummaryCard('Total ContribuiÃ§Ãµes', totalCount, 'primary', 'transaÃ§Ãµes');
   generator.finishCardRow();
   generator.addSpacing(5);
 
-  generator.addSummaryCard('Média por Membro', averagePerMember, 'primary');
-  generator.addSummaryCard('Média por Contribuição', averagePerContribution, 'primary');
+  generator.addSummaryCard('MÃ©dia por Membro', averagePerMember, 'primary');
+  generator.addSummaryCard('MÃ©dia por ContribuiÃ§Ã£o', averagePerContribution, 'primary');
   generator.finishCardRow();
   generator.addSpacing(5);
 
   // Tabela de membros
-  generator.addSection('Contribuições Detalhadas por Membro', 12);
+  generator.addSection('ContribuiÃ§Ãµes Detalhadas por Membro', 12);
   
   const memberRows: (string | number)[][] = data.map(member => [
     member.name,
@@ -535,7 +535,7 @@ export const generateMemberContributionsPDF = (
   ]);
 
   generator.addTable(
-    ['Membro', 'Qtd', 'Total', 'Média', 'Primeira', 'Última'],
+    ['Membro', 'Qtd', 'Total', 'MÃ©dia', 'Primeira', 'Ãšltima'],
     memberRows,
     [40, 15, 25, 25, 20, 20]
   );
@@ -559,9 +559,9 @@ export const generateMemberContributionsPDF = (
     }
   }
 
-  // Análise
+  // AnÃ¡lise
   generator.addSpacing(5);
-  generator.addSection('Análise e Observações', 12);
+  generator.addSection('AnÃ¡lise e ObservaÃ§Ãµes', 12);
   
   if (data.length > 0) {
     const topContributor = data.reduce((top, current) => 
@@ -570,7 +570,7 @@ export const generateMemberContributionsPDF = (
     generator.addText(
       `Maior contribuidor: ${topContributor.name} com ` +
       `${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(topContributor.total_contributed)} ` +
-      `(${topContributor.contribution_count} contribuições).`,
+      `(${topContributor.contribution_count} contribuiÃ§Ãµes).`,
       10,
       true
     );
@@ -578,7 +578,7 @@ export const generateMemberContributionsPDF = (
 
   const membersWithMultipleContributions = data.filter(m => m.contribution_count > 1).length;
   generator.addText(
-    `Membros com múltiplas contribuições: ${membersWithMultipleContributions} de ${data.length} ` +
+    `Membros com mÃºltiplas contribuiÃ§Ãµes: ${membersWithMultipleContributions} de ${data.length} ` +
     `(${data.length > 0 ? ((membersWithMultipleContributions / data.length) * 100).toFixed(1) : '0'}%).`,
     10
   );

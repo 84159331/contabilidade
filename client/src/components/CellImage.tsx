@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { PhotoIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface CellImageProps {
@@ -13,7 +13,7 @@ const CellImage: React.FC<CellImageProps> = ({
   src,
   alt,
   className = '',
-  fallbackText = 'Imagem da Célula',
+  fallbackText = 'Imagem da CÃ©lula',
   containerHeight = 192 // h-48 = 192px
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -48,7 +48,7 @@ const CellImage: React.FC<CellImageProps> = ({
     const { width, height } = imageDimensions;
     const aspectRatio = width / height;
     
-    // Calcular dimensões para preencher completamente o container
+    // Calcular dimensÃµes para preencher completamente o container
     // Usar object-fit: cover para garantir preenchimento total
     return {
       width: '100%',

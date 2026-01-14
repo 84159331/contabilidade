@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import MemberForm from '../components/MemberForm';
@@ -12,19 +12,19 @@ const CadastroMembro: React.FC = () => {
   const handleSave = async (data: any) => {
     // Validar dados antes de enviar
     if (!data || typeof data !== 'object') {
-      console.error('❌ Dados inválidos para criar membro:', data);
-      toast.error('Dados inválidos para criar membro');
+      console.error('âŒ Dados invÃ¡lidos para criar membro:', data);
+      toast.error('Dados invÃ¡lidos para criar membro');
       return;
     }
 
     setIsSaving(true);
     try {
-      console.log('✅ Criando membro com dados:', data);
+      console.log('âœ… Criando membro com dados:', data);
       await membersAPI.createMember(data);
       toast.success('Membro criado com sucesso!');
       navigate('/tesouraria/members'); // Redirect to members list after successful registration
     } catch (error: any) {
-      console.error('❌ Erro ao criar membro:', error);
+      console.error('âŒ Erro ao criar membro:', error);
       toast.error(error.response?.data?.error || error.message || 'Erro ao criar membro');
     } finally {
       setIsSaving(false);

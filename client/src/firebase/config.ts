@@ -1,10 +1,10 @@
-import { initializeApp } from 'firebase/app';
+﻿import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
-// Configuração do Firebase - COMUNIDADE RESGATE (CRA)
+// ConfiguraÃ§Ã£o do Firebase - COMUNIDADE RESGATE (CRA)
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDW73K6vb7RMdyfsJ6JVzzm1r3sULs4ceY",
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "comunidaderesgate-82655.firebaseapp.com",
@@ -15,14 +15,14 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-485FKRFYHE"
 };
 
-// Debug: mostrar configuração
-console.log('🔥 Firebase Config - Comunidade Resgate (CRA):', {
-  apiKey: firebaseConfig.apiKey ? '✅ Configurado' : '❌ Não configurado',
+// Debug: mostrar configuraÃ§Ã£o
+console.log('ðŸ”¥ Firebase Config - Comunidade Resgate (CRA):', {
+  apiKey: firebaseConfig.apiKey ? 'âœ… Configurado' : 'âŒ NÃ£o configurado',
   authDomain: firebaseConfig.authDomain,
   projectId: firebaseConfig.projectId,
   storageBucket: firebaseConfig.storageBucket,
   messagingSenderId: firebaseConfig.messagingSenderId,
-  appId: firebaseConfig.appId ? '✅ Configurado' : '❌ Não configurado',
+  appId: firebaseConfig.appId ? 'âœ… Configurado' : 'âŒ NÃ£o configurado',
   measurementId: firebaseConfig.measurementId,
   env: process.env.NODE_ENV
 });
@@ -30,32 +30,32 @@ console.log('🔥 Firebase Config - Comunidade Resgate (CRA):', {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
-// Exportar serviços
+// Exportar serviÃ§os
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
 
 // Inicializar Analytics de forma condicional e segura
-// Evita erros 404 quando o Analytics não está configurado no Firebase Console
+// Evita erros 404 quando o Analytics nÃ£o estÃ¡ configurado no Firebase Console
 let analytics: Analytics | null = null;
 
 if (typeof window !== 'undefined') {
-  // Verificar se o Analytics é suportado e inicializar apenas se estiver disponível
+  // Verificar se o Analytics Ã© suportado e inicializar apenas se estiver disponÃ­vel
   isSupported()
     .then((supported) => {
       if (supported) {
         try {
           analytics = getAnalytics(app);
-          console.log('✅ Firebase Analytics inicializado');
+          console.log('âœ… Firebase Analytics inicializado');
         } catch (error) {
-          console.warn('⚠️ Firebase Analytics não pôde ser inicializado:', error);
+          console.warn('âš ï¸ Firebase Analytics nÃ£o pÃ´de ser inicializado:', error);
         }
       } else {
-        console.warn('⚠️ Firebase Analytics não é suportado neste ambiente');
+        console.warn('âš ï¸ Firebase Analytics nÃ£o Ã© suportado neste ambiente');
       }
     })
     .catch((error) => {
-      console.warn('⚠️ Erro ao verificar suporte do Firebase Analytics:', error);
+      console.warn('âš ï¸ Erro ao verificar suporte do Firebase Analytics:', error);
     });
 }
 

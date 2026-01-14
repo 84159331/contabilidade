@@ -1,19 +1,19 @@
-// API client-side para aniversários
-// Nota: A maior parte da lógica está no hook useBirthdays
-// Este arquivo pode ser usado para chamadas HTTP adicionais se necessário
+﻿// API client-side para aniversÃ¡rios
+// Nota: A maior parte da lÃ³gica estÃ¡ no hook useBirthdays
+// Este arquivo pode ser usado para chamadas HTTP adicionais se necessÃ¡rio
 
 export const birthdayAPI = {
   /**
-   * Testa manualmente a verificação de aniversários
-   * Chama a função HTTP testBirthdayCheck do Firebase Functions
+   * Testa manualmente a verificaÃ§Ã£o de aniversÃ¡rios
+   * Chama a funÃ§Ã£o HTTP testBirthdayCheck do Firebase Functions
    */
   testBirthdayCheck: async (): Promise<any> => {
     try {
-      // URL da função Firebase (ajustar conforme necessário)
+      // URL da funÃ§Ã£o Firebase (ajustar conforme necessÃ¡rio)
       const functionsUrl = process.env.REACT_APP_FUNCTIONS_URL || '';
       
       if (!functionsUrl) {
-        throw new Error('REACT_APP_FUNCTIONS_URL não configurado');
+        throw new Error('REACT_APP_FUNCTIONS_URL nÃ£o configurado');
       }
 
       const response = await fetch(`${functionsUrl}/testBirthdayCheck`, {
@@ -24,12 +24,12 @@ export const birthdayAPI = {
       });
 
       if (!response.ok) {
-        throw new Error(`Erro ao testar verificação: ${response.statusText}`);
+        throw new Error(`Erro ao testar verificaÃ§Ã£o: ${response.statusText}`);
       }
 
       return await response.json();
     } catch (error: any) {
-      console.error('Erro ao testar verificação de aniversários:', error);
+      console.error('Erro ao testar verificaÃ§Ã£o de aniversÃ¡rios:', error);
       throw error;
     }
   }

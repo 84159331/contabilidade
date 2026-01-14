@@ -1,6 +1,6 @@
-import jsPDF from 'jspdf';
+﻿import jsPDF from 'jspdf';
 
-// Configurações padrão
+// ConfiguraÃ§Ãµes padrÃ£o
 const PDF_CONFIG = {
   pageSize: 'a4' as const,
   orientation: 'portrait' as const,
@@ -62,14 +62,14 @@ class PDFGenerator {
     this.addHeader();
   }
 
-  // Adiciona cabeçalho profissional
+  // Adiciona cabeÃ§alho profissional
   private addHeader(): void {
-    // Logo/Ícone (círculo simples representando igreja)
+    // Logo/Ãcone (cÃ­rculo simples representando igreja)
     const logoSize = 15;
     const logoX = PDF_CONFIG.margin.left;
     const logoY = this.currentY - 8;
     
-    // Desenha círculo para logo
+    // Desenha cÃ­rculo para logo
     const primaryColor = PDF_CONFIG.colors.primary;
     this.pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
     this.pdf.circle(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 'F');
@@ -82,7 +82,7 @@ class PDFGenerator {
     const churchName = this.churchInfo.name || 'Minha Igreja';
     this.pdf.text(churchName, logoX + logoSize + 5, logoY + 8);
     
-    // Informações adicionais da igreja
+    // InformaÃ§Ãµes adicionais da igreja
     if (this.churchInfo.address || this.churchInfo.phone) {
       this.pdf.setFontSize(PDF_CONFIG.fonts.small);
       this.pdf.setFont('helvetica', 'normal');
@@ -100,11 +100,11 @@ class PDFGenerator {
       }
     }
     
-    // Linha divisória
+    // Linha divisÃ³ria
     this.drawLine(PDF_CONFIG.margin.left, this.currentY + 20, this.contentWidth, 0.5);
     this.currentY += 25;
     
-    // Título do relatório
+    // TÃ­tulo do relatÃ³rio
     this.pdf.setFontSize(PDF_CONFIG.fonts.title);
     this.pdf.setFont('helvetica', 'bold');
     const darkColorTitle = PDF_CONFIG.colors.dark;
@@ -113,7 +113,7 @@ class PDFGenerator {
     this.pdf.text(this.options.title, (this.pageWidth - titleWidth) / 2, this.currentY);
     this.currentY += 8;
     
-    // Subtítulo (se fornecido)
+    // SubtÃ­tulo (se fornecido)
     if (this.options.subtitle) {
       this.pdf.setFontSize(PDF_CONFIG.fonts.body);
       this.pdf.setFont('helvetica', 'normal');
@@ -124,26 +124,26 @@ class PDFGenerator {
       this.currentY += 6;
     }
     
-    // Período (se fornecido)
+    // PerÃ­odo (se fornecido)
     if (this.options.period) {
       this.pdf.setFontSize(PDF_CONFIG.fonts.small);
       this.pdf.setFont('helvetica', 'italic');
-      const periodWidth = this.pdf.getTextWidth(`Período: ${this.options.period}`);
-      this.pdf.text(`Período: ${this.options.period}`, (this.pageWidth - periodWidth) / 2, this.currentY);
+      const periodWidth = this.pdf.getTextWidth(`PerÃ­odo: ${this.options.period}`);
+      this.pdf.text(`PerÃ­odo: ${this.options.period}`, (this.pageWidth - periodWidth) / 2, this.currentY);
       this.currentY += 6;
     }
     
-    this.currentY += 5; // Espaçamento após cabeçalho
+    this.currentY += 5; // EspaÃ§amento apÃ³s cabeÃ§alho
   }
 
-  // Adiciona rodapé
+  // Adiciona rodapÃ©
   private addFooter(): void {
     const footerY = this.pageHeight - PDF_CONFIG.margin.bottom;
     
-    // Linha divisória
+    // Linha divisÃ³ria
     this.drawLine(PDF_CONFIG.margin.left, footerY - 10, this.contentWidth, 0.3);
     
-    // Data de geração
+    // Data de geraÃ§Ã£o
     this.pdf.setFontSize(PDF_CONFIG.fonts.small);
     this.pdf.setFont('helvetica', 'normal');
     const grayColorFooter = PDF_CONFIG.colors.gray;
@@ -158,14 +158,14 @@ class PDFGenerator {
     });
     this.pdf.text(`Gerado em: ${dateStr}`, PDF_CONFIG.margin.left, footerY - 5);
     
-    // Número da página
+    // NÃºmero da pÃ¡gina
     const totalPages = this.pdf.getNumberOfPages();
-    const pageText = `Página ${totalPages} de ${totalPages}`;
+    const pageText = `PÃ¡gina ${totalPages} de ${totalPages}`;
     const pageTextWidth = this.pdf.getTextWidth(pageText);
     this.pdf.text(pageText, this.pageWidth - PDF_CONFIG.margin.right - pageTextWidth, footerY - 5);
   }
 
-  // Adiciona uma nova página se necessário
+  // Adiciona uma nova pÃ¡gina se necessÃ¡rio
   private checkNewPage(requiredSpace: number): void {
     if (this.currentY + requiredSpace > this.pageHeight - PDF_CONFIG.margin.bottom - 15) {
       this.addFooter();
@@ -182,7 +182,7 @@ class PDFGenerator {
     this.pdf.line(x, y, x + width, y);
   }
 
-  // Formata valor monetário
+  // Formata valor monetÃ¡rio
   private formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -241,12 +241,12 @@ class PDFGenerator {
   // Reseta cards para nova linha
   finishCardRow(): void {
     if (this.cardsInRow % 3 !== 0) {
-      this.currentY += 25; // Altura do card + espaçamento
+      this.currentY += 25; // Altura do card + espaÃ§amento
     }
     this.cardsInRow = 0;
   }
 
-  // Adiciona uma seção de título
+  // Adiciona uma seÃ§Ã£o de tÃ­tulo
   addSection(title: string, fontSize: number = PDF_CONFIG.fonts.heading): void {
     this.checkNewPage(15);
     this.currentY += 5;
@@ -258,7 +258,7 @@ class PDFGenerator {
     this.pdf.text(title, PDF_CONFIG.margin.left, this.currentY);
     this.currentY += 2;
     
-    // Linha sob o título
+    // Linha sob o tÃ­tulo
     this.drawLine(PDF_CONFIG.margin.left, this.currentY, this.contentWidth, 0.5);
     this.currentY += 6;
   }
@@ -270,10 +270,10 @@ class PDFGenerator {
     const rowHeight = 8;
     const headerHeight = 10;
     
-    // Calcula larguras das colunas se não fornecidas
+    // Calcula larguras das colunas se nÃ£o fornecidas
     const widths = columnWidths || headers.map(() => this.contentWidth / headers.length);
     
-    // Cabeçalho da tabela
+    // CabeÃ§alho da tabela
     let x = PDF_CONFIG.margin.left;
     const primaryColor = PDF_CONFIG.colors.primary;
     const headerBgR = Math.min(255, primaryColor[0] + (255 - primaryColor[0]) * 0.9);
@@ -293,7 +293,7 @@ class PDFGenerator {
       x += widths[index];
     });
     
-    // Linha divisória
+    // Linha divisÃ³ria
     this.drawLine(PDF_CONFIG.margin.left, this.currentY + headerHeight, this.contentWidth, 0.3);
     this.currentY += headerHeight;
     
@@ -323,7 +323,7 @@ class PDFGenerator {
       this.currentY += rowHeight;
     });
     
-    this.currentY += 5; // Espaçamento após tabela
+    this.currentY += 5; // EspaÃ§amento apÃ³s tabela
   }
 
   // Adiciona texto formatado
@@ -335,7 +335,7 @@ class PDFGenerator {
     const textColor = color || PDF_CONFIG.colors.dark;
     this.pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
     
-    // Quebra de linha automática
+    // Quebra de linha automÃ¡tica
     const maxWidth = this.contentWidth;
     const lines = this.pdf.splitTextToSize(text, maxWidth);
     
@@ -348,7 +348,7 @@ class PDFGenerator {
     this.currentY += 2;
   }
 
-  // Adiciona gráfico de barras simples
+  // Adiciona grÃ¡fico de barras simples
   addBarChart(data: { label: string; value: number; color?: 'success' | 'danger' }[], maxValue?: number): void {
     this.checkNewPage(60);
     
@@ -394,7 +394,7 @@ class PDFGenerator {
     this.currentY = chartBottomY + 15;
   }
 
-  // Adiciona espaço
+  // Adiciona espaÃ§o
   addSpacing(amount: number): void {
     this.currentY += amount;
   }
@@ -405,12 +405,12 @@ class PDFGenerator {
     this.pdf.save(fileName);
   }
 
-  // Retorna o objeto PDF para uso avançado
+  // Retorna o objeto PDF para uso avanÃ§ado
   getPDF(): jsPDF {
     return this.pdf;
   }
 
-  // Retorna a posição Y atual
+  // Retorna a posiÃ§Ã£o Y atual
   getCurrentY(): number {
     return this.currentY;
   }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -25,10 +25,10 @@ const LazyImage: React.FC<LazyImageProps> = ({
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    // Se já está carregado ou com erro, não fazer nada
+    // Se jÃ¡ estÃ¡ carregado ou com erro, nÃ£o fazer nada
     if (isLoaded || hasError) return;
 
-    // Se a imagem já está no viewport, carregar imediatamente
+    // Se a imagem jÃ¡ estÃ¡ no viewport, carregar imediatamente
     if (imgRef.current) {
       const rect = imgRef.current.getBoundingClientRect();
       const isInViewport = rect.top < window.innerHeight + 200 && rect.bottom > -200;

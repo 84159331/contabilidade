@@ -1,30 +1,30 @@
-// Tipos para funções/cargos da igreja
+﻿// Tipos para funÃ§Ãµes/cargos da igreja
 
 export type ChurchRole = 
   | 'Pastor(a)'
-  | 'Líder'
-  | 'Líder de Célula'
+  | 'LÃ­der'
+  | 'LÃ­der de CÃ©lula'
   | 'Obreiro(a)'
   | 'Membro'
-  | 'Diácono(a)'
-  | 'Presbítero(a)'
+  | 'DiÃ¡cono(a)'
+  | 'PresbÃ­tero(a)'
   | 'Evangelista'
-  | 'Missionário(a)'
+  | 'MissionÃ¡rio(a)'
   | 'Coordenador(a)'
   | 'Auxiliar'
-  | 'Voluntário(a)';
+  | 'VoluntÃ¡rio(a)';
 
 export const CHURCH_ROLES: { value: ChurchRole; label: string }[] = [
   { value: 'Pastor(a)', label: 'Pastor(a)' },
-  { value: 'Líder', label: 'Líder' },
-  { value: 'Líder de Célula', label: 'Líder de Célula' },
+  { value: 'LÃ­der', label: 'LÃ­der' },
+  { value: 'LÃ­der de CÃ©lula', label: 'LÃ­der de CÃ©lula' },
   { value: 'Obreiro(a)', label: 'Obreiro(a)' },
   { value: 'Membro', label: 'Membro' },
-  { value: 'Diácono(a)', label: 'Diácono(a)' },
-  { value: 'Presbítero(a)', label: 'Presbítero(a)' },
+  { value: 'DiÃ¡cono(a)', label: 'DiÃ¡cono(a)' },
+  { value: 'PresbÃ­tero(a)', label: 'PresbÃ­tero(a)' },
   { value: 'Evangelista', label: 'Evangelista' },
-  { value: 'Missionário(a)', label: 'Missionário(a)' },
+  { value: 'MissionÃ¡rio(a)', label: 'MissionÃ¡rio(a)' },
   { value: 'Coordenador(a)', label: 'Coordenador(a)' },
   { value: 'Auxiliar', label: 'Auxiliar' },
-  { value: 'Voluntário(a)', label: 'Voluntário(a)' },
+  { value: 'VoluntÃ¡rio(a)', label: 'VoluntÃ¡rio(a)' },
 ];

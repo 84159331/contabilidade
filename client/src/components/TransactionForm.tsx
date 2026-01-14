@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface Transaction {
@@ -100,15 +100,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.description.trim()) {
-      newErrors.description = 'Descrição é obrigatória';
+      newErrors.description = 'DescriÃ§Ã£o Ã© obrigatÃ³ria';
     }
 
     if (!formData.amount || isNaN(parseFloat(formData.amount)) || parseFloat(formData.amount) <= 0) {
-      newErrors.amount = 'Valor deve ser um número positivo';
+      newErrors.amount = 'Valor deve ser um nÃºmero positivo';
     }
 
     if (!formData.transaction_date) {
-      newErrors.transaction_date = 'Data da transação é obrigatória';
+      newErrors.transaction_date = 'Data da transaÃ§Ã£o Ã© obrigatÃ³ria';
     }
 
     setErrors(newErrors);
@@ -126,9 +126,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         member_id: formData.member_id || null
       };
       
-      console.log('📝 Dados do formulário sendo enviados:', submitData);
-      console.log('👥 Membros disponíveis:', members);
-      console.log('🎯 Membro selecionado:', formData.member_id);
+      console.log('ðŸ“ Dados do formulÃ¡rio sendo enviados:', submitData);
+      console.log('ðŸ‘¥ Membros disponÃ­veis:', members);
+      console.log('ðŸŽ¯ Membro selecionado:', formData.member_id);
       onSave(submitData);
     }
   };
@@ -145,7 +145,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white pr-2">
-                  {transaction ? 'Editar Transação' : 'Nova Transação'}
+                  {transaction ? 'Editar TransaÃ§Ã£o' : 'Nova TransaÃ§Ã£o'}
                 </h3>
                 <button
                   type="button"
@@ -158,7 +158,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </div>
 
               <div className="space-y-4 sm:space-y-5 overflow-y-auto flex-1">
-                {/* Tipo e Descrição */}
+                {/* Tipo e DescriÃ§Ã£o */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="type" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -201,7 +201,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                 <div>
                   <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Descrição *
+                    DescriÃ§Ã£o *
                   </label>
                   <input
                     type="text"
@@ -211,7 +211,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.description}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="Descrição da transação"
+                    placeholder="DescriÃ§Ã£o da transaÃ§Ã£o"
                   />
                   {errors.description && (
                     <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -263,7 +263,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   </div>
                 </div>
 
-                {/* Data e Método de Pagamento */}
+                {/* Data e MÃ©todo de Pagamento */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="transaction_date" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -285,7 +285,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                   <div>
                     <label htmlFor="payment_method" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Método de Pagamento
+                      MÃ©todo de Pagamento
                     </label>
                     <select
                       id="payment_method"
@@ -298,19 +298,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       <option value="">Selecione</option>
                       <option value="dinheiro">Dinheiro</option>
                       <option value="pix">PIX</option>
-                      <option value="cartao_debito">Cartão de Débito</option>
-                      <option value="cartao_credito">Cartão de Crédito</option>
-                      <option value="transferencia">Transferência</option>
+                      <option value="cartao_debito">CartÃ£o de DÃ©bito</option>
+                      <option value="cartao_credito">CartÃ£o de CrÃ©dito</option>
+                      <option value="transferencia">TransferÃªncia</option>
                       <option value="cheque">Cheque</option>
                       <option value="outro">Outro</option>
                     </select>
                   </div>
                 </div>
 
-                {/* Referência */}
+                {/* ReferÃªncia */}
                 <div>
                   <label htmlFor="reference" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Referência
+                    ReferÃªncia
                   </label>
                   <input
                     type="text"
@@ -320,14 +320,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.reference}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="Número do documento, comprovante, etc."
+                    placeholder="NÃºmero do documento, comprovante, etc."
                   />
                 </div>
 
-                {/* Observações */}
+                {/* ObservaÃ§Ãµes */}
                 <div>
                   <label htmlFor="notes" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Observações
+                    ObservaÃ§Ãµes
                   </label>
                   <textarea
                     id="notes"
@@ -337,7 +337,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.notes}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="Observações adicionais..."
+                    placeholder="ObservaÃ§Ãµes adicionais..."
                   />
                 </div>
               </div>

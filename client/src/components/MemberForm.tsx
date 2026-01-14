@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import Button from './Button';
 
 interface Member {
@@ -36,11 +36,11 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   const currentMemberIdRef = useRef<string | number | null>(null);
 
   // Helper para formatar data para input type="date" (YYYY-MM-DD)
-  // Usa métodos UTC para evitar problemas de fuso horário
+  // Usa mÃ©todos UTC para evitar problemas de fuso horÃ¡rio
   const formatDateForInput = (dateValue: string | undefined | null): string => {
     if (!dateValue) return '';
     
-    // Se já está no formato YYYY-MM-DD, retornar como está
+    // Se jÃ¡ estÃ¡ no formato YYYY-MM-DD, retornar como estÃ¡
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
       return dateValue;
     }
@@ -81,7 +81,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
       const date = new Date(dateValue + 'T00:00:00Z'); // Adicionar hora UTC para evitar problemas
       if (isNaN(date.getTime())) return '';
       
-      // Usar métodos UTC para evitar problemas de fuso horário
+      // Usar mÃ©todos UTC para evitar problemas de fuso horÃ¡rio
       const year = date.getUTCFullYear();
       const month = String(date.getUTCMonth() + 1).padStart(2, '0');
       const day = String(date.getUTCDate()).padStart(2, '0');
@@ -92,13 +92,13 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   };
 
   useEffect(() => {
-    // Só atualizar quando o membro realmente mudar (comparar por ID)
+    // SÃ³ atualizar quando o membro realmente mudar (comparar por ID)
     if (member) {
       const memberId = member.id;
       
-      // Se é o mesmo membro que já está sendo editado, não resetar os dados
+      // Se Ã© o mesmo membro que jÃ¡ estÃ¡ sendo editado, nÃ£o resetar os dados
       if (currentMemberIdRef.current === memberId) {
-        return; // Preservar dados que o usuário pode estar editando
+        return; // Preservar dados que o usuÃ¡rio pode estar editando
       }
       
       // Novo membro ou membro diferente - carregar dados
@@ -114,12 +114,12 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
         notes: member.notes || ''
       });
     } else {
-      // Resetar apenas se realmente não há membro
+      // Resetar apenas se realmente nÃ£o hÃ¡ membro
       if (currentMemberIdRef.current !== null) {
         currentMemberIdRef.current = null;
-        // Resetar formulário apenas se estiver vazio (usuário pode estar preenchendo)
+        // Resetar formulÃ¡rio apenas se estiver vazio (usuÃ¡rio pode estar preenchendo)
         setFormData(prev => {
-          // Se o usuário já começou a preencher, não resetar
+          // Se o usuÃ¡rio jÃ¡ comeÃ§ou a preencher, nÃ£o resetar
           if (prev.name || prev.email || prev.phone || prev.birth_date) {
             return prev;
           }
@@ -137,7 +137,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
         });
       }
     }
-  }, [member?.id]); // Depender apenas do ID para evitar re-renders desnecessários
+  }, [member?.id]); // Depender apenas do ID para evitar re-renders desnecessÃ¡rios
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -145,9 +145,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
     // Para campos de data, garantir que o valor seja preservado
     let processedValue = value;
     if (name === 'birth_date' || name === 'member_since') {
-      // Se o campo de data estiver vazio ou no formato correto, usar como está
+      // Se o campo de data estiver vazio ou no formato correto, usar como estÃ¡
       if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        // Tentar converter se não estiver no formato correto
+        // Tentar converter se nÃ£o estiver no formato correto
         processedValue = formatDateForInput(value) || value;
       }
     }
@@ -170,15 +170,15 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome é obrigatório';
+      newErrors.name = 'Nome Ã© obrigatÃ³rio';
     }
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+      newErrors.email = 'Email invÃ¡lido';
     }
 
     if (formData.phone && !/^[\d\s()\-+]+$/.test(formData.phone)) {
-      newErrors.phone = 'Telefone inválido';
+      newErrors.phone = 'Telefone invÃ¡lido';
     }
 
     setErrors(newErrors);
@@ -188,9 +188,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validar que onSave existe e é uma função
+    // Validar que onSave existe e Ã© uma funÃ§Ã£o
     if (!onSave || typeof onSave !== 'function') {
-      console.error('❌ onSave não é uma função válida:', onSave);
+      console.error('âŒ onSave nÃ£o Ã© uma funÃ§Ã£o vÃ¡lida:', onSave);
       return;
     }
     
@@ -198,7 +198,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
       try {
         onSave(formData);
       } catch (error) {
-        console.error('❌ Erro ao chamar onSave:', error);
+        console.error('âŒ Erro ao chamar onSave:', error);
       }
     }
   };
@@ -280,10 +280,10 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
           </div>
         </div>
 
-        {/* Endereço */}
+        {/* EndereÃ§o */}
         <div>
           <label htmlFor="address" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Endereço
+            EndereÃ§o
           </label>
           <input
             type="text"
@@ -293,7 +293,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             value={formData.address}
             onChange={handleChange}
             onFocus={handleInputFocus}
-            placeholder="Endereço completo"
+            placeholder="EndereÃ§o completo"
             autoComplete="street-address"
           />
         </div>
@@ -349,10 +349,10 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
           </select>
         </div>
 
-        {/* Observações */}
+        {/* ObservaÃ§Ãµes */}
         <div>
           <label htmlFor="notes" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Observações
+            ObservaÃ§Ãµes
           </label>
           <textarea
             id="notes"
@@ -362,7 +362,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             value={formData.notes}
             onChange={handleChange}
             onFocus={handleInputFocus}
-            placeholder="Observações adicionais..."
+            placeholder="ObservaÃ§Ãµes adicionais..."
           />
         </div>
       </div>
@@ -387,7 +387,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             </Button>
           </>
         ) : (
-          <div className="text-red-600">Erro: Componente Button não encontrado</div>
+          <div className="text-red-600">Erro: Componente Button nÃ£o encontrado</div>
         )}
       </div>
     </form>

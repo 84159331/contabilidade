@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ErrorBoundary from '../ErrorBoundary';
 
-// Componente que lança erro para testar o ErrorBoundary
+// Componente que lanÃ§a erro para testar o ErrorBoundary
 const ThrowError = ({ shouldThrow = false }: { shouldThrow?: boolean }) => {
   if (shouldThrow) {
     throw new Error('Test error');
@@ -21,7 +21,7 @@ describe('ErrorBoundary', () => {
     console.error = originalError;
   });
 
-  it('deve renderizar children quando não há erro', () => {
+  it('deve renderizar children quando nÃ£o hÃ¡ erro', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={false} />
@@ -31,7 +31,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('No error')).toBeInTheDocument();
   });
 
-  it('deve renderizar fallback quando há erro', () => {
+  it('deve renderizar fallback quando hÃ¡ erro', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
@@ -54,7 +54,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Custom error message')).toBeInTheDocument();
   });
 
-  it('deve chamar onError callback quando há erro', () => {
+  it('deve chamar onError callback quando hÃ¡ erro', () => {
     const onError = jest.fn();
 
     render(

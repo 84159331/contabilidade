@@ -1,4 +1,4 @@
-// Componente para compartilhar escala via WhatsApp
+﻿// Componente para compartilhar escala via WhatsApp
 import React from 'react';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import type { Escala } from '../types/Scale';
@@ -18,7 +18,7 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
       d = new Date(year, month - 1, day);
     } else {
       d = new Date(date);
-      // Ajustar para timezone local se necessário
+      // Ajustar para timezone local se necessÃ¡rio
       const offset = d.getTimezoneOffset();
       d = new Date(d.getTime() - (offset * 60 * 1000));
     }
@@ -52,27 +52,27 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
     const date = formatDate(escala.data);
     const time = formatTime(escala.data);
     
-    // Mensagem formatada com negrito e ícones
-    let message = `🎵 *ESCALA - ${escala.ministerio_nome}*\n\n`;
-    message += `📅 *Data:* ${date}\n`;
-    message += `🕐 *Horário:* ${time}\n\n`;
-    message += `👥 *Membros Escalados:*\n\n`;
+    // Mensagem formatada com negrito e Ã­cones
+    let message = `ðŸŽµ *ESCALA - ${escala.ministerio_nome}*\n\n`;
+    message += `ðŸ“… *Data:* ${date}\n`;
+    message += `ðŸ• *HorÃ¡rio:* ${time}\n\n`;
+    message += `ðŸ‘¥ *Membros Escalados:*\n\n`;
     
     escala.membros.forEach((membro, index) => {
-      const statusEmoji = membro.status === 'confirmado' ? '✅' : 
-                         membro.status === 'substituido' ? '🔄' : 
-                         membro.status === 'ausente' ? '❌' : '⏳';
+      const statusEmoji = membro.status === 'confirmado' ? 'âœ…' : 
+                         membro.status === 'substituido' ? 'ðŸ”„' : 
+                         membro.status === 'ausente' ? 'âŒ' : 'â³';
       
-      // Destacar nome em negrito e função
+      // Destacar nome em negrito e funÃ§Ã£o
       message += `${statusEmoji} *${membro.membro_nome}* - ${membro.funcao}\n`;
     });
     
     if (escala.observacoes && escala.observacoes.trim()) {
-      message += `\n📝 *Observações:*\n${escala.observacoes}\n`;
+      message += `\nðŸ“ *ObservaÃ§Ãµes:*\n${escala.observacoes}\n`;
     }
     
-    message += `\n✅ *Confirme sua presença no app!*\n\n`;
-    message += `_Comunidade Cristã Resgate_`;
+    message += `\nâœ… *Confirme sua presenÃ§a no app!*\n\n`;
+    message += `_Comunidade CristÃ£ Resgate_`;
     
     return message;
   };

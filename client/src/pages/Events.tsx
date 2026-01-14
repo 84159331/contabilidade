@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { PlusIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../firebase/AuthContext';
 import { eventsAPI } from '../services/api';
@@ -29,34 +29,34 @@ const Events: React.FC = () => {
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Events.tsx - Carregando eventos...');
+      console.log('ðŸ”„ Events.tsx - Carregando eventos...');
       
       if (!user) {
-        console.log('❌ Events.tsx - Usuário não autenticado');
+        console.log('âŒ Events.tsx - UsuÃ¡rio nÃ£o autenticado');
         setEvents([]);
         return;
       }
 
-      console.log('📡 Events.tsx - Chamando eventsAPI.getEvents()');
+      console.log('ðŸ“¡ Events.tsx - Chamando eventsAPI.getEvents()');
       const eventsData = await eventsAPI.getEvents();
-      console.log('📊 Events.tsx - Dados recebidos da API:', eventsData);
-      console.log('📊 Events.tsx - Quantidade de eventos:', eventsData.length);
+      console.log('ðŸ“Š Events.tsx - Dados recebidos da API:', eventsData);
+      console.log('ðŸ“Š Events.tsx - Quantidade de eventos:', eventsData.length);
       
       if (eventsData.length > 0) {
-        console.log('🔍 Events.tsx - Primeiro evento:', eventsData[0]);
+        console.log('ðŸ” Events.tsx - Primeiro evento:', eventsData[0]);
         if (eventsData[0].image) {
-          console.log('🖼️ Events.tsx - Primeira imagem:', eventsData[0].image.substring(0, 50) + '...');
-          console.log('🖼️ Events.tsx - É base64?', eventsData[0].image.startsWith('data:'));
-          console.log('🖼️ Events.tsx - Tamanho da imagem:', eventsData[0].image.length);
+          console.log('ðŸ–¼ï¸ Events.tsx - Primeira imagem:', eventsData[0].image.substring(0, 50) + '...');
+          console.log('ðŸ–¼ï¸ Events.tsx - Ã‰ base64?', eventsData[0].image.startsWith('data:'));
+          console.log('ðŸ–¼ï¸ Events.tsx - Tamanho da imagem:', eventsData[0].image.length);
         } else {
-          console.log('⚠️ Events.tsx - Primeiro evento sem imagem');
+          console.log('âš ï¸ Events.tsx - Primeiro evento sem imagem');
         }
       }
       
       setEvents(eventsData);
-      console.log('✅ Events.tsx - Eventos definidos no estado');
+      console.log('âœ… Events.tsx - Eventos definidos no estado');
     } catch (error) {
-      console.error('❌ Events.tsx - Erro ao carregar eventos:', error);
+      console.error('âŒ Events.tsx - Erro ao carregar eventos:', error);
       toast.error('Erro ao carregar eventos');
     } finally {
       setLoading(false);
@@ -64,17 +64,17 @@ const Events: React.FC = () => {
   };
 
   const handleTestPermissions = async () => {
-    console.log('🧪 Events.tsx - Testando permissões do Firestore...');
+    console.log('ðŸ§ª Events.tsx - Testando permissÃµes do Firestore...');
     try {
       const result = await eventsAPI.testFirestorePermissions();
       if (result) {
-        toast.success('Permissões do Firestore OK!');
+        toast.success('PermissÃµes do Firestore OK!');
       } else {
-        toast.error('Problema com permissões do Firestore');
+        toast.error('Problema com permissÃµes do Firestore');
       }
     } catch (error) {
-      console.error('❌ Events.tsx - Erro ao testar permissões:', error);
-      toast.error('Erro ao testar permissões');
+      console.error('âŒ Events.tsx - Erro ao testar permissÃµes:', error);
+      toast.error('Erro ao testar permissÃµes');
     }
   };
 
@@ -99,39 +99,39 @@ const Events: React.FC = () => {
   };
 
   const handleDeleteEvent = async (id: string) => {
-    console.log('🗑️ Events.tsx - Tentando excluir evento com ID:', id);
+    console.log('ðŸ—‘ï¸ Events.tsx - Tentando excluir evento com ID:', id);
     
     if (!id) {
-      toast.error('ID do evento é inválido');
+      toast.error('ID do evento Ã© invÃ¡lido');
       return;
     }
     
-    if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
-      console.log('✅ Events.tsx - Usuário confirmou exclusão');
+    if (window.confirm('Tem certeza que deseja excluir este evento? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
+      console.log('âœ… Events.tsx - UsuÃ¡rio confirmou exclusÃ£o');
       
       try {
-        console.log('📡 Events.tsx - Chamando eventsAPI.deleteEvent...');
+        console.log('ðŸ“¡ Events.tsx - Chamando eventsAPI.deleteEvent...');
         await eventsAPI.deleteEvent(id);
-        console.log('✅ Events.tsx - Evento excluído com sucesso via API');
+        console.log('âœ… Events.tsx - Evento excluÃ­do com sucesso via API');
         
-        toast.success('Evento excluído com sucesso!');
-        console.log('🔄 Events.tsx - Recarregando eventos...');
+        toast.success('Evento excluÃ­do com sucesso!');
+        console.log('ðŸ”„ Events.tsx - Recarregando eventos...');
         loadEvents();
       } catch (error) {
-        console.error('❌ Events.tsx - Erro ao excluir evento:', error);
+        console.error('âŒ Events.tsx - Erro ao excluir evento:', error);
         
         // Tentar remover localmente mesmo se a API falhar
         try {
           setEvents(prev => prev.filter(event => event.id !== id));
           toast.success('Evento removido localmente!');
-          console.log('✅ Events.tsx - Evento removido localmente');
+          console.log('âœ… Events.tsx - Evento removido localmente');
         } catch (localError) {
-          console.error('❌ Events.tsx - Erro ao remover localmente:', localError);
+          console.error('âŒ Events.tsx - Erro ao remover localmente:', localError);
           toast.error('Erro ao excluir evento. Tente novamente.');
         }
       }
     } else {
-      console.log('❌ Events.tsx - Usuário cancelou exclusão');
+      console.log('âŒ Events.tsx - UsuÃ¡rio cancelou exclusÃ£o');
     }
   };
 
@@ -151,9 +151,9 @@ const Events: React.FC = () => {
   };
 
   const filteredEvents = events.filter(event => {
-    // Criar data local sem problemas de fuso horário
+    // Criar data local sem problemas de fuso horÃ¡rio
     const [year, month, day] = event.date.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -195,13 +195,13 @@ const Events: React.FC = () => {
             onClick={handleTestPermissions}
             className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
           >
-            🧪 Testar Permissões
+            ðŸ§ª Testar PermissÃµes
           </button>
           <button
             onClick={() => {
               if (events.length > 0) {
                 const firstEvent = events[0];
-                console.log('🧪 Testando exclusão do primeiro evento:', firstEvent);
+                console.log('ðŸ§ª Testando exclusÃ£o do primeiro evento:', firstEvent);
                 handleDeleteEvent(firstEvent.id);
               } else {
                 toast.info('Nenhum evento para testar');
@@ -209,7 +209,7 @@ const Events: React.FC = () => {
             }}
             className="inline-flex items-center px-4 py-2 border border-orange-300 text-sm font-medium rounded-md shadow-sm text-orange-700 bg-white hover:bg-orange-50"
           >
-            🗑️ Testar Exclusão
+            ðŸ—‘ï¸ Testar ExclusÃ£o
           </button>
           <button
             onClick={handleCreateEvent}
@@ -242,7 +242,7 @@ const Events: React.FC = () => {
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
-            Próximos ({events.filter(e => {
+            PrÃ³ximos ({events.filter(e => {
               const [year, month, day] = e.date.split('-').map(Number);
               const eventDate = new Date(year, month - 1, day);
               const today = new Date();
@@ -282,7 +282,7 @@ const Events: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de Formulário */}
+      {/* Modal de FormulÃ¡rio */}
       {showForm && (
         <EventForm
           event={editingEvent}
@@ -302,7 +302,7 @@ const Events: React.FC = () => {
         />
       )}
 
-      {/* Modal de Compartilhamento Automático */}
+      {/* Modal de Compartilhamento AutomÃ¡tico */}
       {autoSharingEvent && (
         <AutoShareManager
           event={autoSharingEvent}

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+﻿import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import {
   User, 
   signInWithEmailAndPassword, 
@@ -29,10 +29,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('🔄 Firebase Auth useEffect executado');
+    console.log('ðŸ”„ Firebase Auth useEffect executado');
     
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('👤 Estado do usuário mudou:', user ? user.email : 'null');
+      console.log('ðŸ‘¤ Estado do usuÃ¡rio mudou:', user ? user.email : 'null');
       setUser(user);
       setLoading(false);
     });
@@ -42,16 +42,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log('🔐 Iniciando login Firebase para:', email);
+      console.log('ðŸ” Iniciando login Firebase para:', email);
       await signInWithEmailAndPassword(auth, email, password);
-      console.log('✅ Login Firebase realizado com sucesso');
+      console.log('âœ… Login Firebase realizado com sucesso');
     } catch (error: any) {
-      console.error('❌ Erro no login Firebase:', error);
+      console.error('âŒ Erro no login Firebase:', error);
       
-      // Preservar o erro original do Firebase para tratamento específico
+      // Preservar o erro original do Firebase para tratamento especÃ­fico
       const firebaseError = error;
       
-      // Criar erro com código do Firebase para tratamento específico
+      // Criar erro com cÃ³digo do Firebase para tratamento especÃ­fico
       const customError: any = new Error(firebaseError.message || 'Erro ao fazer login');
       customError.code = firebaseError.code;
       
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (email: string, password: string, displayName: string) => {
     try {
-      console.log('📝 Iniciando registro Firebase para:', email);
+      console.log('ðŸ“ Iniciando registro Firebase para:', email);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
       // Atualizar perfil com nome
@@ -69,27 +69,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         displayName: displayName
       });
       
-      console.log('✅ Registro Firebase realizado com sucesso');
+      console.log('âœ… Registro Firebase realizado com sucesso');
     } catch (error: any) {
-      console.error('❌ Erro no registro Firebase:', error);
+      console.error('âŒ Erro no registro Firebase:', error);
       throw new Error(error.message || 'Erro ao criar conta');
     }
   };
 
   const logout = async () => {
     try {
-      console.log('🚪 Fazendo logout Firebase');
+      console.log('ðŸšª Fazendo logout Firebase');
       await signOut(auth);
-      console.log('✅ Logout Firebase realizado com sucesso');
+      console.log('âœ… Logout Firebase realizado com sucesso');
       
       // Limpar dados locais
       storage.remove('token');
       sessionStorage.clear();
       
-      // Redirecionar para página de logout
+      // Redirecionar para pÃ¡gina de logout
       window.location.href = '/logout';
     } catch (error: any) {
-      console.error('❌ Erro no logout Firebase:', error);
+      console.error('âŒ Erro no logout Firebase:', error);
       throw new Error('Erro ao fazer logout');
     }
   };

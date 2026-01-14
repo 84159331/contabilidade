@@ -1,16 +1,16 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 
-// Hook para demonstrar notificações automáticas
+// Hook para demonstrar notificaÃ§Ãµes automÃ¡ticas
 export const useNotificationDemo = () => {
   const { addNotification } = useNotifications();
 
   useEffect(() => {
-    // Notificação de boas-vindas
+    // NotificaÃ§Ã£o de boas-vindas
     const welcomeTimer = setTimeout(() => {
       addNotification({
         title: 'Bem-vindo ao Sistema de Tesouraria!',
-        message: 'Seu dashboard está atualizado com as últimas informações financeiras.',
+        message: 'Seu dashboard estÃ¡ atualizado com as Ãºltimas informaÃ§Ãµes financeiras.',
         type: 'info',
         priority: 'medium',
         category: 'system',
@@ -19,11 +19,11 @@ export const useNotificationDemo = () => {
       });
     }, 2000);
 
-    // Notificação de meta atingida (exemplo)
+    // NotificaÃ§Ã£o de meta atingida (exemplo)
     const goalTimer = setTimeout(() => {
       addNotification({
-        title: '🎉 Meta Atingida!',
-        message: 'Você alcançou 80% da sua meta mensal de receitas!',
+        title: 'ðŸŽ‰ Meta Atingida!',
+        message: 'VocÃª alcanÃ§ou 80% da sua meta mensal de receitas!',
         type: 'achievement',
         priority: 'high',
         category: 'goals',
@@ -34,10 +34,10 @@ export const useNotificationDemo = () => {
       });
     }, 8000);
 
-    // Notificação de transação importante
+    // NotificaÃ§Ã£o de transaÃ§Ã£o importante
     const transactionTimer = setTimeout(() => {
       addNotification({
-        title: 'Nova Transação Importante',
+        title: 'Nova TransaÃ§Ã£o Importante',
         message: 'Receita de R$ 5.000,00 registrada com sucesso.',
         type: 'success',
         priority: 'medium',
@@ -47,11 +47,11 @@ export const useNotificationDemo = () => {
       });
     }, 12000);
 
-    // Notificação de alerta
+    // NotificaÃ§Ã£o de alerta
     const alertTimer = setTimeout(() => {
       addNotification({
         title: 'Alerta de Saldo Baixo',
-        message: 'Seu saldo atual está abaixo do recomendado. Considere revisar as despesas.',
+        message: 'Seu saldo atual estÃ¡ abaixo do recomendado. Considere revisar as despesas.',
         type: 'warning',
         priority: 'urgent',
         category: 'financial',

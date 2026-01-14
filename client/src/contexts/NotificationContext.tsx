@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import {
@@ -102,7 +102,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     },
   });
 
-  // Carregar configurações do armazenamento local
+  // Carregar configuraÃ§Ãµes do armazenamento local
   useEffect(() => {
     const savedSettings = storage.getJSON<NotificationSettings>('notificationSettings');
     if (savedSettings) {
@@ -110,7 +110,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     }
   }, []);
 
-  // Salvar configurações no armazenamento local
+  // Salvar configuraÃ§Ãµes no armazenamento local
   useEffect(() => {
     storage.setJSON('notificationSettings', settings);
   }, [settings]);
@@ -152,12 +152,12 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
           toast.info(notification.message, { ...toastOptions, toastId: newNotification.id });
           break;
         case 'achievement':
-          toast.success(`🎉 ${notification.message}`, { ...toastOptions, toastId: newNotification.id });
+          toast.success(`ðŸŽ‰ ${notification.message}`, { ...toastOptions, toastId: newNotification.id });
           break;
       }
     }
 
-    // Notificação desktop se habilitada
+    // NotificaÃ§Ã£o desktop se habilitada
     if (settings.desktop && 'Notification' in window) {
       if (Notification.permission === 'granted') {
         new Notification(notification.title, {
@@ -219,7 +219,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   );
 };
 
-// Componente de notificação individual
+// Componente de notificaÃ§Ã£o individual
 interface NotificationItemProps {
   notification: Notification;
   onMarkAsRead: (id: string) => void;
@@ -337,7 +337,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onMar
   );
 };
 
-// Componente principal de notificações
+// Componente principal de notificaÃ§Ãµes
 export const NotificationCenter: React.FC = () => {
   const { 
     notifications, 
@@ -390,14 +390,14 @@ export const NotificationCenter: React.FC = () => {
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Notificações
+                  NotificaÃ§Ãµes
                 </h3>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setFilter(filter === 'all' ? 'unread' : 'all')}
                     className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                   >
-                    {filter === 'all' ? 'Não lidas' : 'Todas'}
+                    {filter === 'all' ? 'NÃ£o lidas' : 'Todas'}
                   </button>
                   <button
                     onClick={() => setIsOpen(false)}
@@ -411,7 +411,7 @@ export const NotificationCenter: React.FC = () => {
               {unreadCount > 0 && (
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {unreadCount} não lidas
+                    {unreadCount} nÃ£o lidas
                   </span>
                   <button
                     onClick={markAllAsRead}
@@ -442,12 +442,12 @@ export const NotificationCenter: React.FC = () => {
                 <div className="p-8 text-center">
                   <BellSlashIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Nenhuma notificação
+                    Nenhuma notificaÃ§Ã£o
                   </h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {filter === 'unread' 
-                      ? 'Todas as notificações foram lidas'
-                      : 'Você está em dia com suas notificações'
+                      ? 'Todas as notificaÃ§Ãµes foram lidas'
+                      : 'VocÃª estÃ¡ em dia com suas notificaÃ§Ãµes'
                     }
                   </p>
                 </div>

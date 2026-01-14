@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { XMarkIcon, DocumentArrowUpIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -12,21 +12,21 @@ interface AddBookModalProps {
 const categorias = [
   'Teologia',
   'Devocionais',
-  'Estudos Bíblicos',
-  'Fé',
-  'Esperança',
+  'Estudos BÃ­blicos',
+  'FÃ©',
+  'EsperanÃ§a',
   'Palavras de Coach',
-  'Palavras de Esperança',
+  'Palavras de EsperanÃ§a',
   'Biografias',
-  'História da Igreja',
-  'Liderança',
-  'Família',
+  'HistÃ³ria da Igreja',
+  'LideranÃ§a',
+  'FamÃ­lia',
   'Jovens',
-  'Crianças'
+  'CrianÃ§as'
 ];
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook }) => {
-  console.log('🔍 AddBookModal renderizado - isOpen:', isOpen);
+  console.log('ðŸ” AddBookModal renderizado - isOpen:', isOpen);
   
   const [formData, setFormData] = useState({
     titulo: '',
@@ -63,9 +63,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validações
+    // ValidaÃ§Ãµes
     if (!formData.titulo.trim()) {
-      toast.warn('Por favor, digite o título do livro');
+      toast.warn('Por favor, digite o tÃ­tulo do livro');
       return;
     }
     
@@ -75,7 +75,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     }
     
     if (!formData.descricao.trim()) {
-      toast.warn('Por favor, digite a descrição do livro');
+      toast.warn('Por favor, digite a descriÃ§Ã£o do livro');
       return;
     }
     
@@ -91,7 +91,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
     setUploading(true);
     try {
-      // Converter arquivos para base64 (permanente, funciona após reload)
+      // Converter arquivos para base64 (permanente, funciona apÃ³s reload)
       const convertFileToBase64 = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -120,8 +120,8 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         autor: formData.autor.trim(),
         descricao: formData.descricao.trim(),
         categoria: formData.categoria,
-        capa: capaUrl, // Agora é base64, não blob URL
-        pdfUrl: pdfUrl, // Agora é base64, não blob URL
+        capa: capaUrl, // Agora Ã© base64, nÃ£o blob URL
+        pdfUrl: pdfUrl, // Agora Ã© base64, nÃ£o blob URL
         tamanho: `${(formData.pdfFile!.size / 1024 / 1024).toFixed(1)} MB`,
         paginas: formData.paginas || 0,
         ano: formData.ano || new Date().getFullYear(),
@@ -131,7 +131,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
         isNovo: true
       };
 
-      // Adicionar livro à biblioteca (a função onAddBook já salva no armazenamento local)
+      // Adicionar livro Ã  biblioteca (a funÃ§Ã£o onAddBook jÃ¡ salva no armazenamento local)
       onAddBook(novoLivro);
       
       // Reset form
@@ -148,7 +148,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       });
       
       // Mostrar mensagem de sucesso
-      toast.success('Livro adicionado com sucesso à biblioteca!');
+      toast.success('Livro adicionado com sucesso Ã  biblioteca!');
       onClose();
     } catch (error) {
       toast.error('Erro ao adicionar livro. Tente novamente.');
@@ -180,26 +180,26 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             </button>
           </div>
 
-          {/* Instruções */}
+          {/* InstruÃ§Ãµes */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
-              📚 Como adicionar livros reais:
+              ðŸ“š Como adicionar livros reais:
             </h3>
             <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-              <li>• Baixe o PDF do livro da internet</li>
-              <li>• Encontre ou crie uma imagem da capa (JPG, PNG)</li>
-              <li>• Preencha todas as informações do livro</li>
-              <li>• Selecione os arquivos PDF e da capa</li>
-              <li>• Clique em "Adicionar Livro"</li>
+              <li>â€¢ Baixe o PDF do livro da internet</li>
+              <li>â€¢ Encontre ou crie uma imagem da capa (JPG, PNG)</li>
+              <li>â€¢ Preencha todas as informaÃ§Ãµes do livro</li>
+              <li>â€¢ Selecione os arquivos PDF e da capa</li>
+              <li>â€¢ Clique em "Adicionar Livro"</li>
             </ul>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Título e Autor */}
+            {/* TÃ­tulo e Autor */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Título do Livro *
+                  TÃ­tulo do Livro *
                 </label>
                 <input
                   type="text"
@@ -208,7 +208,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   onChange={handleInputChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Digite o título do livro"
+                  placeholder="Digite o tÃ­tulo do livro"
                 />
               </div>
               <div>
@@ -227,10 +227,10 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               </div>
             </div>
 
-            {/* Descrição */}
+            {/* DescriÃ§Ã£o */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Descrição *
+                DescriÃ§Ã£o *
               </label>
               <textarea
                 name="descricao"
@@ -239,11 +239,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                 required
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="Descrição do livro..."
+                placeholder="DescriÃ§Ã£o do livro..."
               />
             </div>
 
-            {/* Categoria, Ano e Páginas */}
+            {/* Categoria, Ano e PÃ¡ginas */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -277,7 +277,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Páginas
+                  PÃ¡ginas
                 </label>
                 <input
                   type="number"
@@ -293,7 +293,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             {/* Tags */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tags (separadas por vírgula)
+                Tags (separadas por vÃ­rgula)
               </label>
               <input
                 type="text"
@@ -301,7 +301,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                 value={formData.tags}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="ex: Bíblia, Estudo, Teologia"
+                placeholder="ex: BÃ­blia, Estudo, Teologia"
               />
             </div>
 
@@ -351,7 +351,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               </div>
             </div>
 
-            {/* Botões */}
+            {/* BotÃµes */}
             <div className="flex justify-end space-x-4 pt-4">
               <button
                 type="button"

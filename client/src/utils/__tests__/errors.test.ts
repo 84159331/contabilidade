@@ -1,4 +1,4 @@
-import {
+﻿import {
   AppError,
   ValidationError,
   AuthenticationError,
@@ -9,7 +9,7 @@ import {
 } from '../errors';
 
 describe('AppError', () => {
-  it('deve criar erro com mensagem e código', () => {
+  it('deve criar erro com mensagem e cÃ³digo', () => {
     const error = new AppError('Test error', 'TEST_ERROR');
     expect(error.message).toBe('Test error');
     expect(error.code).toBe('TEST_ERROR');
@@ -29,9 +29,9 @@ describe('AppError', () => {
 });
 
 describe('ValidationError', () => {
-  it('deve criar erro de validação', () => {
-    const error = new ValidationError('Campo inválido', 'email');
-    expect(error.message).toBe('Campo inválido');
+  it('deve criar erro de validaÃ§Ã£o', () => {
+    const error = new ValidationError('Campo invÃ¡lido', 'email');
+    expect(error.message).toBe('Campo invÃ¡lido');
     expect(error.code).toBe('VALIDATION_ERROR');
     expect(error.statusCode).toBe(400);
     expect(error.context?.field).toBe('email');
@@ -39,27 +39,27 @@ describe('ValidationError', () => {
 });
 
 describe('AuthenticationError', () => {
-  it('deve criar erro de autenticação', () => {
+  it('deve criar erro de autenticaÃ§Ã£o', () => {
     const error = new AuthenticationError();
-    expect(error.message).toBe('Não autenticado');
+    expect(error.message).toBe('NÃ£o autenticado');
     expect(error.code).toBe('AUTHENTICATION_ERROR');
     expect(error.statusCode).toBe(401);
   });
 });
 
 describe('AuthorizationError', () => {
-  it('deve criar erro de autorização', () => {
+  it('deve criar erro de autorizaÃ§Ã£o', () => {
     const error = new AuthorizationError();
-    expect(error.message).toBe('Não autorizado');
+    expect(error.message).toBe('NÃ£o autorizado');
     expect(error.code).toBe('AUTHORIZATION_ERROR');
     expect(error.statusCode).toBe(403);
   });
 });
 
 describe('NotFoundError', () => {
-  it('deve criar erro de não encontrado', () => {
-    const error = new NotFoundError('Usuário');
-    expect(error.message).toBe('Usuário não encontrado');
+  it('deve criar erro de nÃ£o encontrado', () => {
+    const error = new NotFoundError('UsuÃ¡rio');
+    expect(error.message).toBe('UsuÃ¡rio nÃ£o encontrado');
     expect(error.code).toBe('NOT_FOUND_ERROR');
     expect(error.statusCode).toBe(404);
   });
@@ -68,7 +68,7 @@ describe('NotFoundError', () => {
 describe('NetworkError', () => {
   it('deve criar erro de rede', () => {
     const error = new NetworkError();
-    expect(error.message).toBe('Erro de conexão com o servidor');
+    expect(error.message).toBe('Erro de conexÃ£o com o servidor');
     expect(error.code).toBe('NETWORK_ERROR');
     expect(error.isOperational).toBe(false);
   });
@@ -81,15 +81,15 @@ describe('ErrorHandler', () => {
 
   describe('handle', () => {
     it('deve tratar AppError corretamente', () => {
-      const error = new ValidationError('Campo inválido');
+      const error = new ValidationError('Campo invÃ¡lido');
       const message = ErrorHandler.handle(error, false);
-      expect(message).toBe('Campo inválido');
+      expect(message).toBe('Campo invÃ¡lido');
     });
 
-    it('deve tratar Error padrão corretamente', () => {
-      const error = new Error('Erro padrão');
+    it('deve tratar Error padrÃ£o corretamente', () => {
+      const error = new Error('Erro padrÃ£o');
       const message = ErrorHandler.handle(error, false);
-      expect(message).toBe('Erro padrão');
+      expect(message).toBe('Erro padrÃ£o');
     });
 
     it('deve tratar erro de API 401', () => {
@@ -100,7 +100,7 @@ describe('ErrorHandler', () => {
         },
       };
       const message = ErrorHandler.handle(error, false);
-      expect(message).toBe('Sua sessão expirou. Por favor, faça login novamente.');
+      expect(message).toBe('Sua sessÃ£o expirou. Por favor, faÃ§a login novamente.');
     });
 
     it('deve tratar erro de API 404', () => {
@@ -111,7 +111,7 @@ describe('ErrorHandler', () => {
         },
       };
       const message = ErrorHandler.handle(error, false);
-      expect(message).toBe('Recurso não encontrado.');
+      expect(message).toBe('Recurso nÃ£o encontrado.');
     });
 
     it('deve tratar erro desconhecido', () => {
@@ -127,24 +127,24 @@ describe('ErrorHandler', () => {
       expect(ErrorHandler.isOperational(error)).toBe(true);
     });
 
-    it('deve retornar false para erro não operacional', () => {
+    it('deve retornar false para erro nÃ£o operacional', () => {
       const error = new NetworkError();
       expect(ErrorHandler.isOperational(error)).toBe(false);
     });
 
-    it('deve retornar false para erro padrão', () => {
+    it('deve retornar false para erro padrÃ£o', () => {
       const error = new Error('Test');
       expect(ErrorHandler.isOperational(error)).toBe(false);
     });
   });
 
   describe('getErrorCode', () => {
-    it('deve retornar código de AppError', () => {
+    it('deve retornar cÃ³digo de AppError', () => {
       const error = new ValidationError('Test');
       expect(ErrorHandler.getErrorCode(error)).toBe('VALIDATION_ERROR');
     });
 
-    it('deve retornar STANDARD_ERROR para Error padrão', () => {
+    it('deve retornar STANDARD_ERROR para Error padrÃ£o', () => {
       const error = new Error('Test');
       expect(ErrorHandler.getErrorCode(error)).toBe('STANDARD_ERROR');
     });

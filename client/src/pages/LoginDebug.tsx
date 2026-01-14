@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useAuth } from '../firebase/AuthContext';
 import { toast } from 'react-toastify';
 
@@ -23,7 +23,7 @@ const LoginDebug: React.FC = () => {
   };
 
   const testFunctions = async () => {
-    addDebugInfo('🧪 Testando Netlify Functions...');
+    addDebugInfo('ðŸ§ª Testando Netlify Functions...');
     
     try {
       // Teste Health
@@ -81,22 +81,22 @@ const LoginDebug: React.FC = () => {
       addDebugInfo(`Login Original: ${loginOriginalResponse.status} - ${loginOriginalData}`);
       
     } catch (error: any) {
-      addDebugInfo(`❌ Erro: ${error.message}`);
+      addDebugInfo(`âŒ Erro: ${error.message}`);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    addDebugInfo('🚀 Iniciando login...');
+    addDebugInfo('ðŸš€ Iniciando login...');
 
     try {
       addDebugInfo(`Tentando login com: ${formData.email}`);
       await login(formData.email, formData.password);
-      addDebugInfo('✅ Login realizado com sucesso!');
+      addDebugInfo('âœ… Login realizado com sucesso!');
       toast.success('Login realizado com sucesso!');
     } catch (error: any) {
-      addDebugInfo(`❌ Erro no login: ${error.message}`);
+      addDebugInfo(`âŒ Erro no login: ${error.message}`);
       toast.error(error.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
@@ -116,7 +116,7 @@ const LoginDebug: React.FC = () => {
           onClick={testFunctions}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 mb-4"
         >
-          🧪 Testar Functions
+          ðŸ§ª Testar Functions
         </button>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

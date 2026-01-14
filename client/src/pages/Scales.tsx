@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   PlusIcon,
   PencilIcon,
@@ -16,6 +16,7 @@ import { CHURCH_ROLES } from '../types/ChurchRole';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
 import ScaleWhatsApp from '../components/ScaleWhatsApp';
+import ScaleSubstitution from '../components/ScaleSubstitution';
 import { toast } from 'react-toastify';
 
 const Scales: React.FC = () => {
@@ -62,7 +63,7 @@ const Scales: React.FC = () => {
     try {
       const ministerio = ministerios.find(m => m.id === formData.ministerio_id);
       if (!ministerio) {
-        toast.error('Ministério não encontrado');
+        toast.error('MinistÃ©rio nÃ£o encontrado');
         return;
       }
 
@@ -122,24 +123,24 @@ const Scales: React.FC = () => {
 
   const handleAutoGenerate = async () => {
     if (!selectedMinisterio) {
-      toast.error('Selecione um ministério');
+      toast.error('Selecione um ministÃ©rio');
       return;
     }
 
     const ministerio = ministerios.find(m => m.id === selectedMinisterio);
     if (!ministerio) {
-      toast.error('Ministério não encontrado');
+      toast.error('MinistÃ©rio nÃ£o encontrado');
       return;
     }
 
     try {
-      // Calcular próxima data baseada na frequência
+      // Calcular prÃ³xima data baseada na frequÃªncia
       const hoje = new Date();
       const proximaData = new Date(hoje);
 
       if (ministerio.frequencia === 'semanal' && ministerio.dia_semana !== undefined) {
         let diasParaProximo = (ministerio.dia_semana - hoje.getDay() + 7) % 7;
-        if (diasParaProximo === 0) diasParaProximo = 7; // Próxima semana
+        if (diasParaProximo === 0) diasParaProximo = 7; // PrÃ³xima semana
         proximaData.setDate(hoje.getDate() + diasParaProximo);
       } else if (ministerio.frequencia === 'quinzenal') {
         proximaData.setDate(hoje.getDate() + 14);
@@ -211,22 +212,22 @@ const Scales: React.FC = () => {
 
   const getMemberName = (memberId: string) => {
     const member = members.find(m => m.id === memberId);
-    return member?.name || 'Nome não encontrado';
+    return member?.name || 'Nome nÃ£o encontrado';
   };
 
   const getMinisterioName = (ministerioId: string) => {
     const ministerio = ministerios.find(m => m.id === ministerioId);
-    return ministerio?.nome || 'Ministério não encontrado';
+    return ministerio?.nome || 'MinistÃ©rio nÃ£o encontrado';
   };
 
   const formatDate = (date: Date | string) => {
-    // Corrigir problema de timezone - criar data local sem conversão UTC
+    // Corrigir problema de timezone - criar data local sem conversÃ£o UTC
     let d: Date;
     if (typeof date === 'string') {
       // Se for string no formato ISO ou YYYY-MM-DD, criar data local
       const dateStr = date.split('T')[0]; // Remove hora se houver
       const [year, month, day] = dateStr.split('-').map(Number);
-      d = new Date(year, month - 1, day); // month é 0-indexed
+      d = new Date(year, month - 1, day); // month Ã© 0-indexed
     } else {
       d = new Date(date);
       // Criar nova data local para evitar problemas de timezone
@@ -300,7 +301,7 @@ const Scales: React.FC = () => {
             Escalas
           </h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Gerencie as escalas dos ministérios
+            Gerencie as escalas dos ministÃ©rios
           </p>
         </div>
         <div className="flex gap-2">
@@ -321,7 +322,7 @@ const Scales: React.FC = () => {
             className="flex items-center gap-2"
           >
             <CalendarIcon className="h-5 w-5" />
-            Gerar Automático
+            Gerar AutomÃ¡tico
           </Button>
         </div>
       </div>
@@ -330,7 +331,7 @@ const Scales: React.FC = () => {
       {escalasFuturas.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Próximas Escalas
+            PrÃ³ximas Escalas
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {escalasFuturas.map((escala) => (
@@ -386,20 +387,72 @@ const Scales: React.FC = () => {
                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Membros Escalados
                   </p>
-                  <div className="space-y-1">
-                    {escala.membros.map((membro, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between text-sm"
-                      >
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {membro.membro_nome}
-                        </span>
-                        <span className="px-2 py-1 text-xs bg-primary-100 text-primary-800 rounded dark:bg-primary-900 dark:text-primary-200">
-                          {membro.funcao}
-                        </span>
-                      </div>
-                    ))}
+                  <div className="space-y-2">
+                    {escala.membros.map((membro, index) => {
+                      const isSubstituido = membro.status === 'substituido';
+                      const isSubstituto = escala.membros.some(m => 
+                        m.substituido_por === membro.membro_id
+                      );
+                      
+                      return (
+                        <div
+                          key={index}
+                          className={`flex items-center justify-between text-sm p-2 rounded-lg ${
+                            isSubstituido 
+                              ? 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800'
+                              : isSubstituto
+                              ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
+                              : 'bg-gray-50 dark:bg-gray-700/50'
+                          }`}
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className={`font-medium ${
+                                isSubstituido 
+                                  ? 'text-orange-700 dark:text-orange-300 line-through'
+                                  : isSubstituto
+                                  ? 'text-purple-700 dark:text-purple-300'
+                                  : 'text-gray-700 dark:text-gray-300'
+                              }`}>
+                                {membro.membro_nome}
+                              </span>
+                              {isSubstituido && (
+                                <span className="text-xs text-orange-600 dark:text-orange-400 font-medium">
+                                  (Substituído)
+                                </span>
+                              )}
+                              {isSubstituto && (
+                                <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                                  (Substituto)
+                                </span>
+                              )}
+                            </div>
+                            {membro.observacoes && membro.observacoes.includes('Substituição') && (
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {membro.observacoes}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-1 text-xs rounded ${
+                              isSubstituido
+                                ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+                                : isSubstituto
+                                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                                : 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200'
+                            }`}>
+                              {membro.funcao}
+                            </span>
+                            {membro.status === 'confirmado' && (
+                              <CheckCircleIcon className="h-4 w-4 text-green-600" />
+                            )}
+                            {membro.status === 'pendente' && (
+                              <ClockIcon className="h-4 w-4 text-yellow-600" />
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -451,7 +504,7 @@ const Scales: React.FC = () => {
         </div>
       )}
 
-      {/* Modal de Formulário */}
+      {/* Modal de FormulÃ¡rio */}
       <Modal
         isOpen={showForm}
         onClose={() => {
@@ -464,7 +517,7 @@ const Scales: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Ministério *
+              MinistÃ©rio *
             </label>
             <select
               required
@@ -472,7 +525,7 @@ const Scales: React.FC = () => {
               onChange={(e) => setFormData({ ...formData, ministerio_id: e.target.value })}
               className="input w-full"
             >
-              <option value="">Selecione um ministério</option>
+              <option value="">Selecione um ministÃ©rio</option>
               {ministerios
                 .filter(m => m.ativo)
                 .map((ministerio) => (
@@ -508,7 +561,7 @@ const Scales: React.FC = () => {
             <div className="space-y-3">
               {formData.membros.map((membro, index) => (
                 <div key={index} className="flex gap-2 items-start">
-                  {/* Seleção de Função (primeiro) */}
+                  {/* SeleÃ§Ã£o de FunÃ§Ã£o (primeiro) */}
                   <select
                     required
                     value={membro.funcao}
@@ -516,9 +569,9 @@ const Scales: React.FC = () => {
                       updateMemberInEscala(index, 'funcao', e.target.value)
                     }
                     className="input flex-1 min-w-[180px]"
-                    title="Selecione a função da igreja"
+                    title="Selecione a funÃ§Ã£o da igreja"
                   >
-                    <option value="">Selecione a função</option>
+                    <option value="">Selecione a funÃ§Ã£o</option>
                     {CHURCH_ROLES.map((role) => (
                       <option key={role.value} value={role.value}>
                         {role.label}
@@ -526,7 +579,7 @@ const Scales: React.FC = () => {
                     ))}
                   </select>
                   
-                  {/* Seleção de Membro (segundo) */}
+                  {/* SeleÃ§Ã£o de Membro (segundo) */}
                   <select
                     required
                     value={membro.membro_id}
@@ -544,7 +597,7 @@ const Scales: React.FC = () => {
                     ))}
                   </select>
                   
-                  {/* Botão Remover */}
+                  {/* BotÃ£o Remover */}
                   <button
                     type="button"
                     onClick={() => removeMemberFromEscala(index)}
@@ -552,7 +605,7 @@ const Scales: React.FC = () => {
                     title="Remover membro"
                     aria-label="Remover membro"
                   >
-                    ×
+                    Ã—
                   </button>
                 </div>
               ))}
@@ -561,14 +614,14 @@ const Scales: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Observações
+              ObservaÃ§Ãµes
             </label>
             <textarea
               value={formData.observacoes}
               onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
               className="input w-full"
               rows={3}
-              placeholder="Observações sobre a escala..."
+              placeholder="ObservaÃ§Ãµes sobre a escala..."
             />
           </div>
 
@@ -591,7 +644,7 @@ const Scales: React.FC = () => {
         </form>
       </Modal>
 
-      {/* Modal de Geração Automática */}
+      {/* Modal de GeraÃ§Ã£o AutomÃ¡tica */}
       <Modal
         isOpen={showAutoGenerate}
         onClose={() => {
@@ -603,7 +656,7 @@ const Scales: React.FC = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Ministério *
+              MinistÃ©rio *
             </label>
             <select
               required
@@ -611,7 +664,7 @@ const Scales: React.FC = () => {
               onChange={(e) => setSelectedMinisterio(e.target.value)}
               className="input w-full"
             >
-              <option value="">Selecione um ministério</option>
+              <option value="">Selecione um ministÃ©rio</option>
               {ministerios
                 .filter(m => m.ativo)
                 .map((ministerio) => (
@@ -623,8 +676,8 @@ const Scales: React.FC = () => {
           </div>
 
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Uma nova escala será gerada automaticamente baseada na rotação configurada do
-            ministério selecionado.
+            Uma nova escala serÃ¡ gerada automaticamente baseada na rotaÃ§Ã£o configurada do
+            ministÃ©rio selecionado.
           </p>
 
           <div className="flex gap-2 pt-4">

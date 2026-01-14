@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Esboco, esbocosService } from '../../services/esbocosService';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -19,7 +19,7 @@ const EsbocoDetalhePage: React.FC = () => {
         const result = await esbocosService.obterPorId(Number(id));
         if (!ativo) return;
         if (!result || result.status !== 'APROVADO') {
-          setErro('Esboço não encontrado ou ainda não aprovado.');
+          setErro('EsboÃ§o nÃ£o encontrado ou ainda nÃ£o aprovado.');
         } else {
           setEsboco(result);
           setErro(null);
@@ -27,7 +27,7 @@ const EsbocoDetalhePage: React.FC = () => {
       } catch (e) {
         console.error(e);
         if (!ativo) return;
-        setErro('Não foi possível carregar o esboço.');
+        setErro('NÃ£o foi possÃ­vel carregar o esboÃ§o.');
       } finally {
         if (ativo) setLoading(false);
       }
@@ -54,13 +54,13 @@ const EsbocoDetalhePage: React.FC = () => {
     return (
       <div className="container mx-auto px-6 py-12 max-w-3xl">
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-          {erro || 'Esboço não encontrado.'}
+          {erro || 'EsboÃ§o nÃ£o encontrado.'}
         </div>
         <Link
           to="/esbocos"
           className="text-primary-600 dark:text-primary-400 font-semibold hover:underline"
         >
-          Voltar para lista de esboços
+          Voltar para lista de esboÃ§os
         </Link>
       </div>
     );
@@ -74,7 +74,7 @@ const EsbocoDetalhePage: React.FC = () => {
             to="/esbocos"
             className="text-sm text-primary-600 dark:text-primary-400 hover:underline mb-4 inline-block"
           >
-            ← Voltar para esboços
+            â† Voltar para esboÃ§os
           </Link>
 
           <header className="mb-6">
@@ -89,20 +89,20 @@ const EsbocoDetalhePage: React.FC = () => {
                 rel="noopener noreferrer"
                 className="text-xs font-semibold underline ml-2"
               >
-                Ler no Bíbliaon
+                Ler no BÃ­bliaon
               </a>
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
               {esboco.autorNome}
-              {esboco.autorIgreja && ` · ${esboco.autorIgreja}`}
-              {esboco.duracaoEstimadaMinutos && ` · ~${esboco.duracaoEstimadaMinutos} min`}
+              {esboco.autorIgreja && ` Â· ${esboco.autorIgreja}`}
+              {esboco.duracaoEstimadaMinutos && ` Â· ~${esboco.duracaoEstimadaMinutos} min`}
             </p>
           </header>
 
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 md:p-8 border border-gray-100 dark:border-gray-700 space-y-6">
             <section>
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Introdução
+                IntroduÃ§Ã£o
               </h2>
               <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                 {esboco.estrutura.introducao}
@@ -112,7 +112,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico1 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 1
+                  TÃ³pico 1
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico1}
@@ -123,7 +123,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico2 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 2
+                  TÃ³pico 2
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico2}
@@ -134,7 +134,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico3 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 3
+                  TÃ³pico 3
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico3}
@@ -145,7 +145,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico4 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 4
+                  TÃ³pico 4
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico4}
@@ -156,7 +156,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico5 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 5
+                  TÃ³pico 5
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico5}
@@ -167,7 +167,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico6 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 6
+                  TÃ³pico 6
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico6}
@@ -178,7 +178,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico7 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 7
+                  TÃ³pico 7
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico7}
@@ -189,7 +189,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico8 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 8
+                  TÃ³pico 8
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico8}
@@ -200,7 +200,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.topico9 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Tópico 9
+                  TÃ³pico 9
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.topico9}
@@ -211,7 +211,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.estrutura.conclusao && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Conclusão
+                  ConclusÃ£o
                 </h2>
                 <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {esboco.estrutura.conclusao}
@@ -233,7 +233,7 @@ const EsbocoDetalhePage: React.FC = () => {
             {esboco.referenciasAdicionais && esboco.referenciasAdicionais.length > 0 && (
               <section>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Outras referências bíblicas
+                  Outras referÃªncias bÃ­blicas
                 </h2>
                 <ul className="list-disc list-inside space-y-1 text-sm text-gray-800 dark:text-gray-200">
                   {esboco.referenciasAdicionais.map((ref) => (
@@ -245,7 +245,7 @@ const EsbocoDetalhePage: React.FC = () => {
                         rel="noopener noreferrer"
                         className="text-xs text-primary-600 dark:text-primary-400 underline ml-1"
                       >
-                        Ler no Bíbliaon
+                        Ler no BÃ­bliaon
                       </a>
                     </li>
                   ))}
@@ -255,14 +255,14 @@ const EsbocoDetalhePage: React.FC = () => {
           </div>
 
           <div className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
-            Dica: você pode copiar este esboço e, se desejar, buscar esboços semelhantes no Bíbliaon em{' '}
+            Dica: vocÃª pode copiar este esboÃ§o e, se desejar, buscar esboÃ§os semelhantes no BÃ­bliaon em{' '}
             <a
               href={getBibliaOnEsbocosIndexUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-primary-600 dark:text-primary-400"
             >
-              bíbliaon.com
+              bÃ­bliaon.com
             </a>
             .
           </div>

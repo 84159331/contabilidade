@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ExclamationTriangleIcon, ArrowPathIcon, HomeIcon } from '@heroicons/react/24/outline';
 
 interface PageErrorFallbackProps {
@@ -40,7 +40,7 @@ const PageErrorFallback: React.FC<PageErrorFallbackProps> = ({
             Ops! Algo deu errado
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Não foi possível carregar esta página. Por favor, tente novamente.
+            NÃ£o foi possÃ­vel carregar esta pÃ¡gina. Por favor, tente novamente.
           </p>
           {error && process.env.NODE_ENV === 'development' && (
             <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-left">
@@ -72,7 +72,7 @@ const PageErrorFallback: React.FC<PageErrorFallbackProps> = ({
           onClick={() => window.location.reload()}
           className="mt-4 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline"
         >
-          Recarregar página completa
+          Recarregar pÃ¡gina completa
         </button>
       </div>
     </div>
