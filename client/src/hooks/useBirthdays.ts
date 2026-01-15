@@ -239,11 +239,12 @@ export function useBirthdays(): UseBirthdaysReturn {
           },
           (error) => {
             // Ignorar erros de Ã­ndice - a query pode nÃ£o ter Ã­ndice ainda
-            if (error.code === 'failed-precondition' || String((error as any)?.message || '').toLowerCase().includes('requires an index')) {
+            const errorCode = (error as any)?.code as string | undefined;
+            if (errorCode === 'failed-precondition' || String((error as any)?.message || '').toLowerCase().includes('requires an index')) {
               return;
             }
 
-            if (error.code !== 'failed-precondition') {
+            if (errorCode !== 'failed-precondition') {
               console.error('Erro ao escutar mudanÃ§as em birthday_notifications:', error);
             }
           }
