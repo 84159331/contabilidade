@@ -101,9 +101,9 @@ const WatchPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Assista - Comunidade CristÃ£ Resgate"
-        description="Assista Ã s nossas mensagens, cultos e estudos bÃ­blicos. Acompanhe toda a programaÃ§Ã£o da Comunidade CristÃ£ Resgate no YouTube."
-        keywords="vÃ­deos, cultos, mensagens, youtube, estudos bÃ­blicos, comunidade cristÃ£ resgate"
+        title="Assista - Comunidade Cristã Resgate"
+        description="Assista às nossas mensagens, cultos e estudos bíblicos. Acompanhe toda a programação da Comunidade Cristã Resgate no YouTube."
+        keywords="vídeos, cultos, mensagens, youtube, estudos bíblicos, comunidade cristã resgate"
         url="/assista"
         type="video"
         image="/img/ICONE-RESGATE.png"
@@ -115,18 +115,18 @@ const WatchPage: React.FC = () => {
           <div className="text-center mb-12">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
-              alt="Comunidade CristÃ£ Resgate" 
+              alt="Comunidade Cristã Resgate" 
               className="mx-auto h-20 w-20 mb-6"
             />
             <h1 className="text-4xl md:text-5xl font-extrabold font-heading text-gray-900 dark:text-white mb-4">
               Assista
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
-              Assista Ã s nossas mensagens mais recentes, cultos, estudos bÃ­blicos e muito mais. 
-              Acompanhe toda a programaÃ§Ã£o da Comunidade CristÃ£ Resgate.
+              Assista às nossas mensagens mais recentes, cultos, estudos bíblicos e muito mais. 
+              Acompanhe toda a programação da Comunidade Cristã Resgate.
             </p>
             <a
-              href="https://youtube.com/@comunidadecresgate"
+              href="https://www.youtube.com/@comunidaderesgate"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"

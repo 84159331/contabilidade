@@ -25,7 +25,7 @@ import {
   MusicalNoteIcon,
 } from '@heroicons/react/24/outline';
 
-// Definindo tipos para os itens de navegaÃ§Ã£o para maior seguranÃ§a
+// Definindo tipos para os itens de navegação para maior segurança
 interface NavLink {
   type: 'link';
   name: string;
@@ -50,39 +50,39 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { role, isAdmin, isLider, isMembro } = useUserRole();
   const location = useLocation();
   
-  // PrÃ©-carrega componentes baseado na navegaÃ§Ã£o
+  // Pré-carrega componentes baseado na navegação
   usePreloadComponents();
 
-  // Menu completo para todos os usuÃ¡rios
+  // Menu completo para todos os usuários
   const navigation: NavItem[] = [
     { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Gerenciar' },
-    { type: 'link', name: 'TransaÃ§Ãµes', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
+    { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
     { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
     { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
     { type: 'link', name: 'Eventos', href: '/tesouraria/events', icon: CalendarIcon },
-    { type: 'link', name: 'EsboÃ§os', href: '/tesouraria/esbocos', icon: DocumentTextIcon },
+    { type: 'link', name: 'Esboços', href: '/tesouraria/esbocos', icon: DocumentTextIcon },
     { type: 'heading', name: 'Escalas' },
-    { type: 'link', name: 'MinistÃ©rios', href: '/tesouraria/ministries', icon: MusicalNoteIcon },
+    { type: 'link', name: 'Ministérios', href: '/tesouraria/ministries', icon: MusicalNoteIcon },
     { type: 'link', name: 'Escalas', href: '/tesouraria/scales', icon: ClipboardDocumentListIcon },
     { type: 'link', name: 'Minhas Escalas', href: '/tesouraria/my-scales', icon: ClipboardDocumentListIcon },
-    { type: 'link', name: 'RelatÃ³rios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
+    { type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
     { type: 'heading', name: 'Analisar' },
-    { type: 'link', name: 'RelatÃ³rios', href: '/tesouraria/reports', icon: ChartBarIcon },
+    { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
-    { type: 'link', name: 'NotificaÃ§Ãµes', href: '/tesouraria/notifications', icon: ChatBubbleLeftRightIcon },
+    { type: 'link', name: 'Notificações', href: '/tesouraria/notifications', icon: ChatBubbleLeftRightIcon },
     { type: 'link', name: 'Dashboard Mobile', href: '/tesouraria/mobile-dashboard', icon: HomeIcon },
-    { type: 'heading', name: 'AdministraÃ§Ã£o' },
-    { type: 'link', name: 'FÃ©rias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
-    { type: 'link', name: 'CÃ©lulas Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
+    { type: 'heading', name: 'Administração' },
+    { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
+    { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
   ];
 
   const isCurrentPath = (path: string) => {
     return location.pathname === path;
   };
 
-  // FunÃ§Ã£o de renderizaÃ§Ã£o corrigida
+  // Função de renderização corrigida
   const renderNav = () => {
     return navigation.map((item, index) => {
       if (item.type === 'link') {
@@ -103,7 +103,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Link>
         );
       }
-      // Renderiza o subtÃ­tulo
+      // Renderiza o subtítulo
       return (
         <div key={`${item.name}-${index}`} className="pt-6 pb-2 px-2">
           <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider dark:text-gray-500">
@@ -115,7 +115,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20 md:pb-0">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -200,7 +200,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200 dark:bg-gray-700" />
               <div className="flex items-center gap-x-1 sm:gap-x-2">
                 <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
-                  OlÃ¡, {user?.displayName || user?.email?.split('@')[0] || 'UsuÃ¡rio'}
+                  Olá, {user?.displayName || user?.email?.split('@')[0] || 'Usuário'}
                 </span>
                 <button
                   onClick={logout}

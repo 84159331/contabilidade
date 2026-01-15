@@ -8,7 +8,7 @@ export function registerServiceWorker() {
       navigator.serviceWorker
         .register(swUrl)
         .then((registration) => {
-          console.log('âœ… Service Worker registrado com sucesso:', registration.scope);
+          console.log('✅ Service Worker registrado com sucesso:', registration.scope);
 
           // Verificar atualizaÃ§Ãµes periodicamente
           registration.addEventListener('updatefound', () => {
@@ -17,10 +17,10 @@ export function registerServiceWorker() {
               installingWorker.addEventListener('statechange', () => {
                 if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   // Nova versÃ£o disponÃ­vel
-                  console.log('ðŸ”„ Nova versÃ£o do Service Worker disponÃ­vel');
+                  console.log('🔄 Nova versão do Service Worker disponível');
                   
                   // Opcional: Mostrar notificaÃ§Ã£o ao usuÃ¡rio
-                  if (window.confirm('Uma nova versÃ£o estÃ¡ disponÃ­vel. Deseja atualizar?')) {
+                  if (window.confirm('Uma nova versão está disponível. Deseja atualizar?')) {
                     installingWorker.postMessage({ type: 'SKIP_WAITING' });
                     window.location.reload();
                   }
@@ -30,12 +30,12 @@ export function registerServiceWorker() {
           });
         })
         .catch((error) => {
-          console.error('âŒ Erro ao registrar Service Worker:', error);
+          console.error('❌ Erro ao registrar Service Worker:', error);
         });
 
       // Verificar se hÃ¡ atualizaÃ§Ãµes disponÃ­veis
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
+        // Evitar reload automático (pode causar loops). O reload ocorre somente após confirmação.
       });
     });
   }

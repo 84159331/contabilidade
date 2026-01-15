@@ -74,6 +74,7 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
   const MotionDiv = motion?.div || (({ children, ...props }: any) => <div {...props}>{children}</div>);
   const MotionButton = motion?.button || (({ children, ...props }: any) => <button {...props}>{children}</button>);
   const hasAnimatePresence = AnimatePresence && typeof AnimatePresence !== 'undefined' && typeof AnimatePresence === 'function';
+  const SafeAnimatePresence = (AnimatePresence as unknown) as React.FC<React.PropsWithChildren<any>>;
   const [contacts, setContacts] = useState<WhatsAppContact[]>([]);
   const [messages, setMessages] = useState<WhatsAppMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -489,7 +490,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
           
           <div className="space-y-3">
             {hasAnimatePresence ? (
-              <AnimatePresence initial={false}>
+              <SafeAnimatePresence initial={false}>
                 {contacts.map((contact, index) => {
                   const RoleIcon = getRoleIcon(contact.role);
                   const colorClass = getRoleColor(contact.role);
@@ -570,7 +571,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                   </MotionDiv>
                 );
               })}
-            </AnimatePresence>
+            </SafeAnimatePresence>
             ) : (
               <div className="space-y-3">
                 {contacts.map((contact) => {
@@ -619,7 +620,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
           
           <div className="space-y-3">
             {hasAnimatePresence ? (
-              <AnimatePresence initial={false}>
+              <SafeAnimatePresence initial={false}>
                 {messages.slice(-5).reverse().map((message, index) => {
                   const contact = contacts.find(c => c.id === message.contactId);
                   const StatusIcon = getStatusIcon(message.status);
@@ -662,7 +663,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                   </MotionDiv>
                 );
               })}
-            </AnimatePresence>
+            </SafeAnimatePresence>
             ) : (
               <div className="space-y-3">
                 {messages.slice(-5).reverse().map((message) => {
@@ -734,7 +735,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
 
       {/* Add Contact Modal */}
       {hasAnimatePresence ? (
-        <AnimatePresence initial={false}>
+        <SafeAnimatePresence initial={false}>
           {showContactForm ? (
             <MotionDiv
               initial={{ opacity: 0 }}
@@ -816,7 +817,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
               </MotionDiv>
             </MotionDiv>
           ) : null}
-        </AnimatePresence>
+        </SafeAnimatePresence>
       ) : (
         showContactForm && (
           <div
@@ -893,7 +894,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
 
       {/* Send Message Modal */}
       {hasAnimatePresence ? (
-        <AnimatePresence initial={false}>
+        <SafeAnimatePresence initial={false}>
           {showMessageForm && selectedContact ? (
             <MotionDiv
               initial={{ opacity: 0 }}
@@ -977,7 +978,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
               </MotionDiv>
             </MotionDiv>
           ) : null}
-        </AnimatePresence>
+        </SafeAnimatePresence>
       ) : (
         showMessageForm && selectedContact && (
           <div

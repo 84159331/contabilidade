@@ -5,7 +5,11 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 require('dotenv').config();
 
-process.env.JWT_SECRET = process.env.JWT_SECRET || 'my-super-secret-key';
+// Validar JWT_SECRET obrigatório
+if (!process.env.JWT_SECRET) {
+  console.error('❌ JWT_SECRET não configurado! Configure a variável de ambiente.');
+  process.exit(1);
+}
 
 const authRoutes = require('./routes/auth');
 const memberRoutes = require('./routes/members');
@@ -23,13 +27,44 @@ app.set('trust proxy', 1);
 // Middleware de segurança
 app.use(helmet());
 
-// Rate limiting
-const limiter = rateLimit({
+// Rate limiting geral
+const generalLimiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutos
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 10000, // Aumentado para 10000 requests por IP
-  message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.'
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // 100 requests por IP
+  message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
-app.use(limiter);
+
+// Rate limiting para autenticação (mais restritivo)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // 5 tentativas de login por IP
+  message: 'Muitas tentativas de login. Tente novamente em 15 minutos.',
+  skipSuccessfulRequests: true,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiting para registro
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 3, // 3 registros por IP
+  message: 'Muitas tentativas de registro. Tente novamente em 1 hora.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiting para criação de dados
+const createLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minuto
+  max: 10, // 10 criações por IP
+  message: 'Muitas tentativas de criação. Tente novamente em alguns minutos.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(generalLimiter);
 
 // Middleware
 app.use(cors({
@@ -70,7 +105,13 @@ app.use(express.urlencoded({ extended: true }));
 // Servir arquivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Rotas da API
+// Rotas da API com rate limits específicos
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', registerLimiter);
+app.use('/api/members', createLimiter);
+app.use('/api/transactions', createLimiter);
+app.use('/api/categories', createLimiter);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/transactions', transactionRoutes);

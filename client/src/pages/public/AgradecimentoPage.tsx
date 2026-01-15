@@ -173,19 +173,19 @@ const AgradecimentoPage: React.FC = () => {
   // VALIDAÃ‡ÃƒO FINAL DOS COMPONENTES ANTES DO RENDER
   // Garantir que todos os componentes crÃ­ticos estÃ£o definidos
   if (!SEOHead || typeof SEOHead !== 'function') {
-    return <div>Erro ao carregar pÃ¡gina. Por favor, recarregue.</div>;
+    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
   
   if (!SafeImage || typeof SafeImage !== 'function') {
-    return <div>Erro ao carregar pÃ¡gina. Por favor, recarregue.</div>;
+    return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
 
   return (
     <div>
       <SEOHead
-        title="Obrigado por se Cadastrar - Comunidade CristÃ£ Resgate"
-        description="Agradecemos seu cadastro! Seja bem-vindo Ã  Comunidade CristÃ£ Resgate."
-        keywords="agradecimento, cadastro, comunidade cristÃ£ resgate"
+        title="Obrigado por se Cadastrar - Comunidade Cristã Resgate"
+        description="Agradecemos seu cadastro! Seja bem-vindo à Comunidade Cristã Resgate."
+        keywords="agradecimento, cadastro, comunidade cristã resgate"
         url="/cadastro/obrigado"
       />
 

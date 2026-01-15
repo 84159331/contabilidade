@@ -1,6 +1,8 @@
 ﻿import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
+
 interface TabTransitionProps {
   children: React.ReactNode;
   transitionKey: string;
@@ -15,7 +17,7 @@ const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }
   const shouldAnimate = !prefersReducedMotion && !isMobileDevice;
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <SafeAnimatePresence mode="wait" initial={false}>
       <motion.div
         key={transitionKey}
         initial={shouldAnimate ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
@@ -30,7 +32,7 @@ const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }
       >
         {children}
       </motion.div>
-    </AnimatePresence>
+    </SafeAnimatePresence>
   );
 };
 

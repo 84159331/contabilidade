@@ -2,11 +2,50 @@ rules_version='2'
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Apenas usuários autenticados podem acessar o banco
     match /{document=**} {
-      // Regras temporárias para desenvolvimento - permitir acesso sem autenticação
-      // ATENÇÃO: Estas regras são apenas para desenvolvimento!
-      // Em produção, implemente autenticação adequada
-      allow read, write: if true;
+      allow read, write: if request.auth != null;
+    }
+    
+    // Regras específicas para usuários
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && 
+        request.auth.token.admin == true;
+    }
+    
+    // Regras para transações financeiras
+    match /transactions/{transactionId} {
+      allow read: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+      allow write: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+      allow create: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+    }
+    
+    // Regras para membros
+    match /members/{memberId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+      allow create: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+    }
+    
+    // Regras para categorias
+    match /categories/{categoryId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+    }
+    
+    // Regras para relatórios
+    match /reports/{reportId} {
+      allow read: if request.auth != null && 
+        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
+      allow write: if request.auth != null && 
+        request.auth.token.admin == true;
     }
   }
 }

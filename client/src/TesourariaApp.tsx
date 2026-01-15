@@ -30,6 +30,9 @@ const MyScales = lazyWithRetry(() => import('./pages/MyScales'));
 const MobileDashboard = lazyWithRetry(() => import('./pages/MobileDashboard'));
 const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'));
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
+const LouveCalendarPage = lazyWithRetry(() => import('./pages/LouveCalendarPage'));
+const LouveMessagesPage = lazyWithRetry(() => import('./pages/LouveMessagesPage'));
+const LouveMinistryPage = lazyWithRetry(() => import('./pages/LouveMinistryPage'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -124,6 +127,9 @@ function TesourariaApp() {
             <Route path="mobile-dashboard" element={<MobileDashboard />} />
             <Route path="notifications" element={<NotificationsPage />} />
             <Route path="scale-reports" element={<ScaleReports />} />
+            <Route path="calendar" element={<LouveCalendarPage />} />
+            <Route path="messages" element={<LouveMessagesPage />} />
+            <Route path="ministry" element={<LouveMinistryPage />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
           </Routes>
         </SmartLoading>

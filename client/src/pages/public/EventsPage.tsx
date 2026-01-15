@@ -89,7 +89,7 @@ const EventsPage: React.FC = () => {
     const types = {
       culto: 'Culto',
       estudo: 'Estudo',
-      oracao: 'OraÃ§Ã£o',
+      oracao: 'Oração',
       jovens: 'Jovens'
     };
     return types[type as keyof typeof types] || 'Evento';
@@ -98,9 +98,9 @@ const EventsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <SEOHead
-        title="Eventos - Comunidade CristÃ£ Resgate"
-        description="Participe dos nossos eventos, cultos, estudos bÃ­blicos e atividades. Veja nossa programaÃ§Ã£o completa e faÃ§a parte da nossa comunidade."
-        keywords="eventos, cultos, estudos bÃ­blicos, programaÃ§Ã£o, igreja brasÃ­lia, comunidade cristÃ£ resgate"
+        title="Eventos - Comunidade Cristã Resgate"
+        description="Participe dos nossos eventos, cultos, estudos bíblicos e atividades. Veja nossa programação completa e faça parte da nossa comunidade."
+        keywords="eventos, cultos, estudos bíblicos, programação, igreja brasília, comunidade cristã resgate"
         url="/eventos"
         type="website"
       />
@@ -120,7 +120,7 @@ const EventsPage: React.FC = () => {
             />
             <h1 className="text-5xl font-bold font-heading mb-4">Eventos</h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
-              Participe dos nossos eventos e fortaleÃ§a sua fÃ© junto conosco
+              Participe dos nossos eventos e fortaleça sua fé junto conosco
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center">
@@ -133,7 +133,7 @@ const EventsPage: React.FC = () => {
               </div>
               <div className="flex items-center">
                 <HeartIcon className="h-5 w-5 mr-2" />
-                <span>ComunhÃ£o e Crescimento</span>
+                <span>Comunhão e Crescimento</span>
               </div>
             </div>
           </motion.div>

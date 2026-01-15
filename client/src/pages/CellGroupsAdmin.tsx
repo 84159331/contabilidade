@@ -473,7 +473,7 @@ const CellGroupsAdmin: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {group.isPopular && (
-                    <StarIcon className="h-5 w-5 text-yellow-500" title="Grupo Popular" />
+                    <StarIcon className="h-5 w-5 text-yellow-500" aria-label="Grupo Popular" />
                   )}
                   <button
                     onClick={() => toggleGroupStatus(group.id)}
@@ -493,7 +493,7 @@ const CellGroupsAdmin: React.FC = () => {
               {/* Upload de Imagem */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Imagem da CÃ©lula:
+                  Imagem da Célula:
                 </label>
                 <ImageUpload
                   currentImage={group.image}

@@ -3,12 +3,6 @@
 import * as React from 'react';
 
 declare module 'framer-motion' {
-  export const AnimatePresence: React.ComponentType<
-    React.PropsWithChildren<{
-      mode?: 'wait' | 'sync' | 'popLayout';
-      initial?: boolean;
-      onExitComplete?: () => void;
-    }>
-  >;
+  export const AnimatePresence: React.FC<any>;
 }
 

@@ -9,6 +9,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
+const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
+
 interface QuickAction {
   id: string;
   label: string;
@@ -53,7 +55,7 @@ const QuickActions: React.FC = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <AnimatePresence initial={false}>
+      <SafeAnimatePresence initial={false}>
         {isOpen ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -81,7 +83,7 @@ const QuickActions: React.FC = () => {
             ))}
           </motion.div>
         ) : null}
-      </AnimatePresence>
+      </SafeAnimatePresence>
 
       <motion.button
         onClick={() => setIsOpen(!isOpen)}

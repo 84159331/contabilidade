@@ -1,7 +1,7 @@
 {
   "short_name": "Resgate",
-  "name": "Comunidade Cristã Resgate",
-  "description": "Sistema de gestão e contabilidade para a Comunidade Cristã Resgate",
+  "name": "Resgate",
+  "description": "Sistema de gestão e contabilidade para Resgate",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#3B82F6",

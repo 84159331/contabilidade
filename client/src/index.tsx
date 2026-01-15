@@ -269,5 +269,5 @@ root.render(
 
 // Registrar Service Worker em produção
 if (process.env.NODE_ENV === 'production') {
-  registerServiceWorker();
+  // PWA desabilitado
 }

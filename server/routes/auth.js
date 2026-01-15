@@ -35,8 +35,15 @@ router.post('/login', async (req, res) => {
         }
         
         const token = jwt.sign(
-          { id: user.id, username: user.username, role: user.role },
-          process.env.JWT_SECRET || 'fallback-secret',
+          { 
+            id: user.id, 
+            username: user.username, 
+            email: user.email,
+            role: user.role,
+            admin: user.role === 'admin',
+            tesoureiro: user.role === 'tesoureiro' || user.role === 'admin'
+          },
+          process.env.JWT_SECRET,
           { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
         );
         
@@ -75,13 +82,14 @@ router.post('/register', validateUser, async (req, res) => {
           return res.status(400).json({ error: 'Username ou email já existem' });
         }
         
-        // Criptografar senha
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Criptografar senha com rounds configuráveis
+        const saltRounds = parseInt(process.env.BCRYPT_ROUNDS) || 12;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         
-        // Inserir novo usuário
+        // Inserir novo usuário com role padrão 'member'
         db.run(
           'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
-          [username, email, hashedPassword, 'admin'],
+          [username, email, hashedPassword, 'member'],
           function(err) {
             if (err) {
               return res.status(500).json({ error: 'Erro ao criar usuário' });
@@ -145,8 +153,9 @@ router.put('/change-password', authenticateToken, async (req, res) => {
           return res.status(401).json({ error: 'Senha atual incorreta' });
         }
         
-        // Criptografar nova senha
-        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        // Criptografar nova senha com rounds configuráveis
+        const saltRounds = parseInt(process.env.BCRYPT_ROUNDS) || 12;
+        const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
         
         // Atualizar senha
         db.run(

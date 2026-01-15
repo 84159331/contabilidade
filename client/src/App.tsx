@@ -10,9 +10,6 @@ import LoadingSpinner from './components/LoadingSpinner';
 import PageErrorFallback from './components/PageErrorFallback';
 import PullToRefresh from './components/PullToRefresh';
 import SwipeNavigation from './components/SwipeNavigation';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
-import OfflineIndicator from './components/OfflineIndicator';
-import AppUpdateChecker from './components/AppUpdateChecker';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // HomePage carregada imediatamente (primeira pÃ¡gina)
@@ -89,9 +86,6 @@ function App() {
                   <Route path="/tesouraria/*" element={<TesourariaApp />} />
                     </Routes>
                     </Suspense>
-                    <PWAInstallPrompt />
-                    <OfflineIndicator />
-                    <AppUpdateChecker />
                   </SwipeNavigation>
                 </PullToRefresh>
               </ErrorBoundary>

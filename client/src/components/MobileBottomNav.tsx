@@ -3,17 +3,17 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   HomeIcon,
-  ClipboardDocumentListIcon,
   CalendarIcon,
-  BellIcon,
-  UserCircleIcon,
+  MusicalNoteIcon,
+  ChatBubbleLeftRightIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import {
   HomeIcon as HomeIconSolid,
-  ClipboardDocumentListIcon as ClipboardDocumentListIconSolid,
   CalendarIcon as CalendarIconSolid,
-  BellIcon as BellIconSolid,
-  UserCircleIcon as UserCircleIconSolid,
+  MusicalNoteIcon as MusicalNoteIconSolid,
+  ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
+  UserGroupIcon as UserGroupIconSolid,
 } from '@heroicons/react/24/solid';
 import { useNotifications } from '../hooks/useNotifications';
 
@@ -37,29 +37,29 @@ const MobileBottomNav: React.FC = () => {
       iconSolid: HomeIconSolid,
     },
     {
-      name: 'Escalas',
-      href: '/tesouraria/my-scales',
-      icon: ClipboardDocumentListIcon,
-      iconSolid: ClipboardDocumentListIconSolid,
-    },
-    {
-      name: 'Eventos',
-      href: '/tesouraria/events',
+      name: 'Calendário',
+      href: '/tesouraria/calendar',
       icon: CalendarIcon,
       iconSolid: CalendarIconSolid,
     },
     {
-      name: 'Notificações',
-      href: '/tesouraria/notifications',
-      icon: BellIcon,
-      iconSolid: BellIconSolid,
+      name: 'Música',
+      href: '/tesouraria/my-scales',
+      icon: MusicalNoteIcon,
+      iconSolid: MusicalNoteIconSolid,
+    },
+    {
+      name: 'Mensagens',
+      href: '/tesouraria/messages',
+      icon: ChatBubbleLeftRightIcon,
+      iconSolid: ChatBubbleLeftRightIconSolid,
       badge: unreadCount > 0 ? unreadCount : undefined,
     },
     {
-      name: 'Perfil',
-      href: '/tesouraria/dashboard',
-      icon: UserCircleIcon,
-      iconSolid: UserCircleIconSolid,
+      name: 'Ministério',
+      href: '/tesouraria/ministry',
+      icon: UserGroupIcon,
+      iconSolid: UserGroupIconSolid,
     },
   ];
 
@@ -71,8 +71,8 @@ const MobileBottomNav: React.FC = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 md:hidden">
-      <div className="flex items-center justify-around h-16 px-2 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-50 md:hidden pb-[env(safe-area-inset-bottom)]">
+      <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const active = isActive(item.href);
           const Icon = active ? item.iconSolid : item.icon;
@@ -83,8 +83,8 @@ const MobileBottomNav: React.FC = () => {
               to={item.href}
               className={`flex flex-col items-center justify-center flex-1 h-full relative transition-colors ${
                 active
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-gray-500 dark:text-gray-400'
+                  ? 'text-primary-400'
+                  : 'text-gray-400'
               }`}
             >
               <div className="relative">

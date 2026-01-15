@@ -1,17 +1,13 @@
 [build]
   base = "client"
-  command = "npm run build"
+  command = "npm run build:production"
   publish = "build"
 
 [build.environment]
   NODE_VERSION = "20"
   CI = "false"
-  JWT_SECRET = "sua-chave-secreta-super-segura-aqui-2024"
-  SUPABASE_URL = "https://seu-projeto.supabase.co"
-  SUPABASE_ANON_KEY = "sua-chave-anonima"
-  SUPABASE_SERVICE_ROLE_KEY = "sua-chave-service-role"
 
-# Netlify Functions
+# Netlify Functions (se necessário)
 [functions]
 directory = "netlify/functions"
 node_bundler = "esbuild"
@@ -22,6 +18,25 @@ package = "@netlify/plugin-functions-install-core"
 
 # Redirecionamento para SPA (Single Page Application)
 [[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Headers para segurança e cache
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

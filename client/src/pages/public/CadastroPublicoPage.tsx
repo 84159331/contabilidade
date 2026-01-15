@@ -39,25 +39,25 @@ const CadastroPublicoPage: React.FC = () => {
     const newErrors: Partial<Record<keyof FormData, string>> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome Ã© obrigatÃ³rio';
+      newErrors.name = 'Nome é obrigatório';
     } else if (formData.name.trim().length < 3) {
       newErrors.name = 'Nome deve ter pelo menos 3 caracteres';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email Ã© obrigatÃ³rio';
+      newErrors.email = 'Email é obrigatório';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email invÃ¡lido';
+      newErrors.email = 'Email inválido';
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Telefone Ã© obrigatÃ³rio';
+      newErrors.phone = 'Telefone é obrigatório';
     } else if (!/^[\d\s()\-+]+$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Telefone invÃ¡lido';
+      newErrors.phone = 'Telefone inválido';
     }
 
     if (formData.birth_date && new Date(formData.birth_date) > new Date()) {
-      newErrors.birth_date = 'Data de nascimento nÃ£o pode ser no futuro';
+      newErrors.birth_date = 'Data de nascimento não pode ser no futuro';
     }
 
     setErrors(newErrors);
@@ -68,7 +68,7 @@ const CadastroPublicoPage: React.FC = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Por favor, corrija os erros no formulÃ¡rio');
+      toast.error('Por favor, corrija os erros no formulário');
       return;
     }
 
@@ -95,13 +95,13 @@ const CadastroPublicoPage: React.FC = () => {
         throw new Error('Email invÃ¡lido');
       }
 
-      console.log('ðŸ“ Cadastrando novo membro:', memberData);
+      console.log('📝 Cadastrando novo membro:', memberData);
 
       // Cadastrar automaticamente via API
       await membersAPI.createMember(memberData);
 
       // Mostrar mensagem de sucesso
-      toast.success('ðŸŽ‰ Cadastro realizado com sucesso! Bem-vindo Ã  nossa comunidade!');
+      toast.success('Cadastro realizado com sucesso! Bem-vindo à nossa comunidade!');
       
       // Salvar nome do membro antes de limpar o formulÃ¡rio
       const memberName = formData.name.trim();
@@ -125,14 +125,14 @@ const CadastroPublicoPage: React.FC = () => {
             }
           });
         } catch (navError) {
-          console.error('âŒ Erro ao navegar:', navError);
+          console.error('❌ Erro ao navegar:', navError);
           // Fallback: recarregar a pÃ¡gina se a navegaÃ§Ã£o falhar
           window.location.href = '/cadastro/obrigado';
         }
       }, 1000);
 
     } catch (error: any) {
-      console.error('âŒ Erro ao cadastrar:', error);
+      console.error('❌ Erro ao cadastrar:', error);
       
       // Tratamento de erro mais robusto
       let errorMessage = 'Erro ao realizar cadastro. Tente novamente.';
@@ -173,9 +173,9 @@ const CadastroPublicoPage: React.FC = () => {
   return (
     <div>
       <SEOHead
-        title="Cadastro - Comunidade CristÃ£ Resgate"
-        description="FaÃ§a parte da nossa famÃ­lia! Cadastre-se e seja bem-vindo Ã  Comunidade CristÃ£ Resgate."
-        keywords="cadastro, igreja brasÃ­lia, comunidade cristÃ£ resgate, membro"
+        title="Cadastro - Comunidade Cristã Resgate"
+        description="Faça parte da nossa família! Cadastre-se e seja bem-vindo à Comunidade Cristã Resgate."
+        keywords="cadastro, igreja brasília, comunidade cristã resgate, membro"
         url="/cadastro"
       />
 
@@ -198,9 +198,9 @@ const CadastroPublicoPage: React.FC = () => {
               className="mx-auto h-20 w-20 mb-4 opacity-90"
             />
           </div>
-          <h1 className="text-5xl font-bold font-heading mb-4">FaÃ§a Parte da Nossa FamÃ­lia</h1>
+          <h1 className="text-5xl font-bold font-heading mb-4">Faça Parte da Nossa Família</h1>
           <p className="text-xl mt-4 opacity-90 max-w-2xl mx-auto">
-            Cadastre-se e seja bem-vindo Ã  Comunidade CristÃ£ Resgate
+            Cadastre-se e seja bem-vindo à Comunidade Cristã Resgate
           </p>
         </motion.div>
       </div>
@@ -225,11 +225,11 @@ const CadastroPublicoPage: React.FC = () => {
                     <CheckCircleIcon className="h-8 w-8 text-green-500" />
                     <div>
                       <h3 className="text-xl font-bold text-green-800 dark:text-green-200 mb-1">
-                        Cadastro Realizado com Sucesso! ðŸŽ‰
+                        Cadastro Realizado com Sucesso!
                       </h3>
                       <p className="text-green-700 dark:text-green-300">
                         Seus dados foram registrados automaticamente em nosso sistema. 
-                        VocÃª receberÃ¡ um contato em breve!
+                        Você receberá um contato em breve!
                       </p>
                     </div>
                   </div>
@@ -244,7 +244,7 @@ const CadastroPublicoPage: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold font-heading dark:text-white">
-                      FormulÃ¡rio de Cadastro
+                      Formulário de Cadastro
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400">
                       Preencha os dados abaixo para se cadastrar automaticamente
@@ -272,7 +272,7 @@ const CadastroPublicoPage: React.FC = () => {
                     />
                     {errors.name && (
                       <p className="mt-1 text-sm text-red-500 flex items-center">
-                        <span className="mr-1">âš ï¸</span> {errors.name}
+                        <span className="mr-1">⚠️</span> {errors.name}
                       </p>
                     )}
                   </div>
@@ -296,7 +296,7 @@ const CadastroPublicoPage: React.FC = () => {
                     />
                     {errors.email && (
                       <p className="mt-1 text-sm text-red-500 flex items-center">
-                        <span className="mr-1">âš ï¸</span> {errors.email}
+                        <span className="mr-1">⚠️</span> {errors.email}
                       </p>
                     )}
                   </div>
@@ -320,16 +320,16 @@ const CadastroPublicoPage: React.FC = () => {
                     />
                     {errors.phone && (
                       <p className="mt-1 text-sm text-red-500 flex items-center">
-                        <span className="mr-1">âš ï¸</span> {errors.phone}
+                        <span className="mr-1">⚠️</span> {errors.phone}
                       </p>
                     )}
                   </div>
 
-                  {/* EndereÃ§o */}
+                  {/* Endereço */}
                   <div>
                     <label htmlFor="address" className="flex items-center text-gray-700 dark:text-gray-300 font-medium mb-2">
                       <MapPinIcon className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
-                      EndereÃ§o
+                      Endereço
                     </label>
                     <input
                       type="text"
@@ -337,7 +337,7 @@ const CadastroPublicoPage: React.FC = () => {
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
                       className="input"
-                      placeholder="EndereÃ§o completo (opcional)"
+                      placeholder="Endereço completo (opcional)"
                       disabled={isSubmitting}
                     />
                   </div>
@@ -360,7 +360,7 @@ const CadastroPublicoPage: React.FC = () => {
                     />
                     {errors.birth_date && (
                       <p className="mt-1 text-sm text-red-500 flex items-center">
-                        <span className="mr-1">âš ï¸</span> {errors.birth_date}
+                        <span className="mr-1">⚠️</span> {errors.birth_date}
                       </p>
                     )}
                   </div>
@@ -393,9 +393,9 @@ const CadastroPublicoPage: React.FC = () => {
                   </button>
 
                   <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                    Ao cadastrar, vocÃª concorda que seus dados serÃ£o armazenados em nosso sistema.
+                    Ao cadastrar, você concorda que seus dados serão armazenados em nosso sistema.
                     <br />
-                    Campos marcados com <span className="text-red-500">*</span> sÃ£o obrigatÃ³rios.
+                    Campos marcados com <span className="text-red-500">*</span> são obrigatórios.
                   </p>
                 </form>
               </div>
@@ -403,12 +403,12 @@ const CadastroPublicoPage: React.FC = () => {
               {/* Info Box */}
               <div className="mt-8 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-2">
-                  â„¹ï¸ Como funciona o cadastro automÃ¡tico?
+                  ℹ️ Como funciona o cadastro automático?
                 </h3>
                 <p className="text-blue-800 dark:text-blue-300 text-sm">
-                  Quando vocÃª preenche e envia este formulÃ¡rio, seus dados sÃ£o automaticamente 
-                  cadastrados em nosso sistema. VocÃª receberÃ¡ um contato da nossa equipe em breve 
-                  para dar as boas-vindas e fornecer mais informaÃ§Ãµes sobre nossa comunidade.
+                  Quando você preenche e envia este formulário, seus dados são automaticamente 
+                  cadastrados em nosso sistema. Você receberá um contato da nossa equipe em breve 
+                  para dar as boas-vindas e fornecer mais informações sobre nossa comunidade.
                 </p>
               </div>
             </motion.div>

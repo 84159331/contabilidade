@@ -13,17 +13,17 @@ interface SEOHeadProps {
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Comunidade CristÃ£ Resgate - Um lugar de fÃ©, comunidade e transparÃªncia',
-  description = 'Comunidade CristÃ£ Resgate em BrasÃ­lia-DF. Cultos, estudos bÃ­blicos, ministÃ©rios e muito mais. Venha fazer parte da nossa famÃ­lia!',
-  keywords = 'igreja, brasÃ­lia, comunidade cristÃ£, resgate, culto, estudos bÃ­blicos, ministÃ©rios, cÃ©lula, fÃ©, esperanÃ§a',
+  title = 'Resgate - Um lugar de fé, comunidade e transparência',
+  description = 'Resgate em Brasília-DF. Cultos, estudos bíblicos, ministérios e muito mais. Venha fazer parte da nossa família!',
+  keywords = 'igreja, brasília, resgate, culto, estudos bíblicos, ministérios, célula, fé, esperança',
   image = '/img/ICONE-RESGATE.png',
   url,
   type = 'website',
-  author = 'Comunidade CristÃ£ Resgate',
+  author = 'Resgate',
   publishedTime,
   modifiedTime
 }) => {
-  const siteName = 'Comunidade CristÃ£ Resgate';
+  const siteName = 'Resgate';
   const siteUrl = 'https://comunidadecresgate.com.br';
   const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : siteUrl);
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
@@ -107,8 +107,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       description: description,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Quadra 38, Ãrea Especial, Lote E',
-        addressLocality: 'Vila SÃ£o JosÃ©',
+        streetAddress: 'Quadra 38, Área Especial, Lote E',
+        addressLocality: 'Vila São José',
         addressRegion: 'DF',
         postalCode: '72010-010',
         addressCountry: 'BR'
@@ -135,8 +135,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       name: siteName,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Quadra 38, Ãrea Especial, Lote E',
-        addressLocality: 'Vila SÃ£o JosÃ©',
+        streetAddress: 'Quadra 38, Área Especial, Lote E',
+        addressLocality: 'Vila São José',
         addressRegion: 'DF',
         postalCode: '72010-010',
         addressCountry: 'BR'

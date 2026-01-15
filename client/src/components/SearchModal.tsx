@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon, XMarkIcon, DocumentTextIcon, CalendarIcon, BookOpenIcon, VideoCameraIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
+
 interface SearchResult {
   id: string;
   title: string;
@@ -90,7 +92,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
   };
 
     return (
-      <AnimatePresence initial={false}>
+      <SafeAnimatePresence initial={false}>
         {onClose && ( // Assuming SearchModal is only rendered when it should be open
           <motion.div className="fixed inset-0 z-50 overflow-y-auto">
             {/* Backdrop */}
@@ -189,7 +191,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </SafeAnimatePresence>
     );};
 
 export default SearchModal;

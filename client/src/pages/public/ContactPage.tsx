@@ -24,17 +24,17 @@ const ContactPage: React.FC = () => {
     const newErrors: Partial<FormData> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome Ã© obrigatÃ³rio';
+      newErrors.name = 'Nome é obrigatório';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email Ã© obrigatÃ³rio';
+      newErrors.email = 'Email é obrigatório';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email invÃ¡lido';
+      newErrors.email = 'Email inválido';
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Mensagem Ã© obrigatÃ³ria';
+      newErrors.message = 'Mensagem é obrigatória';
     } else if (formData.message.trim().length < 10) {
       newErrors.message = 'Mensagem deve ter pelo menos 10 caracteres';
     }
@@ -47,7 +47,7 @@ const ContactPage: React.FC = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Por favor, corrija os erros no formulÃ¡rio');
+      toast.error('Por favor, corrija os erros no formulário');
       return;
     }
 
@@ -92,7 +92,7 @@ const ContactPage: React.FC = () => {
         }, 2000);
       }
     } catch (error: any) {
-      console.error('Erro ao enviar formulÃ¡rio:', error);
+      console.error('Erro ao enviar formulário:', error);
       toast.error(error.message || 'Erro ao enviar mensagem. Tente novamente ou envie diretamente para cresgate012@gmail.com');
       setIsSubmitting(false);
     }
@@ -109,9 +109,9 @@ const ContactPage: React.FC = () => {
   return (
     <div>
       <SEOHead
-        title="Contato - Comunidade CristÃ£ Resgate"
-        description="Entre em contato com a Comunidade CristÃ£ Resgate. Estamos prontos para responder suas dÃºvidas e ajudar vocÃª a fazer parte da nossa famÃ­lia."
-        keywords="contato, igreja brasÃ­lia, comunidade cristÃ£ resgate, fale conosco"
+        title="Contato - Comunidade Cristã Resgate"
+        description="Entre em contato com a Comunidade Cristã Resgate. Estamos prontos para responder suas dúvidas e ajudar você a fazer parte da nossa família."
+        keywords="contato, igreja brasília, comunidade cristã resgate, fale conosco"
         url="/contato"
       />
 
@@ -127,7 +127,7 @@ const ContactPage: React.FC = () => {
             />
           </div>
           <h1 className="text-5xl font-bold font-heading">Contato</h1>
-          <p className="text-xl mt-4 opacity-90">Estamos prontos para ajudar vocÃª</p>
+          <p className="text-xl mt-4 opacity-90">Estamos prontos para ajudar você</p>
         </div>
       </div>
 
@@ -144,7 +144,7 @@ const ContactPage: React.FC = () => {
               </div>
               <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Fale Conosco</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Preencha o formulÃ¡rio abaixo e entraremos em contato o mais breve possÃ­vel.
+                Preencha o formulário abaixo e entraremos em contato o mais breve possível.
               </p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -217,15 +217,15 @@ const ContactPage: React.FC = () => {
               <div className="mb-6">
                 <SafeImage 
                   src="/img/ICONE-RESGATE.png" 
-                  alt="LocalizaÃ§Ã£o" 
+                  alt="Localização" 
                   className="h-12 w-12 mb-4"
                 />
               </div>
-              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa LocalizaÃ§Ã£o</h2>
+              <h2 className="text-3xl font-bold font-heading mb-4 dark:text-white">Nossa Localização</h2>
               <div className="space-y-4 text-gray-600 dark:text-gray-300 mb-6">
                 <div>
-                  <strong className="text-gray-900 dark:text-white">EndereÃ§o:</strong>
-                  <p className="mt-1">Quadra 38, Ãrea Especial, Lote E<br />Vila SÃ£o JosÃ©, BrasÃ­lia - DF<br />72010-010</p>
+                  <strong className="text-gray-900 dark:text-white">Endereço:</strong>
+                  <p className="mt-1">Quadra 38, Área Especial, Lote E<br />Vila São José, Brasília - DF<br />72010-010</p>
                 </div>
                 <div>
                   <strong className="text-gray-900 dark:text-white">Email:</strong>
@@ -238,7 +238,7 @@ const ContactPage: React.FC = () => {
               </div>
               <div className="mt-6 rounded-lg overflow-hidden shadow-lg">
                 <iframe
-                  title="Google Maps - LocalizaÃ§Ã£o da Igreja"
+                  title="Google Maps - Localização da Igreja"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.0000000000005!2d-47.99999999999999!3d-15.999999999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a2e0000000001%3A0x6f3cb501ba6f6d1!2sComunidade+Crist%C3%A3+Resgate!5e0!3m2!1spt-BR!2sbr!4v1678886434038!5m2!1spt-BR!2sbr"
                   width="100%"
                   height="450"

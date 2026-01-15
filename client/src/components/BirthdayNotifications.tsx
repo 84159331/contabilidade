@@ -12,6 +12,8 @@ import {
 import { useBirthdays } from '../hooks/useBirthdays';
 import LoadingSpinner from './LoadingSpinner';
 
+const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
+
 const BirthdayNotifications: React.FC = () => {
   const { todayBirthdays, weekBirthdays, loading, error, lastNotification } = useBirthdays();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,7 +52,7 @@ const BirthdayNotifications: React.FC = () => {
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-              AniversÃ¡rios
+              Aniversários
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Nenhum aniversariante hoje ou nesta semana
@@ -85,7 +87,7 @@ const BirthdayNotifications: React.FC = () => {
           </div>
           <div className="text-left">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-              AniversÃ¡rios
+              Aniversários
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {safeTodayBirthdays.length > 0 
@@ -99,10 +101,10 @@ const BirthdayNotifications: React.FC = () => {
           {lastNotification && (
             <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
               {lastNotification.emailSent && (
-                <EnvelopeIcon className="h-4 w-4 text-green-500" title="Email enviado" />
+                <EnvelopeIcon className="h-4 w-4 text-green-500" aria-label="Email enviado" />
               )}
               {lastNotification.whatsappSent && (
-                <ChatBubbleLeftRightIcon className="h-4 w-4 text-green-500" title="WhatsApp enviado" />
+                <ChatBubbleLeftRightIcon className="h-4 w-4 text-green-500" aria-label="WhatsApp enviado" />
               )}
             </div>
           )}
@@ -116,7 +118,7 @@ const BirthdayNotifications: React.FC = () => {
       </button>
 
       {/* Expanded Content */}
-      <AnimatePresence>
+      <SafeAnimatePresence>
         {isExpanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
@@ -250,7 +252,7 @@ const BirthdayNotifications: React.FC = () => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </SafeAnimatePresence>
     </div>
   );
 };

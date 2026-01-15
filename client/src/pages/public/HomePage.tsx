@@ -24,88 +24,88 @@ import {
 
 const dailyStudies = [
   {
-    title: "O Poder da GratidÃ£o",
-    content: "A gratidÃ£o transforma o que temos em suficiente, e mais. Ela pode transformar a negaÃ§Ã£o em aceitaÃ§Ã£o, o caos em ordem, a confusÃ£o em clareza. Ela pode transformar uma refeiÃ§Ã£o em um banquete, uma casa em um lar, um estranho em um amigo. A gratidÃ£o dÃ¡ sentido ao nosso passado, traz paz para o hoje e cria uma visÃ£o para o amanhÃ£.",
+    title: "O Poder da Gratidão",
+    content: "A gratidão transforma o que temos em suficiente, e mais. Ela pode transformar a negação em aceitação, o caos em ordem, a confusão em clareza. Ela pode transformar uma refeição em um banquete, uma casa em um lar, um estranho em um amigo. A gratidão dá sentido ao nosso passado, traz paz para o hoje e cria uma visão para o amanhã.",
     verse: "1 Tessalonicenses 5:18",
-    author: "ApÃ³stolo Isac"
+    author: "Apóstolo Isac"
   },
   {
-    title: "Cultivando a ResiliÃªncia",
-    content: "ResiliÃªncia nÃ£o Ã© sobre nÃ£o cair, mas sobre a capacidade de se levantar apÃ³s cada queda. Ã‰ a forÃ§a interior que nos permite enfrentar adversidades, aprender com elas e sair mais fortes. Cultive a resiliÃªncia aceitando os desafios como oportunidades de crescimento e mantendo uma perspectiva positiva.",
+    title: "Cultivando a Resiliência",
+    content: "Resiliência não é sobre não cair, mas sobre a capacidade de se levantar após cada queda. É a força interior que nos permite enfrentar adversidades, aprender com elas e sair mais fortes. Cultive a resiliência aceitando os desafios como oportunidades de crescimento e mantendo uma perspectiva positiva.",
     verse: "Romanos 8:28",
-    author: "ApÃ³stola Elaine"
+    author: "Apóstola Elaine"
   },
   {
-    title: "A ImportÃ¢ncia da AÃ§Ã£o",
-    content: "AÃ§Ã£o Ã© a chave fundamental para todo o sucesso. NÃ£o importa o quÃ£o grande seja a sua ideia ou o quÃ£o bem elaborado seja o seu plano, sem aÃ§Ã£o, nada acontece. Comece pequeno, mas comece. Cada passo, por menor que seja, te aproxima do seu objetivo.",
+    title: "A Importância da Ação",
+    content: "Ação é a chave fundamental para todo o sucesso. Não importa o quão grande seja a sua ideia ou o quão bem elaborado seja o seu plano, sem ação, nada acontece. Comece pequeno, mas comece. Cada passo, por menor que seja, te aproxima do seu objetivo.",
     verse: "Tiago 2:17",
     author: "Pastor Jadney"
   },
   {
     title: "O Valor do Autoconhecimento",
-    content: "Conhecer a si mesmo Ã© o comeÃ§o de toda a sabedoria. Entender suas forÃ§as, fraquezas, paixÃµes e medos Ã© crucial para viver uma vida autÃªntica e com propÃ³sito. Dedique tempo para a reflexÃ£o e a autoanÃ¡lise; isso pavimentarÃ¡ o caminho para o seu crescimento pessoal e espiritual.",
-    verse: "ProvÃ©rbios 4:7",
+    content: "Conhecer a si mesmo é o começo de toda a sabedoria. Entender suas forças, fraquezas, paixões e medos é crucial para viver uma vida autêntica e com propósito. Dedique tempo para a reflexão e a autoanálise; isso pavimentará o caminho para o seu crescimento pessoal e espiritual.",
+    verse: "Provérbios 4:7",
     author: "Pastora Fran"
   },
   {
-    title: "Construindo HÃ¡bitos Positivos",
-    content: "NÃ³s somos o que fazemos repetidamente. ExcelÃªncia, entÃ£o, nÃ£o Ã© um ato, mas um hÃ¡bito. Pequenas mudanÃ§as consistentes em seus hÃ¡bitos diÃ¡rios podem levar a transformaÃ§Ãµes significativas em sua vida. Comece com um hÃ¡bito que vocÃª deseja desenvolver e pratique-o diariamente atÃ© que se torne parte de quem vocÃª Ã©.",
+    title: "Construindo Hábitos Positivos",
+    content: "Nós somos o que fazemos repetidamente. Excelência, então, não é um ato, mas um hábito. Pequenas mudanças consistentes em seus hábitos diários podem levar a transformações significativas em sua vida. Comece com um hábito que você deseja desenvolver e pratique-o diariamente até que se torne parte de quem você é.",
     verse: "Filipenses 4:8",
     author: "Pastora Kele"
   },
   {
-    title: "A ForÃ§a da ComunhÃ£o",
-    content: "A comunhÃ£o cristÃ£ Ã© um dos maiores presentes que Deus nos deu. Ã‰ atravÃ©s dela que crescemos, aprendemos e somos fortalecidos na fÃ©. Quando nos reunimos como irmÃ£os e irmÃ£s em Cristo, experimentamos o amor de Deus de forma tangÃ­vel e somos transformados pelo poder do EspÃ­rito Santo.",
+    title: "A Força da Comunhão",
+    content: "A comunhão cristã é um dos maiores presentes que Deus nos deu. É através dela que crescemos, aprendemos e somos fortalecidos na fé. Quando nos reunimos como irmãos e irmãs em Cristo, experimentamos o amor de Deus de forma tangível e somos transformados pelo poder do Espírito Santo.",
     verse: "Hebreus 10:24-25",
     author: "Pastor Leomar"
   },
   {
-    title: "Servindo com ExcelÃªncia",
-    content: "Servir a Deus nÃ£o Ã© apenas um dever, Ã© um privilÃ©gio. Quando servimos com excelÃªncia, refletimos o carÃ¡ter de Cristo e glorificamos o nome do Senhor. Cada ato de serviÃ§o, por menor que seja, tem valor eterno no reino de Deus.",
+    title: "Servindo com Excelência",
+    content: "Servir a Deus não é apenas um dever, é um privilégio. Quando servimos com excelência, refletimos o caráter de Cristo e glorificamos o nome do Senhor. Cada ato de serviço, por menor que seja, tem valor eterno no reino de Deus.",
     verse: "Colossenses 3:23-24",
     author: "Pastor Elcio"
   },
   {
-    title: "A EsperanÃ§a que Transforma",
-    content: "A esperanÃ§a cristÃ£ nÃ£o Ã© uma ilusÃ£o, mas uma certeza baseada nas promessas de Deus. Ela nos sustenta nos momentos difÃ­ceis e nos impulsiona a viver com propÃ³sito. Quando temos esperanÃ§a, podemos enfrentar qualquer desafio sabendo que Deus estÃ¡ no controle.",
+    title: "A Esperança que Transforma",
+    content: "A esperança cristã não é uma ilusão, mas uma certeza baseada nas promessas de Deus. Ela nos sustenta nos momentos difíceis e nos impulsiona a viver com propósito. Quando temos esperança, podemos enfrentar qualquer desafio sabendo que Deus está no controle.",
     verse: "Romanos 15:13",
     author: "Pastora Eneize"
   },
   {
     title: "A Sabedoria que Vem do Alto",
-    content: "A sabedoria verdadeira nÃ£o vem do conhecimento humano, mas do temor ao Senhor. Ã‰ uma sabedoria que nos guia em decisÃµes importantes, nos ajuda a discernir entre o certo e o errado, e nos conduz no caminho da vida. Busque esta sabedoria com todo o seu coraÃ§Ã£o.",
-    verse: "ProvÃ©rbios 9:10",
+    content: "A sabedoria verdadeira não vem do conhecimento humano, mas do temor ao Senhor. É uma sabedoria que nos guia em decisões importantes, nos ajuda a discernir entre o certo e o errado, e nos conduz no caminho da vida. Busque esta sabedoria com todo o seu coração.",
+    verse: "Provérbios 9:10",
     author: "Pastor Thiago"
   },
   {
-    title: "O Amor que NÃ£o Falha",
-    content: "O amor de Deus Ã© perfeito e nunca falha. Mesmo quando enfrentamos dificuldades, podemos confiar que Ele nos ama incondicionalmente. Este amor nos dÃ¡ forÃ§a para amar outros, mesmo quando Ã© difÃ­cil, e nos capacita a viver uma vida de propÃ³sito e significado.",
-    verse: "1 CorÃ­ntios 13:8",
+    title: "O Amor que Não Falha",
+    content: "O amor de Deus é perfeito e nunca falha. Mesmo quando enfrentamos dificuldades, podemos confiar que Ele nos ama incondicionalmente. Este amor nos dá força para amar outros, mesmo quando é difícil, e nos capacita a viver uma vida de propósito e significado.",
+    verse: "1 Coríntios 13:8",
     author: "Pastora Rany"
   },
   {
-    title: "ConfianÃ§a InabalÃ¡vel",
-    content: "A confianÃ§a em Deus Ã© a base de uma vida estÃ¡vel e pacÃ­fica. Quando nossa mente estÃ¡ firmemente focada em Deus, Ele nos conserva em paz, independentemente das circunstÃ¢ncias externas. Esta confianÃ§a nÃ£o Ã© passiva, mas ativa - Ã© uma escolha diÃ¡ria de depositar nossa fÃ© no Senhor.",
-    verse: "IsaÃ­as 26:3",
+    title: "Confiança Inabalável",
+    content: "A confiança em Deus é a base de uma vida estável e pacífica. Quando nossa mente está firmemente focada em Deus, Ele nos conserva em paz, independentemente das circunstâncias externas. Esta confiança não é passiva, mas ativa - é uma escolha diária de depositar nossa fé no Senhor.",
+    verse: "Isaías 26:3",
     author: "Pastor Jadney"
   },
   {
-    title: "EsperanÃ§a Renovada",
-    content: "Mesmo nos momentos mais sombrios da vida, as misericÃ³rdias de Deus se renovam a cada manhÃ£. Sua fidelidade Ã© grande e constante. Esta verdade nos dÃ¡ esperanÃ§a renovada para cada novo dia, sabendo que Deus estÃ¡ sempre presente e ativo em nossa vida.",
-    verse: "LamentaÃ§Ãµes 3:22-23",
-    author: "ApÃ³stola Elaine"
+    title: "Esperança Renovada",
+    content: "Mesmo nos momentos mais sombrios da vida, as misericórdias de Deus se renovam a cada manhã. Sua fidelidade é grande e constante. Esta verdade nos dá esperança renovada para cada novo dia, sabendo que Deus está sempre presente e ativo em nossa vida.",
+    verse: "Lamentações 3:22-23",
+    author: "Apóstola Elaine"
   },
   {
     title: "Desperte o Gigante Interior",
-    content: "Dentro de cada um de nÃ³s existe um potencial ilimitado que sÃ³ pode ser despertado atravÃ©s da forÃ§a que vem de Cristo. NÃ£o somos limitados por nossas prÃ³prias capacidades, mas sim fortalecidos pelo poder de Deus. Quando reconhecemos nossa dependÃªncia dEle, descobrimos que podemos fazer muito mais do que imaginÃ¡vamos.",
+    content: "Dentro de cada um de nós existe um potencial ilimitado que só pode ser despertado através da força que vem de Cristo. Não somos limitados por nossas próprias capacidades, mas sim fortalecidos pelo poder de Deus. Quando reconhecemos nossa dependência dEle, descobrimos que podemos fazer muito mais do que imaginávamos.",
     verse: "Filipenses 4:13",
-    author: "Coach CristÃ£o"
+    author: "Coach Cristão"
   },
   {
-    title: "Consolo para o CoraÃ§Ã£o Ferido",
-    content: "Deus nÃ£o estÃ¡ distante quando nosso coraÃ§Ã£o estÃ¡ ferido. Ele se aproxima especialmente dos quebrantados e contritos. Sua presenÃ§a Ã© um bÃ¡lsamo para nossa dor, e Sua salvaÃ§Ã£o Ã© nossa esperanÃ§a. Em meio ao sofrimento, podemos encontrar consolo na certeza de que Ele estÃ¡ prÃ³ximo.",
+    title: "Consolo para o Coração Ferido",
+    content: "Deus não está distante quando nosso coração está ferido. Ele se aproxima especialmente dos quebrantados e contritos. Sua presença é um bálsamo para nossa dor, e Sua salvação é nossa esperança. Em meio ao sofrimento, podemos encontrar consolo na certeza de que Ele está próximo.",
     verse: "Salmo 34:18",
-    author: "MinistÃ©rio de ConsolaÃ§Ã£o"
+    author: "Ministério de Consolação"
   },
 ];
 
@@ -272,9 +272,9 @@ const HomePage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Comunidade CristÃ£ Resgate - Um lugar de fÃ©, comunidade e transparÃªncia"
-        description="Comunidade CristÃ£ Resgate em BrasÃ­lia-DF. Cultos, estudos bÃ­blicos, ministÃ©rios, cÃ©lulas e muito mais. Venha fazer parte da nossa famÃ­lia!"
-        keywords="igreja brasÃ­lia, comunidade cristÃ£ resgate, culto, estudos bÃ­blicos, ministÃ©rios, cÃ©lula, fÃ©, esperanÃ§a, brasÃ­lia df"
+        title="Comunidade Cristã Resgate - Um lugar de fé, comunidade e transparência"
+        description="Comunidade Cristã Resgate em Brasília-DF. Cultos, estudos bíblicos, ministérios, células e muito mais. Venha fazer parte da nossa família!"
+        keywords="igreja brasília, comunidade cristã resgate, culto, estudos bíblicos, ministérios, célula, fé, esperança, brasília df"
         url="/"
         type="website"
       />
@@ -288,22 +288,16 @@ const HomePage: React.FC = () => {
           <div className="mb-4 sm:mb-6 fade-in-up">
             <SafeImage 
               src="/img/ICONE-RESGATE.png" 
-              alt="Comunidade CristÃ£ Resgate" 
+              alt="Comunidade Cristã Resgate" 
               className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-3 sm:mb-4 opacity-90"
             />
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 px-2 fade-in-up stagger-1 leading-tight">
-            Bem-vindo Ã  Comunidade CristÃ£ Resgate
+            Bem-vindo à Comunidade Cristã Resgate
           </h1>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 px-4 fade-in-up stagger-2">
             Um lugar para pertencer, acreditar e se tornar.
           </p>
-          <Link 
-            to="/sobre" 
-            className="inline-block bg-white text-blue-600 hover:bg-gray-100 text-base sm:text-lg font-semibold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-3 min-h-[48px] flex items-center justify-center"
-          >
-            Saiba Mais
-          </Link>
         </div>
       </div>
 
@@ -311,7 +305,7 @@ const HomePage: React.FC = () => {
       <div className="py-8 sm:py-12 md:py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold font-heading text-center mb-6 sm:mb-8 dark:text-white fade-in-up px-2">
-            Acesso RÃ¡pido
+            Acesso Rápido
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {quickActions.map((action, index) => (
@@ -496,7 +490,7 @@ const HomePage: React.FC = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Telefone</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">(11) 1234-5678</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Segunda a Sexta: 9h Ã s 18h</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Segunda a Sexta: 9h às 18h</p>
             </div>
             
             <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 text-center">
@@ -505,15 +499,15 @@ const HomePage: React.FC = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">cresgate012@gmail.com</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Respondemos em atÃ© 24h</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Respondemos em até 24h</p>
             </div>
             
             <div className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 text-center">
               <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
                 <MapPinIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">EndereÃ§o</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Quadra 38, Ãrea Especial, Lote E<br />Vila SÃ£o JosÃ©, BrasÃ­lia - DF<br />72010-010</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Endereço</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Quadra 38, Área Especial, Lote E<br />Vila São José, Brasília - DF<br />72010-010</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Estacionamento gratuito</p>
             </div>
           </div>
@@ -529,11 +523,11 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* HorÃ¡rios de Culto Section */}
+      {/* Horários de Culto Section */}
       <div className="py-16 bg-white dark:bg-gray-800 bg-waves">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">HorÃ¡rios de Culto</h2>
+            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Horários de Culto</h2>
             <p className="text-gray-600 dark:text-gray-300">Venha adorar conosco</p>
           </div>
           
@@ -544,7 +538,7 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <CalendarIcon className="h-6 w-6 text-blue-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto de CelebraÃ§Ã£o</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Culto de Celebração</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">Culto principal da semana</p>
                     </div>
                   </div>
@@ -572,8 +566,8 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center">
                     <UsersIcon className="h-6 w-6 text-purple-600 mr-3" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">CÃ©lula Resgate</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">ComunhÃ£o e crescimento</p>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">Célula Resgate</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">Comunhão e crescimento</p>
                     </div>
                   </div>
                   <div className="text-right">
@@ -591,10 +585,10 @@ const HomePage: React.FC = () => {
       <div className="py-8 sm:py-12 md:py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white bg-flow bg-particles">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 fade-in-up leading-tight px-2">
-            Pronto para ComeÃ§ar sua Jornada?
+            Pronto para Começar sua Jornada?
           </h2>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90 fade-in-up stagger-1 px-2">
-            Junte-se Ã  nossa comunidade e descubra o propÃ³sito que Deus tem para sua vida
+            Junte-se à nossa comunidade e descubra o propósito que Deus tem para sua vida
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link

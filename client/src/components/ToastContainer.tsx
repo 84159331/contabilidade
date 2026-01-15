@@ -2,6 +2,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
+const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
+
 interface ToastProps {
   id: string;
   type: 'success' | 'error' | 'warning' | 'info';
@@ -106,7 +108,7 @@ interface ToastContainerProps {
 const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onClose }) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
-      <AnimatePresence initial={false}>
+      <SafeAnimatePresence initial={false}>
         {toasts.map((toast) => (
           <Toast
             key={toast.id}
@@ -114,7 +116,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onClose }) => {
             onClose={onClose}
           />
         ))}
-      </AnimatePresence>
+      </SafeAnimatePresence>
     </div>
   );
 };

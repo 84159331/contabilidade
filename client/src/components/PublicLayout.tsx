@@ -22,8 +22,8 @@ const PublicLayout: React.FC = () => {
     { to: '/conecte', label: 'Conecte-se' },
     { to: '/assista', label: 'Assista' },
     { to: '/contribua', label: 'Contribua' },
-    { to: '/localizacoes', label: 'LocalizaÃ§Ã£o' },
-    { to: '/esbocos', label: 'EsboÃ§os' },
+    { to: '/localizacoes', label: 'Localização' },
+    { to: '/esbocos', label: 'Esboços' },
     { to: '/eventos', label: 'Eventos' },
   ];
 
@@ -36,12 +36,12 @@ const PublicLayout: React.FC = () => {
             <Link 
               to="/" 
               className="flex items-center hover:opacity-80 transition-opacity flex-shrink-0"
-              title="Voltar Ã  pÃ¡gina inicial"
+              title="Voltar à página inicial"
               onClick={closeMobileMenu}
             >
               <SafeImage 
                 src="/img/ICONE-RESGATE.png" 
-                alt="Comunidade CristÃ£ Resgate" 
+                alt="Comunidade Cristã Resgate" 
                 className="h-8 w-8 sm:h-10 sm:w-10"
                 priority={true}
                 loading="eager"
@@ -150,9 +150,9 @@ const PublicLayout: React.FC = () => {
                   alt="Resgate" 
                   className="h-8 w-8 mr-3"
                 />
-                <h3 className="text-xl font-bold font-heading text-white">Comunidade CristÃ£ Resgate</h3>
+                <h3 className="text-xl font-bold font-heading text-white">Comunidade Cristã Resgate</h3>
               </div>
-              <p className="text-gray-400">Um lugar de fÃ©, comunidade e transparÃªncia.</p>
+              <p className="text-gray-400">Um lugar de fé, comunidade e transparência.</p>
             </div>
             <div>
               <h3 className="text-lg font-bold font-heading mb-4 text-white">Navegue</h3>
@@ -161,15 +161,15 @@ const PublicLayout: React.FC = () => {
                 <li><Link to="/conecte" className="hover:text-primary-400">Conecte-se</Link></li>
                 <li><a href="https://youtube.com/@comunidadecresgate" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400">Assista</a></li>
                 <li><Link to="/contribua" className="hover:text-primary-400">Contribua</Link></li>
-                <li><Link to="/localizacoes" className="hover:text-primary-400">LocalizaÃ§Ã£o</Link></li>
-                <li><Link to="/esbocos" className="hover:text-primary-400">EsboÃ§os de PregaÃ§Ã£o</Link></li>
+                <li><Link to="/localizacoes" className="hover:text-primary-400">Localização</Link></li>
+                <li><Link to="/esbocos" className="hover:text-primary-400">Esboços de Pregação</Link></li>
                 <li><Link to="/eventos" className="hover:text-primary-400">Eventos</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="text-lg font-bold font-heading mb-4 text-white">Contato</h3>
-              <p>Quadra 38, Ãrea Especial, Lote E</p>
-              <p>Vila SÃ£o JosÃ©, BrasÃ­lia - DF, 72010-010</p>
+              <p>Quadra 38, Área Especial, Lote E</p>
+              <p>Vila São José, Brasília - DF, 72010-010</p>
               <p className="mt-4">cresgate012@gmail.com</p>
             </div>
             <div>
@@ -188,7 +188,7 @@ const PublicLayout: React.FC = () => {
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Comunidade CristÃ£ Resgate. Todos os direitos reservados.</p>
+            <p>&copy; {new Date().getFullYear()} Comunidade Cristã Resgate. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

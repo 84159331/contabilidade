@@ -39,8 +39,6 @@ messaging.onBackgroundMessage((payload) => {
 // Assets para cachear imediatamente
 const STATIC_ASSETS = [
   '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
   '/manifest.json',
 ];
 
@@ -115,6 +113,12 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Navegação SPA (React Router): evitar servir HTML antigo com chunks novos
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirstForNavigation(request));
+    return;
+  }
+
   // Verificar se é uma requisição de dados (Firestore)
   if (isDataRequest(request)) {
     // Dados: Network First com cache
@@ -144,6 +148,30 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(staleWhileRevalidate(request));
   }
 });
+
+// Navegação (HTML): Network First com fallback para a raiz cacheada
+async function networkFirstForNavigation(request) {
+  const cache = await caches.open(CACHE_NAME);
+
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse && networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await cache.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    // Fallback para o index (SPA)
+    const cachedIndex = await cache.match('/');
+    if (cachedIndex) {
+      return cachedIndex;
+    }
+    throw error;
+  }
+}
 
 // Estratégia: Cache First
 async function cacheFirst(request) {
