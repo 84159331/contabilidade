@@ -238,11 +238,50 @@ const MAX_LOG_FREQUENCY = 5000; // Log no máximo a cada 5 segundos por componen
 // Handler global de erros para capturar erros não tratados
 if (typeof window !== 'undefined') {
   window.addEventListener('error', (event) => {
-    // Tratamento de erros globais (removidos logs de debugging)
+    try {
+      const message = event?.error instanceof Error ? event.error.message : (event?.message || 'Erro inesperado');
+      const details = event?.error instanceof Error ? event.error.stack : undefined;
+      const existing = document.getElementById('global-runtime-error');
+      if (existing) return;
+
+      const el = document.createElement('div');
+      el.id = 'global-runtime-error';
+      el.style.position = 'fixed';
+      el.style.inset = '0';
+      el.style.zIndex = '2147483647';
+      el.style.background = '#0b0b0b';
+      el.style.color = '#ffffff';
+      el.style.padding = '16px';
+      el.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+      el.style.overflow = 'auto';
+      el.innerText = `Erro ao abrir o app.\n\n${message}${details ? `\n\n${details}` : ''}`;
+      document.body.appendChild(el);
+    } catch {
+    }
   });
   
   window.addEventListener('unhandledrejection', (event) => {
-    // Tratamento de rejeições não tratadas (removidos logs de debugging)
+    try {
+      const reason = (event as PromiseRejectionEvent)?.reason;
+      const message = reason instanceof Error ? reason.message : String(reason || 'Promise rejeitada');
+      const details = reason instanceof Error ? reason.stack : undefined;
+      const existing = document.getElementById('global-runtime-error');
+      if (existing) return;
+
+      const el = document.createElement('div');
+      el.id = 'global-runtime-error';
+      el.style.position = 'fixed';
+      el.style.inset = '0';
+      el.style.zIndex = '2147483647';
+      el.style.background = '#0b0b0b';
+      el.style.color = '#ffffff';
+      el.style.padding = '16px';
+      el.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+      el.style.overflow = 'auto';
+      el.innerText = `Erro ao abrir o app.\n\n${message}${details ? `\n\n${details}` : ''}`;
+      document.body.appendChild(el);
+    } catch {
+    }
   });
 }
 

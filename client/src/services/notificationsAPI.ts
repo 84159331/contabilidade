@@ -19,6 +19,12 @@ import { toast } from 'react-toastify';
 import type { Notification, NotificationType, NotificationSettings } from '../types/Notification';
 import { NOTIFICATION_TEMPLATES } from '../types/Notification';
 
+const isMissingCompositeIndexError = (error: any) => {
+  const code = error?.code;
+  const message = String(error?.message || '');
+  return code === 'failed-precondition' || message.toLowerCase().includes('requires an index');
+};
+
 // Helper para converter Timestamp
 const convertTimestamp = (timestamp: any): Date => {
   if (!timestamp) return new Date();
@@ -113,6 +119,13 @@ export const notificationsAPI = {
         limit(50)
       );
 
+      // Índice composto necessário (Firestore):
+      // collection: notifications
+      // fields:
+      // - userId ASC
+      // - createdAt DESC
+      // Observação: igualdade + orderBy em campo diferente costuma exigir índice composto.
+
       if (unreadOnly) {
         q = query(
           notificationsRef,
@@ -121,6 +134,13 @@ export const notificationsAPI = {
           orderBy('createdAt', 'desc'),
           limit(50)
         );
+
+        // Índice composto necessário (Firestore):
+        // collection: notifications
+        // fields:
+        // - userId ASC
+        // - read ASC
+        // - createdAt DESC
       }
 
       const querySnapshot = await getDocs(q);
@@ -139,8 +159,16 @@ export const notificationsAPI = {
           scheduledFor: data.scheduledFor ? convertTimestamp(data.scheduledFor) : undefined,
         };
       });
-    } catch (error) {
-      console.error('Erro ao buscar notificaÃ§Ãµes:', error);
+    } catch (error: any) {
+      if (isMissingCompositeIndexError(error)) {
+        console.warn('Query de notificações precisa de índice composto. A UI continuará sem notificações até criar o índice.', {
+          code: error?.code,
+          message: error?.message,
+        });
+        return [];
+      }
+
+      console.error('Erro ao buscar notificações:', error);
       return [];
     }
   },
@@ -259,23 +287,44 @@ export const notificationsAPI = {
       limit(50)
     );
 
-    return onSnapshot(q, (snapshot) => {
-      const notifications = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          userId: data.userId,
-          type: data.type,
-          title: data.title,
-          message: data.message,
-          data: data.data || {},
-          read: data.read || false,
-          priority: data.priority || 'normal',
-          createdAt: convertTimestamp(data.createdAt),
-          scheduledFor: data.scheduledFor ? convertTimestamp(data.scheduledFor) : undefined,
-        };
-      });
-      callback(notifications);
-    });
+    // Índice composto necessário (Firestore):
+    // collection: notifications
+    // fields:
+    // - userId ASC
+    // - createdAt DESC
+
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const notifications = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            userId: data.userId,
+            type: data.type,
+            title: data.title,
+            message: data.message,
+            data: data.data || {},
+            read: data.read || false,
+            priority: data.priority || 'normal',
+            createdAt: convertTimestamp(data.createdAt),
+            scheduledFor: data.scheduledFor ? convertTimestamp(data.scheduledFor) : undefined,
+          };
+        });
+        callback(notifications);
+      },
+      (error) => {
+        if (isMissingCompositeIndexError(error)) {
+          console.warn('Listener de notificações precisa de índice composto. A UI continuará sem tempo real até criar o índice.', {
+            code: (error as any)?.code,
+            message: (error as any)?.message,
+          });
+          callback([]);
+          return;
+        }
+
+        console.error('Erro no listener de notificações:', error);
+      }
+    );
   },
 };

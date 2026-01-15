@@ -21,9 +21,11 @@ const SplashOverlay: React.FC<SplashOverlayProps> = ({
   const [fadeOut, setFadeOut] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
   const [resolvedSrc, setResolvedSrc] = useState<string>(mediaSrc || fallbackSrc);
+  const [fallbackFailed, setFallbackFailed] = useState(false);
 
   useEffect(() => {
     setResolvedSrc(mediaSrc || fallbackSrc);
+    setFallbackFailed(false);
   }, [mediaSrc, fallbackSrc]);
 
   useEffect(() => {
@@ -64,7 +66,16 @@ const SplashOverlay: React.FC<SplashOverlayProps> = ({
           transition: animation === 'zoom' ? 'transform 650ms cubic-bezier(0.2, 0.9, 0.2, 1)' : undefined,
         }}
         onError={() => {
-          if (resolvedSrc !== fallbackSrc) setResolvedSrc(fallbackSrc);
+          if (resolvedSrc !== fallbackSrc) {
+            setResolvedSrc(fallbackSrc);
+            return;
+          }
+
+          if (!fallbackFailed) {
+            setFallbackFailed(true);
+            setFadeOut(true);
+            window.setTimeout(() => setVisible(false), 300);
+          }
         }}
       />
     </div>

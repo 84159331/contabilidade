@@ -5,14 +5,20 @@ import { notificationsAPI } from '../services/notificationsAPI';
 import type { Notification } from '../types/Notification';
 
 export const useNotifications = (unreadOnly: boolean = false) => {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
+    if (!authReady) {
+      setLoading(true);
+      return;
+    }
+
     if (!user) {
       setNotifications([]);
+      setUnreadCount(0);
       setLoading(false);
       return;
     }
@@ -40,7 +46,7 @@ export const useNotifications = (unreadOnly: boolean = false) => {
     });
 
     return () => unsubscribe();
-  }, [user, unreadOnly]);
+  }, [authReady, user, unreadOnly]);
 
   const markAsRead = async (notificationId: string) => {
     await notificationsAPI.markAsRead(notificationId);

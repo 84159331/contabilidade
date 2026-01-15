@@ -72,19 +72,25 @@ if (typeof window !== 'undefined') {
   // Verificar se o Analytics Ã© suportado e inicializar apenas se estiver disponÃ­vel
   isSupported()
     .then((supported) => {
-      if (supported) {
+      if (supported && firebaseConfig.measurementId) {
         try {
           analytics = getAnalytics(app);
-          console.log('âœ… Firebase Analytics inicializado');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ Firebase Analytics inicializado');
+          }
         } catch (error) {
-          console.warn('âš ï¸ Firebase Analytics nÃ£o pÃ´de ser inicializado:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('⚠️ Firebase Analytics não pôde ser inicializado:', error);
+          }
         }
-      } else {
-        console.warn('âš ï¸ Firebase Analytics nÃ£o Ã© suportado neste ambiente');
+      } else if (process.env.NODE_ENV === 'development') {
+        console.warn('⚠️ Firebase Analytics não foi inicializado (não suportado ou measurementId ausente)');
       }
     })
     .catch((error) => {
-      console.warn('âš ï¸ Erro ao verificar suporte do Firebase Analytics:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('⚠️ Erro ao verificar suporte do Firebase Analytics:', error);
+      }
     });
 }
 

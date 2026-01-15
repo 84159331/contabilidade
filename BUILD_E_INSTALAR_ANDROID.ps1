@@ -75,7 +75,6 @@ npx cap sync android
 Write-Host "" 
 Write-Host "[5/6] Gerando APK Debug..." -ForegroundColor Yellow
 Push-Location (Join-Path $clientDir 'android')
-.
 $gradlew = Join-Path (Get-Location) 'gradlew.bat'
 Ensure-File -Path $gradlew -Label 'gradlew.bat'
 & $gradlew clean assembleDebug
@@ -84,24 +83,13 @@ Pop-Location
 $debugApk = Join-Path $clientDir 'android\app\build\outputs\apk\debug\app-debug.apk'
 Ensure-File -Path $debugApk -Label 'APK Debug'
 
-# 6) Instalar no dispositivo via ADB
+# 6) Mostrar caminho do APK gerado (sem ADB)
 Write-Host "" 
-Write-Host "[6/6] Instalando no celular via ADB..." -ForegroundColor Yellow
-Ensure-Command -Name 'adb' -Hint 'ADB nao encontrado. Instale Android Platform Tools ou Android Studio e garanta adb no PATH.'
-
-$devices = & adb devices | Out-String
-if ($devices -notmatch "\sdevice\s") {
-  Write-Host "Nenhum dispositivo ADB detectado." -ForegroundColor Red
-  Write-Host "Ative 'Depuracao USB' no celular e autorize o PC. Depois rode novamente." -ForegroundColor Yellow
-  Pop-Location
-  exit 1
-}
-
-& adb install -r $debugApk
+Write-Host "[6/6] APK gerado (sem instalar via ADB)" -ForegroundColor Yellow
 
 Write-Host "" 
 Write-Host "==============================================" -ForegroundColor Green
-Write-Host "  OK - App instalado com a ultima versao" -ForegroundColor Green
+Write-Host "  OK - APK gerado com a ultima versao" -ForegroundColor Green
 Write-Host "==============================================" -ForegroundColor Green
 Write-Host "APK: $debugApk" -ForegroundColor Cyan
 Write-Host "" 

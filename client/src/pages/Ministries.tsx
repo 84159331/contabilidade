@@ -55,9 +55,9 @@ const Ministries: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // ValidaÃ§Ã£o bÃ¡sica
+    // Validação básica
     if (!formData.nome || formData.nome.trim() === '') {
-      toast.error('Nome do ministÃ©rio Ã© obrigatÃ³rio');
+      toast.error('Nome do ministério é obrigatório');
       return;
     }
 
@@ -178,7 +178,7 @@ const Ministries: React.FC = () => {
 
   const getMemberName = (memberId: string) => {
     const member = members.find(m => m.id === memberId);
-    return member?.name || 'Nome nÃ£o encontrado';
+    return member?.name || 'Nome não encontrado';
   };
 
   if (loading) {
@@ -186,7 +186,7 @@ const Ministries: React.FC = () => {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando ministÃ©rios...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Carregando ministérios...</p>
         </div>
       </div>
     );
@@ -197,10 +197,10 @@ const Ministries: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-            MinistÃ©rios
+            Ministérios
           </h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Gerencie os ministÃ©rios da igreja e configure escalas
+            Gerencie os ministérios da igreja e configure escalas
           </p>
         </div>
         <Button
@@ -212,7 +212,7 @@ const Ministries: React.FC = () => {
           className="flex items-center gap-2"
         >
           <PlusIcon className="h-5 w-5" />
-          Novo MinistÃ©rio
+          Novo Ministério
         </Button>
       </div>
 
@@ -220,10 +220,10 @@ const Ministries: React.FC = () => {
         <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <MusicalNoteIcon className="mx-auto h-16 w-16 text-gray-400" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-            Nenhum ministÃ©rio encontrado
+            Nenhum ministério encontrado
           </h3>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Comece criando um novo ministÃ©rio.
+            Comece criando um novo ministério.
           </p>
         </div>
       ) : (
@@ -271,7 +271,7 @@ const Ministries: React.FC = () => {
               <div className="mt-4 space-y-3">
                 <div>
                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    FunÃ§Ãµes
+                    Funções
                   </p>
                   <div className="mt-1 flex flex-wrap gap-2">
                     {ministerio.funcoes.map((funcao) => (
@@ -299,7 +299,7 @@ const Ministries: React.FC = () => {
 
                 <div>
                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    FrequÃªncia
+                    Frequência
                   </p>
                   <div className="mt-1 flex items-center gap-2">
                     <CalendarIcon className="h-4 w-4 text-gray-400" />
@@ -307,7 +307,7 @@ const Ministries: React.FC = () => {
                       {ministerio.frequencia}
                       {ministerio.dia_semana !== undefined && (
                         <span className="ml-1">
-                          - {['Domingo', 'Segunda', 'TerÃ§a', 'Quarta', 'Quinta', 'Sexta', 'SÃ¡bado'][ministerio.dia_semana]}
+                          - {['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][ministerio.dia_semana]}
                         </span>
                       )}
                     </span>

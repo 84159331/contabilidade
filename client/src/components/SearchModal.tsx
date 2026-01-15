@@ -25,16 +25,16 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Mock data - em produÃ§Ã£o, isso viria de uma API ou busca no conteÃºdo
+  // Mock data - em produção, isso viria de uma API ou busca no conteúdo
   const searchableContent: SearchResult[] = [
-    { id: '1', title: 'Sobre NÃ³s', description: 'ConheÃ§a nossa histÃ³ria, missÃ£o e valores', type: 'page', url: '/sobre', icon: DocumentTextIcon },
-    { id: '2', title: 'Conecte-se', description: 'Encontre uma cÃ©lula e faÃ§a parte da nossa famÃ­lia', type: 'page', url: '/conecte', icon: MapPinIcon },
-    { id: '3', title: 'Assista', description: 'VÃ­deos de cultos e mensagens', type: 'video', url: '/assista', icon: VideoCameraIcon },
-    { id: '4', title: 'Contribua', description: 'Apoie nossa missÃ£o e ministÃ©rios', type: 'page', url: '/contribua', icon: DocumentTextIcon },
-    { id: '5', title: 'LocalizaÃ§Ã£o', description: 'Encontre nossa igreja', type: 'page', url: '/localizacoes', icon: MapPinIcon },
-    { id: '6', title: 'EsboÃ§os', description: 'EsboÃ§os de pregaÃ§Ã£o e estudos', type: 'esboco', url: '/esbocos', icon: BookOpenIcon },
+    { id: '1', title: 'Sobre Nós', description: 'Conheça nossa história, missão e valores', type: 'page', url: '/sobre', icon: DocumentTextIcon },
+    { id: '2', title: 'Conecte-se', description: 'Encontre uma célula e faça parte da nossa família', type: 'page', url: '/conecte', icon: MapPinIcon },
+    { id: '3', title: 'Assista', description: 'Vídeos de cultos e mensagens', type: 'video', url: '/assista', icon: VideoCameraIcon },
+    { id: '4', title: 'Contribua', description: 'Apoie nossa missão e ministérios', type: 'page', url: '/contribua', icon: DocumentTextIcon },
+    { id: '5', title: 'Localização', description: 'Encontre nossa igreja', type: 'page', url: '/localizacoes', icon: MapPinIcon },
+    { id: '6', title: 'Esboços', description: 'Esboços de pregação e estudos', type: 'esboco', url: '/esbocos', icon: BookOpenIcon },
     { id: '7', title: 'Biblioteca Digital', description: 'Livros e recursos espirituais', type: 'book', url: '/biblioteca', icon: BookOpenIcon },
-    { id: '8', title: 'Eventos', description: 'PrÃ³ximos eventos e atividades', type: 'event', url: '/eventos', icon: CalendarIcon },
+    { id: '8', title: 'Eventos', description: 'Próximos eventos e atividades', type: 'event', url: '/eventos', icon: CalendarIcon },
   ];
 
   useEffect(() => {

@@ -15,7 +15,8 @@ import {
   limit,
   startAfter,
   endBefore,
-  limitToLast
+  limitToLast,
+  Timestamp
 } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import storage from '../utils/storage';
@@ -82,7 +83,9 @@ export const transactionsAPI = {
       const transactionData = {
         ...data,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
       };
       
       console.log('ðŸ“ Dados da transaÃ§Ã£o preparados:', transactionData);
@@ -115,7 +118,8 @@ export const transactionsAPI = {
       const transactionRef = doc(db, 'transactions', id);
       await updateDoc(transactionRef, {
         ...data,
-        updated_at: new Date()
+        updated_at: new Date(),
+        updatedAt: Timestamp.now()
       });
       
       console.log('âœ… TransaÃ§Ã£o atualizada no Firestore');
@@ -396,7 +400,9 @@ export const membersAPI = {
         status: data.status || 'active',
         notes: data.notes || '',
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
       };
       
       console.log('ðŸ“ Dados do membro preparados:', memberData);
@@ -449,7 +455,8 @@ export const membersAPI = {
         member_since: data.member_since || '',
         status: data.status || 'active',
         notes: data.notes || '',
-        updated_at: new Date()
+        updated_at: new Date(),
+        updatedAt: Timestamp.now()
       };
       
       console.log('ðŸ“ Dados preparados para atualizaÃ§Ã£o:', updateData);
@@ -621,7 +628,9 @@ export const categoriesAPI = {
       const categoryData = {
         ...data,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
       };
       
       console.log('ðŸ“‹ Dados preparados para salvamento:', categoryData);
@@ -657,7 +666,8 @@ export const categoriesAPI = {
       const categoryRef = doc(db, 'categories', id);
       await updateDoc(categoryRef, {
         ...data,
-        updated_at: new Date()
+        updated_at: new Date(),
+        updatedAt: Timestamp.now()
       });
       
       console.log('âœ… Categoria atualizada no Firestore');
@@ -1283,7 +1293,9 @@ export const eventsAPI = {
       const eventToCreate = {
         ...eventData,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
       };
       
       console.log('ðŸ“ Dados preparados:', eventToCreate);
@@ -1314,7 +1326,8 @@ export const eventsAPI = {
       
       const updateData = {
         ...eventData,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        updatedAt: Timestamp.now()
       };
       
       await updateDoc(eventRef, updateData);

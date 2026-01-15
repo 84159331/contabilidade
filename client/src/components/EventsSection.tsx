@@ -177,13 +177,13 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         if (isAdmin && onDelete) {
           onDelete(id);
         } else {
-          // Para usuÃ¡rios normais, apenas remover da lista local
+          // Para usuários normais, apenas remover da lista local
           setEvents(prev => prev.filter(event => event.id !== id));
-          toast.success('Evento removido da visualizaÃ§Ã£o!');
+          toast.success('Evento removido da visualização!');
         }
-        console.log('âœ… Evento excluÃ­do:', id);
+        console.log('✅ Evento excluído:', id);
       } catch (error) {
-        console.error('âŒ Erro ao excluir evento:', error);
+        console.error('❌ Erro ao excluir evento:', error);
         toast.error('Erro ao excluir evento');
       }
     }
@@ -209,14 +209,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
-            PrÃ³ximos Eventos
+            Próximos Eventos
           </h2>
           <p className="text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
-            Participe dos nossos eventos e fortaleÃ§a sua fÃ© junto conosco
+            Participe dos nossos eventos e fortaleça sua fé junto conosco
           </p>
           {/* Debug info */}
           <div className="mt-2 text-xs text-gray-400">
-            {events.length} eventos carregados | {filteredEvents.length} prÃ³ximos
+            {events.length} eventos carregados | {filteredEvents.length} próximos
           </div>
         </div>
 
@@ -228,11 +228,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
               Nenhum evento encontrado
             </h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              NÃ£o hÃ¡ eventos prÃ³ximos no momento.
+              Não há eventos próximos no momento.
             </p>
             {isAdmin && (
               <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
-                Crie eventos na seÃ§Ã£o de administraÃ§Ã£o para vÃª-los aqui.
+                Crie eventos na seção de administração para vê-los aqui.
               </p>
             )}
           </div>
@@ -256,14 +256,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                   </div>
                 )}
 
-                {/* ConteÃºdo */}
+                {/* Conteúdo */}
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {event.title}
                   </h3>
                   {isUpcoming(event.date) && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                      PrÃ³ximo
+                      Próximo
                     </span>
                   )}
                 </div>
@@ -274,7 +274,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                   </p>
                 )}
 
-                {/* InformaÃ§Ãµes do Evento */}
+                {/* Informações do Evento */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <CalendarIcon className="h-4 w-4 mr-2" />

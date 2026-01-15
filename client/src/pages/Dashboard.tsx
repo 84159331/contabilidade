@@ -23,18 +23,18 @@ import PullToRefresh from '../components/PullToRefresh';
 
 const Dashboard: React.FC = () => {
   const { stats, memberStats, loading, error, refresh } = useDashboardData();
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, authReady, user } = useAuth();
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
   // ForÃ§a recarregamento quando a rota muda ou quando necessÃ¡rio
   useEffect(() => {
     // Se nÃ£o hÃ¡ dados mas o loading terminou, forÃ§ar refresh
-    if (!loading && !authLoading && !stats) {
+    if (authReady && user && !loading && !authLoading && !stats) {
       console.log('ðŸ”„ Dashboard sem dados, forÃ§ando refresh...');
       refresh();
     }
-  }, [loading, authLoading, stats, refresh]);
+  }, [authReady, user, loading, authLoading, stats, refresh]);
 
   // Marcar como renderizado
   useEffect(() => {

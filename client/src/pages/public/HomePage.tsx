@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';
 import EventsSection from '../../components/EventsSection';
+import SafeIcon from '../../components/SafeIcon';
 import { 
   HeartIcon, 
   BookOpenIcon, 
@@ -17,10 +18,10 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   ClockIcon,
-  StarIcon,
   ArrowRightIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 const dailyStudies = [
   {
@@ -141,7 +142,7 @@ const testimonials = [
 
 const upcomingEvents = [
   {
-    title: "Culto de CelebraÃ§Ã£o",
+    title: "Culto de Celebração",
     date: "15 de Fevereiro",
     time: "19:00",
     location: "Templo Principal",
@@ -150,20 +151,20 @@ const upcomingEvents = [
     type: "culto"
   },
   {
-    title: "Estudo BÃ­blico - Livro de EfÃ©sios",
+    title: "Estudo Bíblico - Livro de Efésios",
     date: "20 de Fevereiro",
     time: "20:00",
     location: "Sala de Estudos",
-    description: "Estudo profundo sobre a carta de Paulo aos EfÃ©sios",
+    description: "Estudo profundo sobre a carta de Paulo aos Efésios",
     attendees: 45,
     type: "estudo"
   },
   {
-    title: "ConferÃªncia de LideranÃ§a",
+    title: "Conferência de Liderança",
     date: "25 de Fevereiro",
     time: "09:00",
-    location: "AuditÃ³rio",
-    description: "Desenvolvendo lÃ­deres para o Reino de Deus",
+    location: "Auditório",
+    description: "Desenvolvendo líderes para o Reino de Deus",
     attendees: 89,
     type: "conferencia"
   }
@@ -171,46 +172,46 @@ const upcomingEvents = [
 
 const ministries = [
   {
-    name: "MinistÃ©rio de Louvor",
-    description: "Levantamos nossa voz em adoraÃ§Ã£o ao Senhor",
+    name: "Ministério de Louvor",
+    description: "Levantamos nossa voz em adoração ao Senhor",
     icon: HeartIcon,
     leader: "Pr. Jadney"
   },
   {
-    name: "MinistÃ©rio Infantil",
-    description: "Cuidamos e ensinamos as crianÃ§as no caminho do Senhor",
+    name: "Ministério Infantil",
+    description: "Cuidamos e ensinamos as crianças no caminho do Senhor",
     icon: UsersIcon,
     leader: "Pastora Eneiza"
   },
   {
-    name: "MinistÃ©rio de Jovens",
+    name: "Ministério de Jovens",
     description: "Conectamos jovens com Cristo e uns com os outros",
     icon: CalendarIcon,
     leader: "Prs. Jadney e Kele"
   },
   {
-    name: "MinistÃ©rio de AÃ§Ã£o Social",
-    description: "Servimos nossa comunidade com amor e compaixÃ£o",
+    name: "Ministério de Ação Social",
+    description: "Servimos nossa comunidade com amor e compaixão",
     icon: GiftIcon,
     leader: "Obr. Clebson e Hiully"
   },
   {
     name: "Escola Resgate",
-    description: "Crescimento espiritual atravÃ©s do estudo da Palavra",
+    description: "Crescimento espiritual através do estudo da Palavra",
     icon: BookOpenIcon,
-    leader: "ApÃ³stolo Isac e Elaine"
+    leader: "Apóstolo Isac e Elaine"
   },
   {
-    name: "MinistÃ©rio de Discipulado",
-    description: "Formando discÃ­pulos maduros na fÃ©",
+    name: "Ministério de Discipulado",
+    description: "Formando discípulos maduros na fé",
     icon: UserGroupIcon,
     leader: "Aps. Isac e Elaine"
   },
   {
-    name: "MinistÃ©rio de Casais",
-    description: "Fortalecendo relacionamentos e famÃ­lias",
+    name: "Ministério de Casais",
+    description: "Fortalecendo relacionamentos e famílias",
     icon: HeartIcon,
-    leader: "Prs. Leomar e OdÃ­lia"
+    leader: "Prs. Leomar e Odília"
   }
 ];
 
@@ -390,10 +391,10 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold font-heading mb-2 dark:text-white fade-in-up">
-              Nossos MinistÃ©rios
+              Nossos Ministérios
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
-              Encontre seu lugar de serviÃ§o na comunidade
+              Encontre seu lugar de serviço na comunidade
             </p>
           </div>
           
@@ -402,7 +403,7 @@ const HomePage: React.FC = () => {
               <div key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-5 sm:p-6 text-center hover:shadow-xl transition-all duration-300 fade-in-scale">
                 <div className="mb-3 sm:mb-4">
                   <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full w-14 h-14 sm:w-16 sm:h-16 mx-auto flex items-center justify-center">
-                    <ministry.icon className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400" />
+                    <SafeIcon icon={ministry.icon} className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
                 
@@ -416,7 +417,7 @@ const HomePage: React.FC = () => {
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center justify-center">
                     <StarIcon className="h-4 w-4 mr-1" />
-                    LÃ­der: {ministry.leader}
+                    Líder: {ministry.leader}
                   </div>
                 </div>
               </div>

@@ -13,6 +13,7 @@ import storage from '../utils/storage';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  authReady: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -27,6 +28,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     console.log('ðŸ”„ Firebase Auth useEffect executado');
@@ -35,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('ðŸ‘¤ Estado do usuÃ¡rio mudou:', user ? user.email : 'null');
       setUser(user);
       setLoading(false);
+      setAuthReady(true);
     });
 
     return () => unsubscribe();
@@ -97,6 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value = {
     user,
     loading,
+    authReady,
     login,
     register,
     logout

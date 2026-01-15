@@ -16,11 +16,16 @@ interface UseUserRoleReturn {
 }
 
 export const useUserRole = (): UseUserRoleReturn => {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!authReady) {
+      setLoading(true);
+      return;
+    }
+
     if (!user) {
       setProfile(null);
       setLoading(false);
@@ -29,6 +34,7 @@ export const useUserRole = (): UseUserRoleReturn => {
 
     const loadUserProfile = async () => {
       try {
+        setLoading(true);
         const profileRef = doc(db, 'user_profiles', user.uid);
         const profileSnap = await getDoc(profileRef);
 
@@ -80,7 +86,7 @@ export const useUserRole = (): UseUserRoleReturn => {
     };
 
     loadUserProfile();
-  }, [user]);
+  }, [authReady, user]);
 
   const updateRole = async (newRole: UserRole, ministerioId?: string) => {
     if (!user) return;

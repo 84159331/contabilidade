@@ -242,7 +242,7 @@ const Events: React.FC = () => {
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
-            PrÃ³ximos ({events.filter(e => {
+            Próximos ({events.filter(e => {
               const [year, month, day] = e.date.split('-').map(Number);
               const eventDate = new Date(year, month - 1, day);
               const today = new Date();

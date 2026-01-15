@@ -8,6 +8,7 @@ import {
   DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import SafeIcon from './SafeIcon';
 
 const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
 
@@ -25,7 +26,7 @@ const QuickActions: React.FC = () => {
   const actions: QuickAction[] = [
     {
       id: 'transaction',
-      label: 'Nova TransaÃ§Ã£o',
+      label: 'Nova Transação',
       icon: CurrencyDollarIcon,
       href: '/tesouraria/transactions',
       color: 'bg-green-500 hover:bg-green-600'
@@ -39,7 +40,7 @@ const QuickActions: React.FC = () => {
     },
     {
       id: 'report',
-      label: 'RelatÃ³rio',
+      label: 'Relatório',
       icon: ChartBarIcon,
       href: '/tesouraria/reports',
       color: 'bg-purple-500 hover:bg-purple-600'
@@ -76,7 +77,7 @@ const QuickActions: React.FC = () => {
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-white shadow-lg transition-all duration-200 hover:shadow-xl ${action.color}`}
                   onClick={() => setIsOpen(false)}
                 >
-                  <action.icon className="h-5 w-5" />
+                  <SafeIcon icon={action.icon} className="h-5 w-5" />
                   <span className="font-medium">{action.label}</span>
                 </Link>
               </motion.div>

@@ -153,6 +153,12 @@ export function useBirthdays(): UseBirthdaysReturn {
         orderBy('timestamp', 'desc'),
         limit(1)
       );
+
+      // Índice composto necessário (Firestore):
+      // collection: birthday_notifications
+      // fields:
+      // - type ASC
+      // - timestamp DESC
       
       const snapshot = await getDocs(notificationsQuery);
       if (!snapshot.empty) {
@@ -163,6 +169,14 @@ export function useBirthdays(): UseBirthdaysReturn {
         } as BirthdayNotification);
       }
     } catch (err: any) {
+      if (err?.code === 'failed-precondition' || String(err?.message || '').toLowerCase().includes('requires an index')) {
+        console.warn('Query de birthday_notifications precisa de índice composto. Última notificação ficará indisponível até criar o índice.', {
+          code: err?.code,
+          message: err?.message,
+        });
+        return;
+      }
+
       console.error('Erro ao carregar Ãºltima notificaÃ§Ã£o:', err);
     }
   }, []);
@@ -225,6 +239,10 @@ export function useBirthdays(): UseBirthdaysReturn {
           },
           (error) => {
             // Ignorar erros de Ã­ndice - a query pode nÃ£o ter Ã­ndice ainda
+            if (error.code === 'failed-precondition' || String((error as any)?.message || '').toLowerCase().includes('requires an index')) {
+              return;
+            }
+
             if (error.code !== 'failed-precondition') {
               console.error('Erro ao escutar mudanÃ§as em birthday_notifications:', error);
             }

@@ -1,4 +1,4 @@
-// API para gestÃ£o de escalas e ministÃ©rios
+// API para gestão de escalas e ministérios
 import { db } from '../firebase/config';
 import {
   collection,
@@ -47,16 +47,16 @@ const convertTimestamp = (timestamp: any): Date => {
     date = new Date();
   }
   
-  // Retornar data local sem conversÃ£o de timezone
+  // Retornar data local sem conversão de timezone
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
-// API para MinistÃ©rios
+// API para Ministérios
 export const ministeriosAPI = {
-  // Listar todos os ministÃ©rios
+  // Listar todos os ministérios
   getMinisterios: async (): Promise<Ministerio[]> => {
     try {
-      console.log('ðŸ”¥ Buscando ministÃ©rios no Firestore...');
+      console.log('🔥 Buscando ministérios no Firestore...');
       const ministeriosRef = collection(db, 'ministerios');
       const q = query(ministeriosRef, orderBy('nome', 'asc'));
       const querySnapshot = await getDocs(q);
@@ -78,16 +78,16 @@ export const ministeriosAPI = {
         };
       });
 
-      console.log('âœ… MinistÃ©rios carregados:', ministerios.length);
+      console.log('✅ Ministérios carregados:', ministerios.length);
       return ministerios;
     } catch (error) {
-      console.error('âŒ Erro ao buscar ministÃ©rios:', error);
-      toast.error('Erro ao carregar ministÃ©rios');
+      console.error('❌ Erro ao buscar ministérios:', error);
+      toast.error('Erro ao carregar ministérios');
       return [];
     }
   },
 
-  // Obter ministÃ©rio por ID
+  // Obter ministério por ID
   getMinisterio: async (id: string): Promise<Ministerio | null> => {
     try {
       const ministerioRef = doc(db, 'ministerios', id);
@@ -112,21 +112,21 @@ export const ministeriosAPI = {
         atualizado_em: convertTimestamp(data.atualizado_em),
       };
     } catch (error) {
-      console.error('âŒ Erro ao buscar ministÃ©rio:', error);
-      toast.error('Erro ao carregar ministÃ©rio');
+      console.error('❌ Erro ao buscar ministério:', error);
+      toast.error('Erro ao carregar ministério');
       return null;
     }
   },
 
-  // Criar ministÃ©rio
+  // Criar ministério
   createMinisterio: async (data: MinisterioFormData): Promise<Ministerio | null> => {
     try {
-      console.log('ðŸ’¾ Criando ministÃ©rio no Firestore...');
+      console.log('💾 Criando ministério no Firestore...');
       console.log('ðŸ“ Dados recebidos:', data);
       
-      // Validar dados obrigatÃ³rios
+      // Validar dados obrigatórios
       if (!data.nome || data.nome.trim() === '') {
-        throw new Error('Nome do ministÃ©rio Ã© obrigatÃ³rio');
+        throw new Error('Nome do ministério é obrigatório');
       }
 
       const ministeriosRef = collection(db, 'ministerios');
@@ -149,19 +149,19 @@ export const ministeriosAPI = {
       console.log('ðŸ“ Dados preparados para salvar:', ministerioData);
 
       const docRef = await addDoc(ministeriosRef, ministerioData);
-      console.log('âœ… MinistÃ©rio criado com ID:', docRef.id);
-      console.log('âœ… Dados salvos no Firestore');
+      console.log('✅ Ministério criado com ID:', docRef.id);
+      console.log('✅ Dados salvos no Firestore');
 
-      // Criar rotaÃ§Ã£o inicial (nÃ£o bloquear se falhar)
+      // Criar rotação inicial (não bloquear se falhar)
       try {
         await rotacoesAPI.createRotacao(docRef.id, ministerioData.membros_habilitados);
-        console.log('âœ… RotaÃ§Ã£o inicial criada');
+        console.log('✅ Rotação inicial criada');
       } catch (rotacaoError) {
-        console.warn('âš ï¸ Erro ao criar rotaÃ§Ã£o inicial (nÃ£o crÃ­tico):', rotacaoError);
-        // NÃ£o bloquear o salvamento do ministÃ©rio se a rotaÃ§Ã£o falhar
+        console.warn('⚠️ Erro ao criar rotação inicial (não crítico):', rotacaoError);
+        // Não bloquear o salvamento do ministério se a rotação falhar
       }
 
-      toast.success('MinistÃ©rio criado com sucesso!');
+      toast.success('Ministério criado com sucesso!');
       
       return {
         id: docRef.id,
@@ -177,11 +177,11 @@ export const ministeriosAPI = {
         atualizado_em: now.toDate(),
       };
     } catch (error: any) {
-      console.error('âŒ Erro ao criar ministÃ©rio:', error);
-      console.error('âŒ Detalhes do erro:', error.message);
-      console.error('âŒ Stack trace:', error.stack);
+      console.error('❌ Erro ao criar ministério:', error);
+      console.error('❌ Detalhes do erro:', error.message);
+      console.error('❌ Stack trace:', error.stack);
       
-      const errorMessage = error.message || 'Erro ao criar ministÃ©rio. Verifique o console para mais detalhes.';
+      const errorMessage = error.message || 'Erro ao criar ministério. Verifique o console para mais detalhes.';
       toast.error(errorMessage);
       
       // Re-throw para que o componente possa tratar
@@ -189,16 +189,16 @@ export const ministeriosAPI = {
     }
   },
 
-  // Atualizar ministÃ©rio
+  // Atualizar ministério
   updateMinisterio: async (id: string, data: Partial<MinisterioFormData>): Promise<void> => {
     try {
-      console.log('ðŸ”„ Atualizando ministÃ©rio no Firestore...');
+      console.log('🔄 Atualizando ministério no Firestore...');
       console.log('ðŸ“ ID:', id);
       console.log('ðŸ“ Dados recebidos:', data);
       
       const ministerioRef = doc(db, 'ministerios', id);
       
-      // Preparar dados de atualizaÃ§Ã£o, removendo undefined
+      // Preparar dados de atualização, removendo undefined
       const updateData: any = {
         atualizado_em: Timestamp.now(),
       };
@@ -216,38 +216,38 @@ export const ministeriosAPI = {
       
       await updateDoc(ministerioRef, updateData);
 
-      console.log('âœ… MinistÃ©rio atualizado com sucesso');
-      toast.success('MinistÃ©rio atualizado com sucesso');
+      console.log('✅ Ministério atualizado com sucesso');
+      toast.success('Ministério atualizado com sucesso');
     } catch (error: any) {
-      console.error('âŒ Erro ao atualizar ministÃ©rio:', error);
-      console.error('âŒ Detalhes do erro:', error.message);
-      console.error('âŒ Stack trace:', error.stack);
+      console.error('❌ Erro ao atualizar ministério:', error);
+      console.error('❌ Detalhes do erro:', error.message);
+      console.error('❌ Stack trace:', error.stack);
       
-      const errorMessage = error.message || 'Erro ao atualizar ministÃ©rio. Verifique o console para mais detalhes.';
+      const errorMessage = error.message || 'Erro ao atualizar ministério. Verifique o console para mais detalhes.';
       toast.error(errorMessage);
       throw error;
     }
   },
 
-  // Deletar ministÃ©rio
+  // Deletar ministério
   deleteMinisterio: async (id: string): Promise<void> => {
     try {
-      console.log('ðŸ—‘ï¸ Deletando ministÃ©rio do Firestore...');
+      console.log('🗑️ Deletando ministério do Firestore...');
       const ministerioRef = doc(db, 'ministerios', id);
       await deleteDoc(ministerioRef);
 
-      // Deletar rotaÃ§Ã£o associada
+      // Deletar rotação associada
       const rotacaoRef = doc(db, 'rotacoes', id);
       const rotacaoSnap = await getDoc(rotacaoRef);
       if (rotacaoSnap.exists()) {
         await deleteDoc(rotacaoRef);
       }
 
-      console.log('âœ… MinistÃ©rio deletado');
-      toast.success('MinistÃ©rio deletado com sucesso');
+      console.log('✅ Ministério deletado');
+      toast.success('Ministério deletado com sucesso');
     } catch (error) {
-      console.error('âŒ Erro ao deletar ministÃ©rio:', error);
-      toast.error('Erro ao deletar ministÃ©rio');
+      console.error('❌ Erro ao deletar ministério:', error);
+      toast.error('Erro ao deletar ministério');
       throw error;
     }
   },
@@ -267,6 +267,14 @@ export const escalasAPI = {
       const escalasRef = collection(db, 'escalas');
       
       let q = query(escalasRef, orderBy('data', 'asc'));
+
+      // Índices compostos necessários (Firestore) dependendo dos filtros aplicados:
+      // 1) ministerio_id + orderBy(data)
+      //    fields: ministerio_id ASC, data ASC
+      // 2) status + orderBy(data)
+      //    fields: status ASC, data ASC
+      // 3) ministerio_id + status + orderBy(data)
+      //    fields: ministerio_id ASC, status ASC, data ASC
 
       if (filters?.ministerio_id) {
         q = query(q, where('ministerio_id', '==', filters.ministerio_id));
@@ -308,7 +316,15 @@ export const escalasAPI = {
 
       console.log('âœ… Escalas carregadas:', escalas.length);
       return escalas;
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.code === 'failed-precondition' || String(error?.message || '').toLowerCase().includes('requires an index')) {
+        console.warn('Query de escalas precisa de índice composto. Retornando lista vazia para manter a UI estável.', {
+          code: error?.code,
+          message: error?.message,
+        });
+        return [];
+      }
+
       console.error('âŒ Erro ao buscar escalas:', error);
       toast.error('Erro ao carregar escalas');
       return [];

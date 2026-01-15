@@ -1,7 +1,6 @@
 ﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { transactionsAPI, membersAPI } from '../services/api';
-import { mockDashboardData, simulateApiDelay } from '../services/mockData';
 import { useAuth } from '../firebase/AuthContext';
 import { User } from 'firebase/auth';
 
@@ -35,7 +34,7 @@ export const useDashboardData = (forceRefresh = false) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, authReady } = useAuth();
   const location = useLocation();
   const abortControllerRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
@@ -90,6 +89,18 @@ export const useDashboardData = (forceRefresh = false) => {
       setLoading(true);
       setError(null);
 
+      // NÃ£o rodar nada atÃ© o Auth concluir o bootstrap (primeiro onAuthStateChanged)
+      // Isso evita race condition: queries/estado vazio serem avaliados com user===null antes do restore.
+      if (!authReady) {
+        return;
+      }
+
+      // Nunca rodar queries reais sem usuÃ¡rio
+      if (!user) {
+        setData({ stats: null, memberStats: null, lastFetch: null });
+        return;
+      }
+
       // Tentar carregar do cache primeiro (apenas se nÃ£o forÃ§ar refresh)
       if (useCache && !forceRefresh) {
         const cached = loadFromCache();
@@ -115,62 +126,37 @@ export const useDashboardData = (forceRefresh = false) => {
         }
       }
 
-      // Verificar se deve usar dados mock
-      const useMockData = !user;
+      // Usar APIs reais do Firestore
+      const [financialSummary, memberStatsData] = await Promise.all([
+        transactionsAPI.getSummary(),
+        membersAPI.getMemberStats(),
+      ]);
 
-      if (useMockData) {
-        // Simular delay de API (reduzido para melhor UX)
-        await simulateApiDelay(300);
+      if (signal.aborted || !isMountedRef.current) return;
 
-        if (signal.aborted || !isMountedRef.current) return;
+      // Transformar dados
+      const financialData = financialSummary.data;
+      const stats: DashboardStats = {
+        income: {
+          total: financialData.totalIncome,
+          count: financialData.transactionCount,
+        },
+        expense: {
+          total: financialData.totalExpense,
+          count: financialData.transactionCount,
+        },
+        balance: financialData.balance,
+      };
 
-        // Usar dados mock
-        const stats = mockDashboardData.financialSummary;
-        const memberStats = mockDashboardData.memberStats;
+      const newData: DashboardData = {
+        stats,
+        memberStats: memberStatsData.data,
+        lastFetch: Date.now(),
+      };
 
-        const newData: DashboardData = {
-          stats,
-          memberStats,
-          lastFetch: Date.now(),
-        };
-
-        if (!signal.aborted && isMountedRef.current) {
-          setData(newData);
-          saveToCache(stats, memberStats);
-        }
-      } else {
-        // Usar APIs reais do Firestore
-        const [financialSummary, memberStatsData] = await Promise.all([
-          transactionsAPI.getSummary(),
-          membersAPI.getMemberStats(),
-        ]);
-
-        if (signal.aborted || !isMountedRef.current) return;
-
-        // Transformar dados
-        const financialData = financialSummary.data;
-        const stats: DashboardStats = {
-          income: {
-            total: financialData.totalIncome,
-            count: financialData.transactionCount,
-          },
-          expense: {
-            total: financialData.totalExpense,
-            count: financialData.transactionCount,
-          },
-          balance: financialData.balance,
-        };
-
-        const newData: DashboardData = {
-          stats,
-          memberStats: memberStatsData.data,
-          lastFetch: Date.now(),
-        };
-
-        if (!signal.aborted && isMountedRef.current) {
-          setData(newData);
-          saveToCache(stats, memberStatsData.data);
-        }
+      if (!signal.aborted && isMountedRef.current) {
+        setData(newData);
+        saveToCache(stats, memberStatsData.data);
       }
     } catch (err: any) {
       // Ignorar erros de abort
@@ -185,23 +171,15 @@ export const useDashboardData = (forceRefresh = false) => {
       if (cached && cached.stats && cached.memberStats) {
         setData(cached);
       } else {
-        // Fallback para dados mock
-        const stats = mockDashboardData.financialSummary;
-        const memberStats = mockDashboardData.memberStats;
-        const newData: DashboardData = {
-          stats,
-          memberStats,
-          lastFetch: Date.now(),
-        };
-        setData(newData);
-        setError('Erro ao carregar dados. Mostrando dados de demonstraÃ§Ã£o.');
+        setData({ stats: null, memberStats: null, lastFetch: null });
+        setError('Erro ao carregar dados.');
       }
     } finally {
       if (!signal.aborted && isMountedRef.current) {
         setLoading(false);
       }
     }
-  }, [user, forceRefresh, loadFromCache, saveToCache]);
+  }, [authReady, user, forceRefresh, loadFromCache, saveToCache]);
 
   // Resetar estado quando rota ou usuÃ¡rio muda e forÃ§ar recarregamento
   useEffect(() => {
@@ -237,8 +215,8 @@ export const useDashboardData = (forceRefresh = false) => {
   useEffect(() => {
     isMountedRef.current = true;
     
-    // Aguardar a autenticaÃ§Ã£o terminar antes de tentar carregar dados
-    if (authLoading) {
+    // Aguardar o bootstrap do Auth antes de tentar carregar dados
+    if (!authReady || authLoading) {
       setLoading(true);
       return;
     }
@@ -249,11 +227,11 @@ export const useDashboardData = (forceRefresh = false) => {
       // Carregar imediatamente (sem delay desnecessÃ¡rio)
       loadData(true);
     }
-  }, [authLoading, loadData]);
+  }, [authReady, authLoading, loadData]);
 
   // Recarregar quando nÃ£o hÃ¡ dados mas deveria ter (com retry)
   useEffect(() => {
-    if (!authLoading && user !== null && !data.stats && hasLoadedRef.current) {
+    if (authReady && !authLoading && user !== null && !data.stats && hasLoadedRef.current) {
       // Se jÃ¡ tentamos carregar mas nÃ£o temos dados, tentar novamente
       console.log('ðŸ”„ Recarregando - sem dados disponÃ­veis apÃ³s carregamento');
       hasLoadedRef.current = false;
@@ -265,7 +243,7 @@ export const useDashboardData = (forceRefresh = false) => {
       }
       setTimeout(() => loadData(false), 200); // ForÃ§ar sem cache
     }
-  }, [user, authLoading, data.stats, loadData]);
+  }, [authReady, user, authLoading, data.stats, loadData]);
 
   // Atualizar dados quando a janela/tab ganha foco novamente
   useEffect(() => {
