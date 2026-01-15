@@ -136,7 +136,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               }}
             />
               <h1 className="text-lg font-bold text-gray-700 group-hover:text-primary-600 transition-colors dark:text-gray-300 dark:group-hover:text-primary-400">
-                Tesouraria Resgate
+                Área Logada
               </h1>
             </a>
             <button
@@ -170,7 +170,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               }}
             />
             <h1 className="text-lg font-bold text-gray-700 group-hover:text-primary-600 transition-colors dark:text-gray-300 dark:group-hover:text-primary-400">
-              Tesouraria Resgate
+              Área Logada
             </h1>
           </a>
           <nav className="flex-1 space-y-1 px-2 py-4">

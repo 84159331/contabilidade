@@ -80,7 +80,7 @@ const PublicLayout: React.FC = () => {
                 rel="noopener noreferrer" 
                 className="hidden md:inline-block bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 min-h-[44px] rounded-lg text-sm font-medium transition-colors touch-manipulation whitespace-nowrap"
               >
-                Tesouraria
+                Área Logada
               </a>
               
               {/* Mobile Menu Button - VISÃVEL APENAS NO MOBILE */}
@@ -124,7 +124,7 @@ const PublicLayout: React.FC = () => {
                   onClick={closeMobileMenu}
                     className="mt-2 px-4 py-3 min-h-[48px] flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors touch-manipulation text-base"
                 >
-                  Tesouraria
+                  Área Logada
                 </a>
                 </div>
               </nav>

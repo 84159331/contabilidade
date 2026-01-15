@@ -96,7 +96,10 @@ const EventsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div
+      className="min-h-screen bg-gray-50 dark:bg-gray-900"
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+    >
       <SEOHead
         title="Eventos - Comunidade Cristã Resgate"
         description="Participe dos nossos eventos, cultos, estudos bíblicos e atividades. Veja nossa programação completa e faça parte da nossa comunidade."
@@ -118,7 +121,7 @@ const EventsPage: React.FC = () => {
               alt="Eventos" 
               className="mx-auto h-16 w-16 mb-6 opacity-90"
             />
-            <h1 className="text-5xl font-bold font-heading mb-4">Eventos</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold font-heading mb-4">Eventos</h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
               Participe dos nossos eventos e fortaleça sua fé junto conosco
             </p>

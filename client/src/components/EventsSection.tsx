@@ -293,7 +293,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                 {/* Redes Sociais */}
                 {event.social_media && Object.values(event.social_media).some(Boolean) && (
                   <div className="mb-4">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">Compartilhar:</span>
                       {event.social_media.instagram && (
                         <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200">
