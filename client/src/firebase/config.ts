@@ -43,6 +43,11 @@ if (missingConfig.length > 0) {
   // Se ainda faltou algo até aqui, continuaremos e os serviços podem falhar de forma explícita.
 }
 
+export const firebaseConfigStatus = {
+  ok: missingConfig.length === 0,
+  missing: missingConfig,
+};
+
 // Debug: mostrar configuração (apenas em desenvolvimento)
 if (process.env.NODE_ENV === 'development') {
   console.log('🔥 Firebase Config:', {
