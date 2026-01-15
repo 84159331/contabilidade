@@ -88,7 +88,7 @@ function App() {
           <AuthProvider>
             <SplashOverlay
               mediaSrc="/img/INTRO-LOGO.gif"
-              durationMs={3200}
+              durationMs={6000}
               backgroundColor="#000000"
               animation="none"
             />
