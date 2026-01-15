@@ -10,6 +10,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import PageErrorFallback from './components/PageErrorFallback';
 import PullToRefresh from './components/PullToRefresh';
 import SwipeNavigation from './components/SwipeNavigation';
+import SplashOverlay from './components/SplashOverlay';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
 // HomePage carregada imediatamente (primeira pÃ¡gina)
@@ -54,6 +55,12 @@ function App() {
       <ThemeProvider>
         <NotificationProvider>
           <AuthProvider>
+            <SplashOverlay
+              mediaSrc="/img/INTRO-LOGO.gif"
+              durationMs={3200}
+              backgroundColor="#000000"
+              animation="none"
+            />
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <ErrorBoundary fallback={<PageErrorFallback />}>
                 <PullToRefresh onRefresh={handleRefresh}>
