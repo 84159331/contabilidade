@@ -17,11 +17,14 @@ import SkeletonCard from '../components/SkeletonCard';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
 import PullToRefresh from '../components/PullToRefresh';
+import { useEventsAlerts } from '../contexts/EventsAlertsContext';
+import { Link } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const { stats, loading, error, refresh } = useDashboardData();
   const { loading: authLoading, authReady, user } = useAuth();
   const { isAdmin, isLider } = useUserRole();
+  const { unreadCount: unreadEvents, markAllSeen } = useEventsAlerts();
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
@@ -127,6 +130,23 @@ const Dashboard: React.FC = () => {
           <span>Atualizar</span>
         </button>
       </div>
+
+      {unreadEvents > 0 && (
+        <div className="border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/40 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="text-sm text-blue-900 dark:text-blue-200">
+            Você tem <span className="font-bold">{unreadEvents > 9 ? '9+' : unreadEvents}</span> novo(s) evento(s).
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/tesouraria/events"
+              onClick={markAllSeen}
+              className="inline-flex items-center justify-center min-h-[44px] px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Ver eventos
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">

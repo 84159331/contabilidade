@@ -9,21 +9,24 @@ import AutoShareManager from '../components/AutoShareManager';
 import ImageTest from '../components/ImageTest';
 import { toast } from 'react-toastify';
 import { Event, EventFormData } from '../types/Event';
+import { useEventsAlerts } from '../contexts/EventsAlertsContext';
 
 const Events: React.FC = () => {
   const { user } = useAuth();
+  const { markAllSeen } = useEventsAlerts();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventFormData | undefined>();
   const [sharingEvent, setSharingEvent] = useState<Event | undefined>();
   const [autoSharingEvent, setAutoSharingEvent] = useState<Event | undefined>();
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
 
   useEffect(() => {
     // Migrar imagens antigas primeiro
     eventsAPI.migrateEventsImages();
     loadEvents();
+    markAllSeen();
   }, []);
 
   const loadEvents = async () => {

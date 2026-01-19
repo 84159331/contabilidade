@@ -12,6 +12,7 @@ import PageErrorFallback from './components/PageErrorFallback';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 import { PinProvider } from './contexts/PinContext';
 import PinProtectedRoute from './components/PinProtectedRoute';
+import { EventsAlertsProvider } from './contexts/EventsAlertsContext';
 
 // Lazy loading com retry para componentes pesados (previne páginas brancas)
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
@@ -99,16 +100,17 @@ function TesourariaApp() {
   }
   
   return (
-    <PinProvider>
-      <Layout>
-        <ErrorBoundary fallback={<PageErrorFallback />}>
-          <Suspense fallback={
-            <div className="flex items-center justify-center min-h-[400px]">
-              <PageSkeleton type="dashboard" />
-            </div>
-          }>
-          <SmartLoading>
-            <Routes>
+    <EventsAlertsProvider>
+      <PinProvider>
+        <Layout>
+          <ErrorBoundary fallback={<PageErrorFallback />}>
+            <Suspense fallback={
+              <div className="flex items-center justify-center min-h-[400px]">
+                <PageSkeleton type="dashboard" />
+              </div>
+            }>
+            <SmartLoading>
+              <Routes>
               <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
 
               <Route path="pin" element={<PinAccess />} />
@@ -153,12 +155,13 @@ function TesourariaApp() {
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="scale-reports" element={<ScaleReports />} />
               <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
-            </Routes>
-          </SmartLoading>
-        </Suspense>
-        </ErrorBoundary>
-      </Layout>
-    </PinProvider>
+              </Routes>
+            </SmartLoading>
+          </Suspense>
+          </ErrorBoundary>
+        </Layout>
+      </PinProvider>
+    </EventsAlertsProvider>
   );
 }
 

@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './firebase/AuthContext';
 import PublicLayout from './components/PublicLayout';
@@ -8,7 +8,6 @@ import TesourariaApp from './TesourariaApp';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingSpinner from './components/LoadingSpinner';
 import PageErrorFallback from './components/PageErrorFallback';
-import PullToRefresh from './components/PullToRefresh';
 import SwipeNavigation from './components/SwipeNavigation';
 import SplashOverlay from './components/SplashOverlay';
 import { lazyWithRetry } from './utils/lazyWithRetry';
@@ -34,6 +33,47 @@ const AgradecimentoPage = lazyWithRetry(() => import('./pages/public/Agradecimen
 const Login = lazyWithRetry(() => import('./pages/Login'));
 const Logout = lazyWithRetry(() => import('./pages/Logout'));
 const LoginDebug = lazyWithRetry(() => import('./pages/LoginDebug'));
+
+function BootSplash() {
+  const location = useLocation();
+  const [show, setShow] = useState(false);
+
+  const shouldConsider = useMemo(() => {
+    return location.pathname === '/';
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!shouldConsider) {
+      setShow(false);
+      return;
+    }
+
+    try {
+      const alreadyShown = sessionStorage.getItem('boot_splash_shown_v1') === '1';
+      if (alreadyShown) {
+        setShow(false);
+        return;
+      }
+
+      sessionStorage.setItem('boot_splash_shown_v1', '1');
+      setShow(true);
+      return;
+    } catch {
+      setShow(true);
+    }
+  }, [shouldConsider]);
+
+  if (!show) return null;
+
+  return (
+    <SplashOverlay
+      mediaSrc="/img/INTRO-LOGO.gif"
+      durationMs={6000}
+      backgroundColor="#000000"
+      animation="none"
+    />
+  );
+}
 
 function App() {
   if (!firebaseConfigStatus.ok) {
@@ -76,32 +116,22 @@ function App() {
 
   const lazyComponents = {AboutPage,ContactPage,ConnectPage,WatchPage,GivePage,LocationsPage,BonsEstudosPage,BibliotecaPage,EsbocosPage,EsbocoDetalhePage,EventsPage,CadastroPublicoPage,AgradecimentoPage,Login,Logout,LoginDebug};
   const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
-  
-  const handleRefresh = async () => {
-    window.location.reload();
-  };
 
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <NotificationProvider>
           <AuthProvider>
-            <SplashOverlay
-              mediaSrc="/img/INTRO-LOGO.gif"
-              durationMs={6000}
-              backgroundColor="#000000"
-              animation="none"
-            />
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <BootSplash />
               <ErrorBoundary fallback={<PageErrorFallback />}>
-                <PullToRefresh onRefresh={handleRefresh}>
-                  <SwipeNavigation>
-                    <Suspense fallback={
-                      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                        <LoadingSpinner size="lg" text="Carregando página..." />
-                      </div>
-                    }>
-                    <Routes>
+                <SwipeNavigation>
+                  <Suspense fallback={
+                    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                      <LoadingSpinner size="lg" text="Carregando página..." />
+                    </div>
+                  }>
+                  <Routes>
                   <Route element={<PublicLayout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/sobre" element={<AboutPage />} />
@@ -122,10 +152,9 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/logout" element={<Logout />} />
                   <Route path="/tesouraria/*" element={<TesourariaApp />} />
-                    </Routes>
-                    </Suspense>
-                  </SwipeNavigation>
-                </PullToRefresh>
+                  </Routes>
+                  </Suspense>
+                </SwipeNavigation>
               </ErrorBoundary>
             </Router>
           </AuthProvider>

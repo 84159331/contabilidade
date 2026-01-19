@@ -7,6 +7,7 @@ import ThemeToggle from './ThemeToggle';
 import TabTransition from './TabTransition';
 import ScalesBottomNav from './ScalesBottomNav';
 import { usePreloadComponents } from '../hooks/usePreloadComponents';
+import { useEventsAlerts } from '../contexts/EventsAlertsContext';
 import { 
   HomeIcon, 
   UsersIcon, 
@@ -49,6 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
   const { role, isAdmin, isLider, isMembro } = useUserRole();
   const location = useLocation();
+  const { unreadCount: unreadEvents } = useEventsAlerts();
   
   // Pré-carrega componentes baseado na navegação
   usePreloadComponents();
@@ -88,10 +90,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const renderNav = () => {
     return navigation.map((item, index) => {
       if (item.type === 'link') {
-        const Icon = item.icon; // O Ã­cone Ã© atribuÃ­do a uma variÃ¡vel com letra maiÃºscula
+        const Icon = item.icon; // O ícone é atribuído a uma variável com letra maiúscula
+        const showEventsBadge = item.href === '/tesouraria/events' && unreadEvents > 0;
         return (
           <Link
-            key={`${item.href}-${index}`} // Chave Ãºnica usando href + index
+            key={`${item.href}-${index}`} // Chave única usando href + index
             to={item.href}
             onClick={() => setSidebarOpen(false)}
             className={`group flex items-center px-3 py-3 min-h-[44px] text-sm font-medium rounded-md transition-colors touch-manipulation ${
@@ -101,7 +104,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             }`}
           >
             <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
-            <span>{item.name}</span>
+            <span className="flex-1">{item.name}</span>
+            {showEventsBadge && (
+              <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold bg-red-500 text-white">
+                {unreadEvents > 9 ? '9+' : unreadEvents}
+              </span>
+            )}
           </Link>
         );
       }
