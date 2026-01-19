@@ -224,6 +224,11 @@ async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE_NAME);
   const cachedResponse = await cache.match(request);
 
+  // Cache API só suporta GET. Para outros métodos, apenas faz o fetch.
+  if (request.method && request.method !== 'GET') {
+    return fetch(request);
+  }
+
   // Buscar na rede em background
   const fetchPromise = fetch(request).then((networkResponse) => {
     // Cachear resposta bem-sucedida
@@ -242,6 +247,11 @@ async function staleWhileRevalidate(request) {
 // Estratégia: Network First com cache de dados
 async function networkFirstWithDataCache(request) {
   const dataCache = await caches.open(DATA_CACHE_NAME);
+
+  // Cache API só suporta GET. Para outros métodos, não tenta cachear.
+  if (request.method && request.method !== 'GET') {
+    return fetch(request);
+  }
   
   try {
     // Tentar buscar na rede primeiro

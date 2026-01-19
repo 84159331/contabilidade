@@ -18,19 +18,19 @@ const validateIcons = () => {
 
 // Componentes seguros com fallback
 const SafePencilIcon: React.FC<{ className?: string }> = ({ className }) => {
-  if (PencilIcon && typeof PencilIcon === 'function') {
+  if (PencilIcon) {
     const Icon = PencilIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>âœï¸</span>;
+  return <span className={className}>E</span>;
 };
 
 const SafeTrashIcon: React.FC<{ className?: string }> = ({ className }) => {
-  if (TrashIcon && typeof TrashIcon === 'function') {
+  if (TrashIcon) {
     const Icon = TrashIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>ðŸ—‘ï¸</span>;
+  return <span className={className}>X</span>;
 };
 
 interface Member {
@@ -267,7 +267,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   title="Editar"
                   aria-label="Editar membro"
                 >
-                  <SafePencilIcon className="h-5 w-5" />
+                  <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
                 </button>
                 <button
                   onClick={() => {
@@ -283,7 +283,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   {isDeleting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
                   ) : (
-                    <SafeTrashIcon className="h-5 w-5" />
+                    <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
                   )}
                 </button>
                   </div>
@@ -332,7 +332,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   title="Editar"
                   aria-label="Editar membro"
                 >
-                  <SafePencilIcon className="h-5 w-5" />
+                  <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
                 </button>
                 <button
                   onClick={() => {
@@ -348,7 +348,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   {isDeleting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
                   ) : (
-                    <SafeTrashIcon className="h-5 w-5" />
+                    <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
                   )}
                 </button>
               </div>

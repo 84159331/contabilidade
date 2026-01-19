@@ -34,6 +34,8 @@ const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
 const People = lazyWithRetry(() => import('./pages/People'));
 const PinAccess = lazyWithRetry(() => import('./pages/PinAccess'));
+const FinanceAccessAdmin = lazyWithRetry(() => import('./pages/FinanceAccessAdmin'));
+const AdminsAdmin = lazyWithRetry(() => import('./pages/AdminsAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -126,6 +128,8 @@ function TesourariaApp() {
               <Route path="people" element={<People />} />
               <Route path="members" element={<Members />} />
               <Route path="members/new" element={<CadastroMembro />} />
+              <Route path="admin/finance-access" element={<FinanceAccessAdmin />} />
+              <Route path="admin/admins" element={<AdminsAdmin />} />
               <Route
                 path="transactions"
                 element={

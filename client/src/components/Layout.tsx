@@ -75,11 +75,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
-    { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
-    { type: 'link', name: 'Notificações', href: '/tesouraria/notifications', icon: ChatBubbleLeftRightIcon },
     { type: 'heading', name: 'Administração' },
     { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
     { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
+    ...(isAdmin
+      ? ([
+          { type: 'link', name: 'Acesso ao Financeiro', href: '/tesouraria/admin/finance-access', icon: CurrencyDollarIcon },
+          { type: 'link', name: 'Administradores', href: '/tesouraria/admin/admins', icon: UsersIcon },
+        ] as NavItem[])
+      : ([] as NavItem[])),
   ];
 
   const isCurrentPath = (path: string) => {

@@ -182,10 +182,10 @@ const Events: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Componente de Teste de Imagem */}
-      <ImageTest />
+      {process.env.NODE_ENV === 'development' ? <ImageTest /> : null}
       
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <CalendarIcon className="h-6 w-6 mr-2" />
@@ -193,30 +193,34 @@ const Events: React.FC = () => {
           </h1>
           <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos da sua igreja</p>
         </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={handleTestPermissions}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Testar Permissões
-          </button>
-          <button
-            onClick={() => {
-              if (events.length > 0) {
-                const firstEvent = events[0];
-                console.log('Events.tsx - Testando exclusão do primeiro evento:', firstEvent);
-                handleDeleteEvent(firstEvent.id);
-              } else {
-                toast.info('Nenhum evento para testar');
-              }
-            }}
-            className="inline-flex items-center px-4 py-2 border border-orange-300 text-sm font-medium rounded-md shadow-sm text-orange-700 bg-white hover:bg-orange-50"
-          >
-            Testar Exclusão
-          </button>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
+          {process.env.NODE_ENV === 'development' ? (
+            <>
+              <button
+                onClick={handleTestPermissions}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Testar Permissões
+              </button>
+              <button
+                onClick={() => {
+                  if (events.length > 0) {
+                    const firstEvent = events[0];
+                    console.log('Events.tsx - Testando exclusão do primeiro evento:', firstEvent);
+                    handleDeleteEvent(firstEvent.id);
+                  } else {
+                    toast.info('Nenhum evento para testar');
+                  }
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-orange-300 text-sm font-medium rounded-md shadow-sm text-orange-700 bg-white hover:bg-orange-50"
+              >
+                Testar Exclusão
+              </button>
+            </>
+          ) : null}
           <button
             onClick={handleCreateEvent}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
           >
             <PlusIcon className="h-4 w-4 mr-2" />
             Novo Evento

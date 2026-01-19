@@ -7,6 +7,7 @@ export interface UserProfile {
   email: string;
   name: string;
   role: UserRole;
+  financeiro_access?: boolean;
   ministerio_id?: string; // ID do ministério (para líderes)
   ministerio_nome?: string; // Nome do ministério (para líderes)
   phone?: string;

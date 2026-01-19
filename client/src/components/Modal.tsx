@@ -10,11 +10,11 @@ interface ModalProps {
 
 // Componente seguro para o Ã­cone de fechar
 const SafeXMarkIcon: React.FC<{ className?: string }> = ({ className }) => {
-  if (XMarkIcon && typeof XMarkIcon === 'function') {
+  if (XMarkIcon) {
     const Icon = XMarkIcon as React.ComponentType<{ className?: string }>;
     return <Icon className={className} />;
   }
-  return <span className={className}>âœ•</span>;
+  return <span className={className}>X</span>;
 };
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {

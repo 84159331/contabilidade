@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -33,7 +33,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(event?.image || '');
+  const [imageFileName, setImageFileName] = useState<string>('');
   const [loading, setLoading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -57,11 +60,29 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
+      setImageFileName(file.name);
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePickImage = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleClearImage = () => {
+    setImageFile(null);
+    setImageFileName('');
+    setImagePreview('');
+    setFormData((prev) => ({
+      ...prev,
+      image: '',
+    }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -124,21 +145,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0 sm:p-4">
+      <div className="bg-white dark:bg-gray-800 shadow-xl w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[90vh] sm:rounded-lg flex flex-col">
+        <div className="sticky top-0 z-10 flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             {event?.id ? 'Editar Evento' : 'Novo Evento'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form id="event-form" onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-5 overflow-y-auto flex-1">
           {/* Título */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -221,7 +242,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
 
           {/* Upload de Imagem */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <PhotoIcon className="h-4 w-4 inline mr-1" />
               Imagem do Evento
             </label>
@@ -233,72 +254,98 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
                     alt="Preview"
                     className="w-full h-48 object-cover rounded-md"
                   />
+                  <button
+                    type="button"
+                    onClick={handleClearImage}
+                    className="absolute top-2 right-2 px-3 py-1 rounded-md bg-black/60 text-white text-xs"
+                  >
+                    Remover
+                  </button>
                 </div>
               )}
+
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="hidden"
               />
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  type="button"
+                  onClick={handlePickImage}
+                  className="w-full sm:w-auto px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
+                >
+                  Selecionar imagem
+                </button>
+                <div className="flex-1 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                  {imageFileName ? imageFileName : imagePreview ? 'Imagem selecionada' : 'Nenhuma imagem selecionada'}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Redes Sociais */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <ShareIcon className="h-4 w-4 inline mr-1" />
               Compartilhar nas Redes Sociais
             </label>
-            <div className="flex space-x-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={formData.social_media?.instagram || false}
                   onChange={() => handleSocialMediaChange('instagram')}
-                  className="mr-2"
+                  className="mr-2 h-5 w-5"
                 />
-                <span className="text-sm text-gray-700">Instagram</span>
+                <span className="text-sm text-gray-700 dark:text-gray-200">Instagram</span>
               </label>
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={formData.social_media?.facebook || false}
                   onChange={() => handleSocialMediaChange('facebook')}
-                  className="mr-2"
+                  className="mr-2 h-5 w-5"
                 />
-                <span className="text-sm text-gray-700">Facebook</span>
+                <span className="text-sm text-gray-700 dark:text-gray-200">Facebook</span>
               </label>
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={formData.social_media?.whatsapp || false}
                   onChange={() => handleSocialMediaChange('whatsapp')}
-                  className="mr-2"
+                  className="mr-2 h-5 w-5"
                 />
-                <span className="text-sm text-gray-700">WhatsApp</span>
+                <span className="text-sm text-gray-700 dark:text-gray-200">WhatsApp</span>
               </label>
             </div>
           </div>
 
           {/* BotÃµes */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+        </form>
+
+        <div className="sticky bottom-0 z-10 p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               Cancelar
             </button>
             <button
               type="submit"
+              form="event-form"
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
               {loading ? 'Salvando...' : (event?.id ? 'Atualizar' : 'Criar Evento')}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

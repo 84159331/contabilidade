@@ -45,6 +45,7 @@ export const useUserRole = (): UseUserRoleReturn => {
             email: data.email || user.email || '',
             name: data.name || user.displayName || '',
             role: data.role || 'membro',
+            financeiro_access: !!data.financeiro_access,
             ministerio_id: data.ministerio_id,
             ministerio_nome: data.ministerio_nome,
             phone: data.phone,
@@ -59,6 +60,7 @@ export const useUserRole = (): UseUserRoleReturn => {
             email: user.email || '',
             name: user.displayName || '',
             role: 'membro',
+            financeiro_access: false,
             createdAt: new Date(),
             updatedAt: new Date(),
           };

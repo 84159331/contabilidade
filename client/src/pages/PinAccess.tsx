@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { usePin } from '../contexts/PinContext';
+import { useUserRole } from '../hooks/useUserRole';
 
 function useQuery() {
   const { search } = useLocation();
@@ -15,6 +16,7 @@ export default function PinAccess() {
   const forceSetup = query.get('setup') === '1';
 
   const { hasPin, unlock, setup } = usePin();
+  const { role, profile, loading: roleLoading } = useUserRole();
 
   const [pin, setPin] = useState('');
   const [pin2, setPin2] = useState('');
@@ -23,12 +25,26 @@ export default function PinAccess() {
 
   const shouldSetup = forceSetup || !hasPin;
 
+  const canAccessFinance = role === 'admin' || profile?.financeiro_access === true;
+  const canManagePin = role === 'admin';
+
+  useEffect(() => {
+    if (roleLoading) return;
+    if (!canAccessFinance) {
+      navigate('/tesouraria/members', { replace: true });
+    }
+  }, [roleLoading, canAccessFinance, navigate]);
+
   const validatePin = (value: string) => /^\d{4,6}$/.test(value);
 
   const onSubmit = async () => {
     setError(null);
 
     if (shouldSetup) {
+      if (!canManagePin) {
+        setError('Apenas administradores podem definir o PIN universal.');
+        return;
+      }
       if (!validatePin(pin)) {
         setError('Crie um PIN numérico de 4 a 6 dígitos.');
         return;
