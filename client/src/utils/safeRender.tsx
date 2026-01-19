@@ -1,4 +1,4 @@
-﻿import React, { ComponentType, ReactElement } from 'react';
+import React, { ComponentType, ReactElement } from 'react';
 
 /**
  * Componente de fallback seguro para substituir componentes undefined

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { ChartBarIcon } from '@heroicons/react/24/outline';
@@ -48,9 +48,9 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       
       setData(formattedData);
       onDataLoaded(formattedData);
-      console.log('âœ… RelatÃ³rio mensal carregado:', formattedData);
+      console.log('✅ Relatório mensal carregado:', formattedData);
     } catch (error) {
-      console.error('âŒ Erro ao carregar relatÃ³rio mensal:', error);
+      console.error('❌ Erro ao carregar relatório mensal:', error);
       
       // Em caso de erro, usar dados vazios
       const emptyData: MonthlyBalance = {
@@ -62,7 +62,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       setData(emptyData);
       onDataLoaded(emptyData);
       
-      toast.error('Erro ao carregar relatÃ³rio mensal. Tente novamente.');
+      toast.error('Erro ao carregar relatório mensal. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Nenhum dado disponÃ­vel para o perÃ­odo selecionado</p>
+        <p className="text-gray-500 dark:text-gray-400">Nenhum dado disponível para o período selecionado</p>
       </div>
     );
   }
@@ -94,7 +94,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       {/* Filters */}
       <div className="flex gap-4 items-end">
         <div>
-          <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="year" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Ano
           </label>
           <select
@@ -114,8 +114,8 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
           </select>
         </div>
         <div>
-          <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-1">
-            MÃªs
+          <label htmlFor="month" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Mês
           </label>
           <select
             id="month"
@@ -135,7 +135,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -148,21 +148,21 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Receitas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {(data.income?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
-                {data.income?.count || 0} transaÃ§Ãµes
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {data.income?.count || 0} transações
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -175,21 +175,21 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Despesas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {(data.expense?.total || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
               </div>
             </div>
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
-                {data.expense?.count || 0} transaÃ§Ãµes
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {data.expense?.count || 0} transações
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -217,7 +217,7 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
               </div>
             </div>
             <div className="mt-1">
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {capitalizedMonth} {year}
               </div>
             </div>
@@ -226,14 +226,14 @@ const MonthlyBalanceReport: React.FC<Props> = ({ onDataLoaded }) => {
       </div>
 
       {/* Chart Placeholder */}
-      <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
+      <div className="bg-white dark:bg-gray-900/80 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-800">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
           Resumo Visual
         </h3>
-        <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+        <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-lg">
           <div className="text-center">
             <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-            <p className="text-gray-500">GrÃ¡fico em desenvolvimento</p>
+            <p className="text-gray-500 dark:text-gray-400">Gráfico em desenvolvimento</p>
           </div>
         </div>
       </div>

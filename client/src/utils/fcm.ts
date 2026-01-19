@@ -1,4 +1,4 @@
-﻿// Firebase Cloud Messaging utilities
+// Firebase Cloud Messaging utilities
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';

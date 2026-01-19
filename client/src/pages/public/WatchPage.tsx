@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { FaYoutube } from 'react-icons/fa';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';

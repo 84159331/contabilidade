@@ -1,4 +1,4 @@
-﻿import PDFGenerator, { PDF_CONFIG } from './pdfGenerator';
+import PDFGenerator, { PDF_CONFIG } from './pdfGenerator';
 
 // Interfaces para os dados dos relatÃ³rios
 interface MonthlyBalance {

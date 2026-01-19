@@ -1,4 +1,4 @@
-﻿import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './firebase/AuthContext';
 import { useCacheInvalidation } from './hooks/useRouteRefresh';
@@ -11,7 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import PageErrorFallback from './components/PageErrorFallback';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 
-// Lazy loading com retry para componentes pesados (previne pÃ¡ginas brancas)
+// Lazy loading com retry para componentes pesados (previne páginas brancas)
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
 const Members = lazyWithRetry(() => import('./pages/Members'));
 const Transactions = lazyWithRetry(() => import('./pages/Transactions'));
@@ -27,12 +27,9 @@ const CadastroMembro = lazyWithRetry(() => import('./pages/CadastroMembro'));
 const Ministries = lazyWithRetry(() => import('./pages/Ministries'));
 const Scales = lazyWithRetry(() => import('./pages/Scales'));
 const MyScales = lazyWithRetry(() => import('./pages/MyScales'));
-const MobileDashboard = lazyWithRetry(() => import('./pages/MobileDashboard'));
 const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'));
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
-const LouveCalendarPage = lazyWithRetry(() => import('./pages/LouveCalendarPage'));
-const LouveMessagesPage = lazyWithRetry(() => import('./pages/LouveMessagesPage'));
-const LouveMinistryPage = lazyWithRetry(() => import('./pages/LouveMinistryPage'));
+const People = lazyWithRetry(() => import('./pages/People'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -40,9 +37,9 @@ function TesourariaApp() {
   // Invalidar cache quando a rota muda
   useCacheInvalidation();
 
-  // Limpar cache quando componente monta ou usuÃ¡rio muda
+  // Limpar cache quando componente monta ou usuário muda
   useEffect(() => {
-    // Limpar caches antigos para forÃ§ar recarregamento
+    // Limpar caches antigos para forçar recarregamento
     try {
       const cacheKeys = [
         'dashboard_cache',
@@ -65,7 +62,7 @@ function TesourariaApp() {
               console.log('ðŸ§¹ Cache antigo removido:', key);
             }
           } catch (e) {
-            // Se nÃ£o conseguir parsear, remove
+            // Se não conseguir parsear, remove
             sessionStorage.removeItem(key);
           }
         }
@@ -90,11 +87,11 @@ function TesourariaApp() {
 
   const lazyComponents = {Dashboard,Members,Transactions,Reports,Categories,CellGroupsAdmin,WhatsAppPage,BooksManagement,Events,EsbocosAdminPage,FeriasPastores,CadastroMembro};
   const lazyComponentStatus = Object.entries(lazyComponents).map(([name,comp])=>({name,isUndefined:comp===undefined,type:typeof comp})).reduce((acc,{name,isUndefined,type})=>({...acc,[name]:{isUndefined,type}}),{});
-  // ValidaÃ§Ã£o apenas em desenvolvimento
+  // Validação apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!Layout || !ErrorBoundary || !PageErrorFallback || !PageSkeleton || !SmartLoading) {
-      console.error('âŒ Componente crÃ­tico nÃ£o encontrado!');
-      return <div>Erro: Componente nÃ£o encontrado</div>;
+      console.error('❌ Componente crítico não encontrado!');
+      return <div>Erro: Componente não encontrado</div>;
     }
   }
   
@@ -110,6 +107,7 @@ function TesourariaApp() {
           <Routes>
             <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="people" element={<People />} />
             <Route path="members" element={<Members />} />
             <Route path="members/new" element={<CadastroMembro />} />
             <Route path="transactions" element={<Transactions />} />
@@ -124,12 +122,8 @@ function TesourariaApp() {
             <Route path="ministries" element={<Ministries />} />
             <Route path="scales" element={<Scales />} />
             <Route path="my-scales" element={<MyScales />} />
-            <Route path="mobile-dashboard" element={<MobileDashboard />} />
             <Route path="notifications" element={<NotificationsPage />} />
             <Route path="scale-reports" element={<ScaleReports />} />
-            <Route path="calendar" element={<LouveCalendarPage />} />
-            <Route path="messages" element={<LouveMessagesPage />} />
-            <Route path="ministry" element={<LouveMinistryPage />} />
             <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
           </Routes>
         </SmartLoading>

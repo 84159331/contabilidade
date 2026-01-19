@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../firebase/config';

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon nÃ£o utilizado
@@ -60,8 +60,8 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         });
       }
     } catch (error) {
-      toast.error('Erro ao carregar relatÃ³rio de fluxo de caixa');
-      console.error('Erro ao carregar relatÃ³rio:', error);
+      toast.error('Erro ao carregar relatório de fluxo de caixa');
+      console.error('Erro ao carregar relatório:', error);
     } finally {
       setLoading(false);
     }
@@ -95,8 +95,8 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       {/* Filters */}
       <div className="flex gap-4 items-end">
         <div>
-          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-            Data InÃ­cio
+          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Data Início
           </label>
           <input
             type="date"
@@ -107,7 +107,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           />
         </div>
         <div>
-          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Data Fim
           </label>
           <input
@@ -119,8 +119,8 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           />
         </div>
         <div>
-          <label htmlFor="period" className="block text-sm font-medium text-gray-700 mb-1">
-            PerÃ­odo
+          <label htmlFor="period" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Período
           </label>
           <select
             id="period"
@@ -128,7 +128,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
             value={period}
             onChange={(e) => setPeriod(e.target.value as 'daily' | 'weekly' | 'monthly')}
           >
-            <option value="daily">DiÃ¡rio</option>
+            <option value="daily">Diário</option>
             <option value="weekly">Semanal</option>
             <option value="monthly">Mensal</option>
           </select>
@@ -137,7 +137,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -150,7 +150,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Total de Receitas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {totalIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -159,7 +159,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -172,7 +172,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Total de Despesas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {totalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -181,7 +181,7 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -213,40 +213,40 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       </div>
 
       {/* Cash Flow Table */}
-      <div className="bg-white shadow rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
-            Fluxo de Caixa - {period === 'daily' ? 'DiÃ¡rio' : period === 'weekly' ? 'Semanal' : 'Mensal'}
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            Fluxo de Caixa - {period === 'daily' ? 'Diário' : period === 'weekly' ? 'Semanal' : 'Mensal'}
           </h3>
         </div>
         
         {data.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhum dado encontrado no perÃ­odo selecionado</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhum dado encontrado no período selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    PerÃ­odo
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Período
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Receitas
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Despesas
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Saldo
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-800">
                 {data.map((item, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800/60">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                       {formatPeriod(item.period)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-success-600">

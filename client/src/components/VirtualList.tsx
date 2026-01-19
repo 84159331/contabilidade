@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 interface VirtualListProps<T> {
   items: T[];
@@ -20,7 +20,7 @@ function VirtualList<T>({
   const [scrollTop, setScrollTop] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Calcular quais itens estÃ£o visÃ­veis
+  // Calcular quais itens estão visíveis
   const visibleRange = useMemo(() => {
     const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
     const endIndex = Math.min(
@@ -30,7 +30,7 @@ function VirtualList<T>({
     return { startIndex, endIndex };
   }, [scrollTop, containerHeight, itemHeight, items.length, overscan]);
 
-  // Itens visÃ­veis
+  // Itens visíveis
   const visibleItems = useMemo(() => {
     return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1);
   }, [items, visibleRange.startIndex, visibleRange.endIndex]);
@@ -38,7 +38,7 @@ function VirtualList<T>({
   // Altura total da lista
   const totalHeight = items.length * itemHeight;
 
-  // Offset para posicionar os itens visÃ­veis
+  // Offset para posicionar os itens visíveis
   const offsetY = visibleRange.startIndex * itemHeight;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {

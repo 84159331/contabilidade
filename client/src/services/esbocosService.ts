@@ -1,4 +1,4 @@
-﻿// ServiÃ§o para gerenciar esboÃ§os de pregaÃ§Ã£o (mock em memÃ³ria)
+// ServiÃ§o para gerenciar esboÃ§os de pregaÃ§Ã£o (mock em memÃ³ria)
 
 export type TemaPrincipal =
   | 'FAMILIA'

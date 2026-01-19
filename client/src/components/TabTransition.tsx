@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SafeAnimatePresence = AnimatePresence as unknown as React.FC<React.PropsWithChildren<any>>;
@@ -9,7 +9,7 @@ interface TabTransitionProps {
 }
 
 const TabTransition: React.FC<TabTransitionProps> = ({ children, transitionKey }) => {
-  // Verificar se deve reduzir animaÃ§Ãµes
+  // Verificar se deve reduzir animações
   const prefersReducedMotion = typeof window !== 'undefined' && 
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   

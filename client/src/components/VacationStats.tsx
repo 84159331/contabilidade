@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useCallback, memo } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { usePastorVacationData } from '../hooks/usePastorVacationData';
 import { VacationEvent } from '../services/pastorVacationAPI';
@@ -35,7 +35,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
   const loading = propLoading ?? hookData.loading;
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  // Gerar lista de anos disponÃ­veis
+  // Gerar lista de anos disponíveis
   const availableYears = useMemo(() => {
     if (!vacations || vacations.length === 0) {
       return [new Date().getFullYear()];
@@ -47,7 +47,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
     return Array.from(years).sort((a, b) => b - a);
   }, [vacations]);
 
-  // Dados mensais de fÃ©rias
+  // Dados mensais de férias
   const monthlyData = useMemo<MonthlyVacationData[]>(() => {
     const filtered = vacations.filter(v => moment(v.start).year() === selectedYear);
     const monthly: { [key: number]: number } = {};
@@ -90,7 +90,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
       .slice(0, 8); // Top 8 pastores
   }, [vacations, selectedYear]);
 
-  // EstatÃ­sticas gerais
+  // Estatísticas gerais
   const stats = useMemo(() => {
     const filtered = vacations.filter(v => moment(v.start).year() === selectedYear);
     const totalVacations = filtered.length;
@@ -123,7 +123,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
   if (!vacations || vacations.length === 0) {
     return (
       <div className="text-center text-gray-500 py-8">
-        Nenhuma fÃ©rias registrada ainda.
+        Nenhuma férias registrada ainda.
       </div>
     );
   }
@@ -133,7 +133,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
       {/* Filtro de ano */}
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-          EstatÃ­sticas de FÃ©rias
+          Estatísticas de Férias
         </h3>
         <select
           value={selectedYear}
@@ -146,10 +146,10 @@ const VacationStats: React.FC<VacationStatsProps> = ({
         </select>
       </div>
 
-      {/* Cards de estatÃ­sticas */}
+      {/* Cards de estatísticas */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-500 dark:text-gray-400">Total de FÃ©rias</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">Total de Férias</div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
             {stats.totalVacations}
           </div>
@@ -161,7 +161,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
           </div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-500 dark:text-gray-400">MÃ©dia de Dias</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">Média de Dias</div>
           <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
             {stats.avgDays}
           </div>
@@ -174,12 +174,12 @@ const VacationStats: React.FC<VacationStatsProps> = ({
         </div>
       </div>
 
-      {/* GrÃ¡ficos */}
+      {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* GrÃ¡fico de barras - FÃ©rias por mÃªs */}
+        {/* Gráfico de barras - Férias por mês */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
-            FÃ©rias por MÃªs
+            Férias por Mês
           </h4>
           <div style={{ width: '100%', height: 250 }}>
             <ResponsiveContainer>
@@ -211,7 +211,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
                 />
                 <Bar 
                   dataKey="count" 
-                  name="Quantidade de FÃ©rias" 
+                  name="Quantidade de Férias" 
                   fill="#3B82F6" 
                   radius={[4, 4, 0, 0]}
                 />
@@ -220,10 +220,10 @@ const VacationStats: React.FC<VacationStatsProps> = ({
           </div>
         </div>
 
-        {/* GrÃ¡fico de pizza - FÃ©rias por pastor */}
+        {/* Gráfico de pizza - Férias por pastor */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
-            FÃ©rias por Pastor
+            Férias por Pastor
           </h4>
           {pastorData.length > 0 ? (
             <div style={{ width: '100%', height: 250 }}>
@@ -244,7 +244,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value: number) => `${value} fÃ©rias`}
+                    formatter={(value: number) => `${value} férias`}
                     contentStyle={{
                       backgroundColor: '#fff',
                       border: '1px solid #e5e7eb',
@@ -256,7 +256,7 @@ const VacationStats: React.FC<VacationStatsProps> = ({
             </div>
           ) : (
             <div className="text-center text-gray-500 py-8">
-              Nenhum dado disponÃ­vel para o ano selecionado.
+              Nenhum dado disponível para o ano selecionado.
             </div>
           )}
         </div>
@@ -312,6 +312,6 @@ const VacationStats: React.FC<VacationStatsProps> = ({
   );
 };
 
-// Memoizar componente para evitar re-renderizaÃ§Ãµes desnecessÃ¡rias
+// Memoizar componente para evitar re-renderizações desnecessárias
 export default memo(VacationStats);
 

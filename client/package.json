@@ -64,7 +64,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-irregular-whitespace": "error"
+    }
   },
   "browserslist": {
     "production": [

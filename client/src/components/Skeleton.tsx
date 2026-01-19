@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface SkeletonProps {
   className?: string;
@@ -67,6 +67,6 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ delay = 0 }) => {
   );
 };
 
-// Exportar ambos como default (padrÃ£o do projeto)
+// Exportar ambos como default (padrão do projeto)
 export default Skeleton;
 export { SkeletonCard };

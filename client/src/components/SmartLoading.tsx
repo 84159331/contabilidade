@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ImportaÃ§Ã£o segura do framer-motion com fallback
 let MotionDiv: React.ComponentType<any>;

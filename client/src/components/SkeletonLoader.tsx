@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Skeleton from './Skeleton';
 
 interface SkeletonLoaderProps {
@@ -99,7 +99,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   };
 
   return (
-    <div className="skeleton-loader" aria-label="Carregando conteÃºdo...">
+    <div className="skeleton-loader" aria-label="Carregando conteúdo...">
       {renderers[type]()}
     </div>
   );

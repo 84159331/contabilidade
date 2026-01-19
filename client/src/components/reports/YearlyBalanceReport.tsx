@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon nÃ£o utilizado
@@ -51,7 +51,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
         if (onFullDataLoaded) {
           onFullDataLoaded(reportData);
         }
-        console.log('âœ… RelatÃ³rio anual carregado:', reportData);
+        console.log('✅ Relatório anual carregado:', reportData);
       } else {
         // Dados vazios se nÃ£o houver dados
         const emptyData: YearlyBalance = {
@@ -66,8 +66,8 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
         }
       }
     } catch (error) {
-      console.error('âŒ Erro ao carregar relatÃ³rio anual:', error);
-      toast.error('Erro ao carregar relatÃ³rio anual. Tente novamente.');
+      console.error('❌ Erro ao carregar relatório anual:', error);
+      toast.error('Erro ao carregar relatório anual. Tente novamente.');
       
       // Dados vazios em caso de erro
       const emptyData: YearlyBalance = {
@@ -96,7 +96,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Nenhum dado disponÃ­vel para o ano selecionado</p>
+        <p className="text-gray-500 dark:text-gray-400">Nenhum dado disponível para o ano selecionado</p>
       </div>
     );
   }
@@ -106,7 +106,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
       {/* Filters */}
       <div className="flex gap-4 items-end">
         <div>
-          <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="year" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Ano
           </label>
           <select
@@ -129,7 +129,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
 
       {/* Yearly Summary */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -142,7 +142,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Receitas Anuais
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {data.yearlyTotal.income.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -151,7 +151,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -164,7 +164,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Despesas Anuais
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {data.yearlyTotal.expense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -173,7 +173,7 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -205,34 +205,34 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
       </div>
 
       {/* Monthly Breakdown */}
-      <div className="bg-white shadow rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
             Resumo Mensal - {year}
           </h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+            <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  MÃªs
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Mês
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Receitas
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Despesas
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Saldo
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-800">
               {data.monthlyData.map((month, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800/60">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                     {month.monthName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-success-600">

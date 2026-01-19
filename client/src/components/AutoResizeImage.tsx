@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PhotoIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface AutoResizeImageProps {
@@ -9,14 +9,14 @@ interface AutoResizeImageProps {
   maxHeight?: number;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   fillContainer?: boolean; // Nova prop para preencher container
-  containerWidth?: number; // Largura do container para cÃ¡lculo
+  containerWidth?: number; // Largura do container para cálculo
 }
 
 const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
   src,
   alt,
   className = '',
-  fallbackText = 'Imagem nÃ£o disponÃ­vel',
+  fallbackText = 'Imagem não disponível',
   maxHeight = 300,
   objectFit = 'cover',
   fillContainer = false,
@@ -64,7 +64,7 @@ const AutoResizeImage: React.FC<AutoResizeImageProps> = ({
       };
     }
     
-    // CÃ¡lculo original para dimensionamento proporcional
+    // Cálculo original para dimensionamento proporcional
     let calculatedHeight = maxHeight;
     let calculatedWidth = calculatedHeight * aspectRatio;
     

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 
 interface UserFormProps {
   onSubmit: (data: any) => Promise<void>;
@@ -10,7 +10,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel }) => {
     username: '',
     email: '',
     password: '',
-    role: 'admin', // PadrÃ£o para admin
+    role: 'admin', // Padrão para admin
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +23,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel }) => {
     setLoading(true);
     try {
       await onSubmit(formData);
-      // Limpa o formulÃ¡rio apÃ³s o sucesso
+      // Limpa o formulário após o sucesso
       setFormData({ username: '', email: '', password: '', role: 'admin' });
     } finally {
       setLoading(false);
@@ -33,12 +33,12 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel }) => {
   return (
     <div className="bg-white shadow-xl rounded-xl overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-800">Adicionar Novo UsuÃ¡rio</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Adicionar Novo Usuário</h2>
       </div>
       <form onSubmit={handleSubmit} className="p-6 space-y-4">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Nome de UsuÃ¡rio
+            Nome de Usuário
           </label>
           <input
             type="text"
@@ -66,7 +66,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel }) => {
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Senha (mÃ­nimo 6 caracteres)
+              Senha (mínimo 6 caracteres)
             </label>
             <input
               type="password"
@@ -94,7 +94,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel }) => {
               disabled={loading}
               className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
             >
-              {loading ? 'Salvando...' : 'Salvar UsuÃ¡rio'}
+              {loading ? 'Salvando...' : 'Salvar Usuário'}
             </button>
           </div>
         </form>

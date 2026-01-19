@@ -1,4 +1,6 @@
-﻿// ServiÃ§o para gerenciar estudos bÃ­blicos diÃ¡rios
+import { fixUtf8MojibakeDeep } from '../utils/textEncoding';
+
+// ServiÃ§o para gerenciar estudos bÃ­blicos diÃ¡rios
 export interface Estudo {
   id: number;
   titulo: string;
@@ -242,7 +244,7 @@ export const getEstudoDoDia = (): Promise<Estudo> => {
     setTimeout(() => {
       const hoje = new Date().toISOString().split('T')[0];
       const estudo = estudosDatabase.find(e => e.data === hoje) || estudosDatabase[0];
-      resolve(estudo);
+      resolve(fixUtf8MojibakeDeep(estudo));
     }, 500);
   });
 };
@@ -251,7 +253,7 @@ export const getEstudoDoDia = (): Promise<Estudo> => {
 export const getAllEstudos = (): Promise<Estudo[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(estudosDatabase.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()));
+      resolve(fixUtf8MojibakeDeep(estudosDatabase.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())));
     }, 300);
   });
 };
@@ -261,7 +263,7 @@ export const getEstudosPorCategoria = (categoria: string): Promise<Estudo[]> => 
   return new Promise((resolve) => {
     setTimeout(() => {
       const estudos = estudosDatabase.filter(e => e.categoria === categoria);
-      resolve(estudos.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()));
+      resolve(fixUtf8MojibakeDeep(estudos.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())));
     }, 300);
   });
 };
@@ -275,7 +277,7 @@ export const adicionarEstudo = (estudo: Omit<Estudo, 'id'>): Promise<Estudo> => 
         id: estudosDatabase.length + 1
       };
       estudosDatabase.unshift(novoEstudo);
-      resolve(novoEstudo);
+      resolve(fixUtf8MojibakeDeep(novoEstudo));
     }, 500);
   });
 };
@@ -285,7 +287,7 @@ export const getCategorias = (): Promise<string[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const categorias = Array.from(new Set(estudosDatabase.map(e => e.categoria).filter(Boolean) as string[]));
-      resolve(categorias);
+      resolve(fixUtf8MojibakeDeep(categorias));
     }, 200);
   });
 };
@@ -295,7 +297,7 @@ export const getEstudoPorData = (data: string): Promise<Estudo | null> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const estudo = estudosDatabase.find(e => e.data === data) || null;
-      resolve(estudo);
+      resolve(fixUtf8MojibakeDeep(estudo));
     }, 300);
   });
 };

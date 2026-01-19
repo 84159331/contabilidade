@@ -1,4 +1,4 @@
-﻿export const exportToCsv = (filename: string, data: any[]) => {
+export const exportToCsv = (filename: string, data: any[]) => {
   if (data.length === 0) {
     console.warn("Nenhum dado para exportar.");
     return;
@@ -7,7 +7,7 @@
   const headers = Object.keys(data[0]);
   const csvRows = [];
 
-  // Adiciona o cabeÃ§alho
+  // Adiciona o cabeçalho
   csvRows.push(headers.join(','));
 
   // Adiciona as linhas de dados
@@ -22,7 +22,7 @@
   const csvString = csvRows.join('\n');
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
 
-  // Cria um link temporÃ¡rio para download
+  // Cria um link temporário para download
   const link = document.createElement('a');
   if (link.download !== undefined) { // Verifica se o navegador suporta o atributo download
     const url = URL.createObjectURL(blob);
@@ -34,7 +34,7 @@
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } else {
-    // Fallback para navegadores que nÃ£o suportam o atributo download
+    // Fallback para navegadores que não suportam o atributo download
     window.open(URL.createObjectURL(blob));
   }
 };

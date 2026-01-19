@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface SwipeNavigationProps {
@@ -29,7 +29,7 @@ const SwipeNavigation: React.FC<SwipeNavigationProps> = ({
     if (!container) return;
 
     const handleTouchStart = (e: TouchEvent) => {
-      // NÃ£o ativar se houver scroll horizontal ou se estiver em um input
+      // Não ativar se houver scroll horizontal ou se estiver em um input
       const target = e.target as HTMLElement;
       if (
         target.tagName === 'INPUT' ||
@@ -53,7 +53,7 @@ const SwipeNavigation: React.FC<SwipeNavigationProps> = ({
       const deltaX = e.touches[0].clientX - swipeStart.x;
       const deltaY = e.touches[0].clientY - swipeStart.y;
 
-      // SÃ³ processar se o movimento horizontal for maior que o vertical (swipe horizontal)
+      // Só processar se o movimento horizontal for maior que o vertical (swipe horizontal)
       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
         e.preventDefault();
         setSwipeDistance(deltaX);
@@ -74,7 +74,7 @@ const SwipeNavigation: React.FC<SwipeNavigationProps> = ({
             navigate(-1);
           }
         } else {
-          // Swipe para esquerda (avanÃ§ar)
+          // Swipe para esquerda (avançar)
           if (onSwipeLeft) {
             onSwipeLeft();
           }

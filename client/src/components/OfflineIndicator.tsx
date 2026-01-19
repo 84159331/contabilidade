@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WifiIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 
 const OfflineIndicator: React.FC = () => {
@@ -9,7 +9,7 @@ const OfflineIndicator: React.FC = () => {
     const handleOnline = () => {
       setIsOnline(true);
       setShowBanner(true);
-      // Esconder banner apÃ³s 3 segundos
+      // Esconder banner após 3 segundos
       setTimeout(() => {
         setShowBanner(false);
       }, 3000);
@@ -52,12 +52,12 @@ const OfflineIndicator: React.FC = () => {
         {isOnline ? (
           <>
             <WifiIcon className="h-5 w-5 mr-2" />
-            <span>ConexÃ£o restaurada. Sincronizando dados...</span>
+            <span>Conexão restaurada. Sincronizando dados...</span>
           </>
         ) : (
           <>
             <SignalSlashIcon className="h-5 w-5 mr-2" />
-            <span>VocÃª estÃ¡ offline. Algumas funcionalidades podem estar limitadas.</span>
+            <span>Você está offline. Algumas funcionalidades podem estar limitadas.</span>
           </>
         )}
       </div>

@@ -1,4 +1,4 @@
-﻿// Componente para compartilhar escala via WhatsApp
+// Componente para compartilhar escala via WhatsApp
 import React from 'react';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import type { Escala } from '../types/Scale';

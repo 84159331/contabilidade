@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger';
@@ -52,5 +52,5 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-// Memoizar para evitar re-renders desnecessÃ¡rios
+// Memoizar para evitar re-renders desnecessários
 export default React.memo(Button);

@@ -1,5 +1,6 @@
-﻿// ServiÃ§o de API integrado com Firebase Firestore
+// ServiÃ§o de API integrado com Firebase Firestore
 import { db } from '../firebase/config';
+import { fixUtf8MojibakeDeep } from '../utils/textEncoding';
 import { 
   collection, 
   getDocs, 
@@ -20,6 +21,8 @@ import {
 } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import storage from '../utils/storage';
+
+const normalize = <T,>(value: T): T => fixUtf8MojibakeDeep(value);
 
 // API para transaÃ§Ãµes (usando Firebase Firestore)
 export const transactionsAPI = {
@@ -52,7 +55,7 @@ export const transactionsAPI = {
         const data = doc.data();
         return {
           id: doc.id, // Manter como string para compatibilidade com Firebase
-          description: data.description || 'DescriÃ§Ã£o nÃ£o informada',
+          description: data.description || 'Descrição não informada',
           amount: data.amount || 0,
           type: data.type || 'income',
           transaction_date: data.transaction_date || new Date(),
@@ -62,13 +65,13 @@ export const transactionsAPI = {
           created_at: data.created_at || new Date(),
           updated_at: data.updated_at || new Date(),
           // Adicionar nomes das categorias e membros
-          category_name: data.category_id ? categories[data.category_id] || 'Categoria nÃ£o encontrada' : '',
-          member_name: data.member_id ? members[data.member_id] || 'Membro nÃ£o encontrado' : ''
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
         };
       });
       
       console.log('âœ… TransaÃ§Ãµes carregadas do Firestore:', transactions.length);
-      return { data: { transactions, total: transactions.length } };
+      return normalize({ data: { transactions, total: transactions.length } });
     } catch (error) {
       console.error('âŒ Erro ao buscar transaÃ§Ãµes:', error);
       return { data: { transactions: [], total: 0 } };
@@ -96,12 +99,12 @@ export const transactionsAPI = {
       const docRef = await addDoc(transactionsRef, transactionData);
       console.log('âœ… TransaÃ§Ã£o salva no Firestore com ID:', docRef.id);
       
-      return {
+      return normalize({
         data: {
-          message: 'TransaÃ§Ã£o criada com sucesso',
+          message: 'Transação criada com sucesso',
           transaction: { id: docRef.id, ...transactionData }
         }
-      };
+      });
     } catch (error: any) {
       console.error('âŒ Erro ao criar transaÃ§Ã£o:', error);
       console.error('âŒ Detalhes do erro:', error.message);
@@ -284,7 +287,7 @@ export const transactionsAPI = {
         const data = doc.data();
         return {
           id: doc.id,
-          description: data.description || 'DescriÃ§Ã£o nÃ£o informada',
+          description: data.description || 'Descrição não informada',
           amount: data.amount || 0,
           type: data.type || 'income',
           transaction_date: data.transaction_date || new Date(),
@@ -294,13 +297,13 @@ export const transactionsAPI = {
           created_at: data.created_at || new Date(),
           updated_at: data.updated_at || new Date(),
           // Adicionar nomes das categorias e membros
-          category_name: data.category_id ? categories[data.category_id] || 'Categoria nÃ£o encontrada' : '',
-          member_name: data.member_id ? members[data.member_id] || 'Membro nÃ£o encontrado' : ''
+          category_name: data.category_id ? categories[data.category_id] || 'Categoria não encontrada' : '',
+          member_name: data.member_id ? members[data.member_id] || 'Membro não encontrado' : ''
         };
       });
       
       console.log('âœ… TransaÃ§Ãµes recentes carregadas do Firestore:', transactions.length);
-      return { data: transactions };
+      return normalize({ data: transactions });
     } catch (error) {
       console.error('âŒ Erro ao buscar transaÃ§Ãµes recentes:', error);
       return { data: [] };

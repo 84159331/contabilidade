@@ -1,4 +1,4 @@
-﻿// Registro do Service Worker para cache de assets
+// Registro do Service Worker para cache de assets
 
 export function registerServiceWorker() {
   if ('serviceWorker' in navigator) {

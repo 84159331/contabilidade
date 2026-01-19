@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   PhotoIcon, 
   XMarkIcon, 
@@ -18,7 +18,7 @@ interface ImageUploadProps {
 const ImageUpload: React.FC<ImageUploadProps> = ({
   currentImage,
   onImageChange,
-  maxSize = 5, // 5MB por padrÃ£o
+  maxSize = 5, // 5MB por padrão
   acceptedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
   className = ''
 }) => {
@@ -53,13 +53,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     
     // Validar tipo de arquivo
     if (!acceptedFormats.includes(file.type)) {
-      setError(`Formato nÃ£o suportado. Use: ${acceptedFormats.map(f => f.split('/')[1]).join(', ')}`);
+      setError(`Formato não suportado. Use: ${acceptedFormats.map(f => f.split('/')[1]).join(', ')}`);
       return;
     }
     
     // Validar tamanho
     if (file.size > maxSize * 1024 * 1024) {
-      setError(`Arquivo muito grande. MÃ¡ximo: ${maxSize}MB`);
+      setError(`Arquivo muito grande. Máximo: ${maxSize}MB`);
       return;
     }
 
@@ -152,7 +152,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </button>
             </div>
             
-            {/* BotÃµes de AÃ§Ã£o */}
+            {/* Botões de Ação */}
             <div className="flex gap-2">
               <button
                 onClick={openFileDialog}
@@ -188,7 +188,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </p>
             </div>
             <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-              PNG, JPG, WEBP atÃ© {maxSize}MB
+              PNG, JPG, WEBP até {maxSize}MB
             </p>
           </div>
         )}

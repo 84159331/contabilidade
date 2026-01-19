@@ -1,4 +1,4 @@
-﻿import React, { memo } from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
 interface AnimatedCardProps {
@@ -14,7 +14,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = memo(({
   className = '',
   hover = true 
 }) => {
-  // Verificar se deve reduzir animaÃ§Ãµes (mobile ou preferÃªncia do usuÃ¡rio)
+  // Verificar se deve reduzir animações (mobile ou preferência do usuário)
   const prefersReducedMotion = typeof window !== 'undefined' && 
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   

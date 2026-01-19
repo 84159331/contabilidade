@@ -1,4 +1,4 @@
-﻿// API para gestÃ£o de notificaÃ§Ãµes
+// API para gestÃ£o de notificaÃ§Ãµes
 import { db } from '../firebase/config';
 import {
   collection,

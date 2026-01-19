@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpenIcon, CalendarIcon, ClockIcon, HeartIcon, TagIcon } from '@heroicons/react/24/outline';
 import { getEstudoDoDia, Estudo } from '../../services/estudosService';
@@ -53,7 +53,7 @@ const BonsEstudosPage: React.FC = () => {
             </h1>
           </div>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Alimento diÃ¡rio para sua alma. Estudos bÃ­blicos atualizados todos os dias para fortalecer sua fÃ© e caminhada com Cristo.
+            Alimento diário para sua alma. Estudos bíblicos atualizados todos os dias para fortalecer sua fé e caminhada com Cristo.
           </p>
         </motion.div>
 
@@ -66,7 +66,7 @@ const BonsEstudosPage: React.FC = () => {
             className="max-w-4xl mx-auto"
           >
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-              {/* CabeÃ§alho do Estudo */}
+              {/* Cabeçalho do Estudo */}
               <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-8 py-6 text-white">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
@@ -99,9 +99,9 @@ const BonsEstudosPage: React.FC = () => {
                 )}
               </div>
 
-              {/* ConteÃºdo do Estudo */}
+              {/* Conteúdo do Estudo */}
               <div className="p-8 space-y-8">
-                {/* VersÃ­culo */}
+                {/* Versículo */}
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
                   <div className="flex items-start">
                     <HeartIcon className="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" />
@@ -116,22 +116,22 @@ const BonsEstudosPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* ReflexÃ£o */}
+                {/* Reflexão */}
                 <div>
                   <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
                     <BookOpenIcon className="h-6 w-6 text-primary-600 mr-2" />
-                    ReflexÃ£o
+                    Reflexão
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
                     {estudoHoje.reflexao}
                   </p>
                 </div>
 
-                {/* OraÃ§Ã£o */}
+                {/* Oração */}
                 <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-6">
                   <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
                     <HeartIcon className="h-6 w-6 text-primary-600 mr-2" />
-                    OraÃ§Ã£o do Dia
+                    Oração do Dia
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg italic">
                     {estudoHoje.oracao}
@@ -154,7 +154,7 @@ const BonsEstudosPage: React.FC = () => {
               Quer receber os estudos diariamente?
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Inscreva-se para receber nosso estudo bÃ­blico diÃ¡rio diretamente no seu e-mail ou WhatsApp.
+              Inscreva-se para receber nosso estudo bíblico diário diretamente no seu e-mail ou WhatsApp.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -177,7 +177,7 @@ const BonsEstudosPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* InformaÃ§Ãµes Adicionais */}
+        {/* Informações Adicionais */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -187,7 +187,7 @@ const BonsEstudosPage: React.FC = () => {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
             <ClockIcon className="h-12 w-12 text-primary-600 mx-auto mb-4" />
             <h4 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
-              AtualizaÃ§Ã£o DiÃ¡ria
+              Atualização Diária
             </h4>
             <p className="text-gray-600 dark:text-gray-400">
               Novos estudos todos os dias para fortalecer sua caminhada espiritual.
@@ -196,19 +196,19 @@ const BonsEstudosPage: React.FC = () => {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
             <BookOpenIcon className="h-12 w-12 text-primary-600 mx-auto mb-4" />
             <h4 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
-              Base BÃ­blica
+              Base Bíblica
             </h4>
             <p className="text-gray-600 dark:text-gray-400">
-              Todos os estudos sÃ£o fundamentados na Palavra de Deus.
+              Todos os estudos são fundamentados na Palavra de Deus.
             </p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
             <HeartIcon className="h-12 w-12 text-primary-600 mx-auto mb-4" />
             <h4 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
-              AplicaÃ§Ã£o PrÃ¡tica
+              Aplicação Prática
             </h4>
             <p className="text-gray-600 dark:text-gray-400">
-              ReflexÃµes que podem ser aplicadas no seu dia a dia.
+              Reflexões que podem ser aplicadas no seu dia a dia.
             </p>
           </div>
         </motion.div>

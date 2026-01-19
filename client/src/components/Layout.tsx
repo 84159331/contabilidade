@@ -5,7 +5,7 @@ import { useUserRole } from '../hooks/useUserRole';
 import { NotificationCenter } from '../contexts/NotificationContext';
 import ThemeToggle from './ThemeToggle';
 import TabTransition from './TabTransition';
-import MobileBottomNav from './MobileBottomNav';
+import ScalesBottomNav from './ScalesBottomNav';
 import { usePreloadComponents } from '../hooks/usePreloadComponents';
 import { 
   HomeIcon, 
@@ -53,11 +53,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Pré-carrega componentes baseado na navegação
   usePreloadComponents();
 
+  const showScalesBottomNav = /^\/tesouraria\/(ministries|scales|my-scales|scale-reports)(\/|$)/.test(location.pathname);
+
   // Menu completo para todos os usuários
   const navigation: NavItem[] = [
     { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Gerenciar' },
     { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
+    { type: 'link', name: 'Pessoas', href: '/tesouraria/people', icon: UsersIcon },
     { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
     { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
@@ -72,7 +75,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
     { type: 'link', name: 'WhatsApp', href: '/tesouraria/whatsapp', icon: ChatBubbleLeftRightIcon },
     { type: 'link', name: 'Notificações', href: '/tesouraria/notifications', icon: ChatBubbleLeftRightIcon },
-    { type: 'link', name: 'Dashboard Mobile', href: '/tesouraria/mobile-dashboard', icon: HomeIcon },
     { type: 'heading', name: 'Administração' },
     { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
     { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
@@ -115,7 +117,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20 md:pb-0">
+    <div className={`min-h-screen bg-slate-50 dark:bg-gray-950 ${showScalesBottomNav ? 'pb-20 md:pb-0' : 'pb-0'}`}>
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -227,8 +229,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </main>
       </div>
       
-      {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
+      {/* Bottom Navigation apenas para Escalas */}
+      {showScalesBottomNav && <ScalesBottomNav />}
     </div>
   );
 };

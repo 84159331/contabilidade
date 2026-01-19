@@ -1,6 +1,6 @@
-﻿import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-// Hook para memoizar callbacks e evitar re-renders desnecessÃ¡rios
+// Hook para memoizar callbacks e evitar re-renders desnecessários
 export function useOptimizedCallback<T extends (...args: any[]) => any>(
   callback: T,
   deps: React.DependencyList
@@ -16,7 +16,7 @@ export function useOptimizedMemo<T>(
   return useMemo(factory, deps);
 }
 
-// Hook para debounce de operaÃ§Ãµes pesadas
+// Hook para debounce de operações pesadas
 export function useDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number,

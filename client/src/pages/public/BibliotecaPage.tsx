@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
@@ -34,22 +34,22 @@ const categorias = [
   'Todos',
   'Teologia',
   'Devocionais',
-  'Estudos BÃ­blicos',
-  'FÃ©',
-  'EsperanÃ§a',
+  'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
   'Palavras de Coach',
-  'Palavras de EsperanÃ§a',
+  'Palavras de Esperança',
   'Biografias',
-  'HistÃ³ria da Igreja',
-  'LideranÃ§a',
-  'FamÃ­lia',
+  'História da Igreja',
+  'Liderança',
+  'Família',
   'Jovens',
-  'CrianÃ§as'
+  'Crianças'
 ];
 
 const livros: Livro[] = [
-  // A biblioteca comeÃ§arÃ¡ vazia para que vocÃª possa adicionar apenas livros reais
-  // Use o botÃ£o "Adicionar Livro" para inserir seus prÃ³prios livros
+  // A biblioteca começará vazia para que você possa adicionar apenas livros reais
+  // Use o botão "Adicionar Livro" para inserir seus próprios livros
 ];
 
 const BibliotecaPage: React.FC = () => {
@@ -90,20 +90,20 @@ const BibliotecaPage: React.FC = () => {
 
       let hasChanges = false;
       const livrosAtualizados = livrosSalvos.map(livro => {
-        // Verificar se a capa Ã© blob URL
+        // Verificar se a capa é blob URL
         if (livro.capa && livro.capa.startsWith('blob:')) {
           hasChanges = true;
           return {
             ...livro,
-            capa: '' // Remover blob URL invÃ¡lida
+            capa: '' // Remover blob URL inválida
           };
         }
-        // Verificar se o PDF Ã© blob URL
+        // Verificar se o PDF é blob URL
         if (livro.pdfUrl && livro.pdfUrl.startsWith('blob:')) {
           hasChanges = true;
           return {
             ...livro,
-            pdfUrl: '' // Remover blob URL invÃ¡lida
+            pdfUrl: '' // Remover blob URL inválida
           };
         }
         return livro;
@@ -112,7 +112,7 @@ const BibliotecaPage: React.FC = () => {
       if (hasChanges) {
         storage.setJSON('biblioteca-livros', livrosAtualizados);
         setLivrosLista(livrosAtualizados);
-        toast.warn('Alguns livros tinham imagens temporÃ¡rias que foram removidas. Por favor, adicione novamente as capas.');
+        toast.warn('Alguns livros tinham imagens temporárias que foram removidas. Por favor, adicione novamente as capas.');
       }
     };
 
@@ -130,7 +130,7 @@ const BibliotecaPage: React.FC = () => {
       }
     };
 
-    // Escutar mudanÃ§as no armazenamento local (apenas entre abas)
+    // Escutar mudanças no armazenamento local (apenas entre abas)
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
@@ -138,7 +138,7 @@ const BibliotecaPage: React.FC = () => {
     };
   }, []);
 
-  // Filtrar e ordenar livros com useMemo para otimizaÃ§Ã£o
+  // Filtrar e ordenar livros com useMemo para otimização
   const livrosFiltrados = useMemo(() => {
     setIsLoading(true);
     
@@ -235,12 +235,12 @@ const BibliotecaPage: React.FC = () => {
             />
             <h1 className="text-5xl font-bold font-heading mb-4">Biblioteca Digital</h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
-              Acesse uma vasta coleÃ§Ã£o de livros cristÃ£os, estudos bÃ­blicos e recursos espirituais
+              Acesse uma vasta coleção de livros cristãos, estudos bíblicos e recursos espirituais
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center">
                 <BookOpenIcon className="h-5 w-5 mr-2" />
-                <span>{livrosLista.length} Livros DisponÃ­veis</span>
+                <span>{livrosLista.length} Livros Disponíveis</span>
               </div>
               <div className="flex items-center">
                 <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
@@ -259,10 +259,10 @@ const BibliotecaPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            CatÃ¡logo de Livros
+            Catálogo de Livros
           </h2>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {livrosLista.length} livros disponÃ­veis
+            {livrosLista.length} livros disponíveis
           </div>
         </div>
         
@@ -274,7 +274,7 @@ const BibliotecaPage: React.FC = () => {
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Buscar por tÃ­tulo, autor ou palavra-chave..."
+                  placeholder="Buscar por título, autor ou palavra-chave..."
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -295,7 +295,7 @@ const BibliotecaPage: React.FC = () => {
               </select>
             </div>
 
-            {/* OrdenaÃ§Ã£o */}
+            {/* Ordenação */}
             <div className="lg:w-48">
               <select
                 value={ordenacao}
@@ -303,7 +303,7 @@ const BibliotecaPage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="destaque">Destaques</option>
-                <option value="titulo">TÃ­tulo A-Z</option>
+                <option value="titulo">Título A-Z</option>
                 <option value="autor">Autor A-Z</option>
                 <option value="downloads">Mais Baixados</option>
                 <option value="avaliacao">Melhor Avaliados</option>
@@ -365,7 +365,7 @@ const BibliotecaPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* ConteÃºdo */}
+              {/* Conteúdo */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                   {livro.titulo}
@@ -389,7 +389,7 @@ const BibliotecaPage: React.FC = () => {
                   ))}
                 </div>
 
-                {/* InformaÃ§Ãµes */}
+                {/* Informações */}
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <div className="flex items-center">
                     <CalendarIcon className="h-4 w-4 mr-1" />
@@ -397,7 +397,7 @@ const BibliotecaPage: React.FC = () => {
                   </div>
                   <div className="flex items-center">
                     <BookOpenIcon className="h-4 w-4 mr-1" />
-                    <span>{livro.paginas} pÃ¡gs</span>
+                    <span>{livro.paginas} págs</span>
                   </div>
                   <div className="flex items-center">
                     <DocumentArrowDownIcon className="h-4 w-4 mr-1" />
@@ -409,7 +409,7 @@ const BibliotecaPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* BotÃµes */}
+                {/* Botões */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleDownload(livro)}
@@ -432,7 +432,7 @@ const BibliotecaPage: React.FC = () => {
         </div>
         )}
 
-        {/* Mensagem quando nÃ£o hÃ¡ resultados */}
+        {/* Mensagem quando não há resultados */}
         {livrosFiltrados.length === 0 && (
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -441,7 +441,7 @@ const BibliotecaPage: React.FC = () => {
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {livrosLista.length === 0 
-                ? 'A biblioteca ainda nÃ£o possui livros disponÃ­veis. Volte em breve!'
+                ? 'A biblioteca ainda não possui livros disponíveis. Volte em breve!'
                 : 'Tente ajustar os filtros ou termo de busca'
               }
             </p>

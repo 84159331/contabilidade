@@ -1,4 +1,4 @@
-﻿import React, { useState, memo, useMemo, useCallback } from 'react';
+import React, { useState, memo, useMemo, useCallback } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -53,7 +53,7 @@ const PastorVacationCalendar: React.FC<PastorVacationCalendarProps> = ({
     }
   }, [selectedEvent, deleteVacation, onRefresh]);
 
-  // Memoizar eventPropGetter para evitar recriaÃ§Ã£o a cada render
+  // Memoizar eventPropGetter para evitar recriação a cada render
   const eventPropGetter = useMemo(() => (event: any) => {
     const typedEvent = event as any;
     const newTitle = typedEvent.pastorName ? `${typedEvent.title} (${typedEvent.pastorName})` : typedEvent.title;
@@ -82,17 +82,17 @@ const PastorVacationCalendar: React.FC<PastorVacationCalendarProps> = ({
         style={{ height: '100%' }}
           onSelectEvent={handleSelectEvent}
         messages={{
-          next: "PrÃ³ximo",
+          next: "Próximo",
           previous: "Anterior",
           today: "Hoje",
-          month: "MÃªs",
+          month: "Mês",
           week: "Semana",
           day: "Dia",
           agenda: "Agenda",
           date: "Data",
           time: "Hora",
           event: "Evento",
-          noEventsInRange: "NÃ£o hÃ¡ eventos neste perÃ­odo.",
+          noEventsInRange: "Não há eventos neste período.",
           showMore: total => `+ Ver mais (${total})`
         }}
         eventPropGetter={eventPropGetter}
@@ -105,15 +105,15 @@ const PastorVacationCalendar: React.FC<PastorVacationCalendarProps> = ({
           setShowDeleteModal(false);
           setSelectedEvent(null);
         }} 
-        title="Remover FÃ©rias"
+        title="Remover Férias"
       >
         {selectedEvent && (
           <div className="space-y-4">
             <p className="text-gray-700 dark:text-gray-300">
-              Deseja remover as fÃ©rias de <strong>{selectedEvent.pastorName || selectedEvent.title}</strong>?
+              Deseja remover as férias de <strong>{selectedEvent.pastorName || selectedEvent.title}</strong>?
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              PerÃ­odo: {moment(selectedEvent.start).format('DD/MM/YYYY')} atÃ© {moment(selectedEvent.end).format('DD/MM/YYYY')}
+              Período: {moment(selectedEvent.start).format('DD/MM/YYYY')} até {moment(selectedEvent.end).format('DD/MM/YYYY')}
             </p>
             <div className="flex justify-end gap-3 mt-6">
               <button
@@ -140,5 +140,5 @@ const PastorVacationCalendar: React.FC<PastorVacationCalendarProps> = ({
   );
 };
 
-// Memoizar componente para evitar re-renderizaÃ§Ãµes desnecessÃ¡rias
+// Memoizar componente para evitar re-renderizações desnecessárias
 export default memo(PastorVacationCalendar);

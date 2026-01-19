@@ -1,4 +1,4 @@
-﻿// Dados mock para o dashboard funcionar sem backend
+// Dados mock para o dashboard funcionar sem backend
 export const mockDashboardData = {
   financialSummary: {
     income: { total: 0, count: 0 },
@@ -19,12 +19,12 @@ export const mockDashboardData = {
   recentTransactions: [
     {
       id: 1,
-      description: 'DÃ­zimo - JoÃ£o Silva',
+      description: 'Dízimo - João Silva',
       amount: 150.00,
       type: 'income' as const,
       transaction_date: new Date().toISOString(),
-      category_name: 'DÃ­zimos',
-      member_name: 'JoÃ£o Silva'
+      category_name: 'Dízimos',
+      member_name: 'João Silva'
     },
     {
       id: 2,
@@ -46,20 +46,20 @@ export const mockDashboardData = {
     },
     {
       id: 4,
-      description: 'DÃ­zimo - Pedro Oliveira',
+      description: 'Dízimo - Pedro Oliveira',
       amount: 200.00,
       type: 'income' as const,
       transaction_date: new Date(Date.now() - 259200000).toISOString(),
-      category_name: 'DÃ­zimos',
+      category_name: 'Dízimos',
       member_name: 'Pedro Oliveira'
     },
     {
       id: 5,
-      description: 'ManutenÃ§Ã£o do PrÃ©dio',
+      description: 'Manutenção do Prédio',
       amount: 450.00,
       type: 'expense' as const,
       transaction_date: new Date(Date.now() - 345600000).toISOString(),
-      category_name: 'ManutenÃ§Ã£o',
+      category_name: 'Manutenção',
       member_name: ''
     }
   ],
@@ -91,9 +91,9 @@ export const mockDashboardData = {
   categories: [
     {
       id: 1,
-      name: "DÃ­zimos",
+      name: "Dízimos",
       type: "income" as const,
-      description: "ContribuiÃ§Ãµes regulares dos membros",
+      description: "Contribuições regulares dos membros",
       color: "#10B981",
       transaction_count: 0,
       total_amount: 0,
@@ -104,7 +104,7 @@ export const mockDashboardData = {
       id: 2,
       name: "Ofertas",
       type: "income" as const, 
-      description: "Ofertas especiais e voluntÃ¡rias",
+      description: "Ofertas especiais e voluntárias",
       color: "#3B82F6",
       transaction_count: 0,
       total_amount: 0,
@@ -115,7 +115,7 @@ export const mockDashboardData = {
       id: 3,
       name: "Utilidades",
       type: "expense" as const,
-      description: "Contas de Ã¡gua, luz, telefone",
+      description: "Contas de água, luz, telefone",
       color: "#EF4444",
       transaction_count: 0,
       total_amount: 0,
@@ -124,9 +124,9 @@ export const mockDashboardData = {
     },
     {
       id: 4,
-      name: "ManutenÃ§Ã£o",
+      name: "Manutenção",
       type: "expense" as const,
-      description: "Reparos e manutenÃ§Ã£o do templo",
+      description: "Reparos e manutenção do templo",
       color: "#F59E0B",
       transaction_count: 0,
       total_amount: 0,
@@ -136,9 +136,9 @@ export const mockDashboardData = {
   ]
 };
 
-// FunÃ§Ã£o para simular delay de API
+// Função para simular delay de API
 export const simulateApiDelay = (ms: number = 500) => 
   new Promise(resolve => setTimeout(resolve, ms));
 
-// FunÃ§Ã£o para simular erro ocasional
+// Função para simular erro ocasional
 export const shouldSimulateError = () => Math.random() < 0.1; // 10% chance de erro

@@ -1,4 +1,4 @@
-﻿import React, { ComponentType, ReactElement } from 'react';
+import React, { ComponentType, ReactElement } from 'react';
 
 /**
  * Wrapper que valida se um componente estÃ¡ definido antes de renderizÃ¡-lo

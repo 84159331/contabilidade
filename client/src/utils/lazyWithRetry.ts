@@ -1,4 +1,4 @@
-﻿import { ComponentType, lazy, LazyExoticComponent } from 'react';
+import { ComponentType, lazy, LazyExoticComponent } from 'react';
 
 /**
  * Lazy loading com retry automÃ¡tico em caso de falha

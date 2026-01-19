@@ -1,4 +1,4 @@
-﻿// Componente para controle de acesso baseado em roles
+// Componente para controle de acesso baseado em roles
 import React from 'react';
 import { useUserRole } from '../hooks/useUserRole';
 import type { UserRole } from '../types/Role';
@@ -31,7 +31,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   return <>{children}</>;
 };
 
-// Hook para verificar permissÃ£o especÃ­fica
+// Hook para verificar permissão específica
 export const useHasPermission = (resource: string, action: string): boolean => {
   const { role } = useUserRole();
   const { hasPermission } = require('../types/Role');

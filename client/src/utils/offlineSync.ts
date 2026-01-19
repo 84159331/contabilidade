@@ -1,4 +1,4 @@
-﻿// Sistema de sincronizaÃ§Ã£o offline
+// Sistema de sincronizaÃ§Ã£o offline
 
 import { offlineQueue, QueuedAction } from './offlineQueue';
 import { membersAPI, transactionsAPI, categoriesAPI } from '../services/api';

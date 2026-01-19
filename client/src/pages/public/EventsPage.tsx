@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SafeImage from '../../components/SafeImage';
 import SEOHead from '../../components/SEOHead';

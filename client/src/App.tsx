@@ -1,4 +1,4 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './firebase/AuthContext';
@@ -14,10 +14,10 @@ import SplashOverlay from './components/SplashOverlay';
 import { lazyWithRetry } from './utils/lazyWithRetry';
 import { firebaseConfigStatus } from './firebase/config';
 
-// HomePage carregada imediatamente (primeira pÃ¡gina)
+// HomePage carregada imediatamente (primeira página)
 import HomePage from './pages/public/HomePage';
 
-// PÃ¡ginas pÃºblicas com lazy loading e retry (carregadas sob demanda)
+// Páginas públicas com lazy loading e retry (carregadas sob demanda)
 const AboutPage = lazyWithRetry(() => import('./pages/public/AboutPage'));
 const ContactPage = lazyWithRetry(() => import('./pages/public/ContactPage'));
 const ConnectPage = lazyWithRetry(() => import('./pages/public/ConnectPage'));
@@ -66,11 +66,11 @@ function App() {
     );
   }
 
-  // ValidaÃ§Ã£o apenas em desenvolvimento
+  // Validação apenas em desenvolvimento
   if (process.env.NODE_ENV === 'development') {
     if (!ErrorBoundary || !PageErrorFallback || !LoadingSpinner || !PublicLayout) {
-      console.error('âŒ Componente crÃ­tico nÃ£o encontrado!');
-      return <div>Erro: Componente nÃ£o encontrado</div>;
+      console.error('❌ Componente crítico não encontrado!');
+      return <div>Erro: Componente não encontrado</div>;
     }
   }
 
@@ -98,7 +98,7 @@ function App() {
                   <SwipeNavigation>
                     <Suspense fallback={
                       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                        <LoadingSpinner size="lg" text="Carregando pÃ¡gina..." />
+                        <LoadingSpinner size="lg" text="Carregando página..." />
                       </div>
                     }>
                     <Routes>

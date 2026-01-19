@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { transactionsAPI, membersAPI } from '../services/api';
 import { useAuth } from '../firebase/AuthContext';

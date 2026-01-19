@@ -1,4 +1,4 @@
-﻿const hasWindow = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+const hasWindow = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
 const storageAvailable = () => {
   if (!hasWindow) return false;

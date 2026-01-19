@@ -1,4 +1,4 @@
-﻿// UtilitÃ¡rios de performance
+// Utilitários de performance
 
 /**
  * Debounce function para otimizar chamadas frequentes
@@ -41,7 +41,7 @@ export const throttle = <T extends (...args: any[]) => any>(
 };
 
 /**
- * Request Animation Frame wrapper para animaÃ§Ãµes suaves
+ * Request Animation Frame wrapper para animações suaves
  */
 export const requestAnimationFrame = (callback: () => void): number => {
   if (typeof window !== 'undefined' && window.requestAnimationFrame) {
@@ -62,7 +62,7 @@ export const cancelAnimationFrame = (id: number): void => {
 };
 
 /**
- * Verificar se estÃ¡ em dispositivo mÃ³vel
+ * Verificar se está em dispositivo móvel
  */
 export const isMobile = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -70,7 +70,7 @@ export const isMobile = (): boolean => {
 };
 
 /**
- * Verificar se estÃ¡ em conexÃ£o lenta
+ * Verificar se está em conexão lenta
  */
 export const isSlowConnection = (): boolean => {
   if (typeof navigator === 'undefined' || !('connection' in navigator)) {
@@ -80,7 +80,7 @@ export const isSlowConnection = (): boolean => {
   const connection = (navigator as any).connection;
   if (!connection) return false;
 
-  // Verificar se Ã© conexÃ£o 2G ou saveData estÃ¡ ativado
+  // Verificar se é conexão 2G ou saveData está ativado
   return (
     connection.effectiveType === '2g' ||
     connection.effectiveType === 'slow-2g' ||
@@ -89,7 +89,7 @@ export const isSlowConnection = (): boolean => {
 };
 
 /**
- * Preload de recursos crÃ­ticos
+ * Preload de recursos críticos
  */
 export const preloadResource = (
   href: string,
@@ -109,7 +109,7 @@ export const preloadResource = (
 };
 
 /**
- * Prefetch de recursos (para prÃ³ximas pÃ¡ginas)
+ * Prefetch de recursos (para próximas páginas)
  */
 export const prefetchResource = (href: string): void => {
   if (typeof document === 'undefined') return;
@@ -130,7 +130,7 @@ export const loadScript = (src: string): Promise<void> => {
       return;
     }
 
-    // Verificar se jÃ¡ estÃ¡ carregado
+    // Verificar se já está carregado
     const existingScript = document.querySelector(`script[src="${src}"]`);
     if (existingScript) {
       resolve();
@@ -147,7 +147,7 @@ export const loadScript = (src: string): Promise<void> => {
 };
 
 /**
- * Medir performance de uma funÃ§Ã£o
+ * Medir performance de uma função
  */
 export const measurePerformance = async <T>(
   fn: () => T | Promise<T>,
@@ -167,7 +167,7 @@ export const measurePerformance = async <T>(
   try {
     performance.measure(label || 'measure', startLabel, endLabel);
     const measure = performance.getEntriesByName(label || 'measure')[0];
-    console.log(`â±ï¸ Performance ${label || 'measure'}: ${measure.duration.toFixed(2)}ms`);
+    console.log(`⏱️ Performance ${label || 'measure'}: ${measure.duration.toFixed(2)}ms`);
   } catch (e) {
     // Ignorar erros de medida
   }
@@ -176,7 +176,7 @@ export const measurePerformance = async <T>(
 };
 
 /**
- * Otimizar imagens baseado na conexÃ£o
+ * Otimizar imagens baseado na conexão
  */
 export const getOptimizedImageSize = (): 'small' | 'medium' | 'large' => {
   if (isSlowConnection()) {

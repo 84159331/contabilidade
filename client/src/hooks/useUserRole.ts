@@ -1,4 +1,4 @@
-﻿// Hook para gerenciar roles e permissÃµes do usuÃ¡rio
+// Hook para gerenciar roles e permissões do usuário
 import { useState, useEffect } from 'react';
 import { useAuth } from '../firebase/AuthContext';
 import { db } from '../firebase/config';
@@ -53,7 +53,7 @@ export const useUserRole = (): UseUserRoleReturn => {
             updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
           });
         } else {
-          // Criar perfil padrÃ£o se nÃ£o existir
+          // Criar perfil padrão se não existir
           const defaultProfile: UserProfile = {
             id: user.uid,
             email: user.email || '',
@@ -72,8 +72,8 @@ export const useUserRole = (): UseUserRoleReturn => {
           setProfile(defaultProfile);
         }
       } catch (error) {
-        console.error('Erro ao carregar perfil do usuÃ¡rio:', error);
-        // Perfil padrÃ£o em caso de erro
+        console.error('Erro ao carregar perfil do usuário:', error);
+        // Perfil padrão em caso de erro
         setProfile({
           id: user.uid,
           email: user.email || '',

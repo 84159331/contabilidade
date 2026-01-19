@@ -1,4 +1,4 @@
-﻿// ServiÃ§o de API para FÃ©rias de Pastores com Firebase Firestore
+// ServiÃ§o de API para FÃ©rias de Pastores com Firebase Firestore
 import { db } from '../firebase/config';
 import {
   collection,

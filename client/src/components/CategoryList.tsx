@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Category {
@@ -91,7 +91,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
 
           <div className="mt-4 grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">TransaÃ§Ãµes</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Transações</p>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
                 {category.transaction_count}
               </p>

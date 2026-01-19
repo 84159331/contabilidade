@@ -1,4 +1,4 @@
-﻿// Sistema de fila para aÃ§Ãµes offline
+// Sistema de fila para aÃ§Ãµes offline
 
 export interface QueuedAction {
   id: string;

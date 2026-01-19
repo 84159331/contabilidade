@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { SignalSlashIcon, WifiIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 

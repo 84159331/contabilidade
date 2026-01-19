@@ -1,4 +1,4 @@
-﻿import { disableConsoleInProduction } from './utils/logger';
+import { disableConsoleInProduction } from './utils/logger';
 
 disableConsoleInProduction();
 

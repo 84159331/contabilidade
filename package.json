@@ -7,6 +7,7 @@
     "build": "cd client && npm run build",
     "start": "cd client && npm start",
     "dev": "cd client && npm start",
+    "normalize:utf8": "node scripts/normalize-utf8.js",
     "setup-db": "node server/setup-database.js",
     "server": "node server/index.js"
   },

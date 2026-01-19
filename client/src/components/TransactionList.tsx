@@ -1,4 +1,4 @@
-﻿import React, { memo } from 'react';
+import React, { memo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Transaction {
@@ -56,7 +56,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
     return (
       <div className="bg-white shadow rounded-lg">
         <div className="text-center py-12">
-          <p className="text-gray-500">Nenhuma transaÃ§Ã£o encontrada</p>
+          <p className="text-gray-500">Nenhuma transação encontrada</p>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                DescriÃ§Ã£o
+                Descrição
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Categoria
@@ -85,7 +85,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                 Valor
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                AÃ§Ãµes
+                Ações
               </th>
             </tr>
           </thead>
@@ -135,7 +135,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                       onClick={() => onEdit(transaction)}
                       className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
                       title="Editar"
-                      aria-label="Editar transaÃ§Ã£o"
+                      aria-label="Editar transação"
                     >
                       <PencilIcon className="h-5 w-5" />
                     </button>
@@ -143,7 +143,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                       onClick={() => onDelete(transaction.id)}
                       className="min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation"
                       title="Deletar"
-                      aria-label="Deletar transaÃ§Ã£o"
+                      aria-label="Deletar transação"
                     >
                       <TrashIcon className="h-5 w-5" />
                     </button>
@@ -241,7 +241,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
               disabled={pagination.page === pagination.pages}
               className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              PrÃ³ximo
+              Próximo
             </button>
           </div>
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
@@ -251,7 +251,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                 <span className="font-medium">
                   {((pagination.page - 1) * pagination.limit) + 1}
                 </span>{' '}
-                atÃ©{' '}
+                até{' '}
                 <span className="font-medium">
                   {Math.min(pagination.page * pagination.limit, pagination.total)}
                 </span>{' '}
@@ -295,7 +295,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   disabled={pagination.page === pagination.pages}
                   className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  PrÃ³ximo
+                  Próximo
                 </button>
               </nav>
             </div>

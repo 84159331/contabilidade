@@ -1,14 +1,13 @@
-﻿import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   CurrencyDollarIcon, 
   ArrowUpIcon, 
   ArrowDownIcon,
-  UsersIcon,
-  ChartBarIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import { useDashboardData } from '../hooks/useDashboardData';
 import { useAuth } from '../firebase/AuthContext';
+import { useUserRole } from '../hooks/useUserRole';
 import { toast } from 'react-toastify';
 import AnimatedCard from '../components/AnimatedCard';
 import StatusIndicator from '../components/StatusIndicator';
@@ -17,21 +16,52 @@ import QuickActions from '../components/QuickActions';
 import SkeletonCard from '../components/SkeletonCard';
 import FinancialSummary from '../components/FinancialSummary';
 import RecentTransactions from '../components/RecentTransactions';
-import MemberStats from '../components/MemberStats';
-import BirthdayNotifications from '../components/BirthdayNotifications';
 import PullToRefresh from '../components/PullToRefresh';
 
 const Dashboard: React.FC = () => {
-  const { stats, memberStats, loading, error, refresh } = useDashboardData();
+  const { stats, loading, error, refresh } = useDashboardData();
   const { loading: authLoading, authReady, user } = useAuth();
+  const { isAdmin, isLider } = useUserRole();
   const hasRenderedRef = useRef(false);
   const hasShownErrorRef = useRef(false);
 
-  // ForÃ§a recarregamento quando a rota muda ou quando necessÃ¡rio
+  const financePin = (process.env.REACT_APP_FINANCE_PIN || '').trim();
+  const [financeUnlocked, setFinanceUnlocked] = React.useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('finance_unlocked') === '1';
+    } catch {
+      return false;
+    }
+  });
+
+  const canViewIncome = isAdmin || isLider || (financePin.length > 0 && financeUnlocked);
+
+  const requestFinanceAccess = () => {
+    if (!financePin) {
+      return;
+    }
+
+    const value = window.prompt('Digite a chave de acesso para visualizar as entradas:');
+    if (!value) return;
+    if (value.trim() === financePin) {
+      try {
+        sessionStorage.setItem('finance_unlocked', '1');
+      } catch {
+        // ignore
+      }
+      setFinanceUnlocked(true);
+      toast.success('Acesso liberado');
+      return;
+    }
+
+    toast.error('Chave inválida');
+  };
+
+  // Força recarregamento quando a rota muda ou quando necessário
   useEffect(() => {
-    // Se nÃ£o hÃ¡ dados mas o loading terminou, forÃ§ar refresh
+    // Se não há dados mas o loading terminou, forçar refresh
     if (authReady && user && !loading && !authLoading && !stats) {
-      console.log('ðŸ”„ Dashboard sem dados, forÃ§ando refresh...');
+      console.log('🔄 Dashboard sem dados, forçando refresh...');
       refresh();
     }
   }, [authReady, user, loading, authLoading, stats, refresh]);
@@ -58,7 +88,7 @@ const Dashboard: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
             <p className="mt-1 text-md text-slate-600">
-              VisÃ£o geral das finanÃ§as da igreja
+              Visão geral das finanças da igreja
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -103,18 +133,40 @@ const Dashboard: React.FC = () => {
         {/* Receitas */}
         <AnimatedCard delay={0}>
           <div className="p-5">
-            <StatusIndicator
-              status="positive"
-              value={stats?.income?.total || 0}
-              label="Receitas"
-              icon={<ArrowUpIcon className="h-5 w-5 text-green-600 dark:text-green-400" />}
-              pulse={true}
-            />
-            <div className="mt-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {stats?.income?.count || 0} transaÃ§Ãµes
-              </div>
-            </div>
+            {canViewIncome ? (
+              <>
+                <StatusIndicator
+                  status="positive"
+                  value={stats?.income?.total || 0}
+                  label="Receitas"
+                  icon={<ArrowUpIcon className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                  pulse={true}
+                />
+                <div className="mt-1">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {stats?.income?.count || 0} transações
+                  </div>
+                </div>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={requestFinanceAccess}
+                className="w-full text-left"
+                aria-label="Solicitar acesso às entradas"
+              >
+                <StatusIndicator
+                  status="positive"
+                  value={0}
+                  label="Receitas"
+                  icon={<ArrowUpIcon className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                  pulse={false}
+                />
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  Acesso restrito
+                </div>
+              </button>
+            )}
           </div>
         </AnimatedCard>
 
@@ -130,7 +182,7 @@ const Dashboard: React.FC = () => {
             />
             <div className="mt-1">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {stats?.expense?.count || 0} transaÃ§Ãµes
+                {stats?.expense?.count || 0} transações
               </div>
             </div>
           </div>
@@ -149,52 +201,19 @@ const Dashboard: React.FC = () => {
           </div>
         </AnimatedCard>
 
-        {/* Membros */}
+        {/* Transações */}
         <AnimatedCard delay={3}>
           <div className="p-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                  <UsersIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Membros</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {memberStats?.total || 0}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {memberStats?.active || 0} ativos
-                </div>
-                <div className="text-xs text-gray-400 dark:text-gray-500">
-                  {memberStats?.inactive || 0} inativos
-                </div>
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                <span>Status dos Membros</span>
-                <span>{memberStats?.total ? Math.round(((memberStats?.active || 0) / memberStats.total) * 100) : 0}% ativos</span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div 
-                  className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                  style={{ 
-                    width: `${memberStats?.total ? ((memberStats?.active || 0) / memberStats.total) * 100 : 0}%` 
-                  }}
-                ></div>
-              </div>
-            </div>
+            <StatusIndicator
+              status="neutral"
+              value={(stats?.income?.count || 0) + (stats?.expense?.count || 0)}
+              label="Transações"
+              icon={<ArrowPathIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />}
+              pulse={false}
+            />
           </div>
         </AnimatedCard>
       </div>
-
-        {/* Birthday Notifications */}
-        <AnimatedCard delay={4}>
-          <BirthdayNotifications />
-        </AnimatedCard>
 
         {/* Charts and Recent Activity */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -204,17 +223,13 @@ const Dashboard: React.FC = () => {
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 Resumo Financeiro
               </h3>
-              <FinancialSummary />
-            </div>
-          </AnimatedCard>
-
-          {/* Member Stats */}
-          <AnimatedCard delay={6}>
-            <div className="p-6">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                EstatÃ­sticas dos Membros
-              </h3>
-              <MemberStats />
+              {canViewIncome ? (
+                <FinancialSummary />
+              ) : (
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Acesso restrito
+                </div>
+              )}
             </div>
           </AnimatedCard>
         </div>
@@ -223,7 +238,7 @@ const Dashboard: React.FC = () => {
         <AnimatedCard delay={7}>
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-              TransaÃ§Ãµes Recentes
+              Transações Recentes
             </h3>
           </div>
           <RecentTransactions />

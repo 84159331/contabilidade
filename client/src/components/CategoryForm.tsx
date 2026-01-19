@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface Category {
@@ -27,7 +27,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Removido colorOptions nÃ£o utilizado
+  // Removido colorOptions não utilizado
 
   useEffect(() => {
     if (category) {
@@ -54,7 +54,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'default_amount' ? parseFloat(value) || 0 : value // Converte para nÃºmero se for default_amount
+      [name]: name === 'default_amount' ? parseFloat(value) || 0 : value // Converte para número se for default_amount
     }));
     
     // Clear error when user starts typing
@@ -70,11 +70,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome Ã© obrigatÃ³rio';
+      newErrors.name = 'Nome é obrigatório';
     }
 
     if (!formData.type) {
-      newErrors.type = 'Tipo Ã© obrigatÃ³rio';
+      newErrors.type = 'Tipo é obrigatório';
     }
 
     setErrors(newErrors);
@@ -154,10 +154,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                   </div>
                 </div>
 
-                {/* DescriÃ§Ã£o */}
+                {/* Descrição */}
                 <div>
                   <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    DescriÃ§Ã£o
+                    Descrição
                   </label>
                   <textarea
                     id="description"
@@ -167,14 +167,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, onSave, onClose }
                     value={formData.description}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="DescriÃ§Ã£o da categoria..."
+                    placeholder="Descrição da categoria..."
                   />
                 </div>
 
-                {/* Valor PadrÃ£o (default_amount) */}
+                {/* Valor Padrão (default_amount) */}
                 <div>
                   <label htmlFor="default_amount" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Valor PadrÃ£o (opcional)
+                    Valor Padrão (opcional)
                   </label>
                   <input
                     type="number"

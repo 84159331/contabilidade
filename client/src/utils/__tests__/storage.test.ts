@@ -1,4 +1,4 @@
-﻿import storage from '../storage';
+import storage from '../storage';
 
 describe('storage', () => {
   beforeEach(() => {
@@ -6,7 +6,7 @@ describe('storage', () => {
   });
 
   describe('isAvailable', () => {
-    it('deve retornar true quando localStorage estÃ¡ disponÃ­vel', () => {
+    it('deve retornar true quando localStorage está disponível', () => {
       expect(storage.isAvailable()).toBe(true);
     });
   });
@@ -17,11 +17,11 @@ describe('storage', () => {
       expect(storage.getString('test-key')).toBe('test-value');
     });
 
-    it('deve retornar defaultValue quando nÃ£o existe', () => {
+    it('deve retornar defaultValue quando não existe', () => {
       expect(storage.getString('non-existent', 'default')).toBe('default');
     });
 
-    it('deve retornar null quando nÃ£o existe e nÃ£o hÃ¡ defaultValue', () => {
+    it('deve retornar null quando não existe e não há defaultValue', () => {
       expect(storage.getString('non-existent')).toBeNull();
     });
   });
@@ -32,13 +32,13 @@ describe('storage', () => {
       expect(localStorage.getItem('test-key')).toBe('test-value');
     });
 
-    it('deve remover quando valor Ã© null', () => {
+    it('deve remover quando valor é null', () => {
       localStorage.setItem('test-key', 'test-value');
       storage.setString('test-key', null);
       expect(localStorage.getItem('test-key')).toBeNull();
     });
 
-    it('deve remover quando valor Ã© undefined', () => {
+    it('deve remover quando valor é undefined', () => {
       localStorage.setItem('test-key', 'test-value');
       storage.setString('test-key', undefined);
       expect(localStorage.getItem('test-key')).toBeNull();
@@ -52,16 +52,16 @@ describe('storage', () => {
       expect(storage.getJSON('test-key')).toEqual(data);
     });
 
-    it('deve retornar defaultValue quando nÃ£o existe', () => {
+    it('deve retornar defaultValue quando não existe', () => {
       const defaultValue = { default: true };
       expect(storage.getJSON('non-existent', defaultValue)).toEqual(defaultValue);
     });
 
-    it('deve retornar null quando nÃ£o existe e nÃ£o hÃ¡ defaultValue', () => {
+    it('deve retornar null quando não existe e não há defaultValue', () => {
       expect(storage.getJSON('non-existent')).toBeNull();
     });
 
-    it('deve remover e retornar defaultValue quando JSON Ã© invÃ¡lido', () => {
+    it('deve remover e retornar defaultValue quando JSON é inválido', () => {
       localStorage.setItem('test-key', 'invalid-json');
       const defaultValue = { default: true };
       expect(storage.getJSON('test-key', defaultValue)).toEqual(defaultValue);
@@ -76,13 +76,13 @@ describe('storage', () => {
       expect(JSON.parse(localStorage.getItem('test-key')!)).toEqual(data);
     });
 
-    it('deve remover quando valor Ã© null', () => {
+    it('deve remover quando valor é null', () => {
       localStorage.setItem('test-key', 'test-value');
       storage.setJSON('test-key', null);
       expect(localStorage.getItem('test-key')).toBeNull();
     });
 
-    it('nÃ£o deve fazer nada quando valor Ã© undefined', () => {
+    it('não deve fazer nada quando valor é undefined', () => {
       localStorage.setItem('test-key', 'test-value');
       storage.setJSON('test-key', undefined);
       expect(localStorage.getItem('test-key')).toBe('test-value');

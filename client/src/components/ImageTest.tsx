@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 
 const ImageTest: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PhotoIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface PerfectFillImageProps {
@@ -14,7 +14,7 @@ const PerfectFillImage: React.FC<PerfectFillImageProps> = ({
   src,
   alt,
   className = '',
-  fallbackText = 'Imagem da CÃ©lula',
+  fallbackText = 'Imagem da Célula',
   containerHeight = 192,
   borderRadius = 'rounded-lg'
 }) => {

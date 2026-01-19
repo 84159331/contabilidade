@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '../contexts/ThemeContext';
@@ -9,12 +9,12 @@ const ThemeToggle: React.FC = () => {
   const themes = [
     { key: 'light' as const, icon: SunIcon, label: 'Claro' },
     { key: 'dark' as const, icon: MoonIcon, label: 'Escuro' },
-    { key: 'auto' as const, icon: ComputerDesktopIcon, label: 'AutomÃ¡tico' },
+    { key: 'auto' as const, icon: ComputerDesktopIcon, label: 'Automático' },
   ];
 
   return (
     <div className="flex items-center space-x-1 sm:space-x-2">
-      {/* Toggle rÃ¡pido - sempre visÃ­vel */}
+      {/* Toggle rápido - sempre visível */}
       <motion.button
         onClick={toggleTheme}
         className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"

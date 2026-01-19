@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { ErrorHandler } from '../utils/errors';
 import { toast } from 'react-toastify';
@@ -31,17 +31,17 @@ interface EditBookModalProps {
 const categorias = [
   'Teologia',
   'Devocionais',
-  'Estudos BÃ­blicos',
-  'FÃ©',
-  'EsperanÃ§a',
+  'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
   'Palavras de Coach',
-  'Palavras de EsperanÃ§a',
+  'Palavras de Esperança',
   'Biografias',
-  'HistÃ³ria da Igreja',
-  'LideranÃ§a',
-  'FamÃ­lia',
+  'História da Igreja',
+  'Liderança',
+  'Família',
   'Jovens',
-  'CrianÃ§as'
+  'Crianças'
 ];
 
 const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose }) => {
@@ -80,7 +80,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
     e.preventDefault();
     
     if (!formData.titulo.trim() || !formData.autor.trim() || !formData.descricao.trim()) {
-      toast.warn('Por favor, preencha todos os campos obrigatÃ³rios');
+      toast.warn('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
@@ -133,11 +133,11 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* TÃ­tulo e Autor */}
+          {/* Título e Autor */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                TÃ­tulo *
+                Título *
               </label>
               <input
                 type="text"
@@ -146,7 +146,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
                 onChange={handleInputChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="TÃ­tulo do livro"
+                placeholder="Título do livro"
               />
             </div>
             <div>
@@ -165,10 +165,10 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
             </div>
           </div>
 
-          {/* DescriÃ§Ã£o */}
+          {/* Descrição */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              DescriÃ§Ã£o *
+              Descrição *
             </label>
             <textarea
               name="descricao"
@@ -177,11 +177,11 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
               required
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="DescriÃ§Ã£o do livro..."
+              placeholder="Descrição do livro..."
             />
           </div>
 
-          {/* Categoria, Ano e PÃ¡ginas */}
+          {/* Categoria, Ano e Páginas */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -211,12 +211,12 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
                 min="1900"
                 max={new Date().getFullYear() + 1}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="Ano de publicaÃ§Ã£o"
+                placeholder="Ano de publicação"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                PÃ¡ginas
+                Páginas
               </label>
               <input
                 type="number"
@@ -225,7 +225,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
                 onChange={handleInputChange}
                 min="1"
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="NÃºmero de pÃ¡ginas"
+                placeholder="Número de páginas"
               />
             </div>
           </div>
@@ -241,14 +241,14 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
               value={formData.tags}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="Separadas por vÃ­rgula (ex: fÃ©, esperanÃ§a, amor)"
+              placeholder="Separadas por vírgula (ex: fé, esperança, amor)"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Separe as tags por vÃ­rgula
+              Separe as tags por vírgula
             </p>
           </div>
 
-          {/* OpÃ§Ãµes */}
+          {/* Opções */}
           <div className="space-y-3">
             <div className="flex items-center">
               <input
@@ -276,7 +276,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
             </div>
           </div>
 
-          {/* BotÃµes */}
+          {/* Botões */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"
@@ -296,7 +296,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
                   Salvando...
                 </>
               ) : (
-                'Salvar AlteraÃ§Ãµes'
+                'Salvar Alterações'
               )}
             </button>
           </div>

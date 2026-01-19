@@ -1,14 +1,14 @@
-﻿// Tipos para o sistema de escalas
+// Tipos para o sistema de escalas
 
 export interface Ministerio {
   id: string;
   nome: string;
   descricao: string;
-  funcoes: string[]; // ["Vocal", "Instrumentista", "TÃ©cnico de Som"]
+  funcoes: string[]; // ["Vocal", "Instrumentista", "Técnico de Som"]
   membros_habilitados: string[]; // IDs dos membros
   frequencia: 'semanal' | 'quinzenal' | 'mensal';
   dia_semana?: number; // 0 = Domingo, 1 = Segunda, etc.
-  dia_mes?: number; // Para frequÃªncia mensal
+  dia_mes?: number; // Para frequência mensal
   ativo: boolean;
   criado_em: Date | string;
   atualizado_em: Date | string;
@@ -39,7 +39,7 @@ export interface Escala {
 export interface RotacaoEscala {
   id: string;
   ministerio_id: string;
-  membros: string[]; // IDs dos membros em ordem de rotaÃ§Ã£o
+  membros: string[]; // IDs dos membros em ordem de rotação
   proximo_indice: number;
   historico: {
     data: Date | string;

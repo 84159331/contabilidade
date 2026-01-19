@@ -1,14 +1,14 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Hook para prÃ©-carregar componentes baseado na navegaÃ§Ã£o
+// Hook para pré-carregar componentes baseado na navegação
 export function usePreloadComponents() {
   const location = useLocation();
 
   useEffect(() => {
-    // PrÃ©-carrega componentes baseado na rota atual
+    // Pré-carrega componentes baseado na rota atual
     const preloadComponent = (importFn: () => Promise<any>) => {
-      // Usa requestIdleCallback se disponÃ­vel, senÃ£o usa setTimeout
+      // Usa requestIdleCallback se disponível, senão usa setTimeout
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
           importFn();
@@ -20,34 +20,34 @@ export function usePreloadComponents() {
       }
     };
 
-    // PrÃ©-carrega componentes relacionados baseado na rota atual
+    // Pré-carrega componentes relacionados baseado na rota atual
     switch (location.pathname) {
       case '/tesouraria/dashboard':
-        // PrÃ©-carrega componentes relacionados ao dashboard
+        // Pré-carrega componentes relacionados ao dashboard
         preloadComponent(() => import('../pages/Transactions'));
         preloadComponent(() => import('../pages/Members'));
         break;
       case '/tesouraria/transactions':
-        // PrÃ©-carrega componentes relacionados Ã s transaÃ§Ãµes
+        // Pré-carrega componentes relacionados às transações
         preloadComponent(() => import('../pages/Categories'));
         preloadComponent(() => import('../pages/Members'));
         break;
       case '/tesouraria/members':
-        // PrÃ©-carrega componentes relacionados aos membros
+        // Pré-carrega componentes relacionados aos membros
         preloadComponent(() => import('../pages/Transactions'));
         preloadComponent(() => import('../pages/CellGroupsAdmin'));
         break;
       case '/tesouraria/categories':
-        // PrÃ©-carrega componentes relacionados Ã s categorias
+        // Pré-carrega componentes relacionados às categorias
         preloadComponent(() => import('../pages/Transactions'));
         break;
       case '/tesouraria/reports':
-        // PrÃ©-carrega componentes relacionados aos relatÃ³rios
+        // Pré-carrega componentes relacionados aos relatórios
         preloadComponent(() => import('../pages/Transactions'));
         preloadComponent(() => import('../pages/Members'));
         break;
       case '/tesouraria/cell-groups':
-        // PrÃ©-carrega componentes relacionados aos grupos celulares
+        // Pré-carrega componentes relacionados aos grupos celulares
         preloadComponent(() => import('../pages/Members'));
         break;
     }

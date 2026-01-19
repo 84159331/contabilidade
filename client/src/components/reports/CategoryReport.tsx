@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon nÃ£o utilizado
@@ -78,8 +78,8 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       }
 
     } catch (error) {
-      toast.error('Erro ao carregar relatÃ³rio por categoria');
-      console.error('Erro ao carregar relatÃ³rio:', error);
+      toast.error('Erro ao carregar relatório por categoria');
+      console.error('Erro ao carregar relatório:', error);
     } finally {
       setLoading(false);
     }
@@ -101,8 +101,8 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       {/* Filters */}
       <div className="flex gap-4 items-end">
         <div>
-          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-            Data InÃ­cio
+          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Data Início
           </label>
           <input
             type="date"
@@ -113,7 +113,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           />
         </div>
         <div>
-          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Data Fim
           </label>
           <input
@@ -128,7 +128,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -141,7 +141,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Total de Receitas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {totalIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -150,7 +150,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -163,7 +163,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Total de Despesas
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">
                     R$ {totalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </dd>
                 </dl>
@@ -174,63 +174,63 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       </div>
 
       {/* Income Categories */}
-      <div className="bg-white shadow rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
             Receitas por Categoria
           </h3>
         </div>
         
         {incomeData.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma receita encontrada no perÃ­odo selecionado</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhuma receita encontrada no período selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Categoria
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    TransaÃ§Ãµes
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Transações
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Total
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    MÃ©dia
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Média
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     %
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-800">
                 {incomeData.map((category) => (
-                  <tr key={category.id} className="hover:bg-gray-50">
+                  <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/60">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div 
                           className="w-3 h-3 rounded-full mr-3"
                           style={{ backgroundColor: category.color }}
                         ></div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {category.name}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       {category.transaction_count}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-success-600">
                       R$ {category.total_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       R$ {category.average_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500 dark:text-gray-400">
                       {totalIncome > 0 ? ((category.total_amount / totalIncome) * 100).toFixed(1) : 0}%
                     </td>
                   </tr>
@@ -242,63 +242,63 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       </div>
 
       {/* Expense Categories */}
-      <div className="bg-white shadow rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
             Despesas por Categoria
           </h3>
         </div>
         
         {expenseData.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma despesa encontrada no perÃ­odo selecionado</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhuma despesa encontrada no período selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Categoria
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    TransaÃ§Ãµes
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Transações
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Total
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    MÃ©dia
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Média
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     %
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-800">
                 {expenseData.map((category) => (
-                  <tr key={category.id} className="hover:bg-gray-50">
+                  <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/60">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div 
                           className="w-3 h-3 rounded-full mr-3"
                           style={{ backgroundColor: category.color }}
                         ></div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {category.name}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       {category.transaction_count}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-danger-600">
                       R$ {category.total_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       R$ {category.average_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500 dark:text-gray-400">
                       {totalExpense > 0 ? ((category.total_amount / totalExpense) * 100).toFixed(1) : 0}%
                     </td>
                   </tr>

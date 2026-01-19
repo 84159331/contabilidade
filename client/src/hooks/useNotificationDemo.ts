@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 
 // Hook para demonstrar notificaÃ§Ãµes automÃ¡ticas

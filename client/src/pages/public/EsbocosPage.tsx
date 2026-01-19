@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { esbocosService, Esboco } from '../../services/esbocosService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
@@ -21,7 +21,7 @@ const EsbocosPage: React.FC = () => {
       } catch (e) {
         console.error(e);
         if (!ativo) return;
-        setErro('NÃ£o foi possÃ­vel carregar os esboÃ§os. Tente novamente mais tarde.');
+        setErro('Não foi possível carregar os esboços. Tente novamente mais tarde.');
       } finally {
         if (ativo) setLoading(false);
       }
@@ -42,13 +42,13 @@ const EsbocosPage: React.FC = () => {
         <div className="container mx-auto px-6 max-w-6xl">
           <header className="mb-10 text-center">
             <h1 className="text-3xl md:text-4xl font-extrabold font-heading text-gray-900 dark:text-white mb-3">
-              EsboÃ§os de PregaÃ§Ã£o
+              Esboços de Pregação
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Aqui vocÃª encontra esboÃ§os preparados e aprovados pela lideranÃ§a da Comunidade CristÃ£ Resgate.
+              Aqui você encontra esboços preparados e aprovados pela liderança da Comunidade Cristã Resgate.
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Para explorar muitos outros esboÃ§os de pregaÃ§Ã£o, vocÃª pode acessar diretamente o BÃ­bliaon.
+              Para explorar muitos outros esboços de pregação, você pode acessar diretamente o Bíbliaon.
             </p>
             <div className="mt-5 flex justify-center">
               <button
@@ -56,12 +56,12 @@ const EsbocosPage: React.FC = () => {
                 onClick={handleIrParaBibliaOn}
                 className="inline-flex items-center px-6 py-2.5 rounded-full bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold shadow-md hover:shadow-lg transition"
               >
-                Ver mais esboÃ§os no BÃ­bliaon
+                Ver mais esboços no Bíbliaon
               </button>
             </div>
           </header>
 
-          {/* Lista de esboÃ§os */}
+          {/* Lista de esboços */}
 
           {loading ? (
             <div className="flex justify-center py-12">
@@ -73,7 +73,7 @@ const EsbocosPage: React.FC = () => {
             </div>
           ) : esbocos.length === 0 ? (
             <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
-              Ainda nÃ£o hÃ¡ esboÃ§os cadastrados pela lideranÃ§a. Em breve novos conteÃºdos estarÃ£o disponÃ­veis.
+              Ainda não há esboços cadastrados pela liderança. Em breve novos conteúdos estarão disponíveis.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -101,7 +101,7 @@ const EsbocosPage: React.FC = () => {
                       to={`/esbocos/${esboco.id}`}
                       className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline"
                     >
-                      Ver esboÃ§o completo
+                      Ver esboço completo
                     </Link>
                   </div>
                 </article>

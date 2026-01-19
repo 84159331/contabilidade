@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { ChartBarIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MonthlyBalanceReport from '../components/reports/MonthlyBalanceReport';
@@ -25,7 +25,7 @@ const Reports: React.FC = () => {
   const [activeReport, setActiveReport] = useState<ReportType>('monthly');
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState<any>(null);
-  const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, perÃ­odo, etc.
+  const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, período, etc.
   const reportContainerRef = useRef<HTMLDivElement>(null);
   
   // InformaÃ§Ãµes da igreja (pode ser obtido de configuraÃ§Ãµes ou deixar vazio)
@@ -36,20 +36,20 @@ const Reports: React.FC = () => {
   const reports = [
     {
       id: 'monthly' as ReportType,
-      name: 'BalanÃ§o Mensal',
-      description: 'Receitas e despesas por mÃªs',
+      name: 'Balanço Mensal',
+      description: 'Receitas e despesas por mês',
       icon: ChartBarIcon
     },
     {
       id: 'yearly' as ReportType,
-      name: 'BalanÃ§o Anual',
-      description: 'VisÃ£o geral do ano',
+      name: 'Balanço Anual',
+      description: 'Visão geral do ano',
       icon: ChartBarIcon
     },
     {
       id: 'contributions' as ReportType,
-      name: 'ContribuiÃ§Ãµes',
-      description: 'ContribuiÃ§Ãµes por membro',
+      name: 'Contribuições',
+      description: 'Contribuições por membro',
       icon: ChartBarIcon
     },
     {
@@ -89,7 +89,7 @@ const Reports: React.FC = () => {
   const handleGeneratePdf = async () => {
     try {
       if (!reportData) {
-        toast.warning('Aguarde o carregamento dos dados do relatÃ³rio');
+        toast.warning('Aguarde o carregamento dos dados do relatório');
         return;
       }
 
@@ -166,7 +166,7 @@ const Reports: React.FC = () => {
           break;
 
         default:
-          toast.error('Tipo de relatÃ³rio nÃ£o suportado');
+          toast.error('Tipo de relatório não suportado');
       }
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
@@ -266,14 +266,14 @@ const Reports: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">RelatÃ³rios</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Visualize e analise os dados financeiros da igreja
         </p>
       </div>
 
       {/* Report Tabs */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="-mb-px flex space-x-8 px-6" aria-label="Tabs">
             {reports.map((report) => {

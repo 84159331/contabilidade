@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 // Removido DocumentArrowDownIcon nÃ£o utilizado
@@ -60,8 +60,8 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
         });
       }
     } catch (error) {
-      toast.error('Erro ao carregar relatÃ³rio de contribuiÃ§Ãµes');
-      console.error('Erro ao carregar relatÃ³rio:', error);
+      toast.error('Erro ao carregar relatório de contribuições');
+      console.error('Erro ao carregar relatório:', error);
     } finally {
       setLoading(false);
     }
@@ -80,8 +80,8 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
       {/* Filters */}
       <div className="flex gap-4 items-end">
         <div>
-          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-            Data InÃ­cio
+          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Data Início
           </label>
           <input
             type="date"
@@ -92,7 +92,7 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
           />
         </div>
         <div>
-          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Data Fim
           </label>
           <input
@@ -108,12 +108,12 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
       {/* Summary Stats */}
       {data.length > 0 && (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-4">
-          <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                    <span className="text-primary-600 font-bold">ðŸ‘¥</span>
+                    <span className="text-primary-600 font-bold">#</span>
                   </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
@@ -121,7 +121,7 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       Contribuintes
                     </dt>
-                    <dd className="text-lg font-medium text-gray-900">
+                    <dd className="text-lg font-medium text-gray-900 dark:text-white">
                       {data.length}
                     </dd>
                   </dl>
@@ -130,12 +130,12 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center">
-                    <span className="text-success-600 font-bold">ðŸ’°</span>
+                    <span className="text-success-600 font-bold">$</span>
                   </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
@@ -143,7 +143,7 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       Total Arrecadado
                     </dt>
-                    <dd className="text-lg font-medium text-gray-900">
+                    <dd className="text-lg font-medium text-gray-900 dark:text-white">
                       R$ {data.reduce((sum, member) => sum + member.total_contributed, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </dd>
                   </dl>
@@ -152,20 +152,20 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-bold">ðŸ“Š</span>
+                    <span className="text-blue-600 font-bold">≈</span>
                   </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      MÃ©dia por Membro
+                      Média por Membro
                     </dt>
-                    <dd className="text-lg font-medium text-gray-900">
+                    <dd className="text-lg font-medium text-gray-900 dark:text-white">
                       R$ {data.length > 0 ? (data.reduce((sum, member) => sum + member.total_contributed, 0) / data.length).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '0,00'}
                     </dd>
                   </dl>
@@ -174,20 +174,20 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-900/80 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-800">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-purple-600 font-bold">ðŸ“ˆ</span>
+                    <span className="text-purple-600 font-bold">Σ</span>
                   </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      Total de ContribuiÃ§Ãµes
+                      Total de Contribuições
                     </dt>
-                    <dd className="text-lg font-medium text-gray-900">
+                    <dd className="text-lg font-medium text-gray-900 dark:text-white">
                       {data.reduce((sum, member) => sum + member.contribution_count, 0)}
                     </dd>
                   </dl>
@@ -199,69 +199,69 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
       )}
 
       {/* Members Table */}
-      <div className="bg-white shadow rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
-            ContribuiÃ§Ãµes por Membro
+      <div className="bg-white dark:bg-gray-900/80 shadow rounded-lg border border-gray-200 dark:border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            Contribuições por Membro
           </h3>
         </div>
         
         {data.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">Nenhuma contribuiÃ§Ã£o encontrada no perÃ­odo selecionado</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhuma contribuição encontrada no período selecionado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Membro
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ContribuiÃ§Ãµes
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Contribuições
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Total ContribuÃ­do
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Total Contribuído
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    MÃ©dia por ContribuiÃ§Ã£o
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Média por Contribuição
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Primeira ContribuiÃ§Ã£o
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Primeira Contribuição
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ãšltima ContribuiÃ§Ã£o
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Última Contribuição
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-800">
                 {data.map((member) => (
-                  <tr key={member.id} className="hover:bg-gray-50">
+                  <tr key={member.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/60">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {member.name}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
                           {member.email}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       {member.contribution_count}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-success-600">
                       R$ {member.total_contributed.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
                       R$ {member.average_contribution.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {member.first_contribution ? new Date(member.first_contribution).toLocaleDateString('pt-BR') : '-'}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500 dark:text-gray-400">
+                      {new Date(member.first_contribution).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
-                      {member.last_contribution ? new Date(member.last_contribution).toLocaleDateString('pt-BR') : '-'}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500 dark:text-gray-400">
+                      {new Date(member.last_contribution).toLocaleDateString('pt-BR')}
                     </td>
                   </tr>
                 ))}

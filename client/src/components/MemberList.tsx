@@ -1,4 +1,4 @@
-﻿import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import SkeletonLoader from './SkeletonLoader';
 import LoadingSpinner from './LoadingSpinner';

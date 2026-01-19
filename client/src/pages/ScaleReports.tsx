@@ -1,4 +1,4 @@
-﻿// PÃ¡gina de relatÃ³rios e estatÃ­sticas de escalas
+// PÃ¡gina de relatÃ³rios e estatÃ­sticas de escalas
 import React, { useState, useEffect } from 'react';
 import { escalasAPI } from '../services/scalesAPI';
 import { ministeriosAPI } from '../services/scalesAPI';
@@ -116,15 +116,15 @@ const ScaleReports: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-          RelatÃ³rios de Escalas
+          Relatórios de Escalas
         </h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          EstatÃ­sticas e anÃ¡lises das escalas
+          Estatísticas e análises das escalas
         </p>
       </div>
 
       {/* Filtros */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-gray-900/80 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -157,7 +157,7 @@ const ScaleReports: React.FC = () => {
 
       {/* Cards de EstatÃ­sticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white dark:bg-gray-900/80 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Total de Escalas</p>
@@ -196,7 +196,7 @@ const ScaleReports: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Taxa de ConfirmaÃ§Ã£o</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Taxa de Confirmação</p>
               <p className="text-2xl font-bold text-blue-600 mt-1">
                 {totalMembrosEscalados > 0
                   ? Math.round((totalConfirmacoes / totalMembrosEscalados) * 100)
@@ -210,16 +210,16 @@ const ScaleReports: React.FC = () => {
       </div>
 
       {/* EstatÃ­sticas por MinistÃ©rio */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-900/80 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Por MinistÃ©rio
+          Por Ministério
         </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead>
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                  MinistÃ©rio
+                  Ministério
                 </th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Escalas
@@ -228,7 +228,7 @@ const ScaleReports: React.FC = () => {
                   Membros Escalados
                 </th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                  ConfirmaÃ§Ãµes
+                  Confirmações
                 </th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Taxa
