@@ -204,7 +204,7 @@ const EventsAdmin: React.FC = () => {
           toast.success('Evento criado com sucesso!');
           // Disparar evento de sincronizaÃ§Ã£o
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
-          console.log('ðŸ“¡ Evento de sincronizaÃ§Ã£o disparado para pÃ¡gina inicial');
+          console.log('Evento de sincronização disparado para página inicial');
         } catch (apiError) {
           console.log('âš ï¸ Erro na API, criando localmente:', apiError);
           const newEvent: Event = {
@@ -297,9 +297,9 @@ const EventsAdmin: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <CalendarIcon className="h-6 w-6 mr-2" />
-            AdministraÃ§Ã£o de Eventos
+            Administração de Eventos
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos que aparecem na pÃ¡gina inicial</p>
+          <p className="text-gray-600 dark:text-gray-300">Gerencie os eventos que aparecem na página inicial</p>
         </div>
         <div className="flex space-x-3">
           <button

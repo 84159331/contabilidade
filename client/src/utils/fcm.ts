@@ -17,13 +17,13 @@ export const initializeMessaging = async () => {
 
   // Verificar se o navegador suporta Service Worker
   if (!('serviceWorker' in navigator)) {
-    console.warn('Service Worker nÃ£o suportado');
+    console.warn('Service Worker não suportado');
     return null;
   }
 
   // Verificar se o navegador suporta notificaÃ§Ãµes
   if (!('Notification' in window)) {
-    console.warn('NotificaÃ§Ãµes nÃ£o suportadas');
+    console.warn('Notificações não suportadas');
     return null;
   }
 
@@ -50,7 +50,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     }
 
     if (!messaging) {
-      console.warn('Messaging nÃ£o disponÃ­vel');
+      console.warn('Messaging não disponível');
       return null;
     }
 
@@ -58,7 +58,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     const permission = await Notification.requestPermission();
     
     if (permission === 'granted') {
-      console.log('âœ… PermissÃ£o de notificaÃ§Ã£o concedida');
+      console.log('Permissão de notificação concedida');
 
       if (!VAPID_KEY) {
         console.warn('⚠️ REACT_APP_FIREBASE_VAPID_KEY não configurada. Push web pode falhar.');
@@ -89,15 +89,15 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
         
         return token;
       } else {
-        console.warn('âš ï¸ Token FCM nÃ£o disponÃ­vel');
+        console.warn('Token FCM não disponível');
         return null;
       }
     } else {
-      console.warn('âš ï¸ PermissÃ£o de notificaÃ§Ã£o negada');
+      console.warn('Permissão de notificação negada');
       return null;
     }
   } catch (error) {
-    console.error('âŒ Erro ao solicitar permissÃ£o:', error);
+    console.error('Erro ao solicitar permissão:', error);
     return null;
   }
 };
@@ -120,11 +120,11 @@ const setupListener = () => {
   if (!messaging) return;
 
   onMessage(messaging, (payload) => {
-    console.log('ðŸ“¨ Mensagem recebida:', payload);
+    console.log('Mensagem recebida:', payload);
     
     // Mostrar notificaÃ§Ã£o
     if (payload.notification) {
-      const notificationTitle = payload.notification.title || 'Nova notificaÃ§Ã£o';
+      const notificationTitle = payload.notification.title || 'Nova notificação';
       const notificationOptions = {
         body: payload.notification.body || '',
         icon: '/img/icons/icon-192x192.png',

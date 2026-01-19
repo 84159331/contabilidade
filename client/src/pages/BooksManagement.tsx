@@ -215,7 +215,7 @@ const BooksManagement: React.FC = () => {
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Buscar por tÃ­tulo, autor ou palavra-chave..."
+                  placeholder="Buscar por título, autor ou palavra-chave..."
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -244,7 +244,7 @@ const BooksManagement: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="destaque">Destaques</option>
-                <option value="titulo">TÃ­tulo A-Z</option>
+                <option value="titulo">Título A-Z</option>
                 <option value="autor">Autor A-Z</option>
                 <option value="downloads">Mais Baixados</option>
                 <option value="avaliacao">Melhor Avaliados</option>

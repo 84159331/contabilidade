@@ -67,17 +67,17 @@ const Events: React.FC = () => {
   };
 
   const handleTestPermissions = async () => {
-    console.log('ðŸ§ª Events.tsx - Testando permissÃµes do Firestore...');
+    console.log('Events.tsx - Testando permissões do Firestore...');
     try {
       const result = await eventsAPI.testFirestorePermissions();
       if (result) {
-        toast.success('PermissÃµes do Firestore OK!');
+        toast.success('Permissões do Firestore OK!');
       } else {
-        toast.error('Problema com permissÃµes do Firestore');
+        toast.error('Problema com permissões do Firestore');
       }
     } catch (error) {
-      console.error('âŒ Events.tsx - Erro ao testar permissÃµes:', error);
-      toast.error('Erro ao testar permissÃµes');
+      console.error('Events.tsx - Erro ao testar permissões:', error);
+      toast.error('Erro ao testar permissões');
     }
   };
 
@@ -105,19 +105,19 @@ const Events: React.FC = () => {
     console.log('ðŸ—‘ï¸ Events.tsx - Tentando excluir evento com ID:', id);
     
     if (!id) {
-      toast.error('ID do evento Ã© invÃ¡lido');
+      toast.error('ID do evento é inválido');
       return;
     }
     
-    if (window.confirm('Tem certeza que deseja excluir este evento? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
-      console.log('âœ… Events.tsx - UsuÃ¡rio confirmou exclusÃ£o');
+    if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
+      console.log('Events.tsx - Usuário confirmou exclusão');
       
       try {
         console.log('ðŸ“¡ Events.tsx - Chamando eventsAPI.deleteEvent...');
         await eventsAPI.deleteEvent(id);
-        console.log('âœ… Events.tsx - Evento excluÃ­do com sucesso via API');
+        console.log('Events.tsx - Evento excluído com sucesso via API');
         
-        toast.success('Evento excluÃ­do com sucesso!');
+        toast.success('Evento excluído com sucesso!');
         console.log('ðŸ”„ Events.tsx - Recarregando eventos...');
         loadEvents();
       } catch (error) {
@@ -134,7 +134,7 @@ const Events: React.FC = () => {
         }
       }
     } else {
-      console.log('âŒ Events.tsx - UsuÃ¡rio cancelou exclusÃ£o');
+      console.log('Events.tsx - Usuário cancelou exclusão');
     }
   };
 
@@ -198,13 +198,13 @@ const Events: React.FC = () => {
             onClick={handleTestPermissions}
             className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
           >
-            ðŸ§ª Testar PermissÃµes
+            Testar Permissões
           </button>
           <button
             onClick={() => {
               if (events.length > 0) {
                 const firstEvent = events[0];
-                console.log('ðŸ§ª Testando exclusÃ£o do primeiro evento:', firstEvent);
+                console.log('Events.tsx - Testando exclusão do primeiro evento:', firstEvent);
                 handleDeleteEvent(firstEvent.id);
               } else {
                 toast.info('Nenhum evento para testar');
@@ -212,7 +212,7 @@ const Events: React.FC = () => {
             }}
             className="inline-flex items-center px-4 py-2 border border-orange-300 text-sm font-medium rounded-md shadow-sm text-orange-700 bg-white hover:bg-orange-50"
           >
-            ðŸ—‘ï¸ Testar ExclusÃ£o
+            Testar Exclusão
           </button>
           <button
             onClick={handleCreateEvent}

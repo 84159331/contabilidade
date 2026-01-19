@@ -98,9 +98,9 @@ const CellGroupsAdmin: React.FC = () => {
       const defaultGroups: CellGroup[] = [
         {
           id: 'family',
-          title: 'CÃ©lula Resgate Veredas',
+          title: 'Célula Resgate Veredas',
           subtitle: 'Crescendo Juntos',
-          description: 'Um grupo para casais e famÃ­lias que buscam crescer juntos na fÃ© e no relacionamento.',
+          description: 'Um grupo para casais e famílias que buscam crescer juntos na fé e no relacionamento.',
           image: '/img/family-group.jpg',
           icon: 'HomeIcon',
           color: 'blue',
@@ -119,9 +119,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'youth',
-          title: 'CÃ©lula Resgate Vendinha',
-          subtitle: 'GeraÃ§Ã£o de Impacto',
-          description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleÃ§a sua fÃ©.',
+          title: 'Célula Resgate Vendinha',
+          subtitle: 'Geração de Impacto',
+          description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
           image: '/img/youth-group.jpg',
           icon: 'SparklesIcon',
           color: 'blue',
@@ -140,9 +140,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'women',
-          title: 'CÃ©lula Resgate Quadra 45',
-          subtitle: 'Mulheres de FÃ©',
-          description: 'Um espaÃ§o seguro para mulheres compartilharem experiÃªncias, orarem e se apoiarem mutuamente.',
+          title: 'Célula Resgate Quadra 45',
+          subtitle: 'Mulheres de Fé',
+          description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
           image: '/img/women-group.jpg',
           icon: 'HeartIcon',
           color: 'green',
@@ -161,9 +161,9 @@ const CellGroupsAdmin: React.FC = () => {
         },
         {
           id: 'men',
-          title: 'CÃ©lula Resgate Quadra 34',
-          subtitle: 'Homens de PropÃ³sito',
-          description: 'Homens de fÃ© se reÃºnem para discutir desafios, buscar sabedoria e fortalecer seu propÃ³sito.',
+          title: 'Célula Resgate Quadra 34',
+          subtitle: 'Homens de Propósito',
+          description: 'Homens de fé se reúnem para discutir desafios, buscar sabedoria e fortalecer seu propósito.',
           image: '/img/men-group.jpg',
           icon: 'UserGroupIcon',
           color: 'green',
@@ -387,10 +387,10 @@ const CellGroupsAdmin: React.FC = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          AdministraÃ§Ã£o de CÃ©lulas Resgate
+          Administração de Células Resgate
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Gerencie as cÃ©lulas da igreja, lÃ­deres e membros
+          Gerencie as células da igreja, líderes e membros
         </p>
       </div>
 
@@ -438,7 +438,7 @@ const CellGroupsAdmin: React.FC = () => {
           </button>
           <button
             onClick={() => {
-              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irÃ¡ restaurar os dados padrÃ£o.')) {
+              if (window.confirm('Tem certeza que deseja resetar todos os dados dos grupos celulares? Isso irá restaurar os dados padrão.')) {
                 storage.remove('cellGroups');
                 storage.remove('publicCellGroups');
                 storage.remove('cellGroupsLastSync');
@@ -447,7 +447,7 @@ const CellGroupsAdmin: React.FC = () => {
             }}
             className="px-4 py-2 bg-red-600 text-white border border-red-600 rounded-lg font-medium hover:bg-red-700"
           >
-            ðŸ”„ Resetar Dados
+            Resetar Dados
           </button>
         </div>
       </div>
@@ -506,14 +506,14 @@ const CellGroupsAdmin: React.FC = () => {
               {/* Leader Section */}
               <div className="mb-4 space-y-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  LÃ­der do Grupo:
+                  Líder do Grupo:
                 </label>
                 <input
                   type="text"
                   value={group.leader}
                   onChange={(e) => handleLeaderChange(group.id, 'leader', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  placeholder="Nome do LÃ­der"
+                  placeholder="Nome do Líder"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <input
@@ -546,7 +546,7 @@ const CellGroupsAdmin: React.FC = () => {
                     value={group.location}
                     onChange={(e) => handleLeaderChange(group.id, 'location', e.target.value)}
                     className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                    placeholder="Local da cÃ©lula"
+                    placeholder="Local da célula"
                   />
                 </div>
               </div>
@@ -616,11 +616,11 @@ const CellGroupsAdmin: React.FC = () => {
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.name ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                   required
                 />
-                {memberFormErrors.name && <p className="text-red-500 text-xs mt-1">O nome Ã© obrigatÃ³rio.</p>}
+                {memberFormErrors.name && <p className="text-red-500 text-xs mt-1">O nome é obrigatório.</p>}
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email
+                  E-mail
                 </label>
                 <input
                   type="email"
@@ -630,7 +630,7 @@ const CellGroupsAdmin: React.FC = () => {
                   onChange={handleMemberFormChange}
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.email ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                 />
-                {memberFormErrors.email && <p className="text-red-500 text-xs mt-1">Email invÃ¡lido.</p>}
+                {memberFormErrors.email && <p className="text-red-500 text-xs mt-1">E-mail inválido.</p>}
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -644,7 +644,7 @@ const CellGroupsAdmin: React.FC = () => {
                   onChange={handleMemberFormChange}
                   className={`mt-1 block w-full px-3 py-2 border ${memberFormErrors.phone ? 'border-red-500' : 'border-gray-300'} dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white`}
                 />
-                {memberFormErrors.phone && <p className="text-red-500 text-xs mt-1">Telefone invÃ¡lido (apenas nÃºmeros, 10-11 dÃ­gitos).</p>}
+                {memberFormErrors.phone && <p className="text-red-500 text-xs mt-1">Telefone inválido (apenas números, 10-11 dígitos).</p>}
               </div>
               <button
                 type="submit"

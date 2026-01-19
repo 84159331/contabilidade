@@ -62,30 +62,30 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('ðŸ”„ Carregando eventos para pÃ¡gina inicial...');
+      console.log('Carregando eventos para página inicial...');
       
       // Tentar carregar eventos da API real primeiro
       try {
         const eventsData = await eventsAPI.getEvents();
-        console.log('ðŸ“Š Dados recebidos da API:', eventsData);
+        console.log('Dados recebidos da API:', eventsData);
         
         if (eventsData && eventsData.length > 0) {
           setEvents(eventsData);
           // Salvar no cache local
           storage.setJSON('cachedEvents', eventsData);
-          console.log('âœ… Eventos carregados da API:', eventsData.length);
+          console.log('Eventos carregados da API:', eventsData.length);
         } else {
-          console.log('âš ï¸ Nenhum evento encontrado na API, verificando cache local');
+          console.log('Nenhum evento encontrado na API, verificando cache local');
           loadFromCache();
         }
       } catch (apiError) {
-        console.log('âš ï¸ Erro na API, verificando cache local:', apiError);
+        console.log('Erro na API, verificando cache local:', apiError);
         loadFromCache();
       }
       
       setLoading(false);
     } catch (error) {
-      console.error('âŒ Erro ao carregar eventos:', error);
+      console.error('Erro ao carregar eventos:', error);
       setLoading(false);
     }
   };

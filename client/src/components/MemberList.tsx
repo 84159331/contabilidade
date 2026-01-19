@@ -201,7 +201,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 Contato
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                AniversÃ¡rio
+                Aniversário
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Membro Desde
@@ -210,7 +210,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 Status
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                AÃ§Ãµes
+                Ações
               </th>
             </tr>
           </thead>
@@ -372,7 +372,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 </div>
               )}
               <div>
-                <span className="text-gray-500 dark:text-gray-400">AniversÃ¡rio:</span>
+                <span className="text-gray-500 dark:text-gray-400">Aniversário:</span>
                 <p className="font-medium text-gray-900 dark:text-white">
                   {formatDate(member.birth_date)}
                 </p>
@@ -405,7 +405,7 @@ const MemberList: React.FC<MemberListProps> = ({
               disabled={pagination.page === pagination.pages}
               className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              PrÃ³ximo
+              Próximo
             </button>
           </div>
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
@@ -415,7 +415,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 <span className="font-medium">
                   {((pagination.page - 1) * pagination.limit) + 1}
                 </span>{' '}
-                atÃ©{' '}
+                até{' '}
                 <span className="font-medium">
                   {Math.min(pagination.page * pagination.limit, pagination.total)}
                 </span>{' '}
@@ -459,7 +459,7 @@ const MemberList: React.FC<MemberListProps> = ({
                   disabled={pagination.page === pagination.pages}
                   className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  PrÃ³ximo
+                  Próximo
                 </button>
               </nav>
             </div>

@@ -65,7 +65,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     
     // ValidaÃ§Ãµes
     if (!formData.titulo.trim()) {
-      toast.warn('Por favor, digite o tÃ­tulo do livro');
+      toast.warn('Por favor, digite o título do livro');
       return;
     }
     
@@ -75,7 +75,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     }
     
     if (!formData.descricao.trim()) {
-      toast.warn('Por favor, digite a descriÃ§Ã£o do livro');
+      toast.warn('Por favor, digite a descrição do livro');
       return;
     }
     
@@ -183,23 +183,23 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
           {/* InstruÃ§Ãµes */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
-              ðŸ“š Como adicionar livros reais:
+              Como adicionar livros reais:
             </h3>
             <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-              <li>â€¢ Baixe o PDF do livro da internet</li>
-              <li>â€¢ Encontre ou crie uma imagem da capa (JPG, PNG)</li>
-              <li>â€¢ Preencha todas as informaÃ§Ãµes do livro</li>
-              <li>â€¢ Selecione os arquivos PDF e da capa</li>
-              <li>â€¢ Clique em "Adicionar Livro"</li>
+              <li>- Baixe o PDF do livro da internet</li>
+              <li>- Encontre ou crie uma imagem da capa (JPG, PNG)</li>
+              <li>- Preencha todas as informações do livro</li>
+              <li>- Selecione os arquivos PDF e da capa</li>
+              <li>- Clique em "Adicionar Livro"</li>
             </ul>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* TÃ­tulo e Autor */}
+            {/* Título e Autor */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  TÃ­tulo do Livro *
+                  Título do Livro *
                 </label>
                 <input
                   type="text"
@@ -208,7 +208,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                   onChange={handleInputChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Digite o tÃ­tulo do livro"
+                  placeholder="Digite o título do livro"
                 />
               </div>
               <div>
@@ -227,10 +227,10 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               </div>
             </div>
 
-            {/* DescriÃ§Ã£o */}
+            {/* Descrição */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                DescriÃ§Ã£o *
+                Descrição *
               </label>
               <textarea
                 name="descricao"
@@ -239,7 +239,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                 required
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="DescriÃ§Ã£o do livro..."
+                placeholder="Descrição do livro..."
               />
             </div>
 

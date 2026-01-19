@@ -94,9 +94,9 @@ const ConnectPage: React.FC = () => {
   const getDefaultGroups = (): PublicCellGroup[] => [
     {
       id: 'family',
-      title: 'CÃ©lula Resgate Veredas',
+      title: 'Célula Resgate Veredas',
       subtitle: 'Crescendo Juntos',
-      description: 'Um grupo para casais e famÃ­lias que buscam crescer juntos na fÃ© e no relacionamento.',
+      description: 'Um grupo para casais e famílias que buscam crescer juntos na fé e no relacionamento.',
       image: '/img/family-group.jpg',
       icon: 'HomeIcon',
       color: 'blue',
@@ -111,9 +111,9 @@ const ConnectPage: React.FC = () => {
     },
     {
       id: 'youth',
-      title: 'CÃ©lula Resgate Vendinha',
-      subtitle: 'GeraÃ§Ã£o de Impacto',
-      description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleÃ§a sua fÃ©.',
+      title: 'Célula Resgate Vendinha',
+      subtitle: 'Geração de Impacto',
+      description: 'Conecte-se com outros jovens, discuta temas relevantes e fortaleça sua fé.',
       image: '/img/youth-group.jpg',
       icon: 'SparklesIcon',
       color: 'blue',
@@ -128,9 +128,9 @@ const ConnectPage: React.FC = () => {
     },
     {
       id: 'women',
-      title: 'CÃ©lula Resgate Quadra 45',
-      subtitle: 'Mulheres de FÃ©',
-      description: 'Um espaÃ§o seguro para mulheres compartilharem experiÃªncias, orarem e se apoiarem mutuamente.',
+      title: 'Célula Resgate Quadra 45',
+      subtitle: 'Mulheres de Fé',
+      description: 'Um espaço seguro para mulheres compartilharem experiências, orarem e se apoiarem mutuamente.',
       image: '/img/women-group.jpg',
       icon: 'HeartIcon',
       color: 'green',
@@ -145,9 +145,9 @@ const ConnectPage: React.FC = () => {
     },
     {
       id: 'men',
-      title: 'CÃ©lula Resgate Quadra 34',
-      subtitle: 'Homens de PropÃ³sito',
-      description: 'Homens de fÃ© se reÃºnem para discutir desafios, buscar sabedoria e fortalecer seu propÃ³sito.',
+      title: 'Célula Resgate Quadra 34',
+      subtitle: 'Homens de Propósito',
+      description: 'Homens de fé se reúnem para discutir desafios, buscar sabedoria e fortalecer seu propósito.',
       image: '/img/men-group.jpg',
       icon: 'UserGroupIcon',
       color: 'green',
@@ -196,7 +196,7 @@ const ConnectPage: React.FC = () => {
     setSelectedGroup(groupId);
     // Simular processo de inscriÃ§Ã£o
     setTimeout(() => {
-      toast.success('InscriÃ§Ã£o realizada com sucesso! VocÃª receberÃ¡ um contato em breve.');
+      toast.success('Inscrição realizada com sucesso! Você receberá um contato em breve.');
       setSelectedGroup(null);
     }, 2000);
   };
@@ -227,18 +227,18 @@ const ConnectPage: React.FC = () => {
               alt="Conecte-se" 
               className="mx-auto h-16 w-16 mb-6 opacity-90"
             />
-            <h1 className="text-5xl font-bold font-heading mb-4">CÃ©lulas Resgate</h1>
+            <h1 className="text-5xl font-bold font-heading mb-4">Células Resgate</h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
-              Encontre seu lugar na famÃ­lia de Deus. Participe de uma cÃ©lula e cresÃ§a junto conosco.
+              Encontre seu lugar na família de Deus. Participe de uma célula e cresça junto conosco.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center">
                 <UsersIcon className="h-5 w-5 mr-2" />
-                <span>{cellGroups.length} CÃ©lulas DisponÃ­veis</span>
+                <span>{cellGroups.length} Células Disponíveis</span>
               </div>
               <div className="flex items-center">
                 <CalendarIcon className="h-5 w-5 mr-2" />
-                <span>ReuniÃµes Semanais</span>
+                <span>Reuniões Semanais</span>
               </div>
               <div className="flex items-center">
                 <HeartIcon className="h-5 w-5 mr-2" />
@@ -253,11 +253,11 @@ const ConnectPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                     Escolha Sua CÃ©lula
+                     Escolha Sua Célula
                    </h2>
                    <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                     Cada cÃ©lula tem sua identidade Ãºnica, mas todas compartilham o mesmo objetivo: 
-                     crescer na fÃ© e construir relacionamentos significativos.
+                     Cada célula tem sua identidade única, mas todas compartilham o mesmo objetivo: 
+                     crescer na fé e construir relacionamentos significativos.
                    </p>
         </div>
 
@@ -288,7 +288,7 @@ const ConnectPage: React.FC = () => {
                     alt={group.title}
                     className="w-full"
                     containerHeight={192}
-                    fallbackText="Imagem da CÃ©lula"
+                    fallbackText="Imagem da Célula"
                     borderRadius="rounded-t-xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -303,7 +303,7 @@ const ConnectPage: React.FC = () => {
                   {/* Members Count */}
                   <div className="absolute bottom-4 right-4 bg-white/90 dark:bg-gray-800/90 px-3 py-1 rounded-full">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                      CÃ©lula Ativa
+                      Célula Ativa
                     </span>
                   </div>
                 </div>
@@ -352,10 +352,10 @@ const ConnectPage: React.FC = () => {
         <div className="text-center mt-16">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                       NÃ£o Encontrou a CÃ©lula Ideal?
+                       Não Encontrou a Célula Ideal?
                      </h3>
                      <p className="text-gray-600 dark:text-gray-300 mb-6">
-                       Estamos sempre abertos para criar novas cÃ©lulas baseadas na necessidade da nossa comunidade. 
+                       Estamos sempre abertos para criar novas células baseadas na necessidade da nossa comunidade. 
                        Entre em contato conosco e vamos conversar sobre suas necessidades.
                      </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
