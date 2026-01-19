@@ -10,12 +10,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 
 // Configuração do Firebase (mesma do app)
 firebase.initializeApp({
-  apiKey: "AIzaSyDxJqJqJqJqJqJqJqJqJqJqJqJqJqJqJqJq",
+  apiKey: "AIzaSyDW73K6vb7RMdyfsJ6JVzzm1r3sULs4ceY",
   authDomain: "comunidaderesgate-82655.firebaseapp.com",
   projectId: "comunidaderesgate-82655",
-  storageBucket: "comunidaderesgate-82655.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdefghijklmnop"
+  storageBucket: "comunidaderesgate-82655.firebasestorage.app",
+  messagingSenderId: "587928941365",
+  appId: "1:587928941365:web:b788b8c9acf0a20992d27c"
 });
 
 const messaging = firebase.messaging();

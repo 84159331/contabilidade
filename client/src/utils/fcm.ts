@@ -7,7 +7,7 @@ import { db } from '../firebase/config';
 
 // VAPID key - vocÃª precisa gerar isso no Firebase Console
 // Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
-const VAPID_KEY = 'YOUR_VAPID_KEY_HERE'; // Substitua pela sua chave VAPID
+const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY || '';
 
 let messaging: any = null;
 
@@ -59,10 +59,16 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     
     if (permission === 'granted') {
       console.log('âœ… PermissÃ£o de notificaÃ§Ã£o concedida');
+
+      if (!VAPID_KEY) {
+        console.warn('⚠️ REACT_APP_FIREBASE_VAPID_KEY não configurada. Push web pode falhar.');
+      }
       
       // Obter token FCM
+      const swRegistration = 'serviceWorker' in navigator ? await navigator.serviceWorker.ready : undefined;
       const token = await getToken(messaging, {
         vapidKey: VAPID_KEY,
+        serviceWorkerRegistration: swRegistration as any,
       });
 
       if (token) {

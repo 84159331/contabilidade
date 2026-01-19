@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerServiceWorker } from './utils/registerServiceWorker';
 import { offlineSync } from './utils/offlineSync';
+import { setupMessageListener } from './utils/fcm';
 
 // Interceptor GLOBAL para PREVENIR componentes undefined - SEMPRE ATIVO
 const originalCreateElement = React.createElement;
@@ -306,7 +307,18 @@ root.render(
   </React.StrictMode>
 );
 
-// Registrar Service Worker em produção
-if (process.env.NODE_ENV === 'production') {
-  // PWA desabilitado
+// Registrar Service Worker (necessário para Push/FCM em background)
+// Em DEV: funciona em localhost (ou HTTPS). Em PROD: sempre.
+try {
+  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  if (process.env.NODE_ENV === 'production' || isLocalhost) {
+    registerServiceWorker();
+  }
+} catch {
+}
+
+// Listener de mensagens em primeiro plano (foreground)
+try {
+  setupMessageListener();
+} catch {
 }

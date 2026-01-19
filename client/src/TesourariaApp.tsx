@@ -10,6 +10,8 @@ import SmartLoading from './components/SmartLoading';
 import ErrorBoundary from './components/ErrorBoundary';
 import PageErrorFallback from './components/PageErrorFallback';
 import { lazyWithRetry } from './utils/lazyWithRetry';
+import { PinProvider } from './contexts/PinContext';
+import PinProtectedRoute from './components/PinProtectedRoute';
 
 // Lazy loading com retry para componentes pesados (previne páginas brancas)
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
@@ -30,6 +32,7 @@ const MyScales = lazyWithRetry(() => import('./pages/MyScales'));
 const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'));
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
 const People = lazyWithRetry(() => import('./pages/People'));
+const PinAccess = lazyWithRetry(() => import('./pages/PinAccess'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -96,40 +99,66 @@ function TesourariaApp() {
   }
   
   return (
-    <Layout>
-      <ErrorBoundary fallback={<PageErrorFallback />}>
-        <Suspense fallback={
-          <div className="flex items-center justify-center min-h-[400px]">
-            <PageSkeleton type="dashboard" />
-          </div>
-        }>
-        <SmartLoading>
-          <Routes>
-            <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="people" element={<People />} />
-            <Route path="members" element={<Members />} />
-            <Route path="members/new" element={<CadastroMembro />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="cell-groups" element={<CellGroupsAdmin />} />
-            <Route path="whatsapp" element={<WhatsAppPage />} />
-            <Route path="books" element={<BooksManagement />} />
-            <Route path="events" element={<Events />} />
-            <Route path="esbocos" element={<EsbocosAdminPage />} />
-            <Route path="ferias-pastores" element={<FeriasPastores />} />
-            <Route path="ministries" element={<Ministries />} />
-            <Route path="scales" element={<Scales />} />
-            <Route path="my-scales" element={<MyScales />} />
-            <Route path="notifications" element={<NotificationsPage />} />
-            <Route path="scale-reports" element={<ScaleReports />} />
-            <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
-          </Routes>
-        </SmartLoading>
-      </Suspense>
-      </ErrorBoundary>
-    </Layout>
+    <PinProvider>
+      <Layout>
+        <ErrorBoundary fallback={<PageErrorFallback />}>
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[400px]">
+              <PageSkeleton type="dashboard" />
+            </div>
+          }>
+          <SmartLoading>
+            <Routes>
+              <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
+
+              <Route path="pin" element={<PinAccess />} />
+
+              <Route
+                path="dashboard"
+                element={
+                  <PinProtectedRoute>
+                    <Dashboard />
+                  </PinProtectedRoute>
+                }
+              />
+              <Route path="people" element={<People />} />
+              <Route path="members" element={<Members />} />
+              <Route path="members/new" element={<CadastroMembro />} />
+              <Route
+                path="transactions"
+                element={
+                  <PinProtectedRoute>
+                    <Transactions />
+                  </PinProtectedRoute>
+                }
+              />
+              <Route
+                path="reports"
+                element={
+                  <PinProtectedRoute>
+                    <Reports />
+                  </PinProtectedRoute>
+                }
+              />
+              <Route path="categories" element={<Categories />} />
+              <Route path="cell-groups" element={<CellGroupsAdmin />} />
+              <Route path="whatsapp" element={<WhatsAppPage />} />
+              <Route path="books" element={<BooksManagement />} />
+              <Route path="events" element={<Events />} />
+              <Route path="esbocos" element={<EsbocosAdminPage />} />
+              <Route path="ferias-pastores" element={<FeriasPastores />} />
+              <Route path="ministries" element={<Ministries />} />
+              <Route path="scales" element={<Scales />} />
+              <Route path="my-scales" element={<MyScales />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="scale-reports" element={<ScaleReports />} />
+              <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
+            </Routes>
+          </SmartLoading>
+        </Suspense>
+        </ErrorBoundary>
+      </Layout>
+    </PinProvider>
   );
 }
 

@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { auth } from './config';
 import storage from '../utils/storage';
+import { registerNativePush } from '../utils/nativePush';
 
 interface AuthContextType {
   user: User | null;
@@ -38,6 +39,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(user);
       setLoading(false);
       setAuthReady(true);
+
+      // Push nativo (APK): registra token FCM e salva no Firestore
+      // Isso habilita notificações em massa via tópico (Cloud Functions)
+      if (user) {
+        registerNativePush().catch(() => {});
+      }
     });
 
     return () => unsubscribe();

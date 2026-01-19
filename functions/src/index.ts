@@ -311,3 +311,6 @@ export { checkBirthdays, testBirthdayCheck } from './birthdayNotifications';
 
 // Exportar função de membros
 export { addMembro } from './membros';
+
+// Exportar funções de eventos (notificação e limpeza automática)
+export { onMemberFcmTokenWrite, onEventCreatedSendNotification, cleanupPastEvents } from './eventsNotifications';
