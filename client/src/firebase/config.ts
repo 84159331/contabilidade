@@ -2,6 +2,7 @@ import { getApps, getApp, initializeApp } from 'firebase/app';
 import { browserLocalPersistence, getAuth, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
+import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
 // Configuração do Firebase - usar apenas variáveis de ambiente
@@ -69,6 +70,7 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
+export const firebaseStorage = getStorage(app);
 
 // Persistência do Auth (web)
 if (typeof window !== 'undefined') {

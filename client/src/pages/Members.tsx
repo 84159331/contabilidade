@@ -49,6 +49,9 @@ interface Member {
   email?: string;
   phone?: string;
   address?: string;
+  cpf?: string;
+  cell_group?: string;
+  photo_url?: string;
   birth_date?: string;
   member_since?: string;
   status: string;

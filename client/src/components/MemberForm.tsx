@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Button from './Button';
+import { membersAPI } from '../services/api';
 
 interface Member {
   id: number | string;
@@ -7,6 +8,9 @@ interface Member {
   email?: string;
   phone?: string;
   address?: string;
+  cpf?: string;
+  cell_group?: string;
+  photo_url?: string;
   birth_date?: string;
   member_since?: string;
   status: string;
@@ -26,6 +30,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
     email: '',
     phone: '',
     address: '',
+    cpf: '',
+    cell_group: '',
+    photo_url: '',
     birth_date: '',
     member_since: '',
     status: 'active',
@@ -33,6 +40,8 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [photoPreview, setPhotoPreview] = useState<string>('');
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const currentMemberIdRef = useRef<string | number | null>(null);
 
   // Helper para formatar data para input type="date" (YYYY-MM-DD)
@@ -108,11 +117,15 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
         email: member.email || '',
         phone: member.phone || '',
         address: member.address || '',
+        cpf: member.cpf || '',
+        cell_group: member.cell_group || '',
+        photo_url: member.photo_url || '',
         birth_date: formatDateForInput(member.birth_date),
         member_since: formatDateForInput(member.member_since),
         status: member.status || 'active',
         notes: member.notes || ''
       });
+      setPhotoPreview(member.photo_url || '');
     } else {
       // Resetar apenas se realmente nÃ£o hÃ¡ membro
       if (currentMemberIdRef.current !== null) {
@@ -129,15 +142,39 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             email: '',
             phone: '',
             address: '',
+            cpf: '',
+            cell_group: '',
+            photo_url: '',
             birth_date: '',
             member_since: '',
             status: 'active',
             notes: ''
           };
         });
+        setPhotoPreview('');
       }
     }
   }, [member?.id]); // Depender apenas do ID para evitar re-renders desnecessÃ¡rios
+
+  const handleSelectPhoto = async (file: File | null) => {
+    if (!file) return;
+    try {
+      setIsUploadingPhoto(true);
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') resolve(reader.result);
+          else reject(new Error('Falha ao converter imagem'));
+        };
+        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.readAsDataURL(file);
+      });
+      setFormData((prev: any) => ({ ...prev, photo_url: dataUrl }));
+      setPhotoPreview(dataUrl);
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -179,6 +216,13 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
 
     if (formData.phone && !/^[\d\s()\-+]+$/.test(formData.phone)) {
       newErrors.phone = 'Telefone invÃ¡lido';
+    }
+
+    if (formData.cpf) {
+      const digits = formData.cpf.replace(/\D/g, '');
+      if (digits.length !== 11) {
+        newErrors.cpf = 'CPF invÃ¡lido';
+      }
     }
 
     setErrors(newErrors);
@@ -235,6 +279,50 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
           {errors.name && (
             <p className="mt-1 text-sm text-red-600">{errors.name}</p>
           )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="cpf" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
+              CPF
+            </label>
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              className={`input mt-1 ${errors.cpf ? 'border-red-500' : ''}`}
+              value={(formData as any).cpf}
+              onChange={handleChange}
+              onFocus={handleInputFocus}
+              placeholder="Somente nÃºmeros"
+              autoComplete="off"
+              inputMode="numeric"
+            />
+            {errors.cpf && (
+              <p className="mt-1 text-sm text-red-600">{errors.cpf}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="cell_group" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
+              CÃ©lula
+            </label>
+            <select
+              id="cell_group"
+              name="cell_group"
+              className="input mt-1"
+              value={(formData as any).cell_group}
+              onChange={handleChange}
+              onFocus={handleInputFocus}
+            >
+              <option value="">Selecione</option>
+              <option value="Célula quadra 45">Célula quadra 45</option>
+              <option value="Veredas">Veredas</option>
+              <option value="Igreja">Igreja</option>
+              <option value="Vendinha">Vendinha</option>
+              <option value="Não possuo célula">Não possuo célula</option>
+            </select>
+          </div>
         </div>
 
         {/* Email e Telefone */}
@@ -296,6 +384,48 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
             placeholder="EndereÃ§o completo"
             autoComplete="street-address"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Foto
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              id="member_photo_file"
+              onChange={(e) => handleSelectPhoto(e.target.files?.[0] || null)}
+            />
+            <label
+              htmlFor="member_photo_file"
+              className={`btn btn-secondary min-h-[44px] ${isUploadingPhoto ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {isUploadingPhoto ? 'Enviando...' : 'Selecionar foto'}
+            </label>
+
+            {(photoPreview || (formData as any).photo_url) && (
+              <a
+                href={photoPreview || (formData as any).photo_url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-primary-600 hover:underline"
+              >
+                Ver
+              </a>
+            )}
+          </div>
+
+          {(photoPreview || (formData as any).photo_url) && (
+            <div className="mt-3">
+              <img
+                src={photoPreview || (formData as any).photo_url}
+                alt="Foto do membro"
+                className="w-20 h-20 rounded-lg object-cover border border-gray-200 dark:border-gray-600"
+              />
+            </div>
+          )}
         </div>
 
         {/* Data de Nascimento e Membro Desde */}

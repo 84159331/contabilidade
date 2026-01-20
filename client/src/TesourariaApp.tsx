@@ -34,6 +34,7 @@ const NotificationsPage = lazyWithRetry(() => import('./pages/NotificationsPage'
 const ScaleReports = lazyWithRetry(() => import('./pages/ScaleReports'));
 const People = lazyWithRetry(() => import('./pages/People'));
 const PinAccess = lazyWithRetry(() => import('./pages/PinAccess'));
+const Welcome = lazyWithRetry(() => import('./pages/Welcome'));
 const FinanceAccessAdmin = lazyWithRetry(() => import('./pages/FinanceAccessAdmin'));
 const AdminsAdmin = lazyWithRetry(() => import('./pages/AdminsAdmin'));
 
@@ -113,7 +114,9 @@ function TesourariaApp() {
             }>
             <SmartLoading>
               <Routes>
-              <Route path="/" element={<Navigate to="/tesouraria/dashboard" replace />} />
+              <Route path="/" element={<Navigate to="/tesouraria/welcome" replace />} />
+
+              <Route path="welcome" element={<Welcome />} />
 
               <Route path="pin" element={<PinAccess />} />
 
@@ -158,7 +161,7 @@ function TesourariaApp() {
               <Route path="my-scales" element={<MyScales />} />
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="scale-reports" element={<ScaleReports />} />
-              <Route path="*" element={<Navigate to="/tesouraria/dashboard" replace />} />
+              <Route path="*" element={<Navigate to="/tesouraria/welcome" replace />} />
               </Routes>
             </SmartLoading>
           </Suspense>

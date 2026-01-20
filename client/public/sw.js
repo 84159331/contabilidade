@@ -1,6 +1,6 @@
 // Service Worker para cache de assets estáticos e dados
 // Versão do cache - incrementar para invalidar cache antigo
-const CACHE_VERSION = 'v1.2.0';
+const CACHE_VERSION = 'v1.2.1';
 const CACHE_NAME = `comunidade-resgate-${CACHE_VERSION}`;
 const DATA_CACHE_NAME = `comunidade-resgate-data-${CACHE_VERSION}`;
 

@@ -19,16 +19,14 @@ const validateIcons = () => {
 // Componentes seguros com fallback
 const SafePencilIcon: React.FC<{ className?: string }> = ({ className }) => {
   if (PencilIcon) {
-    const Icon = PencilIcon as React.ComponentType<{ className?: string }>;
-    return <Icon className={className} />;
+    return React.createElement(PencilIcon as any, { className });
   }
   return <span className={className}>E</span>;
 };
 
 const SafeTrashIcon: React.FC<{ className?: string }> = ({ className }) => {
   if (TrashIcon) {
-    const Icon = TrashIcon as React.ComponentType<{ className?: string }>;
-    return <Icon className={className} />;
+    return React.createElement(TrashIcon as any, { className });
   }
   return <span className={className}>X</span>;
 };
@@ -39,6 +37,9 @@ interface Member {
   email?: string;
   phone?: string;
   address?: string;
+  cpf?: string;
+  cell_group?: string;
+  photo_url?: string;
   birth_date?: string;
   member_since?: string;
   status: string;

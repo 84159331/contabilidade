@@ -18,8 +18,11 @@ interface FormData {
   name: string;
   email: string;
   phone: string;
+  cpf: string;
+  cell_group: string;
   address: string;
   birth_date: string;
+  photo_url: string;
 }
 
 const CadastroPublicoPage: React.FC = () => {
@@ -28,12 +31,39 @@ const CadastroPublicoPage: React.FC = () => {
     name: '',
     email: '',
     phone: '',
+    cpf: '',
+    cell_group: '',
     address: '',
-    birth_date: ''
+    birth_date: '',
+    photo_url: ''
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState('');
+
+  const handleSelectPhoto = async (file: File | null) => {
+    if (!file) return;
+    try {
+      setIsUploadingPhoto(true);
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') resolve(reader.result);
+          else reject(new Error('Falha ao converter imagem'));
+        };
+        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.readAsDataURL(file);
+      });
+      setPhotoPreview(dataUrl);
+      setFormData((prev) => ({ ...prev, photo_url: dataUrl }));
+    } catch (e: any) {
+      toast.error('Não foi possível enviar a foto agora.');
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {};
@@ -54,6 +84,13 @@ const CadastroPublicoPage: React.FC = () => {
       newErrors.phone = 'Telefone é obrigatório';
     } else if (!/^[\d\s()\-+]+$/.test(formData.phone.replace(/\s/g, ''))) {
       newErrors.phone = 'Telefone inválido';
+    }
+
+    if (formData.cpf) {
+      const digits = formData.cpf.replace(/\D/g, '');
+      if (digits.length !== 11) {
+        newErrors.cpf = 'CPF inválido';
+      }
     }
 
     if (formData.birth_date && new Date(formData.birth_date) > new Date()) {
@@ -80,25 +117,34 @@ const CadastroPublicoPage: React.FC = () => {
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
+        cpf: formData.cpf.trim() || null,
+        cell_group: formData.cell_group.trim() || null,
         address: formData.address.trim() || null,
         birth_date: formData.birth_date || null,
-        status: 'active', // Status padrÃ£o para novos cadastros
+        photo_url: formData.photo_url.trim() || null,
+        status: 'active', // Status padrão para novos cadastros
         member_since: new Date().toISOString().split('T')[0], // Data atual
       };
 
-      // ValidaÃ§Ã£o adicional antes de enviar
-      if (!memberData.name || memberData.name.length < 3) {
-        throw new Error('Nome invÃ¡lido');
-      }
-
-      if (!memberData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(memberData.email)) {
-        throw new Error('Email invÃ¡lido');
-      }
-
+      // Validação adicional antes de enviar
       console.log('📝 Cadastrando novo membro:', memberData);
 
-      // Cadastrar automaticamente via API
-      await membersAPI.createMember(memberData);
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 20000);
+
+      const response = await fetch('/api/public-register-member', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(memberData),
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(timeout));
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload?.error || 'Erro ao realizar cadastro.');
+      }
 
       // Mostrar mensagem de sucesso
       toast.success('Cadastro realizado com sucesso! Bem-vindo à nossa comunidade!');
@@ -111,8 +157,11 @@ const CadastroPublicoPage: React.FC = () => {
         name: '',
         email: '',
         phone: '',
+        cpf: '',
+        cell_group: '',
         address: '',
-        birth_date: ''
+        birth_date: '',
+        photo_url: ''
       });
 
       // Redirecionar para pÃ¡gina de agradecimento apÃ³s um breve delay
@@ -277,6 +326,50 @@ const CadastroPublicoPage: React.FC = () => {
                     )}
                   </div>
 
+                  <div>
+                    <label htmlFor="cpf" className="flex items-center text-gray-700 dark:text-gray-300 font-medium mb-2">
+                      CPF
+                    </label>
+                    <input
+                      type="text"
+                      id="cpf"
+                      value={formData.cpf}
+                      onChange={(e) => handleChange('cpf', e.target.value)}
+                      className={`input ${
+                        errors.cpf ? 'border-red-500 ring-2 ring-red-200' : ''
+                      }`}
+                      placeholder="Somente números"
+                      disabled={isSubmitting}
+                      inputMode="numeric"
+                      autoComplete="off"
+                    />
+                    {errors.cpf && (
+                      <p className="mt-1 text-sm text-red-500 flex items-center">
+                        <span className="mr-1">⚠️</span> {errors.cpf}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="cell_group" className="flex items-center text-gray-700 dark:text-gray-300 font-medium mb-2">
+                      Célula
+                    </label>
+                    <select
+                      id="cell_group"
+                      value={formData.cell_group}
+                      onChange={(e) => handleChange('cell_group', e.target.value)}
+                      className="input"
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Selecione</option>
+                      <option value="Célula quadra 45">Célula quadra 45</option>
+                      <option value="Veredas">Veredas</option>
+                      <option value="Igreja">Igreja</option>
+                      <option value="Vendinha">Vendinha</option>
+                      <option value="Não possuo célula">Não possuo célula</option>
+                    </select>
+                  </div>
+
                   {/* Email */}
                   <div>
                     <label htmlFor="email" className="flex items-center text-gray-700 dark:text-gray-300 font-medium mb-2">
@@ -362,6 +455,35 @@ const CadastroPublicoPage: React.FC = () => {
                       <p className="mt-1 text-sm text-red-500 flex items-center">
                         <span className="mr-1">⚠️</span> {errors.birth_date}
                       </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="photo_url" className="flex items-center text-gray-700 dark:text-gray-300 font-medium mb-2">
+                      Foto (URL)
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="public_member_photo_file"
+                      onChange={(e) => handleSelectPhoto(e.target.files?.[0] || null)}
+                      disabled={isSubmitting || isUploadingPhoto}
+                    />
+                    <label
+                      htmlFor="public_member_photo_file"
+                      className={`btn btn-secondary min-h-[44px] ${isSubmitting || isUploadingPhoto ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {isUploadingPhoto ? 'Enviando...' : 'Selecionar foto'}
+                    </label>
+                    {(photoPreview || formData.photo_url) && (
+                      <div className="mt-3">
+                        <img
+                          src={photoPreview || formData.photo_url}
+                          alt="Foto selecionada"
+                          className="w-20 h-20 rounded-lg object-cover border border-gray-200 dark:border-gray-600"
+                        />
+                      </div>
                     )}
                   </div>
 

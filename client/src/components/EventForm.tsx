@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { eventsAPI } from '../services/api';
 import { EventFormData } from '../types/Event';
+import { toast } from 'react-toastify';
 
 interface EventFormProps {
   event?: EventFormData;
@@ -93,26 +94,26 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
     try {
       let imageUrl = formData.image;
       
-      console.log('ðŸ“ EventForm - Iniciando submit');
-      console.log('ðŸ“ EventForm - imageFile:', imageFile ? imageFile.name : 'null');
-      console.log('ðŸ“ EventForm - formData.image:', formData.image ? formData.image.substring(0, 50) + '...' : 'vazio');
+      console.log('📝 EventForm - Iniciando submit');
+      console.log('📝 EventForm - imageFile:', imageFile ? imageFile.name : 'null');
+      console.log('📝 EventForm - formData.image:', formData.image ? formData.image.substring(0, 50) + '...' : 'vazio');
       
       // Upload da imagem se houver arquivo
       if (imageFile) {
-        console.log('ðŸ“¤ EventForm - Fazendo upload da imagem...');
-        console.log('ðŸ“¤ EventForm - Arquivo:', imageFile.name, imageFile.size, imageFile.type);
+        console.log('📤 EventForm - Fazendo upload da imagem...');
+        console.log('📤 EventForm - Arquivo:', imageFile.name, imageFile.size, imageFile.type);
         
         try {
           imageUrl = await eventsAPI.uploadEventImage(imageFile);
-          console.log('âœ… EventForm - Upload concluÃ­do com sucesso');
-          console.log('âœ… EventForm - URL gerada:', imageUrl.substring(0, 50) + '...');
-          console.log('âœ… EventForm - Ã‰ base64?', imageUrl.startsWith('data:'));
+          console.log('✅ EventForm - Upload concluído com sucesso');
+          console.log('✅ EventForm - URL gerada:', imageUrl.substring(0, 50) + '...');
+          console.log('✅ EventForm - URL é Storage?', imageUrl.startsWith('http'));
         } catch (uploadError) {
-          console.error('âŒ EventForm - Erro no upload:', uploadError);
+          console.error('❌ EventForm - Erro no upload:', uploadError);
           throw uploadError;
         }
       } else {
-        console.log('â„¹ï¸ EventForm - Nenhum arquivo para upload');
+        console.log('ℹ️ EventForm - Nenhum arquivo para upload');
       }
 
       const eventData = {
@@ -120,25 +121,26 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
         image: imageUrl
       };
 
-      console.log('ðŸ’¾ EventForm - Dados finais do evento:');
-      console.log('ðŸ’¾ EventForm - Título:', eventData.title);
-      console.log('ðŸ’¾ EventForm - Imagem:', eventData.image ? 'Sim' : 'Não');
-      console.log('ðŸ’¾ EventForm - Imagem é base64?', eventData.image?.startsWith('data:'));
-      console.log('ðŸ’¾ EventForm - Tamanho da imagem:', eventData.image?.length || 0);
+      console.log('💾 EventForm - Dados finais do evento:');
+      console.log('💾 EventForm - Título:', eventData.title);
+      console.log('💾 EventForm - Imagem:', eventData.image ? 'Sim' : 'Não');
+      console.log('💾 EventForm - Imagem é URL?', eventData.image?.startsWith('http'));
 
       if (event?.id) {
-        console.log('ðŸ”„ EventForm - Atualizando evento existente:', event.id);
+        console.log('🔄 EventForm - Atualizando evento existente:', event.id);
         await eventsAPI.updateEvent(event.id, eventData);
       } else {
-        console.log('âž• EventForm - Criando novo evento');
+        console.log('➕ EventForm - Criando novo evento');
         await eventsAPI.createEvent(eventData);
       }
 
-      console.log('âœ… EventForm - Evento salvo com sucesso');
+      console.log('✅ EventForm - Evento salvo com sucesso');
+      toast.success(event?.id ? 'Evento atualizado com sucesso!' : 'Evento criado com sucesso!');
       onSave(eventData);
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao salvar evento:', error);
+      toast.error(error?.message ? `Erro ao salvar evento: ${error.message}` : 'Erro ao salvar evento');
     } finally {
       setLoading(false);
     }
