@@ -55,7 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Pré-carrega componentes baseado na navegação
   usePreloadComponents();
 
-  const showScalesBottomNav = /^\/tesouraria\/(ministries|scales|my-scales|scale-reports)(\/|$)/.test(location.pathname);
+  const showScalesBottomNav = /^\/tesouraria\/(ministries|scales|scale-reports)(\/|$)/.test(location.pathname);
 
   // Menu completo para todos os usuários
   const navigation: NavItem[] = [
@@ -71,7 +71,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'heading', name: 'Escalas' },
     { type: 'link', name: 'Ministérios', href: '/tesouraria/ministries', icon: MusicalNoteIcon },
     { type: 'link', name: 'Escalas', href: '/tesouraria/scales', icon: ClipboardDocumentListIcon },
-    { type: 'link', name: 'Minhas Escalas', href: '/tesouraria/my-scales', icon: ClipboardDocumentListIcon },
     { type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
     { type: 'heading', name: 'Analisar' },
     { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },

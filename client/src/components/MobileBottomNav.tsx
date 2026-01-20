@@ -44,7 +44,7 @@ const MobileBottomNav: React.FC = () => {
     },
     {
       name: 'Música',
-      href: '/tesouraria/my-scales',
+      href: '/tesouraria/scales',
       icon: MusicalNoteIcon,
       iconSolid: MusicalNoteIconSolid,
     },

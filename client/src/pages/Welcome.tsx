@@ -196,7 +196,7 @@ export default function Welcome() {
         </Link>
 
         <Link
-          to="/tesouraria/my-scales"
+          to="/tesouraria/scales"
           className="group rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-900/40 p-4 hover:bg-white dark:hover:bg-gray-900 transition-colors shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           <div className="flex items-start gap-3">
@@ -208,7 +208,7 @@ export default function Welcome() {
                 <div className="font-semibold text-gray-900 dark:text-white">Escalas</div>
                 <ChevronRightIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200" />
               </div>
-              <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">Minhas escalas e relatórios</div>
+              <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">Gestão de escalas e relatórios</div>
             </div>
           </div>
         </Link>

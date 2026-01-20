@@ -94,7 +94,7 @@ const NotificationsPage: React.FC = () => {
     
     // Navegar para página relevante
     if (notification.data?.escalaId) {
-      window.location.href = `/tesouraria/my-scales`;
+      window.location.href = `/tesouraria/scales`;
     }
   };
 

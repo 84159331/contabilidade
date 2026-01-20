@@ -18,7 +18,7 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
       d = new Date(year, month - 1, day);
     } else {
       d = new Date(date);
-      // Ajustar para timezone local se necessÃ¡rio
+      // Ajustar para timezone local se necessário
       const offset = d.getTimezoneOffset();
       d = new Date(d.getTime() - (offset * 60 * 1000));
     }
@@ -51,29 +51,27 @@ export const ScaleWhatsApp: React.FC<ScaleWhatsAppProps> = ({ escala, className 
   const generateWhatsAppMessage = (): string => {
     const date = formatDate(escala.data);
     const time = formatTime(escala.data);
-    
-    // Mensagem formatada com negrito e Ã­cones
-    let message = `ðŸŽµ *ESCALA - ${escala.ministerio_nome}*\n\n`;
-    message += `ðŸ“… *Data:* ${date}\n`;
-    message += `ðŸ• *HorÃ¡rio:* ${time}\n\n`;
-    message += `ðŸ‘¥ *Membros Escalados:*\n\n`;
-    
-    escala.membros.forEach((membro, index) => {
-      const statusEmoji = membro.status === 'confirmado' ? 'âœ…' : 
-                         membro.status === 'substituido' ? 'ðŸ”„' : 
-                         membro.status === 'ausente' ? 'âŒ' : 'â³';
-      
-      // Destacar nome em negrito e funÃ§Ã£o
-      message += `${statusEmoji} *${membro.membro_nome}* - ${membro.funcao}\n`;
-    });
-    
-    if (escala.observacoes && escala.observacoes.trim()) {
-      message += `\nðŸ“ *ObservaÃ§Ãµes:*\n${escala.observacoes}\n`;
-    }
-    
-    message += `\nâœ… *Confirme sua presenÃ§a no app!*\n\n`;
-    message += `_Comunidade CristÃ£ Resgate_`;
-    
+
+    const membrosEscalados = escala.membros
+      .filter((m) => m.status !== 'substituido')
+      .map((m) => `${m.membro_nome} – ${m.funcao}`);
+
+    const membroLinha = membrosEscalados.length > 0
+      ? membrosEscalados.join('\n')
+      : 'Não informado';
+
+    const message =
+      `🎵 ESCALA OFICIAL – ${escala.ministerio_nome}\n\n` +
+      `📅 Data: ${date}\n` +
+      `🕛 Horário: ${time}\n\n` +
+      `👤 Membro Escalado:\n` +
+      `⏳ ${membroLinha}\n\n` +
+      `⚠️ Sua presença é essencial para o bom andamento do ministério.\n` +
+      `Pedimos, por gentileza, que confirme sua presença assim que possível, demonstrando seu compromisso com esta escala.\n\n` +
+      `Agradecemos sua disponibilidade e dedicação à obra do Senhor. 🙏\n` +
+      `Que Deus abençoe seu serviço!\n\n` +
+      `Comunidade Cristã Resgate`;
+
     return message;
   };
 

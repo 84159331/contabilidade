@@ -71,7 +71,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
                   </h3>
                   {isUpcoming(event.date) && (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                      PrÃ³ximo
+                      Próximo
                     </span>
                   )}
                 </div>
@@ -135,29 +135,33 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
             </div>
 
             {/* AÃ§Ãµes */}
-            <div className="mt-4 flex justify-end space-x-2">
+            <div
+              className={`mt-4 grid gap-2 ${
+                onAutoShare ? 'grid-cols-4' : 'grid-cols-3'
+              } sm:flex sm:justify-end sm:space-x-2`}
+            >
               <button
                 onClick={() => onShare(event)}
-                className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
+                className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <ShareIcon className="h-3 w-3 mr-1" />
-                Compartilhar
+                <span className="hidden sm:inline">Compartilhar</span>
               </button>
               {onAutoShare && (
                 <button
                   onClick={() => onAutoShare(event)}
-                  className="inline-flex items-center px-3 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded text-blue-700 bg-white hover:bg-blue-50"
+                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center px-3 py-2 border border-blue-300 dark:border-blue-500 shadow-sm text-xs font-medium rounded text-blue-700 dark:text-blue-200 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-gray-700"
                 >
                   <ClockIcon className="h-3 w-3 mr-1" />
-                  Auto Share
+                  <span className="hidden sm:inline">Auto Share</span>
                 </button>
               )}
               <button
                 onClick={() => onEdit(event)}
-                className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
+                className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <PencilIcon className="h-3 w-3 mr-1" />
-                Editar
+                <span className="hidden sm:inline">Editar</span>
               </button>
               <button
                 onClick={() => {
@@ -168,12 +172,12 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
                     console.error('âŒ EventList - ID do evento Ã© invÃ¡lido:', event);
                   }
                 }}
-                className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center px-3 py-2 border border-red-300 dark:border-red-500 shadow-sm text-xs font-medium rounded text-red-700 dark:text-red-200 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!event.id}
                 title={!event.id ? 'ID do evento invÃ¡lido' : 'Excluir evento'}
               >
                 <TrashIcon className="h-3 w-3 mr-1" />
-                Excluir
+                <span className="hidden sm:inline">Excluir</span>
               </button>
             </div>
           </div>

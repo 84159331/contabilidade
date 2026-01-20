@@ -4,13 +4,11 @@ import {
   MusicalNoteIcon,
   ClipboardDocumentListIcon,
   ChartBarIcon,
-  UserIcon,
 } from '@heroicons/react/24/outline';
 import {
   MusicalNoteIcon as MusicalNoteIconSolid,
   ClipboardDocumentListIcon as ClipboardDocumentListIconSolid,
   ChartBarIcon as ChartBarIconSolid,
-  UserIcon as UserIconSolid,
 } from '@heroicons/react/24/solid';
 
 interface NavItem {
@@ -35,12 +33,6 @@ const ScalesBottomNav: React.FC = () => {
       href: '/tesouraria/scales',
       icon: ClipboardDocumentListIcon,
       iconSolid: ClipboardDocumentListIconSolid,
-    },
-    {
-      name: 'Minhas',
-      href: '/tesouraria/my-scales',
-      icon: UserIcon,
-      iconSolid: UserIconSolid,
     },
     {
       name: 'Relatórios',

@@ -160,7 +160,7 @@ const EsbocosAdminPage: React.FC = () => {
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Gerenciamento de Esboços
@@ -171,7 +171,7 @@ const EsbocosAdminPage: React.FC = () => {
             </div>
             <button
               onClick={() => setMostrarForm(!mostrarForm)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center sm:justify-start w-full sm:w-auto"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               {mostrarForm ? 'Cancelar' : 'Novo Esboço'}
@@ -398,8 +398,8 @@ const EsbocosAdminPage: React.FC = () => {
 
         {/* Filtros e Busca */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
+            <div className="sm:col-span-2 lg:col-span-6">
               <div className="relative">
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
@@ -407,15 +407,15 @@ const EsbocosAdminPage: React.FC = () => {
                   placeholder="Buscar por título, autor ou texto bíblico..."
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
             </div>
-            <div className="lg:w-48">
+            <div className="lg:col-span-3">
               <select
                 value={filtroStatus}
                 onChange={(e) => setFiltroStatus(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="TODOS">Todos os status</option>
                 <option value="PENDENTE">Pendente</option>
@@ -424,11 +424,11 @@ const EsbocosAdminPage: React.FC = () => {
                 <option value="ARQUIVADO">Arquivado</option>
               </select>
             </div>
-            <div className="lg:w-48">
+            <div className="lg:col-span-3">
               <select
                 value={filtroTema}
                 onChange={(e) => setFiltroTema(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="TODOS">Todos os temas</option>
                 {temas.map((t) => (
@@ -442,7 +442,7 @@ const EsbocosAdminPage: React.FC = () => {
         </div>
 
         {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
             <div className="flex items-center">
               <DocumentTextIcon className="h-8 w-8 text-blue-600" />
@@ -499,7 +499,7 @@ const EsbocosAdminPage: React.FC = () => {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {esbocosFiltrados.map((esboco, index) => (
               <motion.div
                 key={esboco.id}

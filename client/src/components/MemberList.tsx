@@ -105,6 +105,16 @@ const MemberList: React.FC<MemberListProps> = ({
 
   const memoizedMembers = useMemo(() => validMembers, [validMembers]);
 
+  const getInitials = (name: string) => {
+    const parts = String(name || '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    const first = parts[0]?.[0] || '';
+    const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] || '') : '';
+    return (first + last).toUpperCase() || '?';
+  };
+
   // Helper para formatar data sem problemas de timezone
   const formatDate = (dateString: string | undefined | null): string => {
     if (!dateString) return '-';
@@ -306,83 +316,90 @@ const MemberList: React.FC<MemberListProps> = ({
           
           return (
           <div key={member.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-5 border border-gray-200 dark:border-gray-600 w-full">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  {member.name}
-                </h3>
-                {member.address && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {member.address}
-                  </p>
-                )}
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-100 flex items-center justify-center text-sm font-semibold">
+                {getInitials(member.name)}
               </div>
-              <div className="flex items-center space-x-2">
-                <span className={`badge ${
-                  member.status === 'active' ? 'badge-success' : 'badge-danger'
-                }`}>
-                  {member.status === 'active' ? 'Ativo' : 'Inativo'}
-                </span>
-                <button
-                  onClick={() => {
-                    if (member && onEdit && typeof onEdit === 'function') {
-                      onEdit(member);
-                    }
-                  }}
-                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
-                  title="Editar"
-                  aria-label="Editar membro"
-                >
-                  <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (member && member.id && onDelete && typeof onDelete === 'function') {
-                      onDelete(member.id);
-                    }
-                  }}
-                  disabled={isDeleting}
-                  className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title="Deletar"
-                  aria-label="Deletar membro"
-                >
-                  {isDeleting ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
-                  ) : (
-                    <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-semibold leading-tight text-gray-900 dark:text-white break-words">
+                      {member.name}
+                    </h3>
+                    {member.address && (
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-300 line-clamp-2">
+                        {member.address}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className={`badge ${
+                      member.status === 'active' ? 'badge-success' : 'badge-danger'
+                    }`}>
+                      {member.status === 'active' ? 'Ativo' : 'Inativo'}
+                    </span>
+                    <button
+                      onClick={() => {
+                        if (member && onEdit && typeof onEdit === 'function') {
+                          onEdit(member);
+                        }
+                      }}
+                      className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
+                      title="Editar"
+                      aria-label="Editar membro"
+                    >
+                      <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (member && member.id && onDelete && typeof onDelete === 'function') {
+                          onDelete(member.id);
+                        }
+                      }}
+                      disabled={isDeleting}
+                      className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title="Deletar"
+                      aria-label="Deletar membro"
+                    >
+                      {isDeleting ? (
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
+                      ) : (
+                        <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {member.phone && (
+                    <div className="min-w-0">
+                      <span className="text-gray-500 dark:text-gray-300">Telefone</span>
+                      <p className="font-medium text-gray-900 dark:text-white truncate">
+                        {member.phone}
+                      </p>
+                    </div>
                   )}
-                </button>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-2 text-xs">
-              {member.email && (
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Email:</span>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {member.email}
-                  </p>
+                  {member.email && (
+                    <div className="min-w-0">
+                      <span className="text-gray-500 dark:text-gray-300">Email</span>
+                      <p className="font-medium text-gray-900 dark:text-white truncate">
+                        {member.email}
+                      </p>
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <span className="text-gray-500 dark:text-gray-300">Aniversário</span>
+                    <p className="font-medium text-gray-900 dark:text-white truncate">
+                      {formatDate(member.birth_date)}
+                    </p>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-gray-500 dark:text-gray-300">Membro desde</span>
+                    <p className="font-medium text-gray-900 dark:text-white truncate">
+                      {formatDate(member.member_since)}
+                    </p>
+                  </div>
                 </div>
-              )}
-              {member.phone && (
-                <div>
-                  <span className="text-gray-500 dark:text-gray-400">Telefone:</span>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {member.phone}
-                  </p>
-                </div>
-              )}
-              <div>
-                <span className="text-gray-500 dark:text-gray-400">Aniversário:</span>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatDate(member.birth_date)}
-                </p>
-              </div>
-              <div>
-                <span className="text-gray-500 dark:text-gray-400">Membro desde:</span>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatDate(member.member_since)}
-                </p>
               </div>
             </div>
           </div>

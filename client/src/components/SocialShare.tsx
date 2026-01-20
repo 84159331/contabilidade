@@ -14,36 +14,41 @@ interface SocialShareProps {
   onClose: () => void;
 }
 
+type SocialPlatform = 'instagram' | 'facebook' | 'whatsapp';
+type SocialMode = 'feed' | 'stories' | 'message';
+
 const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<SocialPlatform[]>([]);
+  const [platformMode, setPlatformMode] = useState<Record<SocialPlatform, SocialMode>>({
+    instagram: 'stories',
+    facebook: 'feed',
+    whatsapp: 'message'
+  });
   const [customMessage, setCustomMessage] = useState('');
   const [isSharing, setIsSharing] = useState(false);
 
   const platforms = [
     {
-      id: 'instagram',
+      id: 'instagram' as const,
       name: 'Instagram',
-      icon: 'ðŸ“·',
       color: 'bg-pink-500',
-      description: 'Compartilhar no Instagram Stories'
+      description: 'Compartilhar no Instagram'
     },
     {
-      id: 'facebook',
+      id: 'facebook' as const,
       name: 'Facebook',
-      icon: 'ðŸ‘¥',
       color: 'bg-blue-600',
       description: 'Publicar no Facebook'
     },
     {
-      id: 'whatsapp',
+      id: 'whatsapp' as const,
       name: 'WhatsApp',
-      icon: 'ðŸ’¬',
       color: 'bg-green-500',
       description: 'Enviar para grupos do WhatsApp'
     }
   ];
 
-  const togglePlatform = (platformId: string) => {
+  const togglePlatform = (platformId: SocialPlatform) => {
     setSelectedPlatforms(prev => 
       prev.includes(platformId) 
         ? prev.filter(id => id !== platformId)
@@ -53,9 +58,66 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
 
   const generateShareText = () => {
     const date = new Date(event.date).toLocaleDateString('pt-BR');
-    const defaultMessage = `ðŸŽ‰ ${event.title}\n\nðŸ“… ${date} Ã s ${event.time}\nðŸ“ ${event.location}\n\n${event.description || ''}\n\n#IgrejaComunidadeResgate #Evento`;
+    const defaultMessage = `Evento: ${event.title}\n\nData: ${date} às ${event.time}\nLocal: ${event.location}\n\n${event.description || ''}\n\n#IgrejaComunidadeResgate #Evento`;
     
     return customMessage || defaultMessage;
+  };
+
+  const getModeLabel = (platform: SocialPlatform, mode: SocialMode) => {
+    if (platform === 'whatsapp') return 'Mensagem';
+    if (mode === 'feed') return 'Feed';
+    if (mode === 'stories') return 'Stories';
+    return 'Mensagem';
+  };
+
+  const dataUrlToFile = async (dataUrl: string, filename: string): Promise<File> => {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type || 'image/png' });
+  };
+
+  const urlToFile = async (url: string, filename: string): Promise<File> => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type || 'image/png' });
+  };
+
+  const tryNativeShare = async (text: string) => {
+    if (!('share' in navigator)) {
+      return false;
+    }
+
+    try {
+      const shareData: ShareData = {
+        title: event.title,
+        text
+      };
+
+      if (event.image) {
+        try {
+          const fileName = `${String(event.title || 'evento').slice(0, 24).replace(/[^a-z0-9\-_ ]/gi, '').trim() || 'evento'}.png`;
+          const file = event.image.startsWith('data:')
+            ? await dataUrlToFile(event.image, fileName)
+            : await urlToFile(event.image, fileName);
+
+          if ('canShare' in navigator && typeof (navigator as any).canShare === 'function') {
+            const canShareFiles = (navigator as any).canShare({ files: [file] });
+            if (canShareFiles) {
+              shareData.files = [file];
+            }
+          } else {
+            shareData.files = [file];
+          }
+        } catch {
+          // ignora falha de imagem e compartilha apenas o texto
+        }
+      }
+
+      await navigator.share(shareData);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const handleShare = async () => {
@@ -83,45 +145,40 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
     }
   };
 
-  const shareToPlatform = async (platform: string, text: string) => {
+  const shareToPlatform = async (platform: SocialPlatform, text: string) => {
+    const mode = platformMode[platform];
+    const header = platform === 'whatsapp'
+      ? ''
+      : `[Sugestão: ${getModeLabel(platform, mode)}]\n\n`;
+    const finalText = header + text;
+
+    const shared = await tryNativeShare(finalText);
+    if (shared) return;
+
     switch (platform) {
       case 'instagram':
-        // Para Instagram, abrir o app ou web
-        const instagramUrl = `https://www.instagram.com/create/story/`;
-        window.open(instagramUrl, '_blank');
+        window.open('https://www.instagram.com/', '_blank');
         break;
       
       case 'facebook':
-        // Para Facebook, usar a API de compartilhamento
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(text)}`;
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(finalText)}`;
         window.open(facebookUrl, '_blank');
         break;
       
       case 'whatsapp':
-        // Para WhatsApp, usar o link direto
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(finalText)}`;
         window.open(whatsappUrl, '_blank');
         break;
       
       default:
-        // Fallback para Web Share API
-        if (navigator.share) {
-          await navigator.share({
-            title: event.title,
-            text: text,
-            url: window.location.origin
-          });
-        } else {
-          // Copiar para clipboard
-          await navigator.clipboard.writeText(text);
-        }
+        await navigator.clipboard.writeText(finalText);
     }
   };
 
   const copyToClipboard = async () => {
     const shareText = generateShareText();
     await navigator.clipboard.writeText(shareText);
-    toast.success('Texto copiado para a Ã¡rea de transferÃªncia!');
+    toast.success('Texto copiado para a área de transferência!');
   };
 
   return (
@@ -134,19 +191,19 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            âœ•
+            ✕
           </button>
         </div>
 
         <div className="p-6 space-y-6">
           {/* Preview do Evento */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-900 mb-2">{event.title}</h3>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p>ðŸ“… {new Date(event.date).toLocaleDateString('pt-BR')} Ã s {event.time}</p>
-              <p>ðŸ“ {event.location}</p>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{event.title}</h3>
+            <div className="text-sm text-gray-600 dark:text-gray-200 space-y-1">
+              <p>Data: {new Date(event.date).toLocaleDateString('pt-BR')} às {event.time}</p>
+              <p>Local: {event.location}</p>
               {event.description && <p>{event.description}</p>}
             </div>
             {event.image && (
@@ -162,61 +219,74 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
 
           {/* Mensagem Personalizada */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Mensagem Personalizada (opcional)
             </label>
             <textarea
               value={customMessage}
               onChange={(e) => setCustomMessage(e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Personalize a mensagem que serÃ¡ compartilhada..."
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              placeholder="Personalize a mensagem que será compartilhada..."
             />
           </div>
 
           {/* Plataformas */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3">
               Escolha as plataformas:
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {platforms.map((platform) => (
-                <button
-                  key={platform.id}
-                  onClick={() => togglePlatform(platform.id)}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    selectedPlatforms.includes(platform.id)
-                      ? `${platform.color} text-white border-transparent`
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="text-center">
-                    <div className="text-2xl mb-2">{platform.icon}</div>
-                    <div className="font-medium">{platform.name}</div>
-                    <div className="text-xs opacity-75 mt-1">
-                      {platform.description}
+                <div key={platform.id} className="space-y-2">
+                  <button
+                    onClick={() => togglePlatform(platform.id)}
+                    className={`w-full p-4 rounded-lg border-2 transition-all ${
+                      selectedPlatforms.includes(platform.id)
+                        ? `${platform.color} text-white border-transparent`
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <PhotoIcon className="h-5 w-5" />
+                        <div className="font-medium">{platform.name}</div>
+                      </div>
+                      <div className="text-xs opacity-75 mt-1">
+                        {platform.description}
+                      </div>
                     </div>
-                  </div>
-                </button>
+                  </button>
+                  {selectedPlatforms.includes(platform.id) && platform.id !== 'whatsapp' && (
+                    <select
+                      value={platformMode[platform.id]}
+                      onChange={(e) => setPlatformMode(prev => ({ ...prev, [platform.id]: e.target.value as SocialMode }))}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="feed">Feed</option>
+                      <option value="stories">Stories</option>
+                    </select>
+                  )}
+                </div>
               ))}
             </div>
           </div>
 
           {/* Preview da Mensagem */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Preview da Mensagem:
             </label>
-            <div className="bg-gray-100 rounded-lg p-3 text-sm whitespace-pre-wrap">
+            <div className="bg-gray-100 dark:bg-gray-900/40 rounded-lg p-3 text-sm whitespace-pre-wrap text-gray-800 dark:text-gray-100">
               {generateShareText()}
             </div>
           </div>
 
-          {/* BotÃµes */}
+          {/* Botões */}
           <div className="flex justify-between pt-4 border-t">
             <button
               onClick={copyToClipboard}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               <LinkIcon className="h-4 w-4 mr-2" />
               Copiar Texto
@@ -225,7 +295,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
             <div className="flex space-x-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                className="px-4 py-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
               >
                 Cancelar
               </button>

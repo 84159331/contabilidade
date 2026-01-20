@@ -171,7 +171,7 @@ const BooksManagement: React.FC = () => {
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Gerenciamento de Livros
@@ -180,11 +180,11 @@ const BooksManagement: React.FC = () => {
                 Gerencie a biblioteca digital da igreja
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               {livrosLista.length > 0 && (
                 <button
                   onClick={handleClearLibrary}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center"
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center w-full sm:w-auto"
                 >
                   <TrashIcon className="h-5 w-5 mr-2" />
                   Limpar Biblioteca
@@ -195,7 +195,7 @@ const BooksManagement: React.FC = () => {
                   console.log('ðŸ”„ BotÃ£o Adicionar Livro clicado!');
                   setShowAddModal(true);
                 }}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center w-full sm:w-auto"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
                 Adicionar Livro
@@ -208,9 +208,9 @@ const BooksManagement: React.FC = () => {
       {/* Filtros e Busca */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 items-end">
             {/* Busca */}
-            <div className="flex-1">
+            <div className="lg:col-span-6">
               <div className="relative">
                 <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
@@ -224,7 +224,7 @@ const BooksManagement: React.FC = () => {
             </div>
 
             {/* Categoria */}
-            <div className="lg:w-48">
+            <div className="lg:col-span-3">
               <select
                 value={categoriaSelecionada}
                 onChange={(e) => setCategoriaSelecionada(e.target.value)}
@@ -237,7 +237,7 @@ const BooksManagement: React.FC = () => {
             </div>
 
             {/* OrdenaÃ§Ã£o */}
-            <div className="lg:w-48">
+            <div className="lg:col-span-3">
               <select
                 value={ordenacao}
                 onChange={(e) => setOrdenacao(e.target.value)}
@@ -254,8 +254,8 @@ const BooksManagement: React.FC = () => {
         </div>
 
         {/* EstatÃ­sticas */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
             <div className="flex items-center">
               <BookOpenIcon className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
@@ -264,7 +264,7 @@ const BooksManagement: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
             <div className="flex items-center">
               <DocumentArrowDownIcon className="h-8 w-8 text-green-600" />
               <div className="ml-4">
@@ -275,7 +275,7 @@ const BooksManagement: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
             <div className="flex items-center">
               <StarIcon className="h-8 w-8 text-yellow-600" />
               <div className="ml-4">
@@ -286,7 +286,7 @@ const BooksManagement: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
             <div className="flex items-center">
               <CalendarIcon className="h-8 w-8 text-purple-600" />
               <div className="ml-4">
@@ -297,10 +297,10 @@ const BooksManagement: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>@@
 
         {/* Grid de Livros */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {livrosFiltrados.map((livro, index) => (
             <motion.div
               key={livro.id}
@@ -314,7 +314,7 @@ const BooksManagement: React.FC = () => {
                 <SafeImage 
                   src={livro.capa} 
                   alt={livro.titulo}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-48 sm:h-64 object-cover"
                   fallbackText="Capa do Livro"
                 />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -337,8 +337,8 @@ const BooksManagement: React.FC = () => {
               </div>
 
               {/* ConteÃºdo */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                   {livro.titulo}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-2">
@@ -381,24 +381,24 @@ const BooksManagement: React.FC = () => {
                 </div>
 
                 {/* BotÃµes de AÃ§Ã£o */}
-                <div className="flex gap-2">
+                <div className="grid grid-cols-4 gap-2">
                   <button
                     onClick={() => window.open(livro.pdfUrl, '_blank')}
-                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
+                    className="col-span-2 bg-blue-600 text-white py-2 px-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
                   >
                     <EyeIcon className="h-5 w-5 mr-2" />
                     Visualizar
                   </button>
                   <button
                     onClick={() => handleEditBook(livro)}
-                    className="bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                    className="bg-green-600 text-white py-2 px-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center"
                     title="Editar livro"
                   >
                     <PencilIcon className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleToggleDestaque(livro.id)}
-                    className={`py-2 px-4 rounded-lg font-semibold transition-colors ${
+                    className={`py-2 px-3 rounded-lg font-semibold transition-colors flex items-center justify-center ${
                       livro.isDestaque 
                         ? 'bg-yellow-600 text-white hover:bg-yellow-700' 
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
@@ -409,7 +409,7 @@ const BooksManagement: React.FC = () => {
                   </button>
                   <button
                     onClick={() => handleDeleteBook(livro.id)}
-                    className="bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                    className="bg-red-600 text-white py-2 px-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center"
                     title="Excluir livro"
                   >
                     <TrashIcon className="h-5 w-5" />

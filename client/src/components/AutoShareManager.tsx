@@ -18,7 +18,7 @@ interface AutoShareSettings {
     facebook: boolean;
     whatsapp: boolean;
   };
-  scheduleTime: string; // HorÃ¡rio para compartilhar automaticamente
+  scheduleTime: string; // Horário para compartilhar automaticamente
   messageTemplate: string;
 }
 
@@ -36,20 +36,20 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
       whatsapp: false
     },
     scheduleTime: '',
-    messageTemplate: `ðŸŽ‰ ${event.title}\n\nðŸ“… {date} Ã s {time}\nðŸ“ {location}\n\n{description}\n\n#IgrejaComunidadeResgate #Evento`
+    messageTemplate: `Evento: ${event.title}\n\nData: {date} às {time}\nLocal: {location}\n\n{description}\n\n#IgrejaComunidadeResgate #Evento`
   });
 
   const [isScheduled, setIsScheduled] = useState(false);
   const [timeUntilShare, setTimeUntilShare] = useState<string>('');
 
   useEffect(() => {
-    // Carregar configuraÃ§Ãµes salvas do armazenamento local
+    // Carregar configurações salvas do armazenamento local
     const savedSettings = storage.getJSON<AutoShareSettings>(`autoShare_${event.id}`);
     if (savedSettings) {
       setSettings(savedSettings);
     }
 
-    // Calcular tempo atÃ© o compartilhamento
+    // Calcular tempo até o compartilhamento
     if (settings.enabled && settings.scheduleTime) {
       const now = new Date();
       const eventDate = new Date(event.date);
@@ -71,7 +71,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
       if (diff <= 0) {
         clearInterval(interval);
         setIsScheduled(false);
-        // Executar compartilhamento automÃ¡tico
+        // Executar compartilhamento automático
         executeAutoShare();
         return;
       }
@@ -107,9 +107,9 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
         await shareToWhatsApp(message);
       }
 
-      console.log('âœ… Compartilhamento automÃ¡tico executado');
+      console.log('Compartilhamento automático executado');
     } catch (error) {
-      console.error('âŒ Erro no compartilhamento automÃ¡tico:', error);
+      console.error('Erro no compartilhamento automático:', error);
     }
   };
 
@@ -170,13 +170,13 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-900">
-            Compartilhamento AutomÃ¡tico
+            Compartilhamento Automático
           </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
           >
-            âœ•
+            ✕
           </button>
         </div>
 
@@ -191,18 +191,18 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
                     Compartilhamento Agendado
                   </h3>
                   <p className="text-sm text-blue-600">
-                    SerÃ¡ compartilhado em: {timeUntilShare}
+                    Será compartilhado em: {timeUntilShare}
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ConfiguraÃ§Ãµes */}
+          {/* Configurações */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700">
-                Ativar Compartilhamento AutomÃ¡tico
+                Ativar Compartilhamento Automático
               </label>
               <button
                 onClick={() => setSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
@@ -220,10 +220,10 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
 
             {settings.enabled && (
               <>
-                {/* HorÃ¡rio do Compartilhamento */}
+                {/* Horário do Compartilhamento */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    HorÃ¡rio para Compartilhar
+                    Horário para Compartilhar
                   </label>
                   <input
                     type="time"
@@ -232,7 +232,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    O evento serÃ¡ compartilhado automaticamente neste horÃ¡rio
+                    O evento será compartilhado automaticamente neste horário
                   </p>
                 </div>
 
@@ -269,10 +269,10 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
                     onChange={(e) => setSettings(prev => ({ ...prev, messageTemplate: e.target.value }))}
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Use {date}, {time}, {location}, {description} como variÃ¡veis"
+                    placeholder="Use {date}, {time}, {location}, {description} como variáveis"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    VariÃ¡veis disponÃ­veis: {'{date}'}, {'{time}'}, {'{location}'}, {'{description}'}
+                    Variáveis disponíveis: {'{date}'}, {'{time}'}, {'{location}'}, {'{description}'}
                   </p>
                 </div>
               </>
@@ -289,7 +289,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
             </div>
           </div>
 
-          {/* BotÃµes */}
+          {/* Botões */}
           <div className="flex justify-between pt-4 border-t">
             <button
               onClick={handleTestShare}
@@ -311,7 +311,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 <CheckCircleIcon className="h-4 w-4 mr-2" />
-                Salvar ConfiguraÃ§Ãµes
+                Salvar Configurações
               </button>
             </div>
           </div>

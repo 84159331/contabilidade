@@ -348,8 +348,8 @@ const Members: React.FC = () => {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 items-end">
-          <div className="flex-1">
+        <form onSubmit={handleSearch} className="grid grid-cols-1 gap-3 sm:grid-cols-12 sm:gap-4 items-end">
+          <div className="sm:col-span-7">
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Buscar
             </label>
@@ -365,7 +365,7 @@ const Members: React.FC = () => {
               />
             </div>
           </div>
-          <div>
+          <div className="sm:col-span-3">
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Status
             </label>
@@ -380,9 +380,11 @@ const Members: React.FC = () => {
               <option value="inactive">Inativos</option>
             </select>
           </div>
-          <Button type="submit">
-            Buscar
-          </Button>
+          <div className="sm:col-span-2">
+            <Button type="submit" className="w-full">
+              Buscar
+            </Button>
+          </div>
         </form>
       </div>
 
