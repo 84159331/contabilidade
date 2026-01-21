@@ -1,4 +1,4 @@
-// Sistema de fila para aÃ§Ãµes offline
+// Sistema de fila para ações offline
 
 export interface QueuedAction {
   id: string;
@@ -13,7 +13,7 @@ const QUEUE_KEY = 'offline-actions-queue';
 const MAX_RETRIES = 3;
 
 export const offlineQueue = {
-  // Adicionar aÃ§Ã£o Ã  fila
+  // Adicionar ação à fila
   add: (action: Omit<QueuedAction, 'id' | 'timestamp' | 'retries'>): string => {
     const queue = offlineQueue.getAll();
     const id = `action-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -28,11 +28,11 @@ export const offlineQueue = {
     queue.push(queuedAction);
     localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
     
-    console.log('ðŸ“¦ AÃ§Ã£o adicionada Ã  fila offline:', queuedAction);
+    console.log('ðŸ“¦ Ação adicionada à fila offline:', queuedAction);
     return id;
   },
 
-  // Obter todas as aÃ§Ãµes na fila
+  // Obter todas as ações na fila
   getAll: (): QueuedAction[] => {
     try {
       const stored = localStorage.getItem(QUEUE_KEY);
@@ -43,12 +43,12 @@ export const offlineQueue = {
     }
   },
 
-  // Remover aÃ§Ã£o da fila
+  // Remover ação da fila
   remove: (id: string): void => {
     const queue = offlineQueue.getAll();
     const filtered = queue.filter(action => action.id !== id);
     localStorage.setItem(QUEUE_KEY, JSON.stringify(filtered));
-    console.log('âœ… AÃ§Ã£o removida da fila:', id);
+    console.log('âœ… Ação removida da fila:', id);
   },
 
   // Limpar fila
@@ -62,11 +62,11 @@ export const offlineQueue = {
     const queue = offlineQueue.getAll();
     
     if (queue.length === 0) {
-      console.log('âœ… Nenhuma aÃ§Ã£o pendente na fila');
+      console.log('âœ… Nenhuma ação pendente na fila');
       return;
     }
 
-    console.log(`ðŸ”„ Processando ${queue.length} aÃ§Ã£o(Ãµes) da fila offline...`);
+    console.log(`ðŸ”„ Processando ${queue.length} ação(ões) da fila offline...`);
 
     const results = await Promise.allSettled(
       queue.map(async (action) => {
@@ -75,17 +75,17 @@ export const offlineQueue = {
           offlineQueue.remove(action.id);
           return { success: true, action };
         } catch (error) {
-          console.error(`âŒ Erro ao processar aÃ§Ã£o ${action.id}:`, error);
+          console.error(`âŒ Erro ao processar ação ${action.id}:`, error);
           
           // Incrementar tentativas
           action.retries += 1;
           
           if (action.retries >= MAX_RETRIES) {
-            console.error(`âŒ AÃ§Ã£o ${action.id} excedeu nÃºmero mÃ¡ximo de tentativas`);
+            console.error(`âŒ Ação ${action.id} excedeu número máximo de tentativas`);
             offlineQueue.remove(action.id);
             return { success: false, action, error };
           } else {
-            // Atualizar aÃ§Ã£o na fila com novo nÃºmero de tentativas
+            // Atualizar ação na fila com novo número de tentativas
             const updatedQueue = offlineQueue.getAll();
             const index = updatedQueue.findIndex(a => a.id === action.id);
             if (index !== -1) {
@@ -101,6 +101,6 @@ export const offlineQueue = {
     const successful = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
     const failed = results.length - successful;
 
-    console.log(`âœ… Processamento concluÃ­do: ${successful} sucesso, ${failed} falhas`);
+    console.log(`âœ… Processamento concluído: ${successful} sucesso, ${failed} falhas`);
   }
 };

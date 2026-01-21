@@ -7,11 +7,11 @@ const Logout: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Limpar qualquer token ou dados de sessÃ£o que possam ter ficado
+    // Limpar qualquer token ou dados de sessão que possam ter ficado
     storage.remove('token');
     sessionStorage.clear();
     
-    // Redirecionar automaticamente para login apÃ³s 5 segundos
+    // Redirecionar automaticamente para login após 5 segundos
     const timer = setTimeout(() => {
       navigate('/tesouraria/login');
     }, 5000);
@@ -20,11 +20,11 @@ const Logout: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         {/* Card Principal */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-          {/* Header com Ãcone */}
+          {/* Header com Ícone */}
           <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-12 text-center">
             <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm mb-4">
               <CheckCircleIcon className="h-10 w-10 text-white" />
@@ -33,22 +33,22 @@ const Logout: React.FC = () => {
               Logout Realizado!
             </h2>
             <p className="mt-2 text-green-100 text-sm">
-              VocÃª saiu com seguranÃ§a do sistema
+              Você saiu com segurança do sistema
             </p>
           </div>
 
-          {/* ConteÃºdo */}
+          {/* Conteúdo */}
           <div className="px-8 py-8 text-center">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                âœ… SessÃ£o Encerrada
+                Sessão Encerrada
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Sua sessÃ£o foi encerrada com seguranÃ§a. Todos os dados temporÃ¡rios foram limpos.
+                Sua sessão foi encerrada com segurança. Todos os dados temporários foram limpos.
               </p>
             </div>
 
-            {/* BotÃµes de AÃ§Ã£o */}
+            {/* Botões de Ação */}
             <div className="space-y-3">
               <Link
                 to="/tesouraria/login"
@@ -67,11 +67,11 @@ const Logout: React.FC = () => {
               </Link>
             </div>
 
-            {/* InformaÃ§Ã£o de Redirecionamento */}
+            {/* Informação de Redirecionamento */}
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <p className="text-sm text-blue-800 dark:text-blue-200">
-                <span className="font-medium">â„¹ï¸ Redirecionamento automÃ¡tico:</span><br />
-                VocÃª serÃ¡ redirecionado para o login em alguns segundos...
+                <span className="font-medium">Redirecionamento automático:</span><br />
+                Você será redirecionado para o login em alguns segundos...
               </p>
             </div>
           </div>
@@ -79,23 +79,23 @@ const Logout: React.FC = () => {
           {/* Footer */}
           <div className="bg-gray-50 dark:bg-gray-700 px-8 py-4 text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Â© 2024 Comunidade CristÃ£ Resgate. Todos os direitos reservados.
+              (c) 2024 Comunidade Cristã Resgate. Todos os direitos reservados.
             </p>
           </div>
         </div>
 
-        {/* Card de InformaÃ§Ãµes Adicionais */}
+        {/* Card de Informações Adicionais */}
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              ðŸ”’ SeguranÃ§a
+              Segurança
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Por motivos de seguranÃ§a, recomendamos que vocÃª feche completamente o navegador apÃ³s o logout.
+              Por motivos de segurança, recomendamos que você feche completamente o navegador após o logout.
             </p>
             <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
               <p className="text-sm text-green-800 dark:text-green-200 font-medium">
-                âœ… Todos os dados de sessÃ£o foram removidos com seguranÃ§a
+                Todos os dados de sessão foram removidos com segurança
               </p>
             </div>
           </div>

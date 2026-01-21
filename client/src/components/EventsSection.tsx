@@ -31,18 +31,110 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'upcoming'>('upcoming');
 
+  const getRandomVerseForEvent = (event: Event) => {
+    const verses = [
+      {
+        text: 'Meu coração ouviu tua voz dizer: "Venha e entre na minha presença",\ne meu coração respondeu: "Senhor, eu irei!".',
+        ref: 'Salmos 27:8 - NVT',
+      },
+      {
+        text: 'Alegrei-me quando me disseram: "Vamos à casa do Senhor".',
+        ref: 'Salmos 122:1 - NVT',
+      },
+      {
+        text: 'Pois onde dois ou três se reúnem em meu nome, ali eu estou no meio deles.',
+        ref: 'Mateus 18:20 - NVT',
+      },
+      {
+        text: 'Lancem sobre ele toda a sua ansiedade, porque ele cuida de vocês.',
+        ref: '1 Pedro 5:7 - NVT',
+      },
+    ];
+
+    const seed = Array.from(String(event.id || event.title || '')).reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return verses[seed % verses.length];
+  };
+
+  const formatEventDateTime = (event: Event) => {
+    const date = new Date(event.date);
+    const formatted = date.toLocaleDateString('pt-BR');
+    return `${formatted} às ${event.time}`;
+  };
+
+  const generateInviteMessage = (event: Event) => {
+    const verse = getRandomVerseForEvent(event);
+    const link = `${window.location.origin}/eventos`;
+
+    return [
+      `Evento: ${event.title}`,
+      '',
+      `Data: ${formatEventDateTime(event)}`,
+      `Local: ${event.location}`,
+      '',
+      `${verse.text}`,
+      `${verse.ref}`,
+      '',
+      `Link: ${link}`,
+      '',
+      '#IgrejaComunidadeResgate #Evento',
+    ].join('\n');
+  };
+
+  const tryNativeShare = async (event: Event, text: string) => {
+    if (!('share' in navigator)) {
+      return false;
+    }
+
+    try {
+      await navigator.share({
+        title: event.title,
+        text,
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const shareToPlatform = async (platform: 'instagram' | 'facebook' | 'whatsapp', event: Event) => {
+    const text = generateInviteMessage(event);
+
+    const shared = await tryNativeShare(event, text);
+    if (shared) return;
+
+    if (platform === 'whatsapp') {
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(whatsappUrl, '_blank');
+      return;
+    }
+
+    if (platform === 'facebook') {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(text)}`;
+      window.open(facebookUrl, '_blank');
+      return;
+    }
+
+    window.open('https://www.instagram.com/', '_blank');
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.info('Texto copiado. Cole no Instagram para compartilhar.');
+    } catch {
+      toast.info('Copie o texto para colar no Instagram.');
+    }
+  };
+
   useEffect(() => {
     // Migrar imagens antigas primeiro
     eventsAPI.migrateEventsImages();
     loadEvents();
     
-    // Listener para mudanÃ§as nos eventos (sincronizaÃ§Ã£o)
+    // Listener para mudanças nos eventos (sincronização)
     const handleStorageChange = () => {
       console.log('ðŸ”„ Eventos atualizados, recarregando...');
       loadEvents();
     };
     
-    // Listener para mudanÃ§as no armazenamento local
+    // Listener para mudanças no armazenamento local
     const handleLocalStorageChange = (e: StorageEvent) => {
       if (e.key === 'cachedEvents') {
         console.log('ðŸ”„ Cache de eventos atualizado, recarregando...');
@@ -103,11 +195,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
         setEvents(cachedEvents);
         console.log('âœ… Eventos carregados do cache:', cachedEvents.length);
       } else {
-        // Se nÃ£o hÃ¡ cache, criar um evento de teste para debug
+        // Se não há cache, criar um evento de teste para debug
         const testEvent = {
           id: 'test-1',
           title: 'Evento de Teste',
-          description: 'Este Ã© um evento de teste para verificar se o sistema estÃ¡ funcionando',
+          description: 'Este é um evento de teste para verificar se o sistema está funcionando',
           date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 dias no futuro
           time: '19:00',
           location: 'Igreja Comunidade Resgate',
@@ -131,9 +223,9 @@ const EventsSection: React.FC<EventsSectionProps> = ({
 
 
   const formatDate = (dateString: string) => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const date = new Date(year, month - 1, day); // month é 0-indexed
     
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -147,9 +239,9 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const isUpcoming = (dateString: string) => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = dateString.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -173,7 +265,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   const handleDeleteEvent = async (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este evento?')) {
       try {
-        // Se for admin, chamar a funÃ§Ã£o de exclusÃ£o passada como prop
+        // Se for admin, chamar a função de exclusão passada como prop
         if (isAdmin && onDelete) {
           onDelete(id);
         } else {
@@ -296,25 +388,37 @@ const EventsSection: React.FC<EventsSectionProps> = ({
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">Compartilhar:</span>
                       {event.social_media.instagram && (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200">
+                        <button
+                          type="button"
+                          onClick={() => shareToPlatform('instagram', event)}
+                          className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 hover:opacity-90"
+                        >
                           Instagram
-                        </span>
+                        </button>
                       )}
                       {event.social_media.facebook && (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        <button
+                          type="button"
+                          onClick={() => shareToPlatform('facebook', event)}
+                          className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:opacity-90"
+                        >
                           Facebook
-                        </span>
+                        </button>
                       )}
                       {event.social_media.whatsapp && (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        <button
+                          type="button"
+                          onClick={() => shareToPlatform('whatsapp', event)}
+                          className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:opacity-90"
+                        >
                           WhatsApp
-                        </span>
+                        </button>
                       )}
                     </div>
                   </div>
                 )}
 
-                {/* AÃ§Ãµes para Admin */}
+                {/* Ações para Admin */}
                 {isAdmin && (
                   <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-600">
                     {onShare && (

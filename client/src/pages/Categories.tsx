@@ -48,7 +48,7 @@ const Categories: React.FC = () => {
       return;
     }
 
-    // Carregar apenas se ainda nÃ£o carregou ou se o filtro mudou
+    // Carregar apenas se ainda não carregou ou se o filtro mudou
     if (!hasLoadedRef.current || typeFilter) {
       hasLoadedRef.current = true;
       loadCategories();
@@ -56,7 +56,7 @@ const Categories: React.FC = () => {
   }, [typeFilter, authLoading, location.pathname]);
 
   const loadCategories = async () => {
-    // Aguardar autenticaÃ§Ã£o terminar
+    // Aguardar autenticação terminar
     if (authLoading) {
       return;
     }
@@ -67,8 +67,8 @@ const Categories: React.FC = () => {
       // Verificar se deve usar dados mock
       const useMockData = !user;
       
-      console.log('ðŸ” UsuÃ¡rio logado:', user ? 'Sim' : 'NÃ£o');
-      console.log('ðŸ” Usando dados mock:', useMockData ? 'Sim' : 'NÃ£o');
+      console.log('ðŸ” Usuário logado:', user ? 'Sim' : 'Não');
+      console.log('ðŸ” Usando dados mock:', useMockData ? 'Sim' : 'Não');
       
       if (useMockData) {
         // Simular delay de API
@@ -98,9 +98,9 @@ const Categories: React.FC = () => {
 
   const handleCreateCategory = async (categoryData: any) => {
     try {
-      console.log('ðŸ”„ Iniciando criaÃ§Ã£o de categoria...');
+      console.log('ðŸ”„ Iniciando criação de categoria...');
       console.log('ðŸ“ Dados da categoria:', categoryData);
-      console.log('ðŸ‘¤ UsuÃ¡rio logado:', user ? 'Sim' : 'NÃ£o');
+      console.log('ðŸ‘¤ Usuário logado:', user ? 'Sim' : 'Não');
       
       const response = await categoriesAPI.createCategory(categoryData);
       console.log('âœ… Categoria criada com sucesso:', response);

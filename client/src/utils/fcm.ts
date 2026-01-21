@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { doc, updateDoc, getFirestore } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-// VAPID key - vocÃª precisa gerar isso no Firebase Console
+// VAPID key - você precisa gerar isso no Firebase Console
 // Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
 const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY || '';
 
@@ -21,17 +21,17 @@ export const initializeMessaging = async () => {
     return null;
   }
 
-  // Verificar se o navegador suporta notificaÃ§Ãµes
+  // Verificar se o navegador suporta notificações
   if (!('Notification' in window)) {
     console.warn('Notificações não suportadas');
     return null;
   }
 
   try {
-    // Firebase jÃ¡ estÃ¡ inicializado via config.ts
-    // Apenas obter instÃ¢ncia do messaging
+    // Firebase já está inicializado via config.ts
+    // Apenas obter instância do messaging
 
-    // Obter instÃ¢ncia do messaging
+    // Obter instância do messaging
     const { getMessaging } = await import('firebase/messaging');
     messaging = getMessaging();
 
@@ -42,7 +42,7 @@ export const initializeMessaging = async () => {
   }
 };
 
-// Solicitar permissÃ£o de notificaÃ§Ãµes
+// Solicitar permissão de notificações
 export const requestNotificationPermission = async (): Promise<string | null> => {
   try {
     if (!messaging) {
@@ -54,7 +54,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
       return null;
     }
 
-    // Solicitar permissÃ£o
+    // Solicitar permissão
     const permission = await Notification.requestPermission();
     
     if (permission === 'granted') {
@@ -102,7 +102,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
   }
 };
 
-// Escutar mensagens quando o app estÃ¡ em primeiro plano
+// Escutar mensagens quando o app está em primeiro plano
 export const setupMessageListener = () => {
   if (!messaging) {
     initializeMessaging().then(() => {
@@ -122,7 +122,7 @@ const setupListener = () => {
   onMessage(messaging, (payload) => {
     console.log('Mensagem recebida:', payload);
     
-    // Mostrar notificaÃ§Ã£o
+    // Mostrar notificação
     if (payload.notification) {
       const notificationTitle = payload.notification.title || 'Nova notificação';
       const notificationOptions = {
@@ -144,7 +144,7 @@ const setupListener = () => {
   });
 };
 
-// Verificar se jÃ¡ tem permissÃ£o
+// Verificar se já tem permissão
 export const checkNotificationPermission = (): boolean => {
   if (!('Notification' in window)) {
     return false;
@@ -152,7 +152,7 @@ export const checkNotificationPermission = (): boolean => {
   return Notification.permission === 'granted';
 };
 
-// Verificar se jÃ¡ tem token salvo
+// Verificar se já tem token salvo
 export const getStoredToken = async (): Promise<string | null> => {
   try {
     const auth = getAuth();

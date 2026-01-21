@@ -78,7 +78,7 @@ function BootSplash() {
 function App() {
   if (!firebaseConfigStatus.ok) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
         <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Não foi possível iniciar o app
@@ -127,7 +127,7 @@ function App() {
               <ErrorBoundary fallback={<PageErrorFallback />}>
                 <SwipeNavigation>
                   <Suspense fallback={
-                    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 dark:bg-gray-900">
                       <LoadingSpinner size="lg" text="Carregando página..." />
                     </div>
                   }>

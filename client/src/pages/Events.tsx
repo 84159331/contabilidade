@@ -6,7 +6,6 @@ import EventForm from '../components/EventForm';
 import EventList from '../components/EventList';
 import SocialShare from '../components/SocialShare';
 import AutoShareManager from '../components/AutoShareManager';
-import ImageTest from '../components/ImageTest';
 import { toast } from 'react-toastify';
 import { Event, EventFormData } from '../types/Event';
 import { useEventsAlerts } from '../contexts/EventsAlertsContext';
@@ -35,7 +34,7 @@ const Events: React.FC = () => {
       console.log('ðŸ”„ Events.tsx - Carregando eventos...');
       
       if (!user) {
-        console.log('âŒ Events.tsx - UsuÃ¡rio nÃ£o autenticado');
+        console.log('âŒ Events.tsx - Usuário não autenticado');
         setEvents([]);
         return;
       }
@@ -154,9 +153,9 @@ const Events: React.FC = () => {
   };
 
   const filteredEvents = events.filter(event => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = event.date.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -181,9 +180,6 @@ const Events: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Componente de Teste de Imagem */}
-      {process.env.NODE_ENV === 'development' ? <ImageTest /> : null}
-      
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -289,7 +285,7 @@ const Events: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de FormulÃ¡rio */}
+      {/* Modal de Formulário */}
       {showForm && (
         <EventForm
           event={editingEvent}
@@ -309,7 +305,7 @@ const Events: React.FC = () => {
         />
       )}
 
-      {/* Modal de Compartilhamento AutomÃ¡tico */}
+      {/* Modal de Compartilhamento Automático */}
       {autoSharingEvent && (
         <AutoShareManager
           event={autoSharingEvent}

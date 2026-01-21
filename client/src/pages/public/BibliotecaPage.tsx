@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
 import storage from '../../utils/storage';
+import { booksService, Livro } from '../../services/booksService';
 import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
@@ -11,24 +12,6 @@ import {
   CalendarIcon,
   StarIcon
 } from '@heroicons/react/24/outline';
-
-interface Livro {
-  id: string;
-  titulo: string;
-  autor: string;
-  descricao: string;
-  categoria: string;
-  capa: string;
-  pdfUrl: string;
-  tamanho: string;
-  paginas: number;
-  ano: number;
-  tags: string[];
-  downloads: number;
-  avaliacao: number;
-  isNovo?: boolean;
-  isDestaque?: boolean;
-}
 
 const categorias = [
   'Todos',
@@ -65,6 +48,37 @@ const BibliotecaPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const remote = await booksService.list();
+        if (!mounted) return;
+        if (remote.length > 0) {
+          setLivrosLista(remote);
+        }
+      } catch (e) {
+        // Fallback: manter localStorage
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handlePreviewBook = useCallback((livro: Livro) => {
+    const url = String(livro.pdfUrl || '').trim();
+    if (!url) {
+      toast.warn('Este livro não possui PDF para visualização.');
+      return;
+    }
+    if (url.startsWith('blob:')) {
+      toast.warn('O link do PDF é temporário e não pode ser visualizado após recarregar.');
+      return;
+    }
+    window.open(url, '_blank');
+  }, []);
+
   // Debounce na busca (300ms)
   useEffect(() => {
     if (debounceTimerRef.current) {
@@ -81,62 +95,6 @@ const BibliotecaPage: React.FC = () => {
       }
     };
   }, [termoBusca]);
-
-  // Migrar blob URLs para base64 ou remover (executar uma vez)
-  useEffect(() => {
-    const migrateBlobUrls = () => {
-      const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
-      if (!livrosSalvos) return;
-
-      let hasChanges = false;
-      const livrosAtualizados = livrosSalvos.map(livro => {
-        // Verificar se a capa é blob URL
-        if (livro.capa && livro.capa.startsWith('blob:')) {
-          hasChanges = true;
-          return {
-            ...livro,
-            capa: '' // Remover blob URL inválida
-          };
-        }
-        // Verificar se o PDF é blob URL
-        if (livro.pdfUrl && livro.pdfUrl.startsWith('blob:')) {
-          hasChanges = true;
-          return {
-            ...livro,
-            pdfUrl: '' // Remover blob URL inválida
-          };
-        }
-        return livro;
-      });
-
-      if (hasChanges) {
-        storage.setJSON('biblioteca-livros', livrosAtualizados);
-        setLivrosLista(livrosAtualizados);
-        toast.warn('Alguns livros tinham imagens temporárias que foram removidas. Por favor, adicione novamente as capas.');
-      }
-    };
-
-    migrateBlobUrls();
-  }, []);
-
-  // Atualizar lista quando o armazenamento local mudar (otimizado)
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'biblioteca-livros') {
-        const livrosSalvos = storage.getJSON<Livro[]>('biblioteca-livros');
-        if (livrosSalvos) {
-          setLivrosLista(livrosSalvos);
-        }
-      }
-    };
-
-    // Escutar mudanças no armazenamento local (apenas entre abas)
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
 
   // Filtrar e ordenar livros com useMemo para otimização
   const livrosFiltrados = useMemo(() => {
@@ -206,9 +164,10 @@ const BibliotecaPage: React.FC = () => {
         const atualizados = prev.map(l => 
           l.id === livro.id ? { ...l, downloads: l.downloads + 1 } : l
         );
-        storage.setJSON('biblioteca-livros', atualizados);
         return atualizados;
       });
+
+      booksService.incrementDownloads(livro.id).catch(() => {});
       
       // Mostrar mensagem de sucesso
       toast.success(`Download de "${livro.titulo}" iniciado!`);
@@ -219,7 +178,7 @@ const BibliotecaPage: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-[100dvh] bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -419,7 +378,7 @@ const BibliotecaPage: React.FC = () => {
                     Baixar
                   </button>
                   <button 
-                    onClick={() => window.open(livro.pdfUrl, '_blank')}
+                    onClick={() => handlePreviewBook(livro)}
                     className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                     title="Visualizar PDF"
                   >

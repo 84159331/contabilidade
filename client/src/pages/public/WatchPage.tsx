@@ -5,17 +5,17 @@ import SEOHead from '../../components/SEOHead';
 
 const FaYoutubeIcon = FaYoutube as any;
 
-// IDs de vÃ­deos do canal (vocÃª pode atualizar com os vÃ­deos reais do canal)
-// Para obter o ID, pegue a URL do vÃ­deo: https://www.youtube.com/watch?v=VIDEO_ID
-// Exemplo: Se a URL Ã© https://www.youtube.com/watch?v=dQw4w9WgXcQ, o ID Ã©: dQw4w9WgXcQ
+// IDs de vídeos do canal (você pode atualizar com os vídeos reais do canal)
+// Para obter o ID, pegue a URL do vídeo: https://www.youtube.com/watch?v=VIDEO_ID
+// Exemplo: Se a URL é https://www.youtube.com/watch?v=dQw4w9WgXcQ, o ID é: dQw4w9WgXcQ
 const VIDEOS_DESTAQUE: string[] = [
-  'ZoYuZfbWuvg', // VÃ­deo adicionado
-  'F5EtGh5Qr24', // VÃ­deo em destaque
-  'MJ-szYCspIY', // VÃ­deo em destaque
-  'HCZLNjWVu4E', // VÃ­deo em destaque
+  'ZoYuZfbWuvg', // Vídeo adicionado
+  'F5EtGh5Qr24', // Vídeo em destaque
+  'MJ-szYCspIY', // Vídeo em destaque
+  'HCZLNjWVu4E', // Vídeo em destaque
 ];
 
-// Componente de thumbnail de vÃ­deo
+// Componente de thumbnail de vídeo
 interface VideoThumbnailProps {
   videoId: string;
   title?: string;
@@ -25,15 +25,15 @@ interface VideoThumbnailProps {
 const VideoThumbnail = React.memo<VideoThumbnailProps>(({ videoId, title, onSelect }) => {
   // URLs de thumbnail do YouTube em ordem de prioridade
   const thumbnailUrls = [
-    `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, // Alta resoluÃ§Ã£o
-    `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, // PadrÃ£o SD
+    `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, // Alta resolução
+    `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, // Padrão SD
     `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, // Alta qualidade
   ];
 
   const [currentThumbnailIndex, setCurrentThumbnailIndex] = useState(0);
 
   const handleImageError = () => {
-    // Tenta a prÃ³xima URL de thumbnail se a atual falhar
+    // Tenta a próxima URL de thumbnail se a atual falhar
     if (currentThumbnailIndex < thumbnailUrls.length - 1) {
       setCurrentThumbnailIndex(currentThumbnailIndex + 1);
     }
@@ -47,7 +47,7 @@ const VideoThumbnail = React.memo<VideoThumbnailProps>(({ videoId, title, onSele
       <div className="aspect-video relative bg-gray-200 dark:bg-gray-700">
         <img
           src={thumbnailUrls[currentThumbnailIndex]}
-          alt={title || `VÃ­deo ${videoId}`}
+          alt={title || `Vídeo ${videoId}`}
           className="w-full h-full object-cover"
           onError={handleImageError}
           loading="lazy"
@@ -108,7 +108,7 @@ const WatchPage: React.FC = () => {
         type="video"
         image="/img/ICONE-RESGATE.png"
       />
-      <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
+      <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-[100dvh]">
       <section className="py-10 md:py-16">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Header */}
@@ -136,13 +136,13 @@ const WatchPage: React.FC = () => {
             </a>
           </div>
 
-          {/* Player do vÃ­deo selecionado */}
+          {/* Player do vídeo selecionado */}
           {videoSelecionado && (
             <div className="mb-12">
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    VÃ­deo em destaque
+                    Vídeo em destaque
                   </h2>
                   <button
                     onClick={() => setVideoSelecionado(null)}
@@ -158,11 +158,11 @@ const WatchPage: React.FC = () => {
             </div>
           )}
 
-          {/* Grid de vÃ­deos do canal */}
+          {/* Grid de vídeos do canal */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                VÃ­deos do Canal
+                Vídeos do Canal
               </h2>
               <a
                 href="https://youtube.com/@comunidadecresgate"
@@ -177,18 +177,18 @@ const WatchPage: React.FC = () => {
               </a>
             </div>
 
-            {/* Mensagem quando nÃ£o hÃ¡ vÃ­deos configurados */}
+            {/* Mensagem quando não há vídeos configurados */}
             {VIDEOS_DESTAQUE.length === 0 ? (
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 border border-gray-100 dark:border-gray-700 text-center">
                 <FaYoutubeIcon className="h-16 w-16 text-red-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  Nenhum vÃ­deo configurado
+                  Nenhum vídeo configurado
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Para exibir vÃ­deos em destaque aqui, vocÃª pode:
+                  Para exibir vídeos em destaque aqui, você pode:
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Configure IDs de vÃ­deos especÃ­ficos no cÃ³digo (veja o arquivo WatchPage.tsx) ou clique no botÃ£o abaixo para ir direto ao canal no YouTube
+                  Configure IDs de vídeos específicos no código (veja o arquivo WatchPage.tsx) ou clique no botão abaixo para ir direto ao canal no YouTube
                 </p>
                 <a
                   href="https://youtube.com/@comunidadecresgate"
@@ -213,15 +213,15 @@ const WatchPage: React.FC = () => {
             )}
           </div>
 
-          {/* InformaÃ§Ãµes do canal */}
+          {/* Informações do canal */}
           <div className="bg-white dark:bg-gray-100 rounded-2xl shadow-xl p-8 text-black border border-gray-200">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <FaYoutubeIcon className="h-12 w-12 text-red-600" />
                 <div>
-                  <h3 className="text-2xl font-bold mb-1 text-black">Comunidade CristÃ£ Resgate</h3>
+                  <h3 className="text-2xl font-bold mb-1 text-black">Comunidade Cristã Resgate</h3>
                   <p className="text-black">
-                    Inscreva-se para nÃ£o perder nenhuma mensagem
+                    Inscreva-se para não perder nenhuma mensagem
                   </p>
                 </div>
               </div>

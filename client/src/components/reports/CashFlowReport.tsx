@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon nÃ£o utilizado
+// Removido DocumentArrowDownIcon não utilizado
 
 interface CashFlowData {
   period: string;
@@ -46,12 +46,12 @@ const CashFlowReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         end_date: endDate,
         period
       });
-      // A API jÃ¡ retorna array diretamente
+      // A API já retorna array diretamente
       const cashFlowData = Array.isArray(response.data) ? response.data : [];
       setData(cashFlowData);
       onDataLoaded(cashFlowData);
       
-      // Passa metadados para geraÃ§Ã£o de PDF
+      // Passa metadados para geração de PDF
       if (onMetadataLoaded) {
         onMetadataLoaded({
           startDate,

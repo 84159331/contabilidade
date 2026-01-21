@@ -5,6 +5,7 @@ import AddBookModal from '../components/AddBookModal';
 import EditBookModal from '../components/EditBookModal';
 import SafeImage from '../components/SafeImage';
 import storage from '../utils/storage';
+import { booksService, Livro } from '../services/booksService';
 import {
   BookOpenIcon, 
   MagnifyingGlassIcon, 
@@ -17,39 +18,21 @@ import {
   PencilIcon
 } from '@heroicons/react/24/outline';
 
-interface Livro {
-  id: string;
-  titulo: string;
-  autor: string;
-  descricao: string;
-  categoria: string;
-  capa: string;
-  pdfUrl: string;
-  tamanho: string;
-  paginas: number;
-  ano: number;
-  tags: string[];
-  downloads: number;
-  avaliacao: number;
-  isNovo?: boolean;
-  isDestaque?: boolean;
-}
-
 const categorias = [
   'Todos',
   'Teologia',
   'Devocionais',
-  'Estudos BÃ­blicos',
-  'FÃ©',
-  'EsperanÃ§a',
+  'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
   'Palavras de Coach',
-  'Palavras de EsperanÃ§a',
+  'Palavras de Esperança',
   'Biografias',
-  'HistÃ³ria da Igreja',
-  'LideranÃ§a',
-  'FamÃ­lia',
+  'História da Igreja',
+  'Liderança',
+  'Família',
   'Jovens',
-  'CrianÃ§as'
+  'Crianças'
 ];
 
 const BooksManagement: React.FC = () => {
@@ -67,6 +50,37 @@ const BooksManagement: React.FC = () => {
   const [livroParaEditar, setLivroParaEditar] = useState<Livro | null>(null);
   
   console.log('ðŸ” BooksManagement - showAddModal:', showAddModal);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const livros = await booksService.list();
+        if (!mounted) return;
+        if (livros.length > 0) {
+          setLivrosLista(livros);
+        }
+      } catch (e) {
+        // Fallback: manter localStorage
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handlePreviewBook = (livro: Livro) => {
+    const url = String(livro.pdfUrl || '').trim();
+    if (!url) {
+      toast.warn('Este livro não possui PDF para visualização.');
+      return;
+    }
+    if (url.startsWith('blob:')) {
+      toast.warn('O link do PDF é temporário e não pode ser visualizado após recarregar. Reenvie o PDF.');
+      return;
+    }
+    window.open(url, '_blank');
+  };
 
   useEffect(() => {
     filtrarLivros();
@@ -116,12 +130,7 @@ const BooksManagement: React.FC = () => {
   };
 
   const handleAddBook = (novoLivro: Livro) => {
-    setLivrosLista(prev => {
-      const novaLista = [novoLivro, ...prev];
-      // Salvar no armazenamento local
-      storage.setJSON('biblioteca-livros', novaLista);
-      return novaLista;
-    });
+    setLivrosLista(prev => [novoLivro, ...prev]);
     setShowAddModal(false);
   };
 
@@ -131,43 +140,39 @@ const BooksManagement: React.FC = () => {
   };
 
   const handleSaveEdit = (livroEditado: Livro) => {
-    setLivrosLista(prev => prev.map(livro => 
-      livro.id === livroEditado.id ? livroEditado : livro
-    ));
+    setLivrosLista(prev => prev.map(livro => (livro.id === livroEditado.id ? livroEditado : livro)));
     setShowEditModal(false);
     setLivroParaEditar(null);
   };
 
   const handleDeleteBook = (id: string) => {
     if (window.confirm('Tem certeza que deseja excluir este livro?')) {
-      setLivrosLista(prev => {
-        const novaLista = prev.filter(livro => livro.id !== id);
-        storage.setJSON('biblioteca-livros', novaLista);
-        return novaLista;
+      setLivrosLista(prev => prev.filter(livro => livro.id !== id));
+      booksService.delete(id).catch(() => {
+        toast.error('Não foi possível excluir o livro agora.');
       });
     }
   };
 
   const handleToggleDestaque = (id: string) => {
     setLivrosLista(prev => {
-      const novaLista = prev.map(livro => 
-        livro.id === id ? { ...livro, isDestaque: !livro.isDestaque } : livro
-      );
-      storage.setJSON('biblioteca-livros', novaLista);
-      return novaLista;
+      const livroAtual = prev.find(l => l.id === id);
+      const novoValor = !livroAtual?.isDestaque;
+      booksService.updateMetadata(id, { isDestaque: novoValor } as any).catch(() => {
+        toast.error('Não foi possível atualizar o destaque agora.');
+      });
+      return prev.map(livro => (livro.id === id ? { ...livro, isDestaque: novoValor } : livro));
     });
   };
 
   const handleClearLibrary = () => {
-    if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
-      setLivrosLista([]);
-      storage.remove('biblioteca-livros');
-      toast.success('Biblioteca limpa com sucesso!');
+    if (window.confirm('Tem certeza que deseja limpar toda a biblioteca? Esta ação não pode ser desfeita.')) {
+      toast.warn('A limpeza total não está disponível no modo online. Exclua os livros individualmente.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-[100dvh] bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -192,7 +197,7 @@ const BooksManagement: React.FC = () => {
               )}
               <button
                 onClick={() => {
-                  console.log('ðŸ”„ BotÃ£o Adicionar Livro clicado!');
+                  console.log('ðŸ”„ Botão Adicionar Livro clicado!');
                   setShowAddModal(true);
                 }}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center w-full sm:w-auto"
@@ -236,7 +241,7 @@ const BooksManagement: React.FC = () => {
               </select>
             </div>
 
-            {/* OrdenaÃ§Ã£o */}
+            {/* Ordenação */}
             <div className="lg:col-span-3">
               <select
                 value={ordenacao}
@@ -253,7 +258,7 @@ const BooksManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* EstatÃ­sticas */}
+        {/* Estatísticas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
             <div className="flex items-center">
@@ -297,7 +302,7 @@ const BooksManagement: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>@@
+        </div>
 
         {/* Grid de Livros */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -336,7 +341,7 @@ const BooksManagement: React.FC = () => {
                 </div>
               </div>
 
-              {/* ConteÃºdo */}
+              {/* Conteúdo */}
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                   {livro.titulo}
@@ -360,7 +365,7 @@ const BooksManagement: React.FC = () => {
                   ))}
                 </div>
 
-                {/* InformaÃ§Ãµes */}
+                {/* Informações */}
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <div className="flex items-center">
                     <CalendarIcon className="h-4 w-4 mr-1" />
@@ -368,7 +373,7 @@ const BooksManagement: React.FC = () => {
                   </div>
                   <div className="flex items-center">
                     <BookOpenIcon className="h-4 w-4 mr-1" />
-                    <span>{livro.paginas} pÃ¡gs</span>
+                    <span>{livro.paginas} págs</span>
                   </div>
                   <div className="flex items-center">
                     <DocumentArrowDownIcon className="h-4 w-4 mr-1" />
@@ -380,10 +385,10 @@ const BooksManagement: React.FC = () => {
                   </div>
                 </div>
 
-                {/* BotÃµes de AÃ§Ã£o */}
+                {/* Botões de Ação */}
                 <div className="grid grid-cols-4 gap-2">
                   <button
-                    onClick={() => window.open(livro.pdfUrl, '_blank')}
+                    onClick={() => handlePreviewBook(livro)}
                     className="col-span-2 bg-blue-600 text-white py-2 px-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
                   >
                     <EyeIcon className="h-5 w-5 mr-2" />
@@ -420,7 +425,7 @@ const BooksManagement: React.FC = () => {
           ))}
         </div>
 
-        {/* Mensagem quando nÃ£o hÃ¡ resultados */}
+        {/* Mensagem quando não há resultados */}
         {livrosFiltrados.length === 0 && (
           <div className="text-center py-12">
             <BookOpenIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -429,14 +434,14 @@ const BooksManagement: React.FC = () => {
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               {livrosLista.length === 0 
-                ? 'Comece adicionando livros Ã  biblioteca digital'
+                ? 'Comece adicionando livros à biblioteca digital'
                 : 'Tente ajustar os filtros ou termo de busca'
               }
             </p>
             {livrosLista.length === 0 && (
               <button
                 onClick={() => {
-                  console.log('ðŸ”„ BotÃ£o Adicionar Primeiro Livro clicado!');
+                  console.log('ðŸ”„ Botão Adicionar Primeiro Livro clicado!');
                   setShowAddModal(true);
                 }}
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center mx-auto"

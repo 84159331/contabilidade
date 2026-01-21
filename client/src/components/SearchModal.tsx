@@ -82,13 +82,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
 
   const getTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      page: 'PÃ¡gina',
+      page: 'Página',
       event: 'Evento',
       book: 'Livro',
-      esboco: 'EsboÃ§o',
-      video: 'VÃ­deo'
+      esboco: 'Esboço',
+      video: 'Vídeo'
     };
-    return labels[type] || 'ConteÃºdo';
+    return labels[type] || 'Conteúdo';
   };
 
     return (
@@ -122,7 +122,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Buscar pÃ¡ginas, eventos, livros, esboÃ§os..."
+                      placeholder="Buscar páginas, eventos, livros, esboços..."
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>

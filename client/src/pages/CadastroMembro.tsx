@@ -12,8 +12,8 @@ const CadastroMembro: React.FC = () => {
   const handleSave = async (data: any) => {
     // Validar dados antes de enviar
     if (!data || typeof data !== 'object') {
-      console.error('âŒ Dados invÃ¡lidos para criar membro:', data);
-      toast.error('Dados invÃ¡lidos para criar membro');
+      console.error('âŒ Dados inválidos para criar membro:', data);
+      toast.error('Dados inválidos para criar membro');
       return;
     }
 

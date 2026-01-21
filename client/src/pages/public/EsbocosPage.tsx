@@ -80,7 +80,7 @@ const EsbocosPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
+    <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-[100dvh]">
       <section className="py-10 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           <header className="mb-8 sm:mb-10">

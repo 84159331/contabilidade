@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import storage from '../utils/storage';
 
-// ImportaÃ§Ã£o segura do framer-motion com fallback
+// Importação segura do framer-motion com fallback
 let motion: any;
 let AnimatePresence: React.ComponentType<any>;
 try {
@@ -34,7 +34,7 @@ try {
     AnimatePresence = ({ children }: any) => <>{children}</>;
   }
 } catch (error) {
-  // Fallback se framer-motion nÃ£o estiver disponÃ­vel
+  // Fallback se framer-motion não estiver disponível
   motion = { div: ({ children, ...props }: any) => <div {...props}>{children}</div> };
   AnimatePresence = ({ children }: any) => <>{children}</>;
 }
@@ -96,8 +96,8 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
   // Templates de mensagens
   const messageTemplates = {
     financial: {
-      name: 'RelatÃ³rio Financeiro',
-      template: `ðŸ“Š *RelatÃ³rio Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
+      name: 'Relatório Financeiro',
+      template: `ðŸ“Š *Relatório Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
 
 ðŸ’° *Receitas Totais:* R$ {{totalIncome}}
 ðŸ’¸ *Despesas Totais:* R$ {{totalExpenses}}
@@ -107,50 +107,50 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
 â€¢ Crescimento mensal: {{growth}}%
 â€¢ Meta atingida: {{goalProgress}}%
 
-ðŸ™ Obrigado pela confianÃ§a na gestÃ£o da nossa igreja!`
+ðŸ™ Obrigado pela confiança na gestão da nossa igreja!`
     },
     welcome: {
       name: 'Boas-vindas',
-      template: `ðŸŽ‰ *Bem-vindo Ã  Comunidade CristÃ£ Resgate!*
+      template: `ðŸŽ‰ *Bem-vindo à Comunidade Cristã Resgate!*
 
-Ã‰ uma alegria tÃª-lo conosco! ðŸ™
+Ã‰ uma alegria tê-lo conosco! ðŸ™
 
-ðŸ“… *PrÃ³ximos eventos:*
+ðŸ“… *Próximos eventos:*
 â€¢ Culto de domingo: 9h e 19h
-â€¢ ReuniÃ£o de oraÃ§Ã£o: Quarta-feira 19h30
-â€¢ Escola BÃ­blica: Domingo 8h
+â€¢ Reunião de oração: Quarta-feira 19h30
+â€¢ Escola Bíblica: Domingo 8h
 
 ðŸ“± *Contato:*
 â€¢ WhatsApp: (11) 1234-5678
 â€¢ Email: cresgate012@gmail.com
 
-Que Deus abenÃ§oe sua vida! âœ¨`
+Que Deus abençoe sua vida! âœ¨`
     },
     reminder: {
       name: 'Lembrete de Evento',
       template: `â° *Lembrete de Evento*
 
 ðŸ“… *{{eventName}}*
-ðŸ• *HorÃ¡rio:* {{eventTime}}
+ðŸ• *Horário:* {{eventTime}}
 ðŸ“ *Local:* {{eventLocation}}
 
-NÃ£o esqueÃ§a de participar! Sua presenÃ§a Ã© muito importante para nÃ³s. ðŸ™
+Não esqueça de participar! Sua presença é muito importante para nós. ðŸ™
 
-*Comunidade CristÃ£ Resgate*`
+*Comunidade Cristã Resgate*`
     },
     prayer: {
-      name: 'Pedido de OraÃ§Ã£o',
-      template: `ðŸ™ *Pedido de OraÃ§Ã£o*
+      name: 'Pedido de Oração',
+      template: `ðŸ™ *Pedido de Oração*
 
-OlÃ¡ {{name}}! 
+Olá {{name}}! 
 
-Recebemos seu pedido de oraÃ§Ã£o e nossa equipe jÃ¡ estÃ¡ intercedendo por vocÃª.
+Recebemos seu pedido de oração e nossa equipe já está intercedendo por você.
 
-*"Porque onde estiverem dois ou trÃªs reunidos em meu nome, ali estou no meio deles."* - Mateus 18:20
+*"Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles."* - Mateus 18:20
 
-Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
+Que Deus abençoe e fortaleça você! âœ¨
 
-*Comunidade CristÃ£ Resgate*`
+*Comunidade Cristã Resgate*`
     }
   };
 
@@ -171,7 +171,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
       const exampleContacts: WhatsAppContact[] = [
         {
           id: '1',
-          name: 'ApÃ³stolo Isac',
+          name: 'Apóstolo Isac',
           phone: '+5511999999999',
           role: 'pastor',
           isActive: true,
@@ -179,7 +179,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
         },
         {
           id: '2',
-          name: 'ApÃ³stola Elaine',
+          name: 'Apóstola Elaine',
           phone: '+5511888888888',
           role: 'pastor',
           isActive: true,
@@ -391,7 +391,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
           <ChatBubbleLeftRightIcon className="h-8 w-8 text-green-500" />
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              IntegraÃ§Ã£o WhatsApp
+              Integração WhatsApp
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Gerencie contatos e envie mensagens via WhatsApp
@@ -642,7 +642,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
                           <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {contact?.name || 'Contato nÃ£o encontrado'}
+                            {contact?.name || 'Contato não encontrado'}
                           </h4>
                           <StatusIcon className={`h-4 w-4 ${statusColor}`} />
                         </div>
@@ -679,7 +679,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
                             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {contact?.name || 'Contato nÃ£o encontrado'}
+                              {contact?.name || 'Contato não encontrado'}
                             </h4>
                             {StatusIcon && <StatusIcon className={`h-4 w-4 ${statusColor}`} />}
                           </div>
@@ -771,7 +771,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Telefone (com cÃ³digo do paÃ­s)
+                    Telefone (com código do país)
                   </label>
                   <input
                     type="tel"
@@ -784,7 +784,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    FunÃ§Ã£o
+                    Função
                   </label>
                   <select
                     value={newContact.role}
@@ -846,7 +846,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Telefone (com cÃ³digo do paÃ­s)
+                    Telefone (com código do país)
                   </label>
                   <input
                     type="tel"
@@ -858,7 +858,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    FunÃ§Ã£o
+                    Função
                   </label>
                   <select
                     value={newContact.role}
@@ -940,7 +940,7 @@ Que Deus abenÃ§oe e fortaleÃ§a vocÃª! âœ¨
                     >
                       <option value="text">Texto</option>
                       <option value="template">Template</option>
-                      <option value="media">MÃ­dia</option>
+                      <option value="media">Mídia</option>
                     </select>
                   </div>
                   

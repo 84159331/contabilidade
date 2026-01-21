@@ -104,7 +104,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     },
   });
 
-  // Carregar configuraÃ§Ãµes do armazenamento local
+  // Carregar configurações do armazenamento local
   useEffect(() => {
     const savedSettings = storage.getJSON<NotificationSettings>('notificationSettings');
     if (savedSettings) {
@@ -112,7 +112,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     }
   }, []);
 
-  // Salvar configuraÃ§Ãµes no armazenamento local
+  // Salvar configurações no armazenamento local
   useEffect(() => {
     storage.setJSON('notificationSettings', settings);
   }, [settings]);
@@ -159,7 +159,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
       }
     }
 
-    // NotificaÃ§Ã£o desktop se habilitada
+    // Notificação desktop se habilitada
     if (settings.desktop && 'Notification' in window) {
       if (Notification.permission === 'granted') {
         new Notification(notification.title, {
@@ -221,7 +221,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   );
 };
 
-// Componente de notificaÃ§Ã£o individual
+// Componente de notificação individual
 interface NotificationItemProps {
   notification: Notification;
   onMarkAsRead: (id: string) => void;
@@ -339,7 +339,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onMar
   );
 };
 
-// Componente principal de notificaÃ§Ãµes
+// Componente principal de notificações
 export const NotificationCenter: React.FC = () => {
   const { 
     notifications, 
@@ -392,14 +392,14 @@ export const NotificationCenter: React.FC = () => {
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  NotificaÃ§Ãµes
+                  Notificações
                 </h3>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setFilter(filter === 'all' ? 'unread' : 'all')}
                     className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                   >
-                    {filter === 'all' ? 'NÃ£o lidas' : 'Todas'}
+                    {filter === 'all' ? 'Não lidas' : 'Todas'}
                   </button>
                   <button
                     onClick={() => setIsOpen(false)}
@@ -413,7 +413,7 @@ export const NotificationCenter: React.FC = () => {
               {unreadCount > 0 && (
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {unreadCount} nÃ£o lidas
+                    {unreadCount} não lidas
                   </span>
                   <button
                     onClick={markAllAsRead}
@@ -444,12 +444,12 @@ export const NotificationCenter: React.FC = () => {
                 <div className="p-8 text-center">
                   <BellSlashIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Nenhuma notificaÃ§Ã£o
+                    Nenhuma notificação
                   </h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {filter === 'unread' 
-                      ? 'Todas as notificaÃ§Ãµes foram lidas'
-                      : 'VocÃª estÃ¡ em dia com suas notificaÃ§Ãµes'
+                      ? 'Todas as notificações foram lidas'
+                      : 'Você está em dia com suas notificações'
                     }
                   </p>
                 </div>

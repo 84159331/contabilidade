@@ -3,13 +3,13 @@ import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
 
 interface AppUpdateCheckerProps {
-  checkInterval?: number; // Intervalo em minutos para verificar atualizaÃ§Ãµes
+  checkInterval?: number; // Intervalo em minutos para verificar atualizações
 }
 
 /**
- * Componente que verifica e notifica sobre atualizaÃ§Ãµes do aplicativo
- * Como o app estÃ¡ configurado para carregar do servidor remoto,
- * as atualizaÃ§Ãµes sÃ£o automÃ¡ticas - este componente apenas informa o usuÃ¡rio
+ * Componente que verifica e notifica sobre atualizações do aplicativo
+ * Como o app está configurado para carregar do servidor remoto,
+ * as atualizações são automáticas - este componente apenas informa o usuário
  */
 const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({ 
   checkInterval = 5 
@@ -18,12 +18,12 @@ const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({
   const [lastUpdateCheck, setLastUpdateCheck] = useState<Date | null>(null);
 
   useEffect(() => {
-    // Verificar se estÃ¡ rodando no app nativo
+    // Verificar se está rodando no app nativo
     const platform = Capacitor.getPlatform();
     setIsNativeApp(platform === 'android' || platform === 'ios');
 
     if (isNativeApp) {
-      // Verificar atualizaÃ§Ãµes periodicamente
+      // Verificar atualizações periodicamente
       const interval = setInterval(() => {
         checkForUpdates();
       }, checkInterval * 60 * 1000); // Converter minutos para milissegundos
@@ -37,8 +37,8 @@ const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({
 
   const checkForUpdates = async () => {
     try {
-      // Como o app carrega do servidor remoto, uma simples recarga jÃ¡ traz atualizaÃ§Ãµes
-      // Mas vamos verificar se hÃ¡ uma nova versÃ£o disponÃ­vel
+      // Como o app carrega do servidor remoto, uma simples recarga já traz atualizações
+      // Mas vamos verificar se há uma nova versão disponível
       const response = await fetch('https://comunidaderesgate-82655.web.app/manifest.json', {
         cache: 'no-cache'
       });
@@ -47,20 +47,20 @@ const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({
         const manifest = await response.json();
         setLastUpdateCheck(new Date());
         
-        // Se necessÃ¡rio, podemos comparar versÃµes aqui
+        // Se necessário, podemos comparar versões aqui
         // Por enquanto, apenas registramos que verificamos
-        console.log('âœ… VerificaÃ§Ã£o de atualizaÃ§Ã£o concluÃ­da', {
+        console.log('âœ… Verificação de atualização concluída', {
           timestamp: new Date().toISOString(),
           platform: Capacitor.getPlatform()
         });
       }
     } catch (error) {
-      console.warn('âš ï¸ Erro ao verificar atualizaÃ§Ãµes:', error);
+      console.warn('âš ï¸ Erro ao verificar atualizações:', error);
     }
   };
 
   const handleAppStateChange = async () => {
-    // Quando o app volta para o primeiro plano, verificar atualizaÃ§Ãµes
+    // Quando o app volta para o primeiro plano, verificar atualizações
     if (isNativeApp) {
       await checkForUpdates();
     }
@@ -68,7 +68,7 @@ const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({
 
   useEffect(() => {
     if (isNativeApp) {
-      // Escutar mudanÃ§as de estado do app
+      // Escutar mudanças de estado do app
       let listenerPromise: Promise<any>;
       
       App.addListener('appStateChange', ({ isActive }) => {
@@ -91,8 +91,8 @@ const AppUpdateChecker: React.FC<AppUpdateCheckerProps> = ({
     }
   }, [isNativeApp]);
 
-  // Este componente nÃ£o renderiza nada visualmente
-  // Ele apenas executa verificaÃ§Ãµes em background
+  // Este componente não renderiza nada visualmente
+  // Ele apenas executa verificações em background
   return null;
 };
 

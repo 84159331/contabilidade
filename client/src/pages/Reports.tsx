@@ -28,7 +28,7 @@ const Reports: React.FC = () => {
   const [reportMetadata, setReportMetadata] = useState<any>(null); // Para armazenar metadados como datas, período, etc.
   const reportContainerRef = useRef<HTMLDivElement>(null);
   
-  // InformaÃ§Ãµes da igreja (pode ser obtido de configuraÃ§Ãµes ou deixar vazio)
+  // Informações da igreja (pode ser obtido de configurações ou deixar vazio)
   const churchInfo = {
     name: 'Minha Igreja', // Pode ser obtido de settings ou contexto
   };
@@ -67,12 +67,12 @@ const Reports: React.FC = () => {
   ];
 
   const handleSetReportData = (data: any) => {
-    // Para relatÃ³rio anual, nÃ£o salva aqui se for apenas array (o objeto completo virÃ¡ via handleYearlyFullDataLoaded)
+    // Para relatório anual, não salva aqui se for apenas array (o objeto completo virá via handleYearlyFullDataLoaded)
     if (activeReport === 'yearly' && Array.isArray(data)) {
-      // Ignora arrays no relatÃ³rio anual - o objeto completo serÃ¡ passado via onFullDataLoaded
+      // Ignora arrays no relatório anual - o objeto completo será passado via onFullDataLoaded
       return;
     }
-    // Para outros relatÃ³rios, salva normalmente
+    // Para outros relatórios, salva normalmente
     setReportData(data);
   };
 
@@ -80,9 +80,9 @@ const Reports: React.FC = () => {
     setReportMetadata(metadata);
   };
 
-  // Handler especÃ­fico para o relatÃ³rio anual que precisa do objeto completo
+  // Handler específico para o relatório anual que precisa do objeto completo
   const handleYearlyFullDataLoaded = (fullData: any) => {
-    // Sempre sobrescreve com o objeto completo para o relatÃ³rio anual
+    // Sempre sobrescreve com o objeto completo para o relatório anual
     setReportData(fullData);
   };
 
@@ -117,7 +117,7 @@ const Reports: React.FC = () => {
             toast.success('PDF gerado com sucesso!');
           } else {
             toast.error('Dados insuficientes para gerar o PDF. Aguarde o carregamento completo.');
-            console.error('Dados do relatÃ³rio anual:', reportData);
+            console.error('Dados do relatório anual:', reportData);
           }
           break;
 
@@ -184,17 +184,17 @@ const Reports: React.FC = () => {
           {
             'Tipo': 'Receitas',
             'Total': reportData.income.total,
-            'TransaÃ§Ãµes': reportData.income.count
+            'Transações': reportData.income.count
           },
           {
             'Tipo': 'Despesas',
             'Total': reportData.expense.total,
-            'TransaÃ§Ãµes': reportData.expense.count
+            'Transações': reportData.expense.count
           },
           {
             'Tipo': 'Saldo',
             'Total': reportData.balance,
-            'TransaÃ§Ãµes': reportData.income.count + reportData.expense.count
+            'Transações': reportData.income.count + reportData.expense.count
           }
         ];
       } else if (Array.isArray(reportData)) {
@@ -211,12 +211,12 @@ const Reports: React.FC = () => {
     switch (activeReport) {
       case 'monthly':
         if (!MonthlyBalanceReport) {
-          return <div>Erro: MonthlyBalanceReport nÃ£o encontrado</div>;
+          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
         }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
       case 'yearly':
         if (!YearlyBalanceReport) {
-          return <div>Erro: YearlyBalanceReport nÃ£o encontrado</div>;
+          return <div>Erro: YearlyBalanceReport não encontrado</div>;
         }
         return (
           <YearlyBalanceReport
@@ -226,7 +226,7 @@ const Reports: React.FC = () => {
         );
       case 'contributions':
         if (!MemberContributionsReport) {
-          return <div>Erro: MemberContributionsReport nÃ£o encontrado</div>;
+          return <div>Erro: MemberContributionsReport não encontrado</div>;
         }
         return (
           <MemberContributionsReport
@@ -236,7 +236,7 @@ const Reports: React.FC = () => {
         );
       case 'categories':
         if (!CategoryReport) {
-          return <div>Erro: CategoryReport nÃ£o encontrado</div>;
+          return <div>Erro: CategoryReport não encontrado</div>;
         }
         return (
           <CategoryReport
@@ -246,7 +246,7 @@ const Reports: React.FC = () => {
         );
       case 'cashflow':
         if (!CashFlowReport) {
-          return <div>Erro: CashFlowReport nÃ£o encontrado</div>;
+          return <div>Erro: CashFlowReport não encontrado</div>;
         }
         return (
           <CashFlowReport
@@ -256,7 +256,7 @@ const Reports: React.FC = () => {
         );
       default:
         if (!MonthlyBalanceReport) {
-          return <div>Erro: MonthlyBalanceReport nÃ£o encontrado</div>;
+          return <div>Erro: MonthlyBalanceReport não encontrado</div>;
         }
         return <MonthlyBalanceReport onDataLoaded={handleSetReportData} />;
     }

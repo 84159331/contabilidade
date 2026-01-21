@@ -2,27 +2,29 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { XMarkIcon, DocumentArrowUpIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import { booksService, Livro } from '../services/booksService';
+import { compressImageFile } from '../utils/imageCompression';
 
 interface AddBookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddBook: (book: any) => void;
+  onAddBook: (book: Livro) => void;
 }
 
 const categorias = [
   'Teologia',
   'Devocionais',
-  'Estudos BÃ­blicos',
-  'FÃ©',
-  'EsperanÃ§a',
+  'Estudos Bíblicos',
+  'Fé',
+  'Esperança',
   'Palavras de Coach',
-  'Palavras de EsperanÃ§a',
+  'Palavras de Esperança',
   'Biografias',
-  'HistÃ³ria da Igreja',
-  'LideranÃ§a',
-  'FamÃ­lia',
+  'História da Igreja',
+  'Liderança',
+  'Família',
   'Jovens',
-  'CrianÃ§as'
+  'Crianças'
 ];
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook }) => {
@@ -41,6 +43,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
   });
 
   const [uploading, setUploading] = useState(false);
+  const [optimizingCover, setOptimizingCover] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -60,10 +63,41 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
     }
   };
 
+  const handleOptimizeCover = async () => {
+    if (!formData.capaFile) {
+      toast.warn('Selecione uma capa antes de otimizar.');
+      return;
+    }
+
+    setOptimizingCover(true);
+    try {
+      const before = formData.capaFile;
+      const after = await compressImageFile(before, {
+        maxWidth: 1600,
+        maxHeight: 1600,
+        quality: 0.86,
+        mimeType: 'image/jpeg',
+      });
+
+      setFormData(prev => ({
+        ...prev,
+        capaFile: after,
+      }));
+
+      const beforeMb = before.size / 1024 / 1024;
+      const afterMb = after.size / 1024 / 1024;
+      toast.success(`Capa otimizada: ${beforeMb.toFixed(2)}MB → ${afterMb.toFixed(2)}MB`);
+    } catch (e) {
+      toast.error('Não foi possível otimizar a capa.');
+    } finally {
+      setOptimizingCover(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // ValidaÃ§Ãµes
+    // Validações
     if (!formData.titulo.trim()) {
       toast.warn('Por favor, digite o título do livro');
       return;
@@ -91,47 +125,22 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
 
     setUploading(true);
     try {
-      // Converter arquivos para base64 (permanente, funciona apÃ³s reload)
-      const convertFileToBase64 = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            if (typeof reader.result === 'string') {
-              resolve(reader.result);
-            } else {
-              reject(new Error('Erro ao converter arquivo para base64'));
-            }
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      };
+      const novoLivro = await booksService.create(
+        {
+          titulo: formData.titulo.trim(),
+          autor: formData.autor.trim(),
+          descricao: formData.descricao.trim(),
+          categoria: formData.categoria,
+          paginas: formData.paginas || 0,
+          ano: formData.ano || new Date().getFullYear(),
+          tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+          isNovo: true,
+          isDestaque: false,
+        },
+        formData.pdfFile!,
+        formData.capaFile!
+      );
 
-      // Converter PDF e capa para base64
-      const [pdfUrl, capaUrl] = await Promise.all([
-        convertFileToBase64(formData.pdfFile!),
-        convertFileToBase64(formData.capaFile!)
-      ]);
-      
-      // Criar objeto do livro
-      const novoLivro = {
-        id: Date.now().toString(),
-        titulo: formData.titulo.trim(),
-        autor: formData.autor.trim(),
-        descricao: formData.descricao.trim(),
-        categoria: formData.categoria,
-        capa: capaUrl, // Agora Ã© base64, nÃ£o blob URL
-        pdfUrl: pdfUrl, // Agora Ã© base64, nÃ£o blob URL
-        tamanho: `${(formData.pdfFile!.size / 1024 / 1024).toFixed(1)} MB`,
-        paginas: formData.paginas || 0,
-        ano: formData.ano || new Date().getFullYear(),
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        downloads: 0,
-        avaliacao: 0,
-        isNovo: true
-      };
-
-      // Adicionar livro Ã  biblioteca (a funÃ§Ã£o onAddBook jÃ¡ salva no armazenamento local)
       onAddBook(novoLivro);
       
       // Reset form
@@ -148,10 +157,12 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
       });
       
       // Mostrar mensagem de sucesso
-      toast.success('Livro adicionado com sucesso Ã  biblioteca!');
+      toast.success('Livro adicionado com sucesso à biblioteca!');
       onClose();
     } catch (error) {
-      toast.error('Erro ao adicionar livro. Tente novamente.');
+      const message = error instanceof Error ? error.message : String(error);
+      const code = (error as any)?.code ? String((error as any).code) : '';
+      toast.error(code ? `Erro ao adicionar livro (${code}): ${message}` : `Erro ao adicionar livro: ${message}`);
     } finally {
       setUploading(false);
     }
@@ -180,7 +191,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             </button>
           </div>
 
-          {/* InstruÃ§Ãµes */}
+          {/* Instruções */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2">
               Como adicionar livros reais:
@@ -243,7 +254,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               />
             </div>
 
-            {/* Categoria, Ano e PÃ¡ginas */}
+            {/* Categoria, Ano e Páginas */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -277,7 +288,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  PÃ¡ginas
+                  Páginas
                 </label>
                 <input
                   type="number"
@@ -293,7 +304,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
             {/* Tags */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tags (separadas por vÃ­rgula)
+                Tags (separadas por vírgula)
               </label>
               <input
                 type="text"
@@ -301,7 +312,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                 value={formData.tags}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="ex: BÃ­blia, Estudo, Teologia"
+                placeholder="ex: Bíblia, Estudo, Teologia"
               />
             </div>
 
@@ -348,10 +359,20 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, onClose, onAddBook 
                     </span>
                   </label>
                 </div>
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={handleOptimizeCover}
+                    disabled={!formData.capaFile || uploading || optimizingCover}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {optimizingCover ? 'Otimizando capa...' : 'Otimizar capa'}
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* BotÃµes */}
+            {/* Botões */}
             <div className="flex justify-end space-x-4 pt-4">
               <button
                 type="button"

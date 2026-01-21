@@ -63,7 +63,7 @@ const Scales: React.FC = () => {
     try {
       const ministerio = ministerios.find(m => m.id === formData.ministerio_id);
       if (!ministerio) {
-        toast.error('MinistÃ©rio nÃ£o encontrado');
+        toast.error('Ministério não encontrado');
         return;
       }
 
@@ -123,24 +123,24 @@ const Scales: React.FC = () => {
 
   const handleAutoGenerate = async () => {
     if (!selectedMinisterio) {
-      toast.error('Selecione um ministÃ©rio');
+      toast.error('Selecione um ministério');
       return;
     }
 
     const ministerio = ministerios.find(m => m.id === selectedMinisterio);
     if (!ministerio) {
-      toast.error('MinistÃ©rio nÃ£o encontrado');
+      toast.error('Ministério não encontrado');
       return;
     }
 
     try {
-      // Calcular prÃ³xima data baseada na frequÃªncia
+      // Calcular próxima data baseada na frequência
       const hoje = new Date();
       const proximaData = new Date(hoje);
 
       if (ministerio.frequencia === 'semanal' && ministerio.dia_semana !== undefined) {
         let diasParaProximo = (ministerio.dia_semana - hoje.getDay() + 7) % 7;
-        if (diasParaProximo === 0) diasParaProximo = 7; // PrÃ³xima semana
+        if (diasParaProximo === 0) diasParaProximo = 7; // Próxima semana
         proximaData.setDate(hoje.getDate() + diasParaProximo);
       } else if (ministerio.frequencia === 'quinzenal') {
         proximaData.setDate(hoje.getDate() + 14);
@@ -212,22 +212,22 @@ const Scales: React.FC = () => {
 
   const getMemberName = (memberId: string) => {
     const member = members.find(m => m.id === memberId);
-    return member?.name || 'Nome nÃ£o encontrado';
+    return member?.name || 'Nome não encontrado';
   };
 
   const getMinisterioName = (ministerioId: string) => {
     const ministerio = ministerios.find(m => m.id === ministerioId);
-    return ministerio?.nome || 'MinistÃ©rio nÃ£o encontrado';
+    return ministerio?.nome || 'Ministério não encontrado';
   };
 
   const formatDate = (date: Date | string) => {
-    // Corrigir problema de timezone - criar data local sem conversÃ£o UTC
+    // Corrigir problema de timezone - criar data local sem conversão UTC
     let d: Date;
     if (typeof date === 'string') {
       // Se for string no formato ISO ou YYYY-MM-DD, criar data local
       const dateStr = date.split('T')[0]; // Remove hora se houver
       const [year, month, day] = dateStr.split('-').map(Number);
-      d = new Date(year, month - 1, day); // month Ã© 0-indexed
+      d = new Date(year, month - 1, day); // month é 0-indexed
     } else {
       d = new Date(date);
       // Criar nova data local para evitar problemas de timezone
@@ -301,7 +301,7 @@ const Scales: React.FC = () => {
             Escalas
           </h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Gerencie as escalas dos ministÃ©rios
+            Gerencie as escalas dos ministérios
           </p>
         </div>
         <div className="flex gap-2">
@@ -322,7 +322,7 @@ const Scales: React.FC = () => {
             className="flex items-center gap-2"
           >
             <CalendarIcon className="h-5 w-5" />
-            Gerar AutomÃ¡tico
+            Gerar Automático
           </Button>
         </div>
       </div>
@@ -331,7 +331,7 @@ const Scales: React.FC = () => {
       {escalasFuturas.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            PrÃ³ximas Escalas
+            Próximas Escalas
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {escalasFuturas.map((escala) => (
@@ -504,7 +504,7 @@ const Scales: React.FC = () => {
         </div>
       )}
 
-      {/* Modal de FormulÃ¡rio */}
+      {/* Modal de Formulário */}
       <Modal
         isOpen={showForm}
         onClose={() => {
@@ -517,7 +517,7 @@ const Scales: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              MinistÃ©rio *
+              Ministério *
             </label>
             <select
               required
@@ -525,7 +525,7 @@ const Scales: React.FC = () => {
               onChange={(e) => setFormData({ ...formData, ministerio_id: e.target.value })}
               className="input w-full"
             >
-              <option value="">Selecione um ministÃ©rio</option>
+              <option value="">Selecione um ministério</option>
               {ministerios
                 .filter(m => m.ativo)
                 .map((ministerio) => (
@@ -561,7 +561,7 @@ const Scales: React.FC = () => {
             <div className="space-y-3">
               {formData.membros.map((membro, index) => (
                 <div key={index} className="flex gap-2 items-start">
-                  {/* SeleÃ§Ã£o de FunÃ§Ã£o (primeiro) */}
+                  {/* Seleção de Função (primeiro) */}
                   <select
                     required
                     value={membro.funcao}
@@ -569,9 +569,9 @@ const Scales: React.FC = () => {
                       updateMemberInEscala(index, 'funcao', e.target.value)
                     }
                     className="input flex-1 min-w-[180px]"
-                    title="Selecione a funÃ§Ã£o da igreja"
+                    title="Selecione a função da igreja"
                   >
-                    <option value="">Selecione a funÃ§Ã£o</option>
+                    <option value="">Selecione a função</option>
                     {CHURCH_ROLES.map((role) => (
                       <option key={role.value} value={role.value}>
                         {role.label}
@@ -579,7 +579,7 @@ const Scales: React.FC = () => {
                     ))}
                   </select>
                   
-                  {/* SeleÃ§Ã£o de Membro (segundo) */}
+                  {/* Seleção de Membro (segundo) */}
                   <select
                     required
                     value={membro.membro_id}
@@ -597,7 +597,7 @@ const Scales: React.FC = () => {
                     ))}
                   </select>
                   
-                  {/* BotÃ£o Remover */}
+                  {/* Botão Remover */}
                   <button
                     type="button"
                     onClick={() => removeMemberFromEscala(index)}
@@ -614,14 +614,14 @@ const Scales: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              ObservaÃ§Ãµes
+              Observações
             </label>
             <textarea
               value={formData.observacoes}
               onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
               className="input w-full"
               rows={3}
-              placeholder="ObservaÃ§Ãµes sobre a escala..."
+              placeholder="Observações sobre a escala..."
             />
           </div>
 
@@ -644,7 +644,7 @@ const Scales: React.FC = () => {
         </form>
       </Modal>
 
-      {/* Modal de GeraÃ§Ã£o AutomÃ¡tica */}
+      {/* Modal de Geração Automática */}
       <Modal
         isOpen={showAutoGenerate}
         onClose={() => {
@@ -656,7 +656,7 @@ const Scales: React.FC = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              MinistÃ©rio *
+              Ministério *
             </label>
             <select
               required
@@ -664,7 +664,7 @@ const Scales: React.FC = () => {
               onChange={(e) => setSelectedMinisterio(e.target.value)}
               className="input w-full"
             >
-              <option value="">Selecione um ministÃ©rio</option>
+              <option value="">Selecione um ministério</option>
               {ministerios
                 .filter(m => m.ativo)
                 .map((ministerio) => (
@@ -676,8 +676,8 @@ const Scales: React.FC = () => {
           </div>
 
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Uma nova escala serÃ¡ gerada automaticamente baseada na rotaÃ§Ã£o configurada do
-            ministÃ©rio selecionado.
+            Uma nova escala será gerada automaticamente baseada na rotação configurada do
+            ministério selecionado.
           </p>
 
           <div className="flex gap-2 pt-4">

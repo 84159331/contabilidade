@@ -54,7 +54,7 @@ const Transactions: React.FC = () => {
     end_date: ''
   });
 
-  // Debounce da busca para evitar muitas requisiÃ§Ãµes
+  // Debounce da busca para evitar muitas requisições
   const debouncedSearch = useDebounce(filters.search, 300);
   const [showForm, setShowForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -70,7 +70,7 @@ const Transactions: React.FC = () => {
   const hasLoadedRef = useRef(false);
 
   const loadData = useCallback(async () => {
-    // Aguardar autenticaÃ§Ã£o terminar antes de carregar
+    // Aguardar autenticação terminar antes de carregar
     if (authLoading) {
       return;
     }
@@ -95,17 +95,17 @@ const Transactions: React.FC = () => {
           total: 0,
           pages: 0
         });
-        console.log('Dados mock de transaÃ§Ãµes carregados:', mockDashboardData.transactions);
+        console.log('Dados mock de transações carregados:', mockDashboardData.transactions);
       } else {
         // Tentar usar APIs reais - otimizar carregamento
-        // Carregar transaÃ§Ãµes primeiro (mais importante), depois o resto em paralelo
+        // Carregar transações primeiro (mais importante), depois o resto em paralelo
         const transactionsResponse = await transactionsAPI.getTransactions({
           page: pagination.page,
           limit: pagination.limit,
           ...filters
         });
         
-        // Carregar categorias e membros em paralelo (menos crÃ­tico)
+        // Carregar categorias e membros em paralelo (menos crítico)
         const [categoriesResponse, membersResponse] = await Promise.all([
           categoriesAPI.getCategories(),
           membersAPI.getMembers()
@@ -123,7 +123,7 @@ const Transactions: React.FC = () => {
         setMembers(membersResponse.data.members);
         
         console.log('âœ… Dados carregados do Firestore:');
-        console.log('- TransaÃ§Ãµes:', transactionsResponse.data.transactions.length);
+        console.log('- Transações:', transactionsResponse.data.transactions.length);
         console.log('- Categorias:', categoriesResponse.data.categories.length);
         console.log('- Membros:', membersResponse.data.members.length);
       }
@@ -140,7 +140,7 @@ const Transactions: React.FC = () => {
         total: 0,
         pages: 0
       });
-      // toast.info('Usando dados de demonstraÃ§Ã£o'); // Removido - notificaÃ§Ãµes desabilitadas
+      // toast.info('Usando dados de demonstração'); // Removido - notificações desabilitadas
     } finally {
       setLoading(false);
     }
@@ -163,15 +163,15 @@ const Transactions: React.FC = () => {
 
   // Carregar dados quando monta ou quando auth/user/rota muda
   useEffect(() => {
-    // SÃ³ carregar dados quando auth terminar
+    // Só carregar dados quando auth terminar
     if (authLoading) {
       return;
     }
 
-    // ForÃ§ar recarregamento se ainda nÃ£o carregou ou se a rota mudou
+    // Forçar recarregamento se ainda não carregou ou se a rota mudou
     if (!hasLoadedRef.current) {
       hasLoadedRef.current = true;
-      // Carregar imediatamente (sem delay desnecessÃ¡rio)
+      // Carregar imediatamente (sem delay desnecessário)
       loadData();
     }
   }, [loadData, authLoading, location.pathname]);
@@ -185,36 +185,36 @@ const Transactions: React.FC = () => {
 
   const handleCreateTransaction = useCallback(async (transactionData: any) => {
     try {
-      console.log('ðŸš€ Criando transaÃ§Ã£o com dados:', transactionData);
+      console.log('ðŸš€ Criando transação com dados:', transactionData);
       await transactionsAPI.createTransaction(transactionData);
-      toast.success('TransaÃ§Ã£o criada com sucesso!');
+      toast.success('Transação criada com sucesso!');
       setShowForm(false);
       loadData();
     } catch (error: any) {
-      console.error('âŒ Erro ao criar transaÃ§Ã£o:', error);
-      toast.error(error.response?.data?.error || 'Erro ao criar transaÃ§Ã£o');
+      console.error('âŒ Erro ao criar transação:', error);
+      toast.error(error.response?.data?.error || 'Erro ao criar transação');
     }
   }, [loadData]);
 
   const handleUpdateTransaction = useCallback(async (id: string, transactionData: any) => {
     try {
       await transactionsAPI.updateTransaction(id, transactionData);
-      toast.success('TransaÃ§Ã£o atualizada com sucesso!');
+      toast.success('Transação atualizada com sucesso!');
       setEditingTransaction(null);
       loadData();
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Erro ao atualizar transaÃ§Ã£o');
+      toast.error(error.response?.data?.error || 'Erro ao atualizar transação');
     }
   }, [loadData]);
 
   const handleDeleteTransaction = async (id: string | number) => {
-    if (window.confirm('Tem certeza que deseja deletar esta transaÃ§Ã£o?')) {
+    if (window.confirm('Tem certeza que deseja deletar esta transação?')) {
       try {
         await transactionsAPI.deleteTransaction(String(id));
-        toast.success('TransaÃ§Ã£o deletada com sucesso!');
+        toast.success('Transação deletada com sucesso!');
         loadData();
       } catch (error: any) {
-        toast.error(error.response?.data?.error || 'Erro ao deletar transaÃ§Ã£o');
+        toast.error(error.response?.data?.error || 'Erro ao deletar transação');
       }
     }
   };
@@ -268,7 +268,7 @@ const Transactions: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">TransaÃ§Ãµes</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Transações</h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Gerencie receitas e despesas da igreja
           </p>
@@ -278,7 +278,7 @@ const Transactions: React.FC = () => {
           className="btn btn-primary flex items-center gap-2"
         >
           <PlusIcon className="h-4 w-4" />
-          Nova TransaÃ§Ã£o
+          Nova Transação
         </button>
       </div>
 
@@ -297,7 +297,7 @@ const Transactions: React.FC = () => {
                   type="text"
                   id="search"
                   className="input pl-10 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                  placeholder="DescriÃ§Ã£o ou referÃªncia..."
+                  placeholder="Descrição ou referência..."
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
@@ -364,7 +364,7 @@ const Transactions: React.FC = () => {
             {/* Start Date */}
             <div>
               <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
-                Data InÃ­cio
+                Data Início
               </label>
               <input
                 type="date"

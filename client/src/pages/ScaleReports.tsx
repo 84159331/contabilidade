@@ -1,4 +1,4 @@
-// PÃ¡gina de relatÃ³rios e estatÃ­sticas de escalas
+// Página de relatórios e estatísticas de escalas
 import React, { useState, useEffect } from 'react';
 import { escalasAPI } from '../services/scalesAPI';
 import { ministeriosAPI } from '../services/scalesAPI';
@@ -46,7 +46,7 @@ const ScaleReports: React.FC = () => {
     }
   };
 
-  // EstatÃ­sticas gerais
+  // Estatísticas gerais
   const totalEscalas = escalas.length;
   const escalasConfirmadas = escalas.filter(e => e.status === 'confirmada').length;
   const escalasCanceladas = escalas.filter(e => e.status === 'cancelada').length;
@@ -61,7 +61,7 @@ const ScaleReports: React.FC = () => {
     0
   );
 
-  // EstatÃ­sticas por ministÃ©rio
+  // Estatísticas por ministério
   const statsByMinisterio = ministerios.map(ministerio => {
     const escalasMinisterio = escalas.filter(
       e => e.ministerio_id === ministerio.id
@@ -155,7 +155,7 @@ const ScaleReports: React.FC = () => {
         </div>
       </div>
 
-      {/* Cards de EstatÃ­sticas */}
+      {/* Cards de Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-gray-900/80 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between">
@@ -209,7 +209,7 @@ const ScaleReports: React.FC = () => {
         </div>
       </div>
 
-      {/* EstatÃ­sticas por MinistÃ©rio */}
+      {/* Estatísticas por Ministério */}
       <div className="bg-white dark:bg-gray-900/80 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Por Ministério

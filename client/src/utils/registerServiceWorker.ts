@@ -10,16 +10,16 @@ export function registerServiceWorker() {
         .then((registration) => {
           console.log('✅ Service Worker registrado com sucesso:', registration.scope);
 
-          // Verificar atualizaÃ§Ãµes periodicamente
+          // Verificar atualizações periodicamente
           registration.addEventListener('updatefound', () => {
             const installingWorker = registration.installing;
             if (installingWorker) {
               installingWorker.addEventListener('statechange', () => {
                 if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Nova versÃ£o disponÃ­vel
+                  // Nova versão disponível
                   console.log('🔄 Nova versão do Service Worker disponível');
                   
-                  // Opcional: Mostrar notificaÃ§Ã£o ao usuÃ¡rio
+                  // Opcional: Mostrar notificação ao usuário
                   if (window.confirm('Uma nova versão está disponível. Deseja atualizar?')) {
                     installingWorker.postMessage({ type: 'SKIP_WAITING' });
                     window.location.reload();
@@ -33,7 +33,7 @@ export function registerServiceWorker() {
           console.error('❌ Erro ao registrar Service Worker:', error);
         });
 
-      // Verificar se hÃ¡ atualizaÃ§Ãµes disponÃ­veis
+      // Verificar se há atualizações disponíveis
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         // Evitar reload automático (pode causar loops). O reload ocorre somente após confirmação.
       });

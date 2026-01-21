@@ -62,26 +62,26 @@ const Ministries: React.FC = () => {
     }
 
     try {
-      console.log('ðŸ“ Iniciando salvamento do ministÃ©rio...');
-      console.log('ðŸ“ Dados do formulÃ¡rio:', formData);
+      console.log('ðŸ“ Iniciando salvamento do ministério...');
+      console.log('ðŸ“ Dados do formulário:', formData);
       
       if (editingMinisterio) {
-        console.log('ðŸ”„ Atualizando ministÃ©rio:', editingMinisterio.id);
+        console.log('ðŸ”„ Atualizando ministério:', editingMinisterio.id);
         await ministeriosAPI.updateMinisterio(editingMinisterio.id, formData);
-        console.log('âœ… MinistÃ©rio atualizado com sucesso');
-        // Toast jÃ¡ Ã© exibido pela API
+        console.log('âœ… Ministério atualizado com sucesso');
+        // Toast já é exibido pela API
       } else {
-        console.log('âž• Criando novo ministÃ©rio...');
+        console.log('âž• Criando novo ministério...');
         const result = await ministeriosAPI.createMinisterio(formData);
-        console.log('ðŸ“ Resultado da criaÃ§Ã£o:', result);
+        console.log('ðŸ“ Resultado da criação:', result);
         
         if (!result) {
-          console.error('âŒ Resultado null - criaÃ§Ã£o falhou');
-          // Se retornou null, houve erro (jÃ¡ foi exibido toast pela API)
+          console.error('âŒ Resultado null - criação falhou');
+          // Se retornou null, houve erro (já foi exibido toast pela API)
           return;
         }
-        console.log('âœ… MinistÃ©rio criado com sucesso:', result.id);
-        // Toast jÃ¡ Ã© exibido pela API
+        console.log('âœ… Ministério criado com sucesso:', result.id);
+        // Toast já é exibido pela API
       }
       
       setShowForm(false);
@@ -90,18 +90,18 @@ const Ministries: React.FC = () => {
       
       // Aguardar um pouco antes de recarregar para garantir que o Firestore atualizou
       setTimeout(() => {
-        console.log('ðŸ”„ Recarregando lista de ministÃ©rios...');
+        console.log('ðŸ”„ Recarregando lista de ministérios...');
         loadData();
       }, 500);
     } catch (error: any) {
-      console.error('âŒ Erro ao salvar ministÃ©rio:', error);
+      console.error('âŒ Erro ao salvar ministério:', error);
       console.error('âŒ Tipo do erro:', typeof error);
       console.error('âŒ Mensagem do erro:', error?.message);
       console.error('âŒ Stack do erro:', error?.stack);
       
-      // Toast jÃ¡ foi exibido pela API, mas garantir que aparece
-      const errorMessage = error?.message || 'Erro ao salvar ministÃ©rio. Verifique o console para mais detalhes.';
-      if (!errorMessage.includes('obrigatÃ³rio')) {
+      // Toast já foi exibido pela API, mas garantir que aparece
+      const errorMessage = error?.message || 'Erro ao salvar ministério. Verifique o console para mais detalhes.';
+      if (!errorMessage.includes('obrigatório')) {
         toast.error(errorMessage);
       }
     }
@@ -123,16 +123,16 @@ const Ministries: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja deletar este ministÃ©rio?')) {
+    if (!window.confirm('Tem certeza que deseja deletar este ministério?')) {
       return;
     }
     try {
       await ministeriosAPI.deleteMinisterio(id);
-      toast.success('MinistÃ©rio deletado com sucesso!');
+      toast.success('Ministério deletado com sucesso!');
       loadData();
     } catch (error) {
-      console.error('Erro ao deletar ministÃ©rio:', error);
-      toast.error('Erro ao deletar ministÃ©rio');
+      console.error('Erro ao deletar ministério:', error);
+      toast.error('Erro ao deletar ministério');
     }
   };
 
@@ -326,12 +326,12 @@ const Ministries: React.FC = () => {
           setEditingMinisterio(null);
           resetForm();
         }}
-        title={editingMinisterio ? 'Editar MinistÃ©rio' : 'Novo MinistÃ©rio'}
+        title={editingMinisterio ? 'Editar Ministério' : 'Novo Ministério'}
       >
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Nome do MinistÃ©rio *
+              Nome do Ministério *
             </label>
             <input
               type="text"
@@ -339,26 +339,26 @@ const Ministries: React.FC = () => {
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
               className="input w-full"
-              placeholder="Ex: Louvor, Som, RecepÃ§Ã£o"
+              placeholder="Ex: Louvor, Som, Recepção"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              DescriÃ§Ã£o
+              Descrição
             </label>
             <textarea
               value={formData.descricao}
               onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
               className="input w-full"
               rows={3}
-              placeholder="Descreva o ministÃ©rio..."
+              placeholder="Descreva o ministério..."
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              FunÃ§Ãµes
+              Funções
             </label>
             <div className="flex gap-2 mb-2">
               <input
@@ -367,7 +367,7 @@ const Ministries: React.FC = () => {
                 onChange={(e) => setNewFuncao(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFuncao())}
                 className="input flex-1"
-                placeholder="Ex: Vocal, Instrumentista, TÃ©cnico"
+                placeholder="Ex: Vocal, Instrumentista, Técnico"
               />
               <Button type="button" onClick={addFuncao}>
                 Adicionar
@@ -394,7 +394,7 @@ const Ministries: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              FrequÃªncia
+              Frequência
             </label>
             <select
               value={formData.frequencia}
@@ -426,11 +426,11 @@ const Ministries: React.FC = () => {
               >
                 <option value={0}>Domingo</option>
                 <option value={1}>Segunda-feira</option>
-                <option value={2}>TerÃ§a-feira</option>
+                <option value={2}>Terça-feira</option>
                 <option value={3}>Quarta-feira</option>
                 <option value={4}>Quinta-feira</option>
                 <option value={5}>Sexta-feira</option>
-                <option value={6}>SÃ¡bado</option>
+                <option value={6}>Sábado</option>
               </select>
             </div>
           )}
@@ -476,7 +476,7 @@ const Ministries: React.FC = () => {
               className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
             <label htmlFor="ativo" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              MinistÃ©rio ativo
+              Ministério ativo
             </label>
           </div>
 

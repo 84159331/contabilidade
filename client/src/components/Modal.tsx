@@ -8,7 +8,7 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-// Componente seguro para o Ã­cone de fechar
+// Componente seguro para o ícone de fechar
 const SafeXMarkIcon: React.FC<{ className?: string }> = ({ className }) => {
   if (XMarkIcon) {
     const Icon = XMarkIcon as React.ComponentType<{ className?: string }>;
@@ -22,12 +22,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 
   // Validar props
   if (!onClose || typeof onClose !== 'function') {
-    console.error('âŒ Modal: onClose nÃ£o Ã© uma funÃ§Ã£o vÃ¡lida');
+    console.error('âŒ Modal: onClose não é uma função válida');
     return null;
   }
 
   if (!title || typeof title !== 'string') {
-    console.warn('âš ï¸ Modal: title nÃ£o Ã© uma string vÃ¡lida');
+    console.warn('âš ï¸ Modal: title não é uma string válida');
   }
 
   return (
@@ -51,5 +51,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-// Memoizar para evitar re-renders desnecessÃ¡rios
+// Memoizar para evitar re-renders desnecessários
 export default React.memo(Modal);

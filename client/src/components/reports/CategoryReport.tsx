@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon nÃ£o utilizado
+// Removido DocumentArrowDownIcon não utilizado
 
 interface CategoryData {
   id: string;
@@ -54,7 +54,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
         })
       ]);
       
-      // As APIs jÃ¡ retornam arrays diretamente
+      // As APIs já retornam arrays diretamente
       const incomeData = Array.isArray(incomeResponse.data) ? incomeResponse.data : [];
       const expenseData = Array.isArray(expenseResponse.data) ? expenseResponse.data : [];
       
@@ -67,7 +67,7 @@ const CategoryReport: React.FC<Props> = ({ onDataLoaded, onMetadataLoaded }) => 
       ];
       onDataLoaded(combinedData);
       
-      // Passa metadados para geraÃ§Ã£o de PDF
+      // Passa metadados para geração de PDF
       if (onMetadataLoaded) {
         onMetadataLoaded({
           incomeData,

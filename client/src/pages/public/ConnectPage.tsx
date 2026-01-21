@@ -47,17 +47,17 @@ const ConnectPage: React.FC = () => {
   // Carregar grupos celulares do armazenamento local (sincronizado com a tesouraria)
   useEffect(() => {
     const loadCellGroups = () => {
-      // Limpar dados antigos que possam ter horÃ¡rios incorretos
+      // Limpar dados antigos que possam ter horários incorretos
       const clearOldData = () => {
         const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
         if (savedGroups && Array.isArray(savedGroups)) {
-          // Verificar se algum grupo tem horÃ¡rio antigo
+          // Verificar se algum grupo tem horário antigo
           const hasOldSchedule = savedGroups.some(
             (group: PublicCellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
           );
 
           if (hasOldSchedule) {
-            console.log('ðŸ”„ Detectados horÃ¡rios antigos na pÃ¡gina pÃºblica, atualizando...');
+            console.log('ðŸ”„ Detectados horários antigos na página pública, atualizando...');
             storage.remove('publicCellGroups');
             storage.remove('cellGroups');
             storage.remove('cellGroupsLastSync');
@@ -71,7 +71,7 @@ const ConnectPage: React.FC = () => {
       
       const savedGroups = storage.getJSON<PublicCellGroup[]>('publicCellGroups');
       if (savedGroups && Array.isArray(savedGroups)) {
-        // Atualizar horÃ¡rios para garantir que sejam "Quarta-Feira 20:00hrs"
+        // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
         const updatedGroups = savedGroups.map((group: PublicCellGroup) => ({
           ...group,
           meetings: 'Quarta-Feira 20:00hrs',
@@ -81,7 +81,7 @@ const ConnectPage: React.FC = () => {
         const activeGroups = updatedGroups.filter((group: PublicCellGroup) => group.isActive);
         setCellGroups(activeGroups);
       } else {
-        // Se nÃ£o hÃ¡ dados salvos, usar grupos padrÃ£o
+        // Se não há dados salvos, usar grupos padrão
         setCellGroups(getDefaultGroups());
       }
       setLoading(false);
@@ -90,7 +90,7 @@ const ConnectPage: React.FC = () => {
     loadCellGroups();
   }, []);
 
-  // Grupos padrÃ£o caso nÃ£o haja dados salvos
+  // Grupos padrão caso não haja dados salvos
   const getDefaultGroups = (): PublicCellGroup[] => [
     {
       id: 'family',
@@ -194,7 +194,7 @@ const ConnectPage: React.FC = () => {
 
   const handleJoinGroup = (groupId: string) => {
     setSelectedGroup(groupId);
-    // Simular processo de inscriÃ§Ã£o
+    // Simular processo de inscrição
     setTimeout(() => {
       toast.success('Inscrição realizada com sucesso! Você receberá um contato em breve.');
       setSelectedGroup(null);
@@ -203,7 +203,7 @@ const ConnectPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-300">Carregando grupos...</p>
@@ -213,7 +213,7 @@ const ConnectPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-[100dvh] bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -337,7 +337,7 @@ const ConnectPage: React.FC = () => {
                       {group.leader && (
                         <div className="flex items-center">
                           <UserGroupIcon className={`h-4 w-4 mr-2 ${colors.text}`} />
-                          <span className="text-gray-700 dark:text-gray-300">LÃ­der: {group.leader}</span>
+                          <span className="text-gray-700 dark:text-gray-300">Líder: {group.leader}</span>
                         </div>
                       )}
                     </div>

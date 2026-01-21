@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon nÃ£o utilizado
+// Removido DocumentArrowDownIcon não utilizado
 
 interface MonthlyData {
   month: string;
@@ -47,13 +47,13 @@ const YearlyBalanceReport: React.FC<Props> = ({ onDataLoaded, onFullDataLoaded }
         setData(reportData);
         // Passa o array mensal para compatibilidade (pode ser usado por outros componentes)
         onDataLoaded(reportData.monthlyData);
-        // Passa o objeto completo para geraÃ§Ã£o de PDF (chamado depois para sobrescrever)
+        // Passa o objeto completo para geração de PDF (chamado depois para sobrescrever)
         if (onFullDataLoaded) {
           onFullDataLoaded(reportData);
         }
         console.log('✅ Relatório anual carregado:', reportData);
       } else {
-        // Dados vazios se nÃ£o houver dados
+        // Dados vazios se não houver dados
         const emptyData: YearlyBalance = {
           year,
           monthlyData: [],

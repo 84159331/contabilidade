@@ -61,17 +61,17 @@ const CellGroupsAdmin: React.FC = () => {
 
 // Carregar grupos do armazenamento local
   useEffect(() => {
-    // Limpar dados antigos que possam ter horÃ¡rios incorretos
+    // Limpar dados antigos que possam ter horários incorretos
     const clearOldData = () => {
       const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
       if (savedGroups && Array.isArray(savedGroups)) {
-        // Verificar se algum grupo tem horÃ¡rio antigo
+        // Verificar se algum grupo tem horário antigo
         const hasOldSchedule = savedGroups.some(
           (group: CellGroup) => group.meetings && !group.meetings.includes('Quarta-Feira 20:00hrs')
         );
 
         if (hasOldSchedule) {
-          console.log('ðŸ”„ Detectados horÃ¡rios antigos, atualizando...');
+          console.log('ðŸ”„ Detectados horários antigos, atualizando...');
           storage.remove('cellGroups');
           storage.remove('publicCellGroups');
           storage.remove('cellGroupsLastSync');
@@ -85,7 +85,7 @@ const CellGroupsAdmin: React.FC = () => {
     
     const savedGroups = storage.getJSON<CellGroup[]>('cellGroups');
     if (savedGroups && Array.isArray(savedGroups)) {
-      // Atualizar horÃ¡rios para garantir que sejam "Quarta-Feira 20:00hrs"
+      // Atualizar horários para garantir que sejam "Quarta-Feira 20:00hrs"
       const updatedGroups = savedGroups.map((group: CellGroup) => ({
         ...group,
         meetings: 'Quarta-Feira 20:00hrs',
@@ -94,7 +94,7 @@ const CellGroupsAdmin: React.FC = () => {
       }));
       setGroups(updatedGroups);
     } else {
-      // Grupos padrÃ£o
+      // Grupos padrão
       const defaultGroups: CellGroup[] = [
         {
           id: 'family',
@@ -185,11 +185,11 @@ const CellGroupsAdmin: React.FC = () => {
     }
   }, []);
 
-  // Salvar grupos no armazenamento local sempre que houver mudanÃ§as
+  // Salvar grupos no armazenamento local sempre que houver mudanças
   useEffect(() => {
     if (groups.length > 0) {
       storage.setJSON('cellGroups', groups);
-      // TambÃ©m salvar uma versÃ£o pÃºblica para o site
+      // Também salvar uma versão pública para o site
       storage.setJSON(
         'publicCellGroups',
         groups.map(group => ({
@@ -197,14 +197,14 @@ const CellGroupsAdmin: React.FC = () => {
           title: group.title,
           subtitle: group.subtitle,
           description: group.description,
-          image: group.image || '', // Incluir imagem na sincronizaÃ§Ã£o
+          image: group.image || '', // Incluir imagem na sincronização
           icon: group.icon,
           color: group.color,
-          members: 0, // Sempre mostrar 0 para nÃ£o exibir quantidade
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
           meetings: group.meetings,
           location: group.location,
           leader: group.leader,
-          features: [], // Sempre array vazio para nÃ£o exibir atividades
+          features: [], // Sempre array vazio para não exibir atividades
           isPopular: group.isPopular,
           isActive: group.isActive,
           maxMembers: group.maxMembers
@@ -383,7 +383,7 @@ const CellGroupsAdmin: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+    <div className="min-h-[100dvh] bg-gray-100 dark:bg-gray-900 p-6">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">

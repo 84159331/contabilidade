@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { ErrorHandler } from '../utils/errors';
 import { toast } from 'react-toastify';
-import storage from '../utils/storage';
+import { booksService } from '../services/booksService';
 
 interface Livro {
   id: string;
@@ -86,35 +86,41 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ livro, onSave, onClose })
 
     setUploading(true);
 
-    try {
-      // Criar objeto do livro atualizado
-      const livroAtualizado = {
-        ...livro,
-        titulo: formData.titulo.trim(),
-        autor: formData.autor.trim(),
-        descricao: formData.descricao.trim(),
-        categoria: formData.categoria,
-        paginas: formData.paginas || 0,
-        ano: formData.ano || new Date().getFullYear(),
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        isNovo: formData.isNovo,
-        isDestaque: formData.isDestaque
-      };
+    (async () => {
+      try {
+        const livroAtualizado = {
+          ...livro,
+          titulo: formData.titulo.trim(),
+          autor: formData.autor.trim(),
+          descricao: formData.descricao.trim(),
+          categoria: formData.categoria,
+          paginas: formData.paginas || 0,
+          ano: formData.ano || new Date().getFullYear(),
+          tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+          isNovo: formData.isNovo,
+          isDestaque: formData.isDestaque
+        };
 
-      // Salvar no armazenamento local
-      const livrosExistentes = storage.getJSON<Livro[]>('biblioteca', []) ?? [];
-      const livrosAtualizados = livrosExistentes.map((l: Livro) => 
-        l.id === livro.id ? livroAtualizado : l
-      );
-      storage.setJSON('biblioteca', livrosAtualizados);
+        await booksService.updateMetadata(livro.id, {
+          titulo: livroAtualizado.titulo,
+          autor: livroAtualizado.autor,
+          descricao: livroAtualizado.descricao,
+          categoria: livroAtualizado.categoria,
+          paginas: livroAtualizado.paginas,
+          ano: livroAtualizado.ano,
+          tags: livroAtualizado.tags,
+          isNovo: livroAtualizado.isNovo,
+          isDestaque: livroAtualizado.isDestaque,
+        } as any);
 
-      onSave(livroAtualizado);
-      onClose();
-    } catch (error) {
-      ErrorHandler.handle(error);
-    } finally {
-      setUploading(false);
-    }
+        onSave(livroAtualizado);
+        onClose();
+      } catch (error) {
+        ErrorHandler.handle(error);
+      } finally {
+        setUploading(false);
+      }
+    })();
   };
 
   return (

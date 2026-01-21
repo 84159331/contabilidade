@@ -54,7 +54,7 @@ export function useBirthdays(): UseBirthdaysReturn {
     try {
       setError(null);
 
-      // Buscar todos os membros (filtrar birth_date no cÃ³digo)
+      // Buscar todos os membros (filtrar birth_date no código)
       const membersRef = collection(db, 'members');
       const membersSnapshot = await getDocs(membersRef);
 
@@ -72,11 +72,11 @@ export function useBirthdays(): UseBirthdaysReturn {
           // Validar dados antes de adicionar
           if (data && data.birth_date && typeof data.birth_date === 'string') {
             const birthDate = new Date(data.birth_date);
-            // Verificar se a data Ã© vÃ¡lida
+            // Verificar se a data é válida
             if (!isNaN(birthDate.getTime())) {
               allMembers.push({
                 id: doc.id || String(Date.now()),
-                name: data.name || 'Nome nÃ£o informado',
+                name: data.name || 'Nome não informado',
                 birth_date: data.birth_date,
                 phone: data.phone || undefined,
                 email: data.email || undefined
@@ -92,7 +92,7 @@ export function useBirthdays(): UseBirthdaysReturn {
       const currentMonth = today.getMonth() + 1;
       const currentDay = today.getDate();
 
-      // Calcular inÃ­cio e fim da semana (domingo a sÃ¡bado)
+      // Calcular início e fim da semana (domingo a sábado)
       const dayOfWeek = today.getDay();
       const startOfWeek = new Date(today);
       startOfWeek.setDate(today.getDate() - dayOfWeek);
@@ -138,8 +138,8 @@ export function useBirthdays(): UseBirthdaysReturn {
       setWeekBirthdays(weekOnlyBdays);
       setLoading(false);
     } catch (err: any) {
-      console.error('Erro ao calcular aniversÃ¡rios:', err);
-      setError(err.message || 'Erro ao carregar aniversÃ¡rios');
+      console.error('Erro ao calcular aniversários:', err);
+      setError(err.message || 'Erro ao carregar aniversários');
       setLoading(false);
     }
   }, []);
@@ -177,13 +177,13 @@ export function useBirthdays(): UseBirthdaysReturn {
         return;
       }
 
-      console.error('Erro ao carregar Ãºltima notificaÃ§Ã£o:', err);
+      console.error('Erro ao carregar última notificação:', err);
     }
   }, []);
 
   useEffect(() => {
     if (!db) {
-      console.warn('Firestore nÃ£o estÃ¡ disponÃ­vel');
+      console.warn('Firestore não está disponível');
       setLoading(false);
       return;
     }
@@ -191,7 +191,7 @@ export function useBirthdays(): UseBirthdaysReturn {
     calculateBirthdays();
     loadLastNotification();
 
-    // Escutar mudanÃ§as em tempo real com debounce
+    // Escutar mudanças em tempo real com debounce
     let timeoutId: NodeJS.Timeout | null = null;
     
     try {
@@ -199,19 +199,19 @@ export function useBirthdays(): UseBirthdaysReturn {
       const unsubscribe = onSnapshot(
         membersRef, 
         () => {
-          // Debounce para evitar muitas atualizaÃ§Ãµes
+          // Debounce para evitar muitas atualizações
           if (timeoutId) {
             clearTimeout(timeoutId);
           }
           timeoutId = setTimeout(() => {
             calculateBirthdays().catch(err => {
-              console.error('Erro ao recalcular aniversÃ¡rios:', err);
+              console.error('Erro ao recalcular aniversários:', err);
             });
           }, 500);
         },
         (error) => {
-          console.error('Erro ao escutar mudanÃ§as em members:', error);
-          // NÃ£o definir erro para nÃ£o quebrar a UI
+          console.error('Erro ao escutar mudanças em members:', error);
+          // Não definir erro para não quebrar a UI
         }
       );
 
@@ -234,24 +234,24 @@ export function useBirthdays(): UseBirthdaysReturn {
                 }
               }
             } catch (err) {
-              console.error('Erro ao processar notificaÃ§Ã£o:', err);
+              console.error('Erro ao processar notificação:', err);
             }
           },
           (error) => {
-            // Ignorar erros de Ã­ndice - a query pode nÃ£o ter Ã­ndice ainda
+            // Ignorar erros de índice - a query pode não ter índice ainda
             const errorCode = (error as any)?.code as string | undefined;
             if (errorCode === 'failed-precondition' || String((error as any)?.message || '').toLowerCase().includes('requires an index')) {
               return;
             }
 
             if (errorCode !== 'failed-precondition') {
-              console.error('Erro ao escutar mudanÃ§as em birthday_notifications:', error);
+              console.error('Erro ao escutar mudanças em birthday_notifications:', error);
             }
           }
         );
       } catch (queryError: any) {
-        // Se a query falhar (provavelmente por falta de Ã­ndice), apenas logar
-        console.warn('NÃ£o foi possÃ­vel configurar listener de notificaÃ§Ãµes:', queryError.message);
+        // Se a query falhar (provavelmente por falta de índice), apenas logar
+        console.warn('Não foi possível configurar listener de notificações:', queryError.message);
       }
 
       return () => {
@@ -265,7 +265,7 @@ export function useBirthdays(): UseBirthdaysReturn {
       };
     } catch (error: any) {
       console.error('Erro ao configurar listeners:', error);
-      // NÃ£o definir erro para nÃ£o quebrar a UI
+      // Não definir erro para não quebrar a UI
     }
   }, [calculateBirthdays, loadLastNotification]);
 

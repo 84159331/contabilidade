@@ -20,34 +20,34 @@ interface Event {
 const events: Event[] = [
   {
     id: 1,
-    title: 'Culto de CelebraÃ§Ã£o',
+    title: 'Culto de Celebração',
     date: 'Todos os Domingos',
     time: '19:00',
     location: 'Templo Principal',
-    description: 'Um tempo de louvor, adoraÃ§Ã£o e ensino da Palavra de Deus.',
-    image: '/img/Culto de CelebraÃ§Ã£o - 22-01 [thumb].png',
+    description: 'Um tempo de louvor, adoração e ensino da Palavra de Deus.',
+    image: '/img/Culto de Celebração - 22-01 [thumb].png',
     type: 'culto',
     attendees: 250,
     color: 'blue'
   },
   {
     id: 2,
-    title: 'Estudo BÃ­blico',
+    title: 'Estudo Bíblico',
     date: 'Todas as Quartas-feiras',
     time: '19:30 - 21:00',
     location: 'Sala de Estudos',
-    description: 'Aprofunde seu conhecimento da BÃ­blia em nosso estudo semanal.',
+    description: 'Aprofunde seu conhecimento da Bíblia em nosso estudo semanal.',
     type: 'estudo',
     attendees: 45,
     color: 'green'
   },
   {
     id: 3,
-    title: 'ReuniÃ£o de OraÃ§Ã£o',
+    title: 'Reunião de Oração',
     date: 'Todas as Sextas-feiras',
     time: '07:00 - 08:00',
-    location: 'Capela de OraÃ§Ã£o',
-    description: 'Comece o dia com oraÃ§Ã£o e comunhÃ£o.',
+    location: 'Capela de Oração',
+    description: 'Comece o dia com oração e comunhão.',
     type: 'oracao',
     attendees: 30,
     color: 'purple'
@@ -55,10 +55,10 @@ const events: Event[] = [
   {
     id: 4,
     title: 'Grupo de Jovens',
-    date: 'Todos os SÃ¡bados',
+    date: 'Todos os Sábados',
     time: '18:00 - 20:00',
     location: 'Sala dos Jovens',
-    description: 'Um tempo de diversÃ£o, comunhÃ£o e crescimento para os jovens da nossa igreja.',
+    description: 'Um tempo de diversão, comunhão e crescimento para os jovens da nossa igreja.',
     type: 'jovens',
     attendees: 60,
     color: 'orange'
@@ -97,7 +97,7 @@ const EventsPage: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 dark:bg-gray-900"
+      className="min-h-[100dvh] bg-gray-50 dark:bg-gray-900"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       <SEOHead

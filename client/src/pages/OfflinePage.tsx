@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const OfflinePage: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="max-w-md w-full text-center">
         <div className="mb-8">
           <SignalSlashIcon className="h-24 w-24 text-gray-400 dark:text-gray-600 mx-auto" />

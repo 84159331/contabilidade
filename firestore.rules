@@ -2,6 +2,12 @@ rules_version='2'
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Biblioteca Digital: leitura pública para exibir no site/app
+    match /biblioteca_livros/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // Apenas usuários autenticados podem acessar o banco
     match /{document=**} {
       allow read, write: if request.auth != null;

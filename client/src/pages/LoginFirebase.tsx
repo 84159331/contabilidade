@@ -9,9 +9,9 @@ const LoginFirebase: React.FC = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // ComeÃ§a oculta
+  const [showPassword, setShowPassword] = useState(false); // Começa oculta
   const [error, setError] = useState<string>('');
-  const { login } = useAuth();
+  const { login, resetPassword } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -28,20 +28,20 @@ const LoginFirebase: React.FC = () => {
     try {
       await login(formData.email, formData.password);
       toast.success('Login realizado com sucesso!');
-      // Limpar senha apÃ³s login bem-sucedido
+      // Limpar senha após login bem-sucedido
       setFormData({ ...formData, password: '' });
     } catch (error: any) {
       console.error('Erro no login:', error);
       
-      // Mensagens de erro mais amigÃ¡veis
+      // Mensagens de erro mais amigáveis
       let errorMessage = 'Erro ao fazer login';
       
       if (error.code === 'auth/user-not-found') {
-        errorMessage = 'UsuÃ¡rio nÃ£o encontrado. Verifique o email.';
+        errorMessage = 'Usuário não encontrado. Verifique o email.';
       } else if (error.code === 'auth/wrong-password') {
         errorMessage = 'Senha incorreta. Tente novamente.';
       } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Email invÃ¡lido. Verifique o formato.';
+        errorMessage = 'Email inválido. Verifique o formato.';
       } else if (error.code === 'auth/user-disabled') {
         errorMessage = 'Esta conta foi desabilitada. Entre em contato com o administrador.';
       } else if (error.code === 'auth/too-many-requests') {
@@ -62,8 +62,31 @@ const LoginFirebase: React.FC = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setError('');
+
+    const email = String(formData.email || '').trim();
+    if (!email) {
+      toast.error('Informe seu email para receber o link de redefinição de senha.');
+      return;
+    }
+
+    try {
+      await resetPassword(email);
+      toast.success('Enviamos um email com instruções para redefinir sua senha (se o email existir no sistema).');
+    } catch (err: any) {
+      const code = err?.code;
+      if (code === 'auth/invalid-email') {
+        toast.error('Email inválido. Verifique o formato.');
+        return;
+      }
+      toast.error('Não foi possível enviar o email de redefinição. Tente novamente.');
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         {/* Card Principal */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -72,7 +95,7 @@ const LoginFirebase: React.FC = () => {
             <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm mb-4">
               <img 
                 src="/img/ICONE-RESGATE.png" 
-                alt="Comunidade CristÃ£ Resgate" 
+                alt="Comunidade Cristã Resgate" 
                 className="h-10 w-10 object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -83,11 +106,11 @@ const LoginFirebase: React.FC = () => {
               Sistema de Tesouraria
             </h2>
             <p className="mt-2 text-blue-100 text-sm">
-              Comunidade CristÃ£ Resgate
+              Comunidade Cristã Resgate
             </p>
           </div>
 
-          {/* FormulÃ¡rio */}
+          {/* Formulário */}
           <div className="px-8 py-8">
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Campo Email */}
@@ -128,7 +151,7 @@ const LoginFirebase: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
-                    className={`block w-full pl-10 pr-12 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                    className={`block w-full pl-10 pr-12 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${
                       error ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="Sua senha"
@@ -161,7 +184,7 @@ const LoginFirebase: React.FC = () => {
                 )}
               </div>
 
-              {/* OpÃ§Ãµes Adicionais */}
+              {/* Opções Adicionais */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input 
@@ -176,13 +199,13 @@ const LoginFirebase: React.FC = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                  <a href="#" onClick={handleForgotPassword} className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
                     Esqueceu a senha?
                   </a>
                 </div>
               </div>
 
-              {/* BotÃ£o de Login */}
+              {/* Botão de Login */}
               <div>
                 <button
                   type="submit"
@@ -208,23 +231,23 @@ const LoginFirebase: React.FC = () => {
           {/* Footer */}
           <div className="bg-gray-50 dark:bg-gray-700 px-8 py-4 text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Â© 2024 Comunidade CristÃ£ Resgate. Todos os direitos reservados.
+              (c) 2024 Comunidade Cristã Resgate. Todos os direitos reservados.
             </p>
           </div>
         </div>
 
-        {/* InformaÃ§Ãµes de Acesso */}
+        {/* Informações de Acesso */}
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              ðŸš€ Primeiro Acesso?
+              Primeiro acesso?
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Entre em contato com o administrador do sistema para obter suas credenciais de acesso.
             </p>
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                ðŸ“§ Contato: cresgate012@gmail.com
+                Contato: cresgate012@gmail.com
               </p>
             </div>
           </div>

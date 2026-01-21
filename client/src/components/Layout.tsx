@@ -128,7 +128,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className={`min-h-screen bg-slate-50 dark:bg-gray-950 ${showScalesBottomNav ? 'pb-20 md:pb-0' : 'pb-0'}`}>
+    <div className={`min-h-[100dvh] flex flex-col bg-gray-950 ${showScalesBottomNav ? 'pb-20 md:pb-0' : 'pb-0'}`}>
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -193,7 +193,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-72">
+      <div className="lg:pl-72 flex-1 flex flex-col">
         {/* Top bar */}
         <div className="sticky top-0 z-40 flex h-14 sm:h-16 shrink-0 items-center gap-x-2 border-b border-gray-100 bg-white/80 backdrop-blur-sm px-2 sm:px-3 shadow-sm sm:gap-x-4 sm:px-4 lg:gap-x-6 lg:px-8 dark:border-gray-800 dark:bg-gray-900/80">
           <button
@@ -229,7 +229,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         {/* Page content */}
-        <main className="py-2 sm:py-4 lg:py-6">
+        <main className="flex-1 py-2 sm:py-4 lg:py-6">
           <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
             <TabTransition transitionKey={location.pathname}>
               <div className="bg-white/90 dark:bg-gray-900/90 border border-gray-100 dark:border-gray-800 rounded-xl sm:rounded-2xl shadow-sm sm:shadow-md p-3 sm:p-4 md:p-6 lg:p-8">

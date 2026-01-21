@@ -10,7 +10,7 @@ import {
   HeartIcon
 } from '@heroicons/react/24/outline';
 
-// ImportaÃ§Ã£o segura do framer-motion (apÃ³s imports normais)
+// Importação segura do framer-motion (após imports normais)
 let motion: any;
 try {
   const framerMotion = require('framer-motion');
@@ -19,9 +19,9 @@ try {
   motion = null;
 }
 
-// VALIDAÃ‡ÃƒO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicializaÃ§Ã£o)
+// VALIDAÃ‡ÃƒO E FALLBACK SEGURO PARA FaYoutube (fora do componente para evitar re-inicialização)
 const FaYoutubeIcon: React.FC<{ className?: string }> = ({ className }) => {
-  // Tentar usar FaYoutube se disponÃ­vel, senÃ£o usar SVG fallback
+  // Tentar usar FaYoutube se disponível, senão usar SVG fallback
   if (FaYoutube && typeof FaYoutube !== 'undefined') {
     const Icon = FaYoutube as any;
     return <Icon className={className} />;
@@ -47,11 +47,11 @@ const AgradecimentoPage: React.FC = () => {
   try {
     memberName = (location.state as any)?.memberName || null;
   } catch (error) {
-    console.warn('âš ï¸ Erro ao ler state da navegaÃ§Ã£o:', error);
+    console.warn('âš ï¸ Erro ao ler state da navegação:', error);
     memberName = null;
   }
 
-  // Redirecionamento automÃ¡tico apÃ³s 5 segundos (com opÃ§Ã£o de cancelar)
+  // Redirecionamento automático após 5 segundos (com opção de cancelar)
   // IMPORTANTE: Hooks devem estar ANTES de qualquer early return
   useEffect(() => {
     if (showRedirect) {
@@ -76,12 +76,12 @@ const AgradecimentoPage: React.FC = () => {
   // CRIAÃ‡ÃƒO DE COMPONENTES COM FALLBACKS SEGUROS
   // ============================================
   // Criar aliases seguros para motion components com fallback
-  // Sempre garantir que hÃ¡ um componente vÃ¡lido, mesmo se motion estiver undefined
-  // IMPORTANTE: Ignorar props de animaÃ§Ã£o (initial, animate, transition) nos fallbacks
+  // Sempre garantir que há um componente válido, mesmo se motion estiver undefined
+  // IMPORTANTE: Ignorar props de animação (initial, animate, transition) nos fallbacks
   
-  // Fallback padrÃ£o que sempre funciona - usando React.forwardRef para compatibilidade
+  // Fallback padrão que sempre funciona - usando React.forwardRef para compatibilidade
   const FallbackDiv = React.forwardRef<HTMLDivElement, any>(({ children, className, ...props }, ref) => {
-    // Remover props de animaÃ§Ã£o que podem causar erro
+    // Remover props de animação que podem causar erro
     const { initial, animate, transition, ...restProps } = props;
     return <div ref={ref} className={className} {...restProps}>{children}</div>;
   });
@@ -99,14 +99,14 @@ const AgradecimentoPage: React.FC = () => {
   });
   FallbackP.displayName = 'FallbackP';
   
-  // Tentar usar motion se disponÃ­vel, senÃ£o usar fallbacks
-  // IMPORTANTE: Sempre garantir que os componentes tenham um valor vÃ¡lido
+  // Tentar usar motion se disponível, senão usar fallbacks
+  // IMPORTANTE: Sempre garantir que os componentes tenham um valor válido
   let MotionDiv: React.ComponentType<any> = FallbackDiv;
   let MotionH1: React.ComponentType<any> = FallbackH1;
   let MotionP: React.ComponentType<any> = FallbackP;
   
   try {
-    // Verificar se motion estÃ¡ disponÃ­vel e tem as propriedades necessÃ¡rias
+    // Verificar se motion está disponível e tem as propriedades necessárias
     if (motion && typeof motion === 'object' && motion !== null) {
       const motionAny = motion as any;
       if (motionAny.div && typeof motionAny.div === 'function' && motionAny.div !== undefined && motionAny.div !== null) {
@@ -130,7 +130,7 @@ const AgradecimentoPage: React.FC = () => {
       MotionP = FallbackP;
     }
   } catch (error) {
-    // Se houver erro, usar fallbacks (jÃ¡ definidos acima)
+    // Se houver erro, usar fallbacks (já definidos acima)
     if (process.env.NODE_ENV === 'development') {
       console.warn('âš ï¸ Erro ao inicializar motion components, usando fallbacks HTML:', error);
     }
@@ -139,7 +139,7 @@ const AgradecimentoPage: React.FC = () => {
     MotionP = FallbackP;
   }
   
-  // VALIDAÃ‡ÃƒO FINAL: Garantir que os componentes nÃ£o estÃ£o undefined
+  // VALIDAÃ‡ÃƒO FINAL: Garantir que os componentes não estão undefined
   if (!MotionDiv || typeof MotionDiv !== 'function' || MotionDiv === undefined || MotionDiv === null) {
     MotionDiv = FallbackDiv;
   }
@@ -150,7 +150,7 @@ const AgradecimentoPage: React.FC = () => {
     MotionP = FallbackP;
   }
   
-  // VALIDAÃ‡ÃƒO EXTRA: Garantir que os fallbacks tambÃ©m estÃ£o definidos
+  // VALIDAÃ‡ÃƒO EXTRA: Garantir que os fallbacks também estão definidos
   if (!FallbackDiv || typeof FallbackDiv !== 'function') {
     MotionDiv = ({ children, className, ...props }: any) => <div className={className} {...props}>{children}</div>;
   }
@@ -171,7 +171,7 @@ const AgradecimentoPage: React.FC = () => {
   };
 
   // VALIDAÃ‡ÃƒO FINAL DOS COMPONENTES ANTES DO RENDER
-  // Garantir que todos os componentes crÃ­ticos estÃ£o definidos
+  // Garantir que todos os componentes críticos estão definidos
   if (!SEOHead || typeof SEOHead !== 'function') {
     return <div>Erro ao carregar página. Por favor, recarregue.</div>;
   }
@@ -226,9 +226,9 @@ const AgradecimentoPage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {memberName ? (
-              <>Bem-vindo, <strong>{memberName}</strong>! Estamos felizes em tÃª-lo conosco.</>
+              <>Bem-vindo, <strong>{memberName}</strong>! Estamos felizes em tê-lo conosco.</>
             ) : (
-              <>Bem-vindo Ã  nossa famÃ­lia! Estamos felizes em tÃª-lo conosco.</>
+              <>Bem-vindo à nossa família! Estamos felizes em tê-lo conosco.</>
             )}
           </MotionP>
         </MotionDiv>
@@ -268,15 +268,15 @@ const AgradecimentoPage: React.FC = () => {
                       <ul className="space-y-2 text-blue-800 dark:text-blue-300 text-sm">
                         <li className="flex items-start">
                           <span className="mr-2">âœ“</span>
-                          <span>VocÃª receberÃ¡ um contato da nossa equipe em breve para dar as boas-vindas</span>
+                          <span>Você receberá um contato da nossa equipe em breve para dar as boas-vindas</span>
                         </li>
                         <li className="flex items-start">
                           <span className="mr-2">âœ“</span>
-                          <span>Seus dados estÃ£o seguros e protegidos em nosso sistema</span>
+                          <span>Seus dados estão seguros e protegidos em nosso sistema</span>
                         </li>
                         <li className="flex items-start">
                           <span className="mr-2">âœ“</span>
-                          <span>VocÃª jÃ¡ faz parte da nossa famÃ­lia e comunidade</span>
+                          <span>Você já faz parte da nossa família e comunidade</span>
                         </li>
                       </ul>
                     </div>
@@ -295,7 +295,7 @@ const AgradecimentoPage: React.FC = () => {
                           Inscreva-se no nosso Canal do YouTube
                         </h3>
                         <p className="text-red-800 dark:text-red-300 text-sm">
-                          Acompanhe nossas mensagens, cultos e estudos bÃ­blicos
+                          Acompanhe nossas mensagens, cultos e estudos bíblicos
                         </p>
                       </div>
                     </div>
@@ -308,7 +308,7 @@ const AgradecimentoPage: React.FC = () => {
                     </button>
                   </div>
                   
-                  {/* Countdown para redirecionamento automÃ¡tico */}
+                  {/* Countdown para redirecionamento automático */}
                   {showRedirect && countdown !== null && countdown > 0 && (
                     <MotionDiv
                       initial={{ opacity: 0, y: 10 }}
@@ -342,7 +342,7 @@ const AgradecimentoPage: React.FC = () => {
                     className="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
                   >
                     <HomeIcon className="h-5 w-5 mr-2" />
-                    Voltar ao InÃ­cio
+                    Voltar ao Início
                   </button>
                   <button
                     onClick={() => {
@@ -355,7 +355,7 @@ const AgradecimentoPage: React.FC = () => {
                     }}
                     className="flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-lg font-semibold transition-all transform hover:scale-105 hover:bg-blue-50 dark:hover:bg-gray-600"
                   >
-                    Conhecer Mais Sobre NÃ³s
+                    Conhecer Mais Sobre Nós
                   </button>
                 </div>
               </div>
@@ -365,14 +365,14 @@ const AgradecimentoPage: React.FC = () => {
                 <div className="text-center">
                   <SafeImage 
                     src="/img/ICONE-RESGATE.png" 
-                    alt="Comunidade CristÃ£ Resgate" 
+                    alt="Comunidade Cristã Resgate" 
                     className="mx-auto h-16 w-16 mb-4 opacity-90"
                   />
                   <h3 className="text-xl font-bold dark:text-white mb-2">
-                    Comunidade CristÃ£ Resgate
+                    Comunidade Cristã Resgate
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    Estamos aqui para caminhar juntos nesta jornada de fÃ© e crescimento espiritual.
+                    Estamos aqui para caminhar juntos nesta jornada de fé e crescimento espiritual.
                   </p>
                 </div>
               </div>

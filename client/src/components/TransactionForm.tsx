@@ -100,15 +100,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.description.trim()) {
-      newErrors.description = 'DescriÃ§Ã£o Ã© obrigatÃ³ria';
+      newErrors.description = 'Descrição é obrigatória';
     }
 
     if (!formData.amount || isNaN(parseFloat(formData.amount)) || parseFloat(formData.amount) <= 0) {
-      newErrors.amount = 'Valor deve ser um nÃºmero positivo';
+      newErrors.amount = 'Valor deve ser um número positivo';
     }
 
     if (!formData.transaction_date) {
-      newErrors.transaction_date = 'Data da transaÃ§Ã£o Ã© obrigatÃ³ria';
+      newErrors.transaction_date = 'Data da transação é obrigatória';
     }
 
     setErrors(newErrors);
@@ -126,8 +126,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         member_id: formData.member_id || null
       };
       
-      console.log('ðŸ“ Dados do formulÃ¡rio sendo enviados:', submitData);
-      console.log('ðŸ‘¥ Membros disponÃ­veis:', members);
+      console.log('ðŸ“ Dados do formulário sendo enviados:', submitData);
+      console.log('ðŸ‘¥ Membros disponíveis:', members);
       console.log('ðŸŽ¯ Membro selecionado:', formData.member_id);
       onSave(submitData);
     }
@@ -137,7 +137,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-center justify-center min-h-[100dvh] pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose}></div>
 
         <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full w-full max-h-[95vh] flex flex-col m-2 sm:m-0">
@@ -145,7 +145,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white pr-2">
-                  {transaction ? 'Editar TransaÃ§Ã£o' : 'Nova TransaÃ§Ã£o'}
+                  {transaction ? 'Editar Transação' : 'Nova Transação'}
                 </h3>
                 <button
                   type="button"
@@ -158,7 +158,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </div>
 
               <div className="space-y-4 sm:space-y-5 overflow-y-auto flex-1">
-                {/* Tipo e DescriÃ§Ã£o */}
+                {/* Tipo e Descrição */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="type" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -201,7 +201,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                 <div>
                   <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    DescriÃ§Ã£o *
+                    Descrição *
                   </label>
                   <input
                     type="text"
@@ -211,7 +211,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.description}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="DescriÃ§Ã£o da transaÃ§Ã£o"
+                    placeholder="Descrição da transação"
                   />
                   {errors.description && (
                     <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -263,7 +263,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   </div>
                 </div>
 
-                {/* Data e MÃ©todo de Pagamento */}
+                {/* Data e Método de Pagamento */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="transaction_date" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -285,7 +285,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                   <div>
                     <label htmlFor="payment_method" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      MÃ©todo de Pagamento
+                      Método de Pagamento
                     </label>
                     <select
                       id="payment_method"
@@ -298,19 +298,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       <option value="">Selecione</option>
                       <option value="dinheiro">Dinheiro</option>
                       <option value="pix">PIX</option>
-                      <option value="cartao_debito">CartÃ£o de DÃ©bito</option>
-                      <option value="cartao_credito">CartÃ£o de CrÃ©dito</option>
-                      <option value="transferencia">TransferÃªncia</option>
+                      <option value="cartao_debito">Cartão de Débito</option>
+                      <option value="cartao_credito">Cartão de Crédito</option>
+                      <option value="transferencia">Transferência</option>
                       <option value="cheque">Cheque</option>
                       <option value="outro">Outro</option>
                     </select>
                   </div>
                 </div>
 
-                {/* ReferÃªncia */}
+                {/* Referência */}
                 <div>
                   <label htmlFor="reference" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    ReferÃªncia
+                    Referência
                   </label>
                   <input
                     type="text"
@@ -320,14 +320,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.reference}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="NÃºmero do documento, comprovante, etc."
+                    placeholder="Número do documento, comprovante, etc."
                   />
                 </div>
 
-                {/* ObservaÃ§Ãµes */}
+                {/* Observações */}
                 <div>
                   <label htmlFor="notes" className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    ObservaÃ§Ãµes
+                    Observações
                   </label>
                   <textarea
                     id="notes"
@@ -337,7 +337,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     value={formData.notes}
                     onChange={handleChange}
                     onFocus={handleInputFocus}
-                    placeholder="ObservaÃ§Ãµes adicionais..."
+                    placeholder="Observações adicionais..."
                   />
                 </div>
               </div>

@@ -1,8 +1,8 @@
 import { ComponentType, lazy, LazyExoticComponent } from 'react';
 
 /**
- * Lazy loading com retry automÃ¡tico em caso de falha
- * Isso previne pÃ¡ginas brancas quando o carregamento do mÃ³dulo falha
+ * Lazy loading com retry automático em caso de falha
+ * Isso previne páginas brancas quando o carregamento do módulo falha
  */
 export function lazyWithRetry<T extends ComponentType<any>>(
   componentImport: () => Promise<{ default: T }>,
@@ -28,7 +28,7 @@ export function lazyWithRetry<T extends ComponentType<any>>(
         return module;
       } catch (error) {
         lastError = error as Error;
-        console.warn(`âŒ Falha ao carregar mÃ³dulo (tentativa ${i + 1}/${retries}):`, error);
+        console.warn(`âŒ Falha ao carregar módulo (tentativa ${i + 1}/${retries}):`, error);
         
         // Aguardar antes de tentar novamente (exponencial backoff)
         if (i < retries - 1) {
@@ -37,8 +37,8 @@ export function lazyWithRetry<T extends ComponentType<any>>(
       }
     }
 
-    // Se todas as tentativas falharam, lanÃ§ar erro
-    console.error('âŒ Todas as tentativas de carregar o mÃ³dulo falharam');
-    throw lastError || new Error('Falha ao carregar mÃ³dulo apÃ³s mÃºltiplas tentativas');
+    // Se todas as tentativas falharam, lançar erro
+    console.error('âŒ Todas as tentativas de carregar o módulo falharam');
+    throw lastError || new Error('Falha ao carregar módulo após múltiplas tentativas');
   });
 }

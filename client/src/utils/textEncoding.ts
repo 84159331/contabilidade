@@ -1,7 +1,7 @@
 export function fixUtf8Mojibake(input: string): string {
   if (!input) return input;
 
-  const likelyMojibake = /[ÃÂ]/.test(input);
+  const likelyMojibake = /[Ã]/.test(input);
   if (!likelyMojibake) return input;
 
   try {

@@ -28,7 +28,7 @@ const PublicLayout: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+    <div className="flex flex-col min-h-[100dvh] bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
           <div className="flex justify-between items-center">
@@ -83,7 +83,7 @@ const PublicLayout: React.FC = () => {
                 Área Logada
               </a>
               
-              {/* Mobile Menu Button - VISÃVEL APENAS NO MOBILE */}
+              {/* Mobile Menu Button - VISÍVEL APENAS NO MOBILE */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-manipulation"
@@ -136,7 +136,7 @@ const PublicLayout: React.FC = () => {
       {/* Search Modal */}
       {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
 
-      <main className="flex-grow">
+      <main className="flex-1">
         <Outlet />
       </main>
 

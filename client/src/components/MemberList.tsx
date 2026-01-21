@@ -3,13 +3,13 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import SkeletonLoader from './SkeletonLoader';
 import LoadingSpinner from './LoadingSpinner';
 
-// ValidaÃ§Ã£o de componentes importados
+// Validação de componentes importados
 const validateIcons = () => {
   const icons = { PencilIcon, TrashIcon };
   const invalid = Object.entries(icons).filter(([name, icon]) => {
     const isValid = icon !== undefined && icon !== null && (typeof icon === 'function' || typeof icon === 'object');
     if (!isValid) {
-      console.error(`âŒ Ãcone ${name} estÃ¡ undefined ou invÃ¡lido:`, typeof icon, icon);
+      console.error(`âŒ Ícone ${name} está undefined ou inválido:`, typeof icon, icon);
     }
     return !isValid;
   });
@@ -74,29 +74,29 @@ const MemberList: React.FC<MemberListProps> = ({
   isDeleting = false,
   onPageChange
 }) => {
-  // Validar Ã­cones
+  // Validar ícones
   const iconsValid = validateIcons();
   if (!iconsValid) {
-    console.warn('âš ï¸ Alguns Ã­cones nÃ£o estÃ£o disponÃ­veis, usando fallbacks');
+    console.warn('âš ï¸ Alguns ícones não estão disponíveis, usando fallbacks');
   }
 
-  // Validar e filtrar membros vÃ¡lidos
+  // Validar e filtrar membros válidos
   const validMembers = useMemo(() => {
     if (!Array.isArray(members)) {
-      console.error('âŒ members nÃ£o Ã© um array:', typeof members, members);
+      console.error('âŒ members não é um array:', typeof members, members);
       return [];
     }
     return members.filter((member) => {
       if (!member || typeof member !== 'object') {
-        console.warn('âš ï¸ Membro invÃ¡lido encontrado:', member);
+        console.warn('âš ï¸ Membro inválido encontrado:', member);
         return false;
       }
       if (!member.id || (typeof member.id !== 'string' && typeof member.id !== 'number')) {
-        console.warn('âš ï¸ Membro sem ID vÃ¡lido:', member);
+        console.warn('âš ï¸ Membro sem ID válido:', member);
         return false;
       }
       if (!member.name || typeof member.name !== 'string') {
-        console.warn('âš ï¸ Membro sem nome vÃ¡lido:', member);
+        console.warn('âš ï¸ Membro sem nome válido:', member);
         return false;
       }
       return true;
@@ -119,7 +119,7 @@ const MemberList: React.FC<MemberListProps> = ({
   const formatDate = (dateString: string | undefined | null): string => {
     if (!dateString) return '-';
     
-    // Se jÃ¡ estÃ¡ no formato YYYY-MM-DD, converter diretamente
+    // Se já está no formato YYYY-MM-DD, converter diretamente
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
       const [year, month, day] = dateString.split('-').map(Number);
       return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
@@ -168,7 +168,7 @@ const MemberList: React.FC<MemberListProps> = ({
 
   // Validar componentes
   if (!SkeletonLoader || typeof SkeletonLoader !== 'function' && typeof SkeletonLoader !== 'object') {
-    console.error('âŒ SkeletonLoader estÃ¡ undefined ou invÃ¡lido');
+    console.error('âŒ SkeletonLoader está undefined ou inválido');
   }
 
   if (loading && validMembers.length === 0) {
@@ -308,9 +308,9 @@ const MemberList: React.FC<MemberListProps> = ({
       {/* Mobile Cards */}
       <div className="md:hidden space-y-3 p-3 sm:p-4">
         {validMembers.map((member) => {
-          // ValidaÃ§Ã£o adicional dentro do map
+          // Validação adicional dentro do map
           if (!member || !member.id || !member.name) {
-            console.warn('âš ï¸ Membro invÃ¡lido no map mobile:', member);
+            console.warn('âš ï¸ Membro inválido no map mobile:', member);
             return null;
           }
           
@@ -321,9 +321,9 @@ const MemberList: React.FC<MemberListProps> = ({
                 {getInitials(member.name)}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="text-base font-semibold leading-tight text-gray-900 dark:text-white break-words">
+                    <h3 className="text-base font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2">
                       {member.name}
                     </h3>
                     {member.address && (
@@ -332,54 +332,49 @@ const MemberList: React.FC<MemberListProps> = ({
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="shrink-0">
                     <span className={`badge ${
                       member.status === 'active' ? 'badge-success' : 'badge-danger'
                     }`}>
                       {member.status === 'active' ? 'Ativo' : 'Inativo'}
                     </span>
-                    <button
-                      onClick={() => {
-                        if (member && onEdit && typeof onEdit === 'function') {
-                          onEdit(member);
-                        }
-                      }}
-                      className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
-                      title="Editar"
-                      aria-label="Editar membro"
-                    >
-                      <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (member && member.id && onDelete && typeof onDelete === 'function') {
-                          onDelete(member.id);
-                        }
-                      }}
-                      disabled={isDeleting}
-                      className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      title="Deletar"
-                      aria-label="Deletar membro"
-                    >
-                      {isDeleting ? (
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
-                      ) : (
-                        <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
-                      )}
-                    </button>
                   </div>
                 </div>
 
-                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  {member.phone && (
-                    <div className="min-w-0">
-                      <span className="text-gray-500 dark:text-gray-300">Telefone</span>
-                      <p className="font-medium text-gray-900 dark:text-white truncate">
-                        {member.phone}
-                      </p>
-                    </div>
-                  )}
-                  {member.email && (
+                <div className="mt-2 flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => {
+                      if (member && onEdit && typeof onEdit === 'function') {
+                        onEdit(member);
+                      }
+                    }}
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 touch-manipulation"
+                    title="Editar"
+                    aria-label="Editar membro"
+                  >
+                    <SafePencilIcon className="h-5 w-5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (member && member.id && onDelete && typeof onDelete === 'function') {
+                        onDelete(member.id);
+                      }
+                    }}
+                    disabled={isDeleting}
+                    className={`min-w-[44px] min-h-[44px] flex items-center justify-center text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300 touch-manipulation ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title="Deletar"
+                    aria-label="Deletar membro"
+                  >
+                    {isDeleting ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-danger-600"></div>
+                    ) : (
+                      <SafeTrashIcon className="h-5 w-5 text-danger-600 hover:text-danger-900 dark:text-red-400 dark:hover:text-red-300" />
+                    )}
+                  </button>
+                </div>
+
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {member.phone && (
                     <div className="min-w-0">
                       <span className="text-gray-500 dark:text-gray-300">Email</span>
                       <p className="font-medium text-gray-900 dark:text-white truncate">

@@ -1,4 +1,4 @@
-// Tipos para sistema de notificaÃ§Ãµes
+// Tipos para sistema de notificações
 
 export type NotificationType = 
   | 'nova_escala'
@@ -30,7 +30,7 @@ export interface Notification {
   read: boolean;
   priority: NotificationPriority;
   createdAt: Date | string;
-  scheduledFor?: Date | string; // Para notificaÃ§Ãµes agendadas
+  scheduledFor?: Date | string; // Para notificações agendadas
 }
 
 export interface NotificationSettings {

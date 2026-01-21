@@ -11,10 +11,10 @@ import MemberList from '../components/MemberList';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
 
-// ValidaÃ§Ã£o de componentes importados (apenas para logging em desenvolvimento)
+// Validação de componentes importados (apenas para logging em desenvolvimento)
 const validateComponents = () => {
   if (process.env.NODE_ENV !== 'development') {
-    return true; // Em produÃ§Ã£o, confiar nos imports
+    return true; // Em produção, confiar nos imports
   }
   
   const components = {
@@ -31,16 +31,16 @@ const validateComponents = () => {
   const invalid = Object.entries(components).filter(([name, comp]) => {
     const isValid = comp !== undefined && comp !== null;
     if (!isValid) {
-      console.error(`âŒ Componente ${name} estÃ¡ undefined ou invÃ¡lido:`, typeof comp, comp);
+      console.error(`âŒ Componente ${name} está undefined ou inválido:`, typeof comp, comp);
     }
     return !isValid;
   });
   
   if (invalid.length > 0) {
-    console.warn('âš ï¸ Componentes invÃ¡lidos encontrados:', invalid.map(([name]) => name));
-    // NÃ£o bloquear renderizaÃ§Ã£o, apenas avisar
+    console.warn('âš ï¸ Componentes inválidos encontrados:', invalid.map(([name]) => name));
+    // Não bloquear renderização, apenas avisar
   }
-  return true; // Sempre retornar true para nÃ£o bloquear renderizaÃ§Ã£o
+  return true; // Sempre retornar true para não bloquear renderização
 };
 
 interface Member {
@@ -92,7 +92,7 @@ const Members: React.FC = () => {
   }, [location.pathname]);
 
   const loadMembers = useCallback(async (forceReload = false) => {
-    // Aguardar autenticaÃ§Ã£o terminar
+    // Aguardar autenticação terminar
     if (authLoading) {
       return;
     }
@@ -100,9 +100,9 @@ const Members: React.FC = () => {
     try {
       setLoading(true);
       
-      // Limpar cache se forÃ§ado
+      // Limpar cache se forçado
       if (forceReload) {
-        console.log('ðŸ”„ ForÃ§ando recarga dos membros...');
+        console.log('ðŸ”„ Forçando recarga dos membros...');
         setMembers([]);
       }
       
@@ -127,11 +127,11 @@ const Members: React.FC = () => {
         console.log('ðŸ”¥ Carregando membros do Firestore...');
         const response = await membersAPI.getMembers();
         
-        // Verificar se os IDs sÃ£o vÃ¡lidos
+        // Verificar se os IDs são válidos
         const validMembers = response.data.members.filter(member => {
           const isValid = typeof member.id === 'string' && member.id.length > 0;
           if (!isValid) {
-            console.warn('âš ï¸ Membro com ID invÃ¡lido encontrado:', member);
+            console.warn('âš ï¸ Membro com ID inválido encontrado:', member);
           }
           return isValid;
         });
@@ -143,7 +143,7 @@ const Members: React.FC = () => {
           total: validMembers.length,
           pages: Math.ceil(validMembers.length / 10)
         });
-        console.log('âœ… Membros vÃ¡lidos carregados do Firestore:', validMembers.length);
+        console.log('âœ… Membros válidos carregados do Firestore:', validMembers.length);
       }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
@@ -168,12 +168,12 @@ const Members: React.FC = () => {
       return;
     }
 
-    // Carregar apenas se ainda nÃ£o carregou ou se filtros mudaram
+    // Carregar apenas se ainda não carregou ou se filtros mudaram
     if (!hasLoadedRef.current) {
       hasLoadedRef.current = true;
       loadMembers();
     } else if (searchTerm || statusFilter || pagination.page > 1) {
-      // Se jÃ¡ carregou, sÃ³ recarregar se filtros mudaram
+      // Se já carregou, só recarregar se filtros mudaram
       loadMembers();
     }
   }, [searchTerm, statusFilter, pagination.page, authLoading, location.pathname, loadMembers]);
@@ -181,8 +181,8 @@ const Members: React.FC = () => {
   const handleCreateMember = useCallback(async (memberData: any) => {
     // Validar dados antes de enviar
     if (!memberData || typeof memberData !== 'object') {
-      console.error('âŒ Dados invÃ¡lidos para criar membro:', memberData);
-      toast.error('Dados invÃ¡lidos para criar membro');
+      console.error('âŒ Dados inválidos para criar membro:', memberData);
+      toast.error('Dados inválidos para criar membro');
       return;
     }
 
@@ -205,28 +205,28 @@ const Members: React.FC = () => {
   const handleUpdateMember = useCallback(async (id: string | number, memberData: any) => {
     // Validar ID e dados antes de enviar
     if (!id || (typeof id !== 'string' && typeof id !== 'number')) {
-      console.error('âŒ ID invÃ¡lido para atualizar membro:', id);
-      toast.error('ID invÃ¡lido para atualizar membro');
+      console.error('âŒ ID inválido para atualizar membro:', id);
+      toast.error('ID inválido para atualizar membro');
       return;
     }
 
     if (!memberData || typeof memberData !== 'object') {
-      console.error('âŒ Dados invÃ¡lidos para atualizar membro:', memberData);
-      toast.error('Dados invÃ¡lidos para atualizar membro');
+      console.error('âŒ Dados inválidos para atualizar membro:', memberData);
+      toast.error('Dados inválidos para atualizar membro');
       return;
     }
 
     try {
       setIsUpdating(true);
       const memberId = String(id);
-      console.log('ðŸ”„ Iniciando atualizaÃ§Ã£o do membro:', memberId, 'Tipo:', typeof id);
+      console.log('ðŸ”„ Iniciando atualização do membro:', memberId, 'Tipo:', typeof id);
       await membersAPI.updateMember(memberId, memberData);
       toast.success('Membro atualizado com sucesso!');
       setEditingMember(null);
       setShowForm(false);
-      await loadMembers(true); // ForÃ§ar recarga
+      await loadMembers(true); // Forçar recarga
     } catch (error: any) {
-      console.error('âŒ Erro na atualizaÃ§Ã£o:', error);
+      console.error('âŒ Erro na atualização:', error);
       toast.error(error.response?.data?.error || error.message || 'Erro ao atualizar membro');
     } finally {
       setIsUpdating(false);
@@ -236,8 +236,8 @@ const Members: React.FC = () => {
   const handleDeleteMember = useCallback(async (id: string | number) => {
     // Validar ID antes de deletar
     if (!id || (typeof id !== 'string' && typeof id !== 'number')) {
-      console.error('âŒ ID invÃ¡lido para deletar membro:', id);
-      toast.error('ID invÃ¡lido para deletar membro');
+      console.error('âŒ ID inválido para deletar membro:', id);
+      toast.error('ID inválido para deletar membro');
       return;
     }
 
@@ -245,7 +245,7 @@ const Members: React.FC = () => {
       try {
         setIsDeleting(true);
         const memberId = String(id);
-        console.log('ðŸ—‘ï¸ Iniciando exclusÃ£o do membro:', memberId, 'Tipo:', typeof id);
+        console.log('ðŸ—‘ï¸ Iniciando exclusão do membro:', memberId, 'Tipo:', typeof id);
         
         // Remover do estado local imediatamente para evitar render com membro deletado
         setMembers(prevMembers => {
@@ -257,10 +257,10 @@ const Members: React.FC = () => {
         await membersAPI.deleteMember(memberId);
         toast.success('Membro deletado com sucesso!');
         
-        // Recarregar para garantir sincronizaÃ§Ã£o
+        // Recarregar para garantir sincronização
         await loadMembers(true);
       } catch (error: any) {
-        console.error('âŒ Erro na exclusÃ£o:', error);
+        console.error('âŒ Erro na exclusão:', error);
         toast.error(error.response?.data?.error || error.message || 'Erro ao deletar membro');
         // Em caso de erro, recarregar para restaurar estado
         await loadMembers(true);
@@ -284,17 +284,17 @@ const Members: React.FC = () => {
   const handleSaveMember = useCallback((data: any) => {
     // Validar dados antes de salvar
     if (!data || typeof data !== 'object') {
-      console.error('âŒ Dados invÃ¡lidos no formulÃ¡rio:', data);
-      toast.error('Dados invÃ¡lidos no formulÃ¡rio');
+      console.error('âŒ Dados inválidos no formulário:', data);
+      toast.error('Dados inválidos no formulário');
       return;
     }
 
     if (editingMember && editingMember.id) {
       // Atualizar membro existente
       const memberId = editingMember.id;
-      console.log('ðŸ”„ Salvando atualizaÃ§Ã£o do membro:', memberId);
+      console.log('ðŸ”„ Salvando atualização do membro:', memberId);
       handleUpdateMember(memberId, data).catch((error) => {
-        console.error('âŒ Erro ao salvar atualizaÃ§Ã£o:', error);
+        console.error('âŒ Erro ao salvar atualização:', error);
       });
     } else {
       // Criar novo membro
@@ -314,7 +314,7 @@ const Members: React.FC = () => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
 
-  // ValidaÃ§Ã£o de componentes (apenas para logging)
+  // Validação de componentes (apenas para logging)
   validateComponents();
 
   if (loading && members.length === 0) {

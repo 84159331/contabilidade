@@ -38,7 +38,7 @@ const ImageTest: React.FC = () => {
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-        Teste de ConversÃ£o de Imagem
+        Teste de Conversão de Imagem
       </h2>
       
       <div className="space-y-4">
@@ -86,12 +86,12 @@ const ImageTest: React.FC = () => {
 
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                InformaÃ§Ãµes do Base64
+                Informações do Base64
               </h3>
               <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm font-mono text-gray-800 dark:text-gray-200">
                 <p>Tamanho: {base64Image.length} caracteres</p>
                 <p>Prefixo: {base64Image.substring(0, 30)}...</p>
-                <p>Ã‰ vÃ¡lido: {base64Image.startsWith('data:') ? 'Sim' : 'NÃ£o'}</p>
+                <p>Ã‰ válido: {base64Image.startsWith('data:') ? 'Sim' : 'Não'}</p>
               </div>
             </div>
 
@@ -100,7 +100,7 @@ const ImageTest: React.FC = () => {
                 Teste com SafeImage
               </h3>
               <div className="border border-gray-300 dark:border-gray-600 rounded p-4">
-                {/* Aqui vocÃª pode testar com o SafeImage se quiser */}
+                {/* Aqui você pode testar com o SafeImage se quiser */}
                 <img
                   src={base64Image}
                   alt="Teste SafeImage"

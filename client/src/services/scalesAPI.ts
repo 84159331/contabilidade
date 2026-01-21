@@ -377,7 +377,7 @@ export const escalasAPI = {
           
           return {
             ...membro,
-            membro_nome: membroData?.name || 'Nome nÃ£o encontrado',
+            membro_nome: membroData?.name || 'Nome não encontrado',
           };
         })
       );
@@ -385,15 +385,15 @@ export const escalasAPI = {
       const escalasRef = collection(db, 'escalas');
       const now = Timestamp.now();
       
-      // Corrigir problema de timezone - criar data local sem conversÃ£o UTC
+      // Corrigir problema de timezone - criar data local sem conversão UTC
       let dataDate: Date;
       if (typeof data.data === 'string') {
         // Se for string no formato YYYY-MM-DD, criar data local
         const [year, month, day] = data.data.split('-').map(Number);
-        dataDate = new Date(year, month - 1, day); // month Ã© 0-indexed
+        dataDate = new Date(year, month - 1, day); // month é 0-indexed
       } else {
         dataDate = new Date(data.data);
-        // Garantir que Ã© data local
+        // Garantir que é data local
         dataDate = new Date(dataDate.getFullYear(), dataDate.getMonth(), dataDate.getDate());
       }
       const dataTimestamp = Timestamp.fromDate(dataDate);
@@ -412,12 +412,12 @@ export const escalasAPI = {
       const docRef = await addDoc(escalasRef, escalaData);
       console.log('âœ… Escala criada com ID:', docRef.id);
 
-      // Criar notificaÃ§Ãµes para os membros escalados
+      // Criar notificações para os membros escalados
       try {
         const { notificationsAPI } = await import('./notificationsAPI');
         const membrosIds = membrosComNomes.map(m => m.membro_id);
         
-        // Criar notificaÃ§Ã£o de nova escala para cada membro
+        // Criar notificação de nova escala para cada membro
         membrosIds.forEach(async (membroId) => {
           await notificationsAPI.createNotification(
             membroId,
@@ -430,7 +430,7 @@ export const escalasAPI = {
           );
         });
 
-        // Agendar lembretes automÃ¡ticos
+        // Agendar lembretes automáticos
         await notificationsAPI.scheduleScaleReminders(
           docRef.id,
           ministerioNome,
@@ -438,8 +438,8 @@ export const escalasAPI = {
           membrosIds
         );
       } catch (error) {
-        console.warn('âš ï¸ Erro ao criar notificaÃ§Ãµes:', error);
-        // NÃ£o falhar a criaÃ§Ã£o da escala se notificaÃ§Ãµes falharem
+        console.warn('âš ï¸ Erro ao criar notificações:', error);
+        // Não falhar a criação da escala se notificações falharem
       }
 
       return {
@@ -559,14 +559,14 @@ export const escalasAPI = {
     }
   },
 
-  // Confirmar presenÃ§a
+  // Confirmar presença
   confirmarPresenca: async (escalaId: string, membroId: string): Promise<void> => {
     try {
       const escalaRef = doc(db, 'escalas', escalaId);
       const escalaSnap = await getDoc(escalaRef);
 
       if (!escalaSnap.exists()) {
-        throw new Error('Escala nÃ£o encontrada');
+        throw new Error('Escala não encontrada');
       }
 
       const data = escalaSnap.data();
@@ -586,20 +586,20 @@ export const escalasAPI = {
         atualizado_em: Timestamp.now(),
       });
 
-      // Criar notificaÃ§Ã£o para lÃ­deres do ministÃ©rio
+      // Criar notificação para líderes do ministério
       try {
         const { notificationsAPI } = await import('./notificationsAPI');
         const membroEscalado = membros.find((m: MembroEscala) => m.membro_id === membroId);
         
-        // Buscar lÃ­deres do ministÃ©rio
+        // Buscar líderes do ministério
         const ministerioSnap = await getDoc(doc(db, 'ministerios', data.ministerio_id));
         
         if (ministerioSnap.exists()) {
           const ministerioData = ministerioSnap.data();
-          // Notificar lÃ­deres (buscar usuÃ¡rios com role 'lider' e mesmo ministerio_id)
-          // Por enquanto, criar notificaÃ§Ã£o genÃ©rica
+          // Notificar líderes (buscar usuários com role 'lider' e mesmo ministerio_id)
+          // Por enquanto, criar notificação genérica
           await notificationsAPI.createNotification(
-            data.ministerio_id, // Usar ministerio_id como referÃªncia
+            data.ministerio_id, // Usar ministerio_id como referência
             'confirmacao_presenca',
             {
               escalaId,
@@ -609,11 +609,11 @@ export const escalasAPI = {
           );
         }
       } catch (error) {
-        console.warn('âš ï¸ Erro ao criar notificaÃ§Ã£o de confirmaÃ§Ã£o:', error);
+        console.warn('âš ï¸ Erro ao criar notificação de confirmação:', error);
       }
     } catch (error) {
-      console.error('âŒ Erro ao confirmar presenÃ§a:', error);
-      toast.error('Erro ao confirmar presenÃ§a');
+      console.error('âŒ Erro ao confirmar presença:', error);
+      toast.error('Erro ao confirmar presença');
       throw error;
     }
   },
@@ -635,12 +635,12 @@ export const escalasAPI = {
   },
 };
 
-// API para RotaÃ§Ãµes
+// API para Rotações
 export const rotacoesAPI = {
-  // Criar rotaÃ§Ã£o inicial
+  // Criar rotação inicial
   createRotacao: async (ministerioId: string, membros: string[]): Promise<void> => {
     try {
-      console.log('ðŸ”„ Criando rotaÃ§Ã£o inicial para ministÃ©rio:', ministerioId);
+      console.log('ðŸ”„ Criando rotação inicial para ministério:', ministerioId);
       const rotacaoRef = doc(db, 'rotacoes', ministerioId);
       
       const rotacaoData = {
@@ -651,25 +651,25 @@ export const rotacoesAPI = {
         atualizado_em: Timestamp.now(),
       };
 
-      // Verificar se jÃ¡ existe
+      // Verificar se já existe
       const rotacaoSnap = await getDoc(rotacaoRef);
       if (rotacaoSnap.exists()) {
-        // Atualizar se jÃ¡ existe
+        // Atualizar se já existe
         await updateDoc(rotacaoRef, rotacaoData);
-        console.log('âœ… RotaÃ§Ã£o atualizada');
+        console.log('âœ… Rotação atualizada');
       } else {
         // Criar nova
         await setDoc(rotacaoRef, rotacaoData);
-        console.log('âœ… RotaÃ§Ã£o criada');
+        console.log('âœ… Rotação criada');
       }
     } catch (error) {
-      console.error('âŒ Erro ao criar rotaÃ§Ã£o:', error);
-      // NÃ£o bloquear o salvamento do ministÃ©rio
+      console.error('âŒ Erro ao criar rotação:', error);
+      // Não bloquear o salvamento do ministério
       throw error;
     }
   },
 
-  // Obter rotaÃ§Ã£o
+  // Obter rotação
   getRotacao: async (ministerioId: string): Promise<RotacaoEscala | null> => {
     try {
       const rotacaoRef = doc(db, 'rotacoes', ministerioId);
@@ -692,12 +692,12 @@ export const rotacoesAPI = {
         atualizado_em: convertTimestamp(data.atualizado_em),
       };
     } catch (error) {
-      console.error('âŒ Erro ao buscar rotaÃ§Ã£o:', error);
+      console.error('âŒ Erro ao buscar rotação:', error);
       return null;
     }
   },
 
-  // Gerar prÃ³xima escala automaticamente
+  // Gerar próxima escala automaticamente
   gerarProximaEscala: async (
     ministerioId: string,
     data: Date,
@@ -706,19 +706,19 @@ export const rotacoesAPI = {
     try {
       const rotacao = await rotacoesAPI.getRotacao(ministerioId);
       if (!rotacao || rotacao.membros.length === 0) {
-        throw new Error('RotaÃ§Ã£o nÃ£o encontrada ou sem membros');
+        throw new Error('Rotação não encontrada ou sem membros');
       }
 
       const ministerio = await ministeriosAPI.getMinisterio(ministerioId);
       if (!ministerio) {
-        throw new Error('MinistÃ©rio nÃ£o encontrado');
+        throw new Error('Ministério não encontrado');
       }
 
       const membrosEscalados: Omit<MembroEscala, 'membro_nome'>[] = [];
 
-      // Para cada funÃ§Ã£o, escalar um membro
+      // Para cada função, escalar um membro
       for (const funcao of funcoes) {
-        // Encontrar prÃ³ximo membro disponÃ­vel
+        // Encontrar próximo membro disponível
         let tentativas = 0;
         let membroEscalado = false;
 
@@ -726,7 +726,7 @@ export const rotacoesAPI = {
           const indice = (rotacao.proximo_indice + tentativas) % rotacao.membros.length;
           const membroId = rotacao.membros[indice];
 
-          // Verificar se membro tem a funÃ§Ã£o (simplificado - pode ser melhorado)
+          // Verificar se membro tem a função (simplificado - pode ser melhorado)
           membrosEscalados.push({
             membro_id: membroId,
             funcao,
@@ -739,7 +739,7 @@ export const rotacoesAPI = {
         }
       }
 
-      // Atualizar rotaÃ§Ã£o
+      // Atualizar rotação
       const rotacaoRef = doc(db, 'rotacoes', ministerioId);
       await updateDoc(rotacaoRef, {
         proximo_indice: rotacao.proximo_indice,
@@ -760,8 +760,8 @@ export const rotacoesAPI = {
         membros: membrosEscalados,
       };
     } catch (error) {
-      console.error('âŒ Erro ao gerar prÃ³xima escala:', error);
-      toast.error('Erro ao gerar escala automÃ¡tica');
+      console.error('âŒ Erro ao gerar próxima escala:', error);
+      toast.error('Erro ao gerar escala automática');
       return null;
     }
   },

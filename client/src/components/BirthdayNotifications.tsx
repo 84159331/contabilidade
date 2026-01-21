@@ -216,11 +216,11 @@ const BirthdayNotifications: React.FC = () => {
                 </div>
               )}
 
-              {/* Status da Ãºltima notificaÃ§Ã£o */}
+              {/* Status da última notificação */}
               {lastNotification && (
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span>Ãšltima notificaÃ§Ã£o:</span>
+                    <span>Ãšltima notificação:</span>
                     <div className="flex items-center space-x-2">
                       {lastNotification.emailSent && (
                         <span className="flex items-center space-x-1 text-green-600 dark:text-green-400">

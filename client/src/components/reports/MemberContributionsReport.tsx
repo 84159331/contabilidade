@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { reportsAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-// Removido DocumentArrowDownIcon nÃ£o utilizado
+// Removido DocumentArrowDownIcon não utilizado
 
 interface MemberContribution {
   id: string;
@@ -52,7 +52,7 @@ const MemberContributionsReport: React.FC<Props> = ({ onDataLoaded, onMetadataLo
       setData(contributionsData);
       onDataLoaded(contributionsData);
       
-      // Passa metadados para geraÃ§Ã£o de PDF
+      // Passa metadados para geração de PDF
       if (onMetadataLoaded) {
         onMetadataLoaded({
           startDate,

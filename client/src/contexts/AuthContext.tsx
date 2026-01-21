@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const token = storage.getString('token');
     console.log('ðŸ”‘ Token encontrado no armazenamento local:', token);
     
-    // VerificaÃ§Ã£o de token comentada - usando Firebase Auth
+    // Verificação de token comentada - usando Firebase Auth
     /*
     if (token) {
       console.log('ðŸ” Verificando token...');
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(response.data.user);
         })
         .catch((error) => {
-          console.error('âŒ Erro na verificaÃ§Ã£o do token:', error);
+          console.error('âŒ Erro na verificação do token:', error);
           storage.remove('token');
         })
         .finally(() => {
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     */
     
-    // Usar Firebase Auth em vez de verificaÃ§Ã£o de token
+    // Usar Firebase Auth em vez de verificação de token
     setLoading(false);
   }, []);
 

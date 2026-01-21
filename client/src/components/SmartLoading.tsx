@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-// ImportaÃ§Ã£o segura do framer-motion com fallback
+// Importação segura do framer-motion com fallback
 let MotionDiv: React.ComponentType<any>;
 try {
   const framerMotion = require('framer-motion');
   if (framerMotion && framerMotion.motion && framerMotion.motion.div) {
     MotionDiv = framerMotion.motion.div;
   } else {
-    throw new Error('motion.div nÃ£o disponÃ­vel');
+    throw new Error('motion.div não disponível');
   }
 } catch (error) {
-  // Fallback: usar div padrÃ£o (sem log em produÃ§Ã£o)
+  // Fallback: usar div padrão (sem log em produção)
   if (process.env.NODE_ENV === 'development') {
-    console.warn('âš ï¸ framer-motion nÃ£o disponÃ­vel, usando div padrÃ£o');
+    console.warn('âš ï¸ framer-motion não disponível, usando div padrão');
   }
   MotionDiv = ({ children, ...props }: any) => <div {...props}>{children}</div>;
 }
@@ -32,7 +32,7 @@ const SmartLoading: React.FC<SmartLoadingProps> = ({
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // Simula um delay mÃ­nimo para evitar flash de conteÃºdo
+    // Simula um delay mínimo para evitar flash de conteúdo
     const timer = setTimeout(() => {
       setIsLoading(false);
       setShowContent(true);
@@ -41,7 +41,7 @@ const SmartLoading: React.FC<SmartLoadingProps> = ({
     return () => clearTimeout(timer);
   }, [preloadDelay]);
 
-  // Props de animaÃ§Ã£o apenas se motion.div estiver disponÃ­vel
+  // Props de animação apenas se motion.div estiver disponível
   const hasMotion = MotionDiv.name !== 'SmartLoading' && MotionDiv !== (() => <div />);
   const loadingProps = hasMotion ? {
     initial: { opacity: 0 },

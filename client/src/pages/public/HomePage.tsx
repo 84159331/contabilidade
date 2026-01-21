@@ -116,24 +116,24 @@ const testimonials = [
   {
     name: "Maria Silva",
     age: 35,
-    location: "SÃ£o Paulo, SP",
-    story: "Encontrei na Comunidade CristÃ£ Resgate um lugar onde posso crescer espiritualmente e servir ao prÃ³ximo. A mensagem de esperanÃ§a transformou minha vida completamente.",
+    location: "São Paulo, SP",
+    story: "Encontrei na Comunidade Cristã Resgate um lugar onde posso crescer espiritualmente e servir ao próximo. A mensagem de esperança transformou minha vida completamente.",
     image: "/img/testimonial-1.jpg",
     rating: 5
   },
   {
-    name: "JoÃ£o Santos",
+    name: "João Santos",
     age: 28,
     location: "Rio de Janeiro, RJ",
-    story: "Os estudos bÃ­blicos e a comunhÃ£o com os irmÃ£os me ajudaram a superar momentos difÃ­ceis. Hoje sou grato por fazer parte desta famÃ­lia.",
+    story: "Os estudos bíblicos e a comunhão com os irmãos me ajudaram a superar momentos difíceis. Hoje sou grato por fazer parte desta família.",
     image: "/img/testimonial-2.jpg",
     rating: 5
   },
   {
     name: "Ana Costa",
     age: 42,
-    location: "BrasÃ­lia, DF",
-    story: "A Comunidade CristÃ£ Resgate nÃ£o Ã© apenas uma igreja, Ã© uma famÃ­lia. Aqui encontrei propÃ³sito, amor e uma nova perspectiva de vida.",
+    location: "Brasília, DF",
+    story: "A Comunidade Cristã Resgate não é apenas uma igreja, é uma família. Aqui encontrei propósito, amor e uma nova perspectiva de vida.",
     image: "/img/testimonial-3.jpg",
     rating: 5
   }
@@ -231,8 +231,8 @@ const quickActions = [
     color: "bg-blue-600 hover:bg-blue-700"
   },
   {
-    title: "Fazer ContribuiÃ§Ã£o",
-    description: "Apoie nossa missÃ£o e ministÃ©rios",
+    title: "Fazer Contribuição",
+    description: "Apoie nossa missão e ministérios",
     icon: GiftIcon,
     link: "/contribua",
     color: "bg-green-600 hover:bg-green-700"
@@ -282,7 +282,7 @@ const HomePage: React.FC = () => {
       <div>
       {/* Hero Section - OTIMIZADO PARA MOBILE */}
       <div
-        className="relative min-h-[60vh] sm:min-h-[70vh] md:h-screen flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles px-4"
+        className="relative min-h-[60vh] sm:min-h-[70vh] md:min-h-[100dvh] flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 bg-flow bg-particles px-4"
       >
         <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
         <div className="relative z-20 text-center max-w-4xl mx-auto py-8 sm:py-12">
@@ -334,7 +334,7 @@ const HomePage: React.FC = () => {
               Estudo de Hoje
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 fade-in-up stagger-1">
-              ReflexÃ£o diÃ¡ria para fortalecer sua fÃ©
+              Reflexão diária para fortalecer sua fé
             </p>
           </div>
           
@@ -383,10 +383,10 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* PrÃ³ximos Eventos Section */}
+      {/* Próximos Eventos Section */}
       <EventsSection />
 
-      {/* MinistÃ©rios Section - OTIMIZADO PARA MOBILE */}
+      {/* Ministérios Section - OTIMIZADO PARA MOBILE */}
       <div className="py-8 sm:py-12 md:py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-6 sm:mb-8">
@@ -431,7 +431,7 @@ const HomePage: React.FC = () => {
       <div className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">HistÃ³rias de TransformaÃ§Ã£o</h2>
+            <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Histórias de Transformação</h2>
             <p className="text-gray-600 dark:text-gray-300">Veja como Deus tem transformado vidas em nossa comunidade</p>
           </div>
           
@@ -467,7 +467,7 @@ const HomePage: React.FC = () => {
               to="/conecte"
               className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
             >
-              FaÃ§a Parte da Nossa HistÃ³ria
+              Faça Parte da Nossa História
             </Link>
           </div>
         </div>
@@ -476,12 +476,12 @@ const HomePage: React.FC = () => {
 
 
 
-      {/* InformaÃ§Ãµes de Contato Section */}
+      {/* Informações de Contato Section */}
       <div className="py-16 bg-gray-200 dark:bg-gray-800 bg-drift">
         <div className="container mx-auto px-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold font-heading mb-2 dark:text-white">Entre em Contato</h2>
-            <p className="text-gray-600 dark:text-gray-300">Estamos aqui para ajudar e responder suas dÃºvidas</p>
+            <p className="text-gray-600 dark:text-gray-300">Estamos aqui para ajudar e responder suas dúvidas</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

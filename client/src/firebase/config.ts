@@ -16,6 +16,12 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
+// Normalizar storageBucket: o SDK do Firebase Storage espera o bucket no formato *.appspot.com
+// (alguns painéis/SDKs mostram *.firebasestorage.app, que pode causar falhas de CORS/404 no upload via web)
+if (firebaseConfig.storageBucket && firebaseConfig.storageBucket.endsWith('.firebasestorage.app')) {
+  firebaseConfig.storageBucket = firebaseConfig.storageBucket.replace('.firebasestorage.app', '.appspot.com');
+}
+
 // Validar configuração obrigatória
 const requiredConfig: (keyof typeof firebaseConfig)[] = ['apiKey', 'authDomain', 'projectId', 'appId'];
 let missingConfig = requiredConfig.filter(key => !firebaseConfig[key]);
@@ -27,10 +33,14 @@ if (missingConfig.length > 0) {
   firebaseConfig.apiKey = firebaseConfig.apiKey || 'AIzaSyDW73K6vb7RMdyfsJ6JVzzm1r3sULs4ceY';
   firebaseConfig.authDomain = firebaseConfig.authDomain || 'comunidaderesgate-82655.firebaseapp.com';
   firebaseConfig.projectId = firebaseConfig.projectId || 'comunidaderesgate-82655';
-  firebaseConfig.storageBucket = firebaseConfig.storageBucket || 'comunidaderesgate-82655.firebasestorage.app';
+  firebaseConfig.storageBucket = firebaseConfig.storageBucket || 'comunidaderesgate-82655.appspot.com';
   firebaseConfig.messagingSenderId = firebaseConfig.messagingSenderId || '587928941365';
   firebaseConfig.appId = firebaseConfig.appId || '1:587928941365:web:b788b8c9acf0a20992d27c';
   firebaseConfig.measurementId = firebaseConfig.measurementId || 'G-485FKRFYHE';
+
+  if (firebaseConfig.storageBucket && firebaseConfig.storageBucket.endsWith('.firebasestorage.app')) {
+    firebaseConfig.storageBucket = firebaseConfig.storageBucket.replace('.firebasestorage.app', '.appspot.com');
+  }
   missingConfig = requiredConfig.filter(key => !firebaseConfig[key]);
 
   if (process.env.NODE_ENV === 'development') {
@@ -80,11 +90,11 @@ if (typeof window !== 'undefined') {
 }
 
 // Inicializar Analytics de forma condicional e segura
-// Evita erros 404 quando o Analytics nÃ£o estÃ¡ configurado no Firebase Console
+// Evita erros 404 quando o Analytics não está configurado no Firebase Console
 let analytics: Analytics | null = null;
 
 if (typeof window !== 'undefined') {
-  // Verificar se o Analytics Ã© suportado e inicializar apenas se estiver disponÃ­vel
+  // Verificar se o Analytics é suportado e inicializar apenas se estiver disponível
   isSupported()
     .then((supported) => {
       if (supported && firebaseConfig.measurementId) {

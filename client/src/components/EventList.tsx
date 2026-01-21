@@ -134,7 +134,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               )}
             </div>
 
-            {/* AÃ§Ãµes */}
+            {/* Ações */}
             <div
               className={`mt-4 grid gap-2 ${
                 onAutoShare ? 'grid-cols-4' : 'grid-cols-3'
@@ -165,16 +165,16 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
               </button>
               <button
                 onClick={() => {
-                  console.log('ðŸ—‘ï¸ EventList - BotÃ£o excluir clicado para evento:', event.title, 'ID:', event.id);
+                  console.log('ðŸ—‘ï¸ EventList - Botão excluir clicado para evento:', event.title, 'ID:', event.id);
                   if (event.id) {
                     onDelete(event.id);
                   } else {
-                    console.error('âŒ EventList - ID do evento Ã© invÃ¡lido:', event);
+                    console.error('âŒ EventList - ID do evento é inválido:', event);
                   }
                 }}
                 className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center px-3 py-2 border border-red-300 dark:border-red-500 shadow-sm text-xs font-medium rounded text-red-700 dark:text-red-200 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!event.id}
-                title={!event.id ? 'ID do evento invÃ¡lido' : 'Excluir evento'}
+                title={!event.id ? 'ID do evento inválido' : 'Excluir evento'}
               >
                 <TrashIcon className="h-3 w-3 mr-1" />
                 <span className="hidden sm:inline">Excluir</span>

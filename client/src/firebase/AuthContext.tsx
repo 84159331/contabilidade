@@ -5,11 +5,13 @@ import {
   signOut, 
   onAuthStateChanged,
   createUserWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from './config';
 import storage from '../utils/storage';
 import { registerNativePush } from '../utils/nativePush';
+import { initOneSignal } from '../utils/oneSignal';
 
 interface AuthContextType {
   user: User | null;
@@ -17,6 +19,7 @@ interface AuthContextType {
   authReady: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, displayName: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -35,7 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('ðŸ”„ Firebase Auth useEffect executado');
     
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('ðŸ‘¤ Estado do usuÃ¡rio mudou:', user ? user.email : 'null');
+      console.log('ðŸ‘¤ Estado do usuário mudou:', user ? user.email : 'null');
       setUser(user);
       setLoading(false);
       setAuthReady(true);
@@ -44,6 +47,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Isso habilita notificações em massa via tópico (Cloud Functions)
       if (user) {
         registerNativePush().catch(() => {});
+
+        const oneSignalAppId = process.env.REACT_APP_ONESIGNAL_APP_ID || '';
+        initOneSignal(oneSignalAppId, user.uid).catch(() => {});
       }
     });
 
@@ -58,10 +64,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error: any) {
       console.error('âŒ Erro no login Firebase:', error);
       
-      // Preservar o erro original do Firebase para tratamento especÃ­fico
+      // Preservar o erro original do Firebase para tratamento específico
       const firebaseError = error;
       
-      // Criar erro com cÃ³digo do Firebase para tratamento especÃ­fico
+      // Criar erro com código do Firebase para tratamento específico
       const customError: any = new Error(firebaseError.message || 'Erro ao fazer login');
       customError.code = firebaseError.code;
       
@@ -86,6 +92,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error: any) {
+      const firebaseError = error;
+      const customError: any = new Error(firebaseError.message || 'Erro ao enviar email de redefinição');
+      customError.code = firebaseError.code;
+      throw customError;
+    }
+  };
+
   const logout = async () => {
     try {
       console.log('ðŸšª Fazendo logout Firebase');
@@ -96,7 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       storage.remove('token');
       sessionStorage.clear();
       
-      // Redirecionar para pÃ¡gina de logout
+      // Redirecionar para página de logout
       window.location.href = '/logout';
     } catch (error: any) {
       console.error('âŒ Erro no logout Firebase:', error);
@@ -110,6 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     authReady,
     login,
     register,
+    resetPassword,
     logout
   };
 

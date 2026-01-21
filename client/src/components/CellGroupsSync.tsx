@@ -17,14 +17,14 @@ const CellGroupsSync: React.FC = () => {
   });
 
   useEffect(() => {
-    // Verificar status de sincronizaÃ§Ã£o
+    // Verificar status de sincronização
     const lastSync = storage.getString('cellGroupsLastSync');
     setSyncStatus(prev => ({
       ...prev,
       lastSync
     }));
 
-    // Verificar se hÃ¡ mudanÃ§as nÃ£o sincronizadas
+    // Verificar se há mudanças não sincronizadas
     checkForChanges();
   }, []);
 
@@ -33,7 +33,7 @@ const CellGroupsSync: React.FC = () => {
     const publicCellGroups = storage.getJSON<any[]>('publicCellGroups');
 
     if (cellGroups && publicCellGroups) {
-      // Comparar timestamps ou conteÃºdo
+      // Comparar timestamps ou conteúdo
       const hasChanges = cellGroups.some((group: any) => {
         const publicGroup = publicCellGroups.find((pg: any) => pg.id === group.id);
         return !publicGroup || publicGroup.updatedAt !== group.updatedAt;
@@ -52,20 +52,20 @@ const CellGroupsSync: React.FC = () => {
     try {
       const cellGroups = storage.getJSON<any[]>('cellGroups');
       if (cellGroups && Array.isArray(cellGroups)) {
-        // Converter para formato pÃºblico
+        // Converter para formato público
         const publicGroups = cellGroups.map((group: any) => ({
           id: group.id,
           title: group.title,
           subtitle: group.subtitle,
           description: group.description,
-          image: group.image || '', // Incluir imagem na sincronizaÃ§Ã£o
+          image: group.image || '', // Incluir imagem na sincronização
           icon: group.icon?.name || group.icon || 'UserGroupIcon',
           color: group.color,
-          members: 0, // Sempre mostrar 0 para nÃ£o exibir quantidade
+          members: 0, // Sempre mostrar 0 para não exibir quantidade
           meetings: group.meetings,
           location: group.location,
           leader: group.leader,
-          features: [], // Sempre array vazio para nÃ£o exibir atividades
+          features: [], // Sempre array vazio para não exibir atividades
           isPopular: group.isPopular,
           isActive: group.isActive,
           maxMembers: group.maxMembers,
@@ -74,7 +74,7 @@ const CellGroupsSync: React.FC = () => {
 
         const timestamp = new Date().toISOString();
 
-        // Salvar versÃ£o pÃºblica
+        // Salvar versão pública
         storage.setJSON('publicCellGroups', publicGroups);
         storage.setString('cellGroupsLastSync', timestamp);
 
@@ -90,7 +90,7 @@ const CellGroupsSync: React.FC = () => {
         setSyncStatus(prev => ({ ...prev, isSyncing: false }));
       }
     } catch (error) {
-      // Fallback para grupos padrÃ£o se houver erro
+      // Fallback para grupos padrão se houver erro
       setSyncStatus(prev => ({ ...prev, isSyncing: false }));
       toast.error('Erro ao sincronizar grupos celulares');
     }
@@ -104,8 +104,8 @@ const CellGroupsSync: React.FC = () => {
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
     if (diffInMinutes < 1) return 'Agora mesmo';
-    if (diffInMinutes < 60) return `${diffInMinutes} min atrÃ¡s`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrÃ¡s`;
+    if (diffInMinutes < 60) return `${diffInMinutes} min atrás`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
     return date.toLocaleDateString('pt-BR');
   };
 
@@ -124,14 +124,14 @@ const CellGroupsSync: React.FC = () => {
           </div>
           <div className="ml-3">
             <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-              SincronizaÃ§Ã£o de Grupos Celulares
+              Sincronização de Grupos Celulares
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Ãšltima sincronizaÃ§Ã£o: {formatLastSync(syncStatus.lastSync)}
+              Ãšltima sincronização: {formatLastSync(syncStatus.lastSync)}
             </p>
             {syncStatus.hasChanges && (
               <p className="text-xs text-yellow-600 dark:text-yellow-400">
-                HÃ¡ mudanÃ§as nÃ£o sincronizadas
+                Há mudanças não sincronizadas
               </p>
             )}
           </div>

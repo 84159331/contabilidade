@@ -1,4 +1,4 @@
-// API para gestÃ£o de notificaÃ§Ãµes
+// API para gestão de notificações
 import { db } from '../firebase/config';
 import {
   collection,
@@ -34,9 +34,9 @@ const convertTimestamp = (timestamp: any): Date => {
   return new Date();
 };
 
-// API para NotificaÃ§Ãµes
+// API para Notificações
 export const notificationsAPI = {
-  // Criar notificaÃ§Ã£o
+  // Criar notificação
   createNotification: async (
     userId: string,
     type: NotificationType,
@@ -64,12 +64,12 @@ export const notificationsAPI = {
         createdAt: new Date(),
       };
     } catch (error) {
-      console.error('Erro ao criar notificaÃ§Ã£o:', error);
+      console.error('Erro ao criar notificação:', error);
       return null;
     }
   },
 
-  // Criar notificaÃ§Ã£o agendada
+  // Criar notificação agendada
   scheduleNotification: async (
     userId: string,
     type: NotificationType,
@@ -100,12 +100,12 @@ export const notificationsAPI = {
         scheduledFor,
       };
     } catch (error) {
-      console.error('Erro ao agendar notificaÃ§Ã£o:', error);
+      console.error('Erro ao agendar notificação:', error);
       return null;
     }
   },
 
-  // Obter notificaÃ§Ãµes do usuÃ¡rio
+  // Obter notificações do usuário
   getUserNotifications: async (
     userId: string,
     unreadOnly: boolean = false
@@ -181,7 +181,7 @@ export const notificationsAPI = {
         read: true,
       });
     } catch (error) {
-      console.error('Erro ao marcar notificaÃ§Ã£o como lida:', error);
+      console.error('Erro ao marcar notificação como lida:', error);
     }
   },
 
@@ -196,13 +196,13 @@ export const notificationsAPI = {
     }
   },
 
-  // Deletar notificaÃ§Ã£o
+  // Deletar notificação
   deleteNotification: async (notificationId: string): Promise<void> => {
     try {
       const notificationRef = doc(db, 'notifications', notificationId);
       await deleteDoc(notificationRef);
     } catch (error) {
-      console.error('Erro ao deletar notificaÃ§Ã£o:', error);
+      console.error('Erro ao deletar notificação:', error);
     }
   },
 

@@ -35,6 +35,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(event?.image || '');
   const [imageFileName, setImageFileName] = useState<string>('');
+  const [isConvertingImage, setIsConvertingImage] = useState(false);
+  const [imageQuality, setImageQuality] = useState<number>(0.82);
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -84,6 +86,77 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
     }));
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  const optimizeImageFile = async (file: File, quality: number): Promise<File> => {
+    const MAX_DIMENSION = 1600;
+
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error('Falha ao carregar imagem para conversão'));
+      el.src = URL.createObjectURL(file);
+    });
+
+    const width = img.naturalWidth || img.width;
+    const height = img.naturalHeight || img.height;
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(width, height));
+
+    const targetW = Math.max(1, Math.round(width * scale));
+    const targetH = Math.max(1, Math.round(height * scale));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = targetW;
+    canvas.height = targetH;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Canvas não suportado para conversão de imagem');
+    }
+
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+    URL.revokeObjectURL(img.src);
+
+    const outType = 'image/jpeg';
+    const outExt = 'jpg';
+    const outName = `${String(file.name || 'imagem')
+      .replace(/\.[^.]+$/, '')
+      .slice(0, 80)}_otimizada.${outExt}`;
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (b) => {
+          if (b) resolve(b);
+          else reject(new Error('Falha ao converter imagem'));
+        },
+        outType,
+        quality
+      );
+    });
+
+    return new File([blob], outName, { type: outType });
+  };
+
+  const handleConvertImage = async () => {
+    if (!imageFile) return;
+
+    setIsConvertingImage(true);
+    try {
+      const optimized = await optimizeImageFile(imageFile, imageQuality);
+      setImageFile(optimized);
+      setImageFileName(optimized.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(optimized);
+      toast.success('Imagem otimizada com sucesso!');
+    } catch (error: any) {
+      console.error('Erro ao otimizar imagem:', error);
+      toast.error(error?.message ? `Erro ao otimizar imagem: ${error.message}` : 'Erro ao otimizar imagem');
+    } finally {
+      setIsConvertingImage(false);
     }
   };
 
@@ -178,6 +251,88 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
             />
           </div>
 
+          {/* Imagem */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <PhotoIcon className="h-4 w-4 inline mr-1" />
+              Imagem (opcional)
+            </label>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={handlePickImage}
+                className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
+                <PhotoIcon className="h-4 w-4 mr-2" />
+                Selecionar imagem
+              </button>
+
+              {imageFile && (
+                <button
+                  type="button"
+                  onClick={handleConvertImage}
+                  disabled={isConvertingImage}
+                  className="inline-flex items-center px-3 py-2 border border-blue-300 dark:border-blue-600 text-sm font-medium rounded-md text-blue-700 dark:text-blue-200 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 disabled:opacity-50"
+                >
+                  {isConvertingImage ? 'Reduzindo...' : 'Reduzir qualidade'}
+                </button>
+              )}
+
+              {(imageFile || imagePreview) && (
+                <button
+                  type="button"
+                  onClick={handleClearImage}
+                  className="inline-flex items-center px-3 py-2 border border-red-300 dark:border-red-700 text-sm font-medium rounded-md text-red-700 dark:text-red-200 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30"
+                >
+                  Remover
+                </button>
+              )}
+            </div>
+
+            {imageFile && (
+              <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+                <div>Arquivo: {imageFileName || imageFile.name}</div>
+                <div>Tamanho: {(imageFile.size / 1024 / 1024).toFixed(2)} MB</div>
+              </div>
+            )}
+
+            {imageFile && (
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Qualidade: {Math.round(imageQuality * 100)}%
+                </label>
+                <input
+                  type="range"
+                  min={40}
+                  max={95}
+                  step={1}
+                  value={Math.round(imageQuality * 100)}
+                  onChange={(e) => setImageQuality(Number(e.target.value) / 100)}
+                  className="w-full"
+                />
+              </div>
+            )}
+
+            {imagePreview && (
+              <div className="mt-3 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover"
+                />
+              </div>
+            )}
+          </div>
+
           {/* Descrição */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -212,7 +367,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <ClockIcon className="h-4 w-4 inline mr-1" />
-                HorÃ¡rio
+                Horário
               </label>
               <input
                 type="time"
@@ -240,53 +395,6 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
               placeholder="Ex: Igreja Comunidade Resgate"
               required
             />
-          </div>
-
-          {/* Upload de Imagem */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              <PhotoIcon className="h-4 w-4 inline mr-1" />
-              Imagem do Evento
-            </label>
-            <div className="space-y-4">
-              {imagePreview && (
-                <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-48 object-cover rounded-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleClearImage}
-                    className="absolute top-2 right-2 px-3 py-1 rounded-md bg-black/60 text-white text-xs"
-                  >
-                    Remover
-                  </button>
-                </div>
-              )}
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-
-              <div className="flex flex-col sm:flex-row gap-2">
-                <button
-                  type="button"
-                  onClick={handlePickImage}
-                  className="w-full sm:w-auto px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600"
-                >
-                  Selecionar imagem
-                </button>
-                <div className="flex-1 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-200">
-                  {imageFileName ? imageFileName : imagePreview ? 'Imagem selecionada' : 'Nenhuma imagem selecionada'}
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Redes Sociais */}
@@ -326,7 +434,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* BotÃµes */}
+          {/* Botões */}
         </form>
 
         <div className="sticky bottom-0 z-10 p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">

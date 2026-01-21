@@ -67,12 +67,12 @@ const EventsAdmin: React.FC = () => {
     const mockEvents: Event[] = [
       {
         id: '1',
-        title: 'Culto de CelebraÃ§Ã£o',
-        description: 'Venha celebrar conosco a presenÃ§a de Deus em nossas vidas',
+        title: 'Culto de Celebração',
+        description: 'Venha celebrar conosco a presença de Deus em nossas vidas',
         date: '2024-01-15',
         time: '19:00',
         location: 'Igreja Comunidade Resgate',
-        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+CelebraÃ§Ã£o',
+        image: 'https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Culto+de+Celebração',
         social_media: {
           instagram: true,
           facebook: true,
@@ -83,12 +83,12 @@ const EventsAdmin: React.FC = () => {
       },
       {
         id: '2',
-        title: 'ConferÃªncia de Jovens',
+        title: 'Conferência de Jovens',
         description: 'Um encontro especial para jovens com palestras e atividades',
         date: '2024-01-20',
         time: '14:00',
-        location: 'AuditÃ³rio Principal',
-        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=ConferÃªncia+de+Jovens',
+        location: 'Auditório Principal',
+        image: 'https://via.placeholder.com/400x300/059669/FFFFFF?text=Conferência+de+Jovens',
         social_media: {
           instagram: true,
           facebook: false,
@@ -99,12 +99,12 @@ const EventsAdmin: React.FC = () => {
       },
       {
         id: '3',
-        title: 'ReuniÃ£o de OraÃ§Ã£o',
-        description: 'Momento especial de oraÃ§Ã£o e comunhÃ£o',
+        title: 'Reunião de Oração',
+        description: 'Momento especial de oração e comunhão',
         date: '2024-01-25',
         time: '20:00',
-        location: 'Sala de OraÃ§Ã£o',
-        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=ReuniÃ£o+de+OraÃ§Ã£o',
+        location: 'Sala de Oração',
+        image: 'https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Reunião+de+Oração',
         social_media: {
           instagram: false,
           facebook: true,
@@ -139,20 +139,20 @@ const EventsAdmin: React.FC = () => {
   };
 
   const handleDeleteEvent = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este evento? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) {
+    if (window.confirm('Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.')) {
       try {
         // Tentar excluir via API
         try {
           await eventsAPI.deleteEvent(id);
-          console.log('âœ… Evento excluÃ­do via API:', id);
+          console.log('âœ… Evento excluído via API:', id);
         } catch (apiError) {
           console.log('âš ï¸ Erro na API, removendo localmente:', apiError);
         }
         
         // Remover da lista local
         setEvents(prev => prev.filter(event => event.id !== id));
-        toast.success('Evento excluÃ­do com sucesso!');
-        // Disparar evento de sincronizaÃ§Ã£o
+        toast.success('Evento excluído com sucesso!');
+        // Disparar evento de sincronização
         window.dispatchEvent(new CustomEvent('eventsUpdated'));
       } catch (error) {
         console.error('âŒ Erro ao excluir evento:', error);
@@ -177,7 +177,7 @@ const EventsAdmin: React.FC = () => {
               : event
           ));
           toast.success('Evento atualizado com sucesso!');
-          // Disparar evento de sincronizaÃ§Ã£o
+          // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         } catch (apiError) {
           console.log('âš ï¸ Erro na API, atualizando localmente:', apiError);
@@ -187,7 +187,7 @@ const EventsAdmin: React.FC = () => {
               : event
           ));
           toast.success('Evento atualizado localmente!');
-          // Disparar evento de sincronizaÃ§Ã£o
+          // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
       } else {
@@ -202,7 +202,7 @@ const EventsAdmin: React.FC = () => {
             return updatedEvents;
           });
           toast.success('Evento criado com sucesso!');
-          // Disparar evento de sincronizaÃ§Ã£o
+          // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
           console.log('Evento de sincronização disparado para página inicial');
         } catch (apiError) {
@@ -220,7 +220,7 @@ const EventsAdmin: React.FC = () => {
             return updatedEvents;
           });
           toast.success('Evento criado localmente!');
-          // Disparar evento de sincronizaÃ§Ã£o
+          // Disparar evento de sincronização
           window.dispatchEvent(new CustomEvent('eventsUpdated'));
         }
       }
@@ -239,9 +239,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const date = new Date(year, month - 1, day); // month é 0-indexed
     
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -255,9 +255,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const isUpcoming = (dateString: string) => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = dateString.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -265,9 +265,9 @@ const EventsAdmin: React.FC = () => {
   };
 
   const filteredEvents = events.filter(event => {
-    // Criar data local sem problemas de fuso horÃ¡rio
+    // Criar data local sem problemas de fuso horário
     const [year, month, day] = event.date.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day); // month Ã© 0-indexed
+    const eventDate = new Date(year, month - 1, day); // month é 0-indexed
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -340,7 +340,7 @@ const EventsAdmin: React.FC = () => {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            PrÃ³ximos ({events.filter(e => {
+            Próximos ({events.filter(e => {
               const [year, month, day] = e.date.split('-').map(Number);
               const eventDate = new Date(year, month - 1, day);
               const today = new Date();
@@ -377,7 +377,7 @@ const EventsAdmin: React.FC = () => {
               <p className="mt-1 text-sm text-gray-500">
                 {filter === 'all' 
                   ? 'Comece criando um novo evento.' 
-                  : 'NÃ£o hÃ¡ eventos para o filtro selecionado.'}
+                  : 'Não há eventos para o filtro selecionado.'}
               </p>
             </div>
           ) : (
@@ -400,7 +400,7 @@ const EventsAdmin: React.FC = () => {
                     </div>
                   )}
 
-                  {/* ConteÃºdo */}
+                  {/* Conteúdo */}
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-900">
@@ -408,7 +408,7 @@ const EventsAdmin: React.FC = () => {
                       </h3>
                       {isUpcoming(event.date) && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          PrÃ³ximo
+                          Próximo
                         </span>
                       )}
                     </div>
@@ -458,7 +458,7 @@ const EventsAdmin: React.FC = () => {
                       </div>
                     )}
 
-                    {/* AÃ§Ãµes */}
+                    {/* Ações */}
                     {viewMode === 'admin' && (
                       <div className="flex justify-end space-x-2 pt-4 border-t">
                         <button
@@ -499,7 +499,7 @@ const EventsAdmin: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de FormulÃ¡rio */}
+      {/* Modal de Formulário */}
       {showForm && (
         <EventForm
           event={editingEvent}
@@ -519,7 +519,7 @@ const EventsAdmin: React.FC = () => {
         />
       )}
 
-      {/* Modal de Compartilhamento AutomÃ¡tico */}
+      {/* Modal de Compartilhamento Automático */}
       {autoSharingEvent && (
         <AutoShareManager
           event={autoSharingEvent}

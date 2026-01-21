@@ -149,10 +149,10 @@ const CadastroPublicoPage: React.FC = () => {
       // Mostrar mensagem de sucesso
       toast.success('Cadastro realizado com sucesso! Bem-vindo à nossa comunidade!');
       
-      // Salvar nome do membro antes de limpar o formulÃ¡rio
+      // Salvar nome do membro antes de limpar o formulário
       const memberName = formData.name.trim();
 
-      // Limpar formulÃ¡rio
+      // Limpar formulário
       setFormData({
         name: '',
         email: '',
@@ -164,7 +164,7 @@ const CadastroPublicoPage: React.FC = () => {
         photo_url: ''
       });
 
-      // Redirecionar para pÃ¡gina de agradecimento apÃ³s um breve delay
+      // Redirecionar para página de agradecimento após um breve delay
       // Passar o nome do membro para personalizar a mensagem
       setTimeout(() => {
         try {
@@ -175,7 +175,7 @@ const CadastroPublicoPage: React.FC = () => {
           });
         } catch (navError) {
           console.error('❌ Erro ao navegar:', navError);
-          // Fallback: recarregar a pÃ¡gina se a navegaÃ§Ã£o falhar
+          // Fallback: recarregar a página se a navegação falhar
           window.location.href = '/cadastro/obrigado';
         }
       }, 1000);
@@ -205,7 +205,7 @@ const CadastroPublicoPage: React.FC = () => {
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Limpar erro quando o usuÃ¡rio comeÃ§ar a digitar
+    // Limpar erro quando o usuário começar a digitar
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -213,7 +213,7 @@ const CadastroPublicoPage: React.FC = () => {
         return newErrors;
       });
     }
-    // Resetar estado de sucesso se o usuÃ¡rio comeÃ§ar a editar novamente
+    // Resetar estado de sucesso se o usuário começar a editar novamente
     if (isSuccess) {
       setIsSuccess(false);
     }
