@@ -30,6 +30,8 @@ const EsbocoDetalhePage = lazyWithRetry(() => import('./pages/public/EsbocoDetal
 const EventsPage = lazyWithRetry(() => import('./pages/public/EventsPage'));
 const CadastroPublicoPage = lazyWithRetry(() => import('./pages/public/CadastroPublicoPage'));
 const AgradecimentoPage = lazyWithRetry(() => import('./pages/public/AgradecimentoPage'));
+const DevocionalPublico = lazyWithRetry(() => import('./pages/public/DevocionalPublico'));
+const DevocionalHistoricoPublico = lazyWithRetry(() => import('./pages/public/DevocionalHistoricoPublico'));
 const Login = lazyWithRetry(() => import('./pages/Login'));
 const Logout = lazyWithRetry(() => import('./pages/Logout'));
 const LoginDebug = lazyWithRetry(() => import('./pages/LoginDebug'));
@@ -139,6 +141,8 @@ function App() {
                     <Route path="/conecte" element={<ConnectPage />} />
                     <Route path="/assista" element={<WatchPage />} />
                     <Route path="/contribua" element={<GivePage />} />
+                    <Route path="/devocional" element={<DevocionalPublico />} />
+                    <Route path="/devocional/historico" element={<DevocionalHistoricoPublico />} />
                     <Route path="/localizacoes" element={<LocationsPage />} />
                     <Route path="/bons-estudos" element={<BonsEstudosPage />} />
                     <Route path="/biblioteca" element={<BibliotecaPage />} />

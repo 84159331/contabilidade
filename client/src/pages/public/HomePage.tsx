@@ -234,7 +234,7 @@ const quickActions = [
     title: "Devocional",
     description: "Leitura diária e histórico",
     icon: BookOpenIcon,
-    link: "/tesouraria/devocional",
+    link: "/devocional",
     color: "bg-emerald-600 hover:bg-emerald-700"
   },
   {

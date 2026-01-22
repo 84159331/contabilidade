@@ -66,7 +66,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
     { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
     { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
-    { type: 'link', name: 'Devocional', href: '/tesouraria/devocional', icon: BookOpenIcon },
     { type: 'link', name: 'Eventos', href: '/tesouraria/events', icon: CalendarIcon },
     { type: 'link', name: 'Esboços', href: '/tesouraria/esbocos', icon: DocumentTextIcon },
     { type: 'heading', name: 'Escalas' },
@@ -82,7 +81,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       ? ([
           { type: 'link', name: 'Acesso ao Financeiro', href: '/tesouraria/admin/finance-access', icon: CurrencyDollarIcon },
           { type: 'link', name: 'Administradores', href: '/tesouraria/admin/admins', icon: UsersIcon },
-          { type: 'link', name: 'Devocional (Admin)', href: '/tesouraria/admin/devocional', icon: BookOpenIcon },
         ] as NavItem[])
       : ([] as NavItem[])),
   ];

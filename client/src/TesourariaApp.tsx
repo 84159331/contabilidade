@@ -90,7 +90,7 @@ function TesourariaApp() {
     return (
       <Routes>
         <Route path="login" element={<LoginFirebase />} />
-        <Route path="*" element={<Navigate to="login" replace />} />
+        <Route path="*" element={<Navigate to="/tesouraria/login" replace />} />
       </Routes>
     );
   }
