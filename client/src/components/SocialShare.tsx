@@ -83,6 +83,25 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
     return new File([blob], filename, { type: blob.type || 'image/png' });
   };
 
+  const tryOpenInstagramStories = async (): Promise<boolean> => {
+    // Deep links only work reliably on mobile devices with the Instagram app installed.
+    // We try a couple of known schemes and fall back to opening instagram.com.
+    const candidates = ['instagram-stories://share', 'instagram://story-camera'];
+    try {
+      for (const url of candidates) {
+        try {
+          window.location.href = url;
+          return true;
+        } catch {
+          // ignore and try next
+        }
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
   const tryNativeShare = async (text: string) => {
     if (!('share' in navigator)) {
       return false;
@@ -151,14 +170,33 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
     const header = platform === 'whatsapp'
       ? ''
       : `[Sugestão: ${getModeLabel(platform, mode)}]\n\n`;
-    const finalText = header + text;
+    const baseText = header + text;
+
+    // For WhatsApp web fallback, include the image URL so WhatsApp generates a link preview.
+    // (wa.me cannot attach images; only native share can send files.)
+    const finalText = platform === 'whatsapp' && event.image && !event.image.startsWith('data:')
+      ? `${baseText}\n\n${event.image}`
+      : baseText;
 
     const shared = await tryNativeShare(finalText);
     if (shared) return;
 
     switch (platform) {
       case 'instagram':
-        window.open('https://www.instagram.com/', '_blank');
+        if (mode === 'stories') {
+          const opened = await tryOpenInstagramStories();
+          if (!opened) {
+            window.open('https://www.instagram.com/', '_blank');
+          }
+          try {
+            await navigator.clipboard.writeText(finalText);
+            toast.info('Texto copiado. Cole no Stories do Instagram.');
+          } catch {
+            toast.info('Copie o texto para colar no Stories do Instagram.');
+          }
+        } else {
+          window.open('https://www.instagram.com/', '_blank');
+        }
         break;
       
       case 'facebook':

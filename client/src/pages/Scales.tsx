@@ -221,29 +221,31 @@ const Scales: React.FC = () => {
       atribuicao: '',
       status: 'pendente' as const,
     };
-    setFormData({
-      ...formData,
-      membros: [...formData.membros, newMember],
-    });
+    setFormData((prev) => ({
+      ...prev,
+      membros: [...prev.membros, newMember],
+    }));
   };
 
-  const updateMemberInEscala = (index: number, field: string, value: any) => {
-    const updatedMembers = [...formData.membros];
-    updatedMembers[index] = {
-      ...updatedMembers[index],
-      [field]: value,
-    };
-    setFormData({
-      ...formData,
-      membros: updatedMembers,
+  const updateMemberField = (index: number, field: string, value: any) => {
+    setFormData((prev) => {
+      const updatedMembers = [...prev.membros];
+      updatedMembers[index] = {
+        ...updatedMembers[index],
+        [field]: value,
+      };
+      return {
+        ...prev,
+        membros: updatedMembers,
+      };
     });
   };
 
   const removeMemberFromEscala = (index: number) => {
-    setFormData({
-      ...formData,
-      membros: formData.membros.filter((_, i) => i !== index),
-    });
+    setFormData((prev) => ({
+      ...prev,
+      membros: prev.membros.filter((_: any, i: number) => i !== index),
+    }));
   };
 
   const getMemberName = (memberId: string) => {
@@ -558,7 +560,7 @@ const Scales: React.FC = () => {
             <select
               required
               value={formData.ministerio_id}
-              onChange={(e) => setFormData({ ...formData, ministerio_id: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, ministerio_id: e.target.value }))}
               className="input w-full"
             >
               <option value="">Selecione um ministério</option>
@@ -580,7 +582,7 @@ const Scales: React.FC = () => {
               type="date"
               required
               value={formData.data}
-              onChange={(e) => setFormData({ ...formData, data: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, data: e.target.value }))}
               className="input w-full"
             />
           </div>
@@ -592,7 +594,7 @@ const Scales: React.FC = () => {
             <input
               type="time"
               value={String((formData as any).hora || '')}
-              onChange={(e) => setFormData({ ...formData, hora: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, hora: e.target.value }))}
               className="input w-full"
               step={60}
             />
@@ -615,7 +617,7 @@ const Scales: React.FC = () => {
                     required
                     value={membro.funcao}
                     onChange={(e) =>
-                      updateMemberInEscala(index, 'funcao', e.target.value)
+                      updateMemberField(index, 'funcao', e.target.value)
                     }
                     className="input w-full sm:flex-1 sm:min-w-[180px]"
                     title="Selecione a função da igreja"
@@ -633,7 +635,7 @@ const Scales: React.FC = () => {
                     required
                     value={membro.membro_id}
                     onChange={(e) =>
-                      updateMemberInEscala(index, 'membro_id', e.target.value)
+                      updateMemberField(index, 'membro_id', e.target.value)
                     }
                     className="input w-full sm:flex-1"
                     title="Selecione o membro"
@@ -651,7 +653,7 @@ const Scales: React.FC = () => {
                     <select
                       required
                       value={(membro as any).atribuicao || ''}
-                      onChange={(e) => updateMemberInEscala(index, 'atribuicao', e.target.value)}
+                      onChange={(e) => updateMemberField(index, 'atribuicao', e.target.value)}
                       className="input w-full sm:flex-1 sm:min-w-[180px]"
                       title="Selecione a atribuição (Mídia Resgate)"
                     >
@@ -685,7 +687,7 @@ const Scales: React.FC = () => {
             </label>
             <textarea
               value={formData.observacoes}
-              onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, observacoes: e.target.value }))}
               className="input w-full"
               rows={3}
               placeholder="Observações sobre a escala..."

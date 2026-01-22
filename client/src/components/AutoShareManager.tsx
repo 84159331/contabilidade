@@ -124,9 +124,29 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
   };
 
   const shareToInstagram = async (message: string) => {
-    // Abrir Instagram Stories
-    const instagramUrl = `https://www.instagram.com/create/story/`;
-    window.open(instagramUrl, '_blank');
+    const candidates = ['instagram-stories://share', 'instagram://story-camera'];
+    let opened = false;
+    for (const url of candidates) {
+      try {
+        window.location.href = url;
+        opened = true;
+        break;
+      } catch {
+        // ignore
+      }
+    }
+
+    if (!opened) {
+      const instagramUrl = `https://www.instagram.com/`;
+      window.open(instagramUrl, '_blank');
+    }
+
+    try {
+      await navigator.clipboard.writeText(message);
+      toast.info('Texto copiado. Cole no Stories do Instagram.');
+    } catch {
+      toast.info('Copie o texto para colar no Stories do Instagram.');
+    }
   };
 
   const shareToFacebook = async (message: string) => {

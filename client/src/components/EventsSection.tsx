@@ -13,6 +13,7 @@ import { eventsAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import storage from '../utils/storage';
 import SkeletonLoader from './SkeletonLoader';
+import { parseDateOnly } from '../utils/dateOnly';
 
 interface EventsSectionProps {
   isAdmin?: boolean;
@@ -56,9 +57,26 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const formatEventDateTime = (event: Event) => {
-    const date = new Date(event.date);
+    const date = parseDateOnly(event.date);
     const formatted = date.toLocaleDateString('pt-BR');
     return `${formatted} às ${event.time}`;
+  };
+
+  const tryOpenInstagramStories = async (): Promise<boolean> => {
+    const candidates = ['instagram-stories://share', 'instagram://story-camera'];
+    try {
+      for (const url of candidates) {
+        try {
+          window.location.href = url;
+          return true;
+        } catch {
+          // ignore and try next
+        }
+      }
+      return false;
+    } catch {
+      return false;
+    }
   };
 
   const generateInviteMessage = (event: Event) => {
@@ -97,7 +115,11 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   };
 
   const shareToPlatform = async (platform: 'instagram' | 'facebook' | 'whatsapp', event: Event) => {
-    const text = generateInviteMessage(event);
+    const baseText = generateInviteMessage(event);
+
+    const text = platform === 'whatsapp' && event.image && !event.image.startsWith('data:')
+      ? `${baseText}\n\n${event.image}`
+      : baseText;
 
     const shared = await tryNativeShare(event, text);
     if (shared) return;
@@ -114,12 +136,15 @@ const EventsSection: React.FC<EventsSectionProps> = ({
       return;
     }
 
-    window.open('https://www.instagram.com/', '_blank');
+    const opened = await tryOpenInstagramStories();
+    if (!opened) {
+      window.open('https://www.instagram.com/', '_blank');
+    }
     try {
       await navigator.clipboard.writeText(text);
-      toast.info('Texto copiado. Cole no Instagram para compartilhar.');
+      toast.info('Texto copiado. Cole no Stories do Instagram para compartilhar.');
     } catch {
-      toast.info('Copie o texto para colar no Instagram.');
+      toast.info('Copie o texto para colar no Stories do Instagram.');
     }
   };
 

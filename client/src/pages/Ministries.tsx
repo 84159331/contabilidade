@@ -151,28 +151,30 @@ const Ministries: React.FC = () => {
 
   const addFuncao = () => {
     if (newFuncao.trim() && !formData.funcoes.includes(newFuncao.trim())) {
-      setFormData({
-        ...formData,
-        funcoes: [...formData.funcoes, newFuncao.trim()],
-      });
+      setFormData((prev) => ({
+        ...prev,
+        funcoes: [...prev.funcoes, newFuncao.trim()],
+      }));
       setNewFuncao('');
     }
   };
 
   const removeFuncao = (funcao: string) => {
-    setFormData({
-      ...formData,
-      funcoes: formData.funcoes.filter(f => f !== funcao),
-    });
+    setFormData((prev) => ({
+      ...prev,
+      funcoes: prev.funcoes.filter((f) => f !== funcao),
+    }));
   };
 
   const toggleMember = (memberId: string) => {
-    const isSelected = formData.membros_habilitados.includes(memberId);
-    setFormData({
-      ...formData,
-      membros_habilitados: isSelected
-        ? formData.membros_habilitados.filter(id => id !== memberId)
-        : [...formData.membros_habilitados, memberId],
+    setFormData((prev) => {
+      const isSelected = prev.membros_habilitados.includes(memberId);
+      return {
+        ...prev,
+        membros_habilitados: isSelected
+          ? prev.membros_habilitados.filter((id) => id !== memberId)
+          : [...prev.membros_habilitados, memberId],
+      };
     });
   };
 
@@ -337,7 +339,7 @@ const Ministries: React.FC = () => {
               type="text"
               required
               value={formData.nome}
-              onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, nome: e.target.value }))}
               className="input w-full"
               placeholder="Ex: Louvor, Som, Recepção"
             />
@@ -349,7 +351,7 @@ const Ministries: React.FC = () => {
             </label>
             <textarea
               value={formData.descricao}
-              onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, descricao: e.target.value }))}
               className="input w-full"
               rows={3}
               placeholder="Descreva o ministério..."
@@ -399,10 +401,10 @@ const Ministries: React.FC = () => {
             <select
               value={formData.frequencia}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setFormData((prev) => ({
+                  ...prev,
                   frequencia: e.target.value as 'semanal' | 'quinzenal' | 'mensal',
-                })
+                }))
               }
               className="input w-full"
             >
@@ -420,7 +422,7 @@ const Ministries: React.FC = () => {
               <select
                 value={formData.dia_semana}
                 onChange={(e) =>
-                  setFormData({ ...formData, dia_semana: parseInt(e.target.value) })
+                  setFormData((prev) => ({ ...prev, dia_semana: parseInt(e.target.value) }))
                 }
                 className="input w-full"
               >
@@ -472,7 +474,7 @@ const Ministries: React.FC = () => {
               type="checkbox"
               id="ativo"
               checked={formData.ativo}
-              onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
+              onChange={(e) => setFormData((prev) => ({ ...prev, ativo: e.target.checked }))}
               className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
             <label htmlFor="ativo" className="text-sm font-medium text-gray-700 dark:text-gray-300">

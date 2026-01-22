@@ -14,10 +14,11 @@ const LoginFirebase: React.FC = () => {
   const { login, resetPassword } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,7 +30,7 @@ const LoginFirebase: React.FC = () => {
       await login(formData.email, formData.password);
       toast.success('Login realizado com sucesso!');
       // Limpar senha após login bem-sucedido
-      setFormData({ ...formData, password: '' });
+      setFormData((prev) => ({ ...prev, password: '' }));
     } catch (error: any) {
       console.error('Erro no login:', error);
       
