@@ -31,34 +31,34 @@ const Events: React.FC = () => {
   const loadEvents = async () => {
     try {
       setLoading(true);
-      console.log('ðŸ”„ Events.tsx - Carregando eventos...');
+      console.log('Events.tsx - Carregando eventos...');
       
       if (!user) {
-        console.log('âŒ Events.tsx - Usuário não autenticado');
+        console.log('Events.tsx - Usuário não autenticado');
         setEvents([]);
         return;
       }
 
-      console.log('ðŸ“¡ Events.tsx - Chamando eventsAPI.getEvents()');
+      console.log('Events.tsx - Chamando eventsAPI.getEvents()');
       const eventsData = await eventsAPI.getEvents();
-      console.log('ðŸ“Š Events.tsx - Dados recebidos da API:', eventsData);
-      console.log('ðŸ“Š Events.tsx - Quantidade de eventos:', eventsData.length);
+      console.log('Events.tsx - Dados recebidos da API:', eventsData);
+      console.log('Events.tsx - Quantidade de eventos:', eventsData.length);
       
       if (eventsData.length > 0) {
-        console.log('ðŸ” Events.tsx - Primeiro evento:', eventsData[0]);
+        console.log('Events.tsx - Primeiro evento:', eventsData[0]);
         if (eventsData[0].image) {
-          console.log('ðŸ–¼ï¸ Events.tsx - Primeira imagem:', eventsData[0].image.substring(0, 50) + '...');
-          console.log('ðŸ–¼ï¸ Events.tsx - Ã‰ base64?', eventsData[0].image.startsWith('data:'));
-          console.log('ðŸ–¼ï¸ Events.tsx - Tamanho da imagem:', eventsData[0].image.length);
+          console.log('Events.tsx - Primeira imagem:', eventsData[0].image.substring(0, 50) + '...');
+          console.log('Events.tsx - É base64?', eventsData[0].image.startsWith('data:'));
+          console.log('Events.tsx - Tamanho da imagem:', eventsData[0].image.length);
         } else {
-          console.log('âš ï¸ Events.tsx - Primeiro evento sem imagem');
+          console.log('Events.tsx - Primeiro evento sem imagem');
         }
       }
       
       setEvents(eventsData);
-      console.log('âœ… Events.tsx - Eventos definidos no estado');
+      console.log('Events.tsx - Eventos definidos no estado');
     } catch (error) {
-      console.error('âŒ Events.tsx - Erro ao carregar eventos:', error);
+      console.error('Events.tsx - Erro ao carregar eventos:', error);
       toast.error('Erro ao carregar eventos');
     } finally {
       setLoading(false);
@@ -101,7 +101,7 @@ const Events: React.FC = () => {
   };
 
   const handleDeleteEvent = async (id: string) => {
-    console.log('ðŸ—‘ï¸ Events.tsx - Tentando excluir evento com ID:', id);
+    console.log('Events.tsx - Tentando excluir evento com ID:', id);
     
     if (!id) {
       toast.error('ID do evento é inválido');
@@ -112,23 +112,23 @@ const Events: React.FC = () => {
       console.log('Events.tsx - Usuário confirmou exclusão');
       
       try {
-        console.log('ðŸ“¡ Events.tsx - Chamando eventsAPI.deleteEvent...');
+        console.log('Events.tsx - Chamando eventsAPI.deleteEvent...');
         await eventsAPI.deleteEvent(id);
         console.log('Events.tsx - Evento excluído com sucesso via API');
         
         toast.success('Evento excluído com sucesso!');
-        console.log('ðŸ”„ Events.tsx - Recarregando eventos...');
+        console.log('Events.tsx - Recarregando eventos...');
         loadEvents();
       } catch (error) {
-        console.error('âŒ Events.tsx - Erro ao excluir evento:', error);
+        console.error('Events.tsx - Erro ao excluir evento:', error);
         
         // Tentar remover localmente mesmo se a API falhar
         try {
           setEvents(prev => prev.filter(event => event.id !== id));
           toast.success('Evento removido localmente!');
-          console.log('âœ… Events.tsx - Evento removido localmente');
+          console.log('Events.tsx - Evento removido localmente');
         } catch (localError) {
-          console.error('âŒ Events.tsx - Erro ao remover localmente:', localError);
+          console.error('Events.tsx - Erro ao remover localmente:', localError);
           toast.error('Erro ao excluir evento. Tente novamente.');
         }
       }

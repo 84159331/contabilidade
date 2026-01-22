@@ -8,6 +8,7 @@ import {
 import { Event } from '../types/Event';
 import SafeImage from './SafeImage';
 import { toast } from 'react-toastify';
+import { parseDateOnly } from '../utils/dateOnly';
 
 interface SocialShareProps {
   event: Event;
@@ -57,7 +58,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
   };
 
   const generateShareText = () => {
-    const date = new Date(event.date).toLocaleDateString('pt-BR');
+    const date = parseDateOnly(event.date).toLocaleDateString('pt-BR');
     const defaultMessage = `Evento: ${event.title}\n\nData: ${date} às ${event.time}\nLocal: ${event.location}\n\n${event.description || ''}\n\n#IgrejaComunidadeResgate #Evento`;
     
     return customMessage || defaultMessage;
@@ -202,7 +203,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ event, onClose }) => {
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{event.title}</h3>
             <div className="text-sm text-gray-600 dark:text-gray-200 space-y-1">
-              <p>Data: {new Date(event.date).toLocaleDateString('pt-BR')} às {event.time}</p>
+              <p>Data: {parseDateOnly(event.date).toLocaleDateString('pt-BR')} às {event.time}</p>
               <p>Local: {event.location}</p>
               {event.description && <p>{event.description}</p>}
             </div>

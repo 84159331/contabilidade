@@ -97,50 +97,50 @@ const WhatsAppIntegration: React.FC<WhatsAppIntegrationProps> = ({ financialData
   const messageTemplates = {
     financial: {
       name: 'Relatório Financeiro',
-      template: `ðŸ“Š *Relatório Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
+      template: `📊 *Relatório Financeiro - ${new Date().toLocaleDateString('pt-BR')}*
 
-ðŸ’° *Receitas Totais:* R$ {{totalIncome}}
-ðŸ’¸ *Despesas Totais:* R$ {{totalExpenses}}
-ðŸ’µ *Saldo Atual:* R$ {{balance}}
+💰 *Receitas Totais:* R$ {{totalIncome}}
+💸 *Despesas Totais:* R$ {{totalExpenses}}
+💵 *Saldo Atual:* R$ {{balance}}
 
-ðŸ“ˆ *Resumo:*
-â€¢ Crescimento mensal: {{growth}}%
-â€¢ Meta atingida: {{goalProgress}}%
+📈 *Resumo:*
+- Crescimento mensal: {{growth}}%
+- Meta atingida: {{goalProgress}}%
 
-ðŸ™ Obrigado pela confiança na gestão da nossa igreja!`
+🙏 Obrigado pela confiança na gestão da nossa igreja!`
     },
     welcome: {
       name: 'Boas-vindas',
-      template: `ðŸŽ‰ *Bem-vindo à Comunidade Cristã Resgate!*
+      template: `🎉 *Bem-vindo à Comunidade Cristã Resgate!*
 
-Ã‰ uma alegria tê-lo conosco! ðŸ™
+É uma alegria tê-lo conosco! 🙏
 
-ðŸ“… *Próximos eventos:*
-â€¢ Culto de domingo: 9h e 19h
-â€¢ Reunião de oração: Quarta-feira 19h30
-â€¢ Escola Bíblica: Domingo 8h
+📅 *Próximos eventos:*
+- Culto de domingo: 9h e 19h
+- Reunião de oração: Quarta-feira 19h30
+- Escola Bíblica: Domingo 8h
 
-ðŸ“± *Contato:*
-â€¢ WhatsApp: (11) 1234-5678
-â€¢ Email: cresgate012@gmail.com
+📱 *Contato:*
+- WhatsApp: (11) 1234-5678
+- Email: cresgate012@gmail.com
 
-Que Deus abençoe sua vida! âœ¨`
+Que Deus abençoe sua vida! ✨`
     },
     reminder: {
       name: 'Lembrete de Evento',
-      template: `â° *Lembrete de Evento*
+      template: `⏰ *Lembrete de Evento*
 
-ðŸ“… *{{eventName}}*
-ðŸ• *Horário:* {{eventTime}}
-ðŸ“ *Local:* {{eventLocation}}
+📅 *{{eventName}}*
+🕐 *Horário:* {{eventTime}}
+📍 *Local:* {{eventLocation}}
 
-Não esqueça de participar! Sua presença é muito importante para nós. ðŸ™
+Não esqueça de participar! Sua presença é muito importante para nós. 🙏
 
 *Comunidade Cristã Resgate*`
     },
     prayer: {
       name: 'Pedido de Oração',
-      template: `ðŸ™ *Pedido de Oração*
+      template: `🙏 *Pedido de Oração*
 
 Olá {{name}}! 
 
@@ -148,7 +148,7 @@ Recebemos seu pedido de oração e nossa equipe já está intercedendo por você
 
 *"Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles."* - Mateus 18:20
 
-Que Deus abençoe e fortaleça você! âœ¨
+Que Deus abençoe e fortaleça você! ✨
 
 *Comunidade Cristã Resgate*`
     }

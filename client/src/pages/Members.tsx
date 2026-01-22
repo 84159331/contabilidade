@@ -31,13 +31,13 @@ const validateComponents = () => {
   const invalid = Object.entries(components).filter(([name, comp]) => {
     const isValid = comp !== undefined && comp !== null;
     if (!isValid) {
-      console.error(`âŒ Componente ${name} está undefined ou inválido:`, typeof comp, comp);
+      console.error(`Componente ${name} está undefined ou inválido:`, typeof comp, comp);
     }
     return !isValid;
   });
   
   if (invalid.length > 0) {
-    console.warn('âš ï¸ Componentes inválidos encontrados:', invalid.map(([name]) => name));
+    console.warn('Componentes inválidos encontrados:', invalid.map(([name]) => name));
     // Não bloquear renderização, apenas avisar
   }
   return true; // Sempre retornar true para não bloquear renderização
@@ -87,7 +87,7 @@ const Members: React.FC = () => {
     if (lastRouteRef.current !== location.pathname) {
       hasLoadedRef.current = false;
       lastRouteRef.current = location.pathname;
-      console.log('ðŸ”„ Rota mudou em Members, resetando estado');
+      console.log('Rota mudou em Members, resetando estado');
     }
   }, [location.pathname]);
 
@@ -102,7 +102,7 @@ const Members: React.FC = () => {
       
       // Limpar cache se forçado
       if (forceReload) {
-        console.log('ðŸ”„ Forçando recarga dos membros...');
+        console.log('Forçando recarga dos membros...');
         setMembers([]);
       }
       
@@ -124,14 +124,14 @@ const Members: React.FC = () => {
         console.log('Dados mock de membros carregados:', mockDashboardData.members.length);
       } else {
         // Usar API real do Firestore
-        console.log('ðŸ”¥ Carregando membros do Firestore...');
+        console.log('Carregando membros do Firestore...');
         const response = await membersAPI.getMembers();
         
         // Verificar se os IDs são válidos
         const validMembers = response.data.members.filter(member => {
           const isValid = typeof member.id === 'string' && member.id.length > 0;
           if (!isValid) {
-            console.warn('âš ï¸ Membro com ID inválido encontrado:', member);
+            console.warn('Membro com ID inválido encontrado:', member);
           }
           return isValid;
         });
@@ -143,7 +143,7 @@ const Members: React.FC = () => {
           total: validMembers.length,
           pages: Math.ceil(validMembers.length / 10)
         });
-        console.log('âœ… Membros válidos carregados do Firestore:', validMembers.length);
+        console.log('Membros válidos carregados do Firestore:', validMembers.length);
       }
     } catch (error) {
       console.error('Erro ao carregar membros:', error);
@@ -181,21 +181,21 @@ const Members: React.FC = () => {
   const handleCreateMember = useCallback(async (memberData: any) => {
     // Validar dados antes de enviar
     if (!memberData || typeof memberData !== 'object') {
-      console.error('âŒ Dados inválidos para criar membro:', memberData);
+      console.error('Dados inválidos para criar membro:', memberData);
       toast.error('Dados inválidos para criar membro');
       return;
     }
 
     try {
       setIsCreating(true);
-      console.log('âœ… Criando membro com dados:', memberData);
+      console.log('Criando membro com dados:', memberData);
       await membersAPI.createMember(memberData);
       toast.success('Membro criado com sucesso!');
       setShowForm(false);
       setEditingMember(null);
       await loadMembers(true);
     } catch (error: any) {
-      console.error('âŒ Erro ao criar membro:', error);
+      console.error('Erro ao criar membro:', error);
       toast.error(error.response?.data?.error || error.message || 'Erro ao criar membro');
     } finally {
       setIsCreating(false);

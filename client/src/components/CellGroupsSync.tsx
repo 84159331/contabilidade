@@ -127,7 +127,7 @@ const CellGroupsSync: React.FC = () => {
               Sincronização de Grupos Celulares
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Ãšltima sincronização: {formatLastSync(syncStatus.lastSync)}
+              Última sincronização: {formatLastSync(syncStatus.lastSync)}
             </p>
             {syncStatus.hasChanges && (
               <p className="text-xs text-yellow-600 dark:text-yellow-400">

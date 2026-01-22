@@ -1,4 +1,5 @@
 import PDFGenerator, { PDF_CONFIG } from './pdfGenerator';
+import { parseDateOnly } from './dateOnly';
 
 // Interfaces para os dados dos relatórios
 interface MonthlyBalance {
@@ -233,8 +234,8 @@ export const generateCategoryReportPDF = (
   endDate: string,
   churchInfo?: ChurchInfo
 ): void => {
-  const startDateFormatted = new Date(startDate).toLocaleDateString('pt-BR');
-  const endDateFormatted = new Date(endDate).toLocaleDateString('pt-BR');
+  const startDateFormatted = parseDateOnly(startDate).toLocaleDateString('pt-BR');
+  const endDateFormatted = parseDateOnly(endDate).toLocaleDateString('pt-BR');
   
   const generator = new PDFGenerator({
     title: 'Relatório por Categoria',

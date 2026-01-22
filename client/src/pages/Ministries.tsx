@@ -385,7 +385,7 @@ const Ministries: React.FC = () => {
                     onClick={() => removeFuncao(funcao)}
                     className="text-primary-600 hover:text-primary-800"
                   >
-                    Ã—
+                    ×
                   </button>
                 </span>
               ))}

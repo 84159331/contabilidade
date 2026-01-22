@@ -18,6 +18,7 @@ export interface MembroEscala {
   membro_id: string;
   membro_nome: string;
   funcao: string;
+  atribuicao?: string;
   status: 'pendente' | 'confirmado' | 'substituido' | 'ausente';
   confirmado_em?: Date | string;
   substituido_por?: string;
@@ -29,6 +30,7 @@ export interface Escala {
   ministerio_id: string;
   ministerio_nome: string;
   data: Date | string;
+  hora?: string;
   membros: MembroEscala[];
   status: 'agendada' | 'confirmada' | 'cancelada' | 'concluida';
   observacoes?: string;
@@ -63,6 +65,7 @@ export interface MinisterioFormData {
 export interface EscalaFormData {
   ministerio_id: string;
   data: string;
+  hora?: string;
   membros: Omit<MembroEscala, 'membro_nome'>[];
   observacoes?: string;
 }

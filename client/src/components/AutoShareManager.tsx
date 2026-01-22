@@ -10,6 +10,7 @@ import { eventsAPI } from '../services/api';
 import { Event } from '../types/Event';
 import { toast } from 'react-toastify';
 import storage from '../utils/storage';
+import { parseDateOnly } from '../utils/dateOnly';
 
 interface AutoShareSettings {
   enabled: boolean;
@@ -52,7 +53,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
     // Calcular tempo até o compartilhamento
     if (settings.enabled && settings.scheduleTime) {
       const now = new Date();
-      const eventDate = new Date(event.date);
+      const eventDate = parseDateOnly(event.date);
       const [hours, minutes] = settings.scheduleTime.split(':');
       eventDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
       
@@ -114,7 +115,7 @@ const AutoShareManager: React.FC<AutoShareManagerProps> = ({ event, onClose }) =
   };
 
   const generateMessage = () => {
-    const date = new Date(event.date).toLocaleDateString('pt-BR');
+    const date = parseDateOnly(event.date).toLocaleDateString('pt-BR');
     return settings.messageTemplate
       .replace('{date}', date)
       .replace('{time}', event.time)

@@ -130,14 +130,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     
     // Listener para mudanças nos eventos (sincronização)
     const handleStorageChange = () => {
-      console.log('ðŸ”„ Eventos atualizados, recarregando...');
+      console.log('Eventos atualizados, recarregando...');
       loadEvents();
     };
     
     // Listener para mudanças no armazenamento local
     const handleLocalStorageChange = (e: StorageEvent) => {
       if (e.key === 'cachedEvents') {
-        console.log('ðŸ”„ Cache de eventos atualizado, recarregando...');
+        console.log('Cache de eventos atualizado, recarregando...');
         loadEvents();
       }
     };
@@ -186,14 +186,14 @@ const EventsSection: React.FC<EventsSectionProps> = ({
     try {
       const cachedEvents = storage.getJSON<Event[]>('cachedEvents');
       if (cachedEvents && Array.isArray(cachedEvents) && cachedEvents.length > 0) {
-        console.log('ðŸ” Eventos do cache:', cachedEvents);
-        console.log('ðŸ” Primeiro evento:', cachedEvents[0]);
+        console.log('Eventos do cache:', cachedEvents);
+        console.log('Primeiro evento:', cachedEvents[0]);
         if (cachedEvents[0] && cachedEvents[0].image) {
-          console.log('ðŸ” Imagem do primeiro evento:', cachedEvents[0].image.substring(0, 50) + '...');
-          console.log('ðŸ” Ã‰ base64?', cachedEvents[0].image.startsWith('data:'));
+          console.log('Imagem do primeiro evento:', cachedEvents[0].image.substring(0, 50) + '...');
+          console.log('É base64?', cachedEvents[0].image.startsWith('data:'));
         }
         setEvents(cachedEvents);
-        console.log('âœ… Eventos carregados do cache:', cachedEvents.length);
+        console.log('Eventos carregados do cache:', cachedEvents.length);
       } else {
         // Se não há cache, criar um evento de teste para debug
         const testEvent = {
@@ -213,10 +213,10 @@ const EventsSection: React.FC<EventsSectionProps> = ({
           updated_at: new Date().toISOString()
         };
         setEvents([testEvent]);
-        console.log('âš ï¸ Nenhum evento no cache, criando evento de teste');
+        console.log('Nenhum evento no cache, criando evento de teste');
       }
     } catch (error) {
-      console.error('âŒ Erro ao carregar do cache:', error);
+      console.error('Erro ao carregar do cache:', error);
       setEvents([]);
     }
   };

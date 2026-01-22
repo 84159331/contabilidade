@@ -11,7 +11,6 @@ import {
 import { auth } from './config';
 import storage from '../utils/storage';
 import { registerNativePush } from '../utils/nativePush';
-import { initOneSignal } from '../utils/oneSignal';
 
 interface AuthContextType {
   user: User | null;
@@ -47,9 +46,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Isso habilita notificações em massa via tópico (Cloud Functions)
       if (user) {
         registerNativePush().catch(() => {});
-
-        const oneSignalAppId = process.env.REACT_APP_ONESIGNAL_APP_ID || '';
-        initOneSignal(oneSignalAppId, user.uid).catch(() => {});
       }
     });
 

@@ -124,7 +124,7 @@ const Users: React.FC = () => {
                   className="px-2 py-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none"
                   aria-label="Fechar"
                 >
-                  Ã—
+                  ×
                 </button>
               </div>
               <div className="p-6">

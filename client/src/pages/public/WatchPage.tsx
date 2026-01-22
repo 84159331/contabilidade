@@ -229,8 +229,7 @@ const WatchPage: React.FC = () => {
                 href="https://youtube.com/@comunidadecresgate"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-red-600 text-white hover:bg-red-700 border-2 border-red-700 hover:border-red-800 px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg text-white"
-                style={{ color: '#ffffff' }}
+                className="bg-red-600 text-white hover:bg-red-700 border-2 border-red-700 hover:border-red-800 px-8 py-3 rounded-full font-extrabold tracking-wide transition-all transform hover:scale-105 shadow-xl"
               >
                 Visitar Canal
               </a>

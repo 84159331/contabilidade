@@ -594,7 +594,7 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               to="/conecte"
-              className="bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2 min-h-[48px] flex items-center justify-center touch-manipulation"
+              className="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 fade-in-scale stagger-2 min-h-[48px] flex items-center justify-center touch-manipulation"
             >
               Conectar-se
             </Link>

@@ -180,7 +180,7 @@ const MobileDashboard: React.FC = () => {
                 Você tem {pendingConfirmations} {pendingConfirmations === 1 ? 'confirmação pendente' : 'confirmações pendentes'}
               </p>
               <Link
-                to="/tesouraria/scales"
+                to="/tesouraria/my-scales"
                 className="text-xs text-yellow-700 dark:text-yellow-300 font-medium mt-1 inline-block"
               >
                 Confirmar agora →
@@ -199,7 +199,7 @@ const MobileDashboard: React.FC = () => {
             </h2>
             {myScales.length > 3 && (
               <Link
-                to="/tesouraria/scales"
+                to="/tesouraria/my-scales"
                 className="text-sm text-primary-600 dark:text-primary-400 font-medium"
               >
                 Ver todas ({myScales.length})
@@ -291,11 +291,11 @@ const MobileDashboard: React.FC = () => {
           {isMembro && (
             <>
               <Link
-                to="/tesouraria/scales"
+                to="/tesouraria/my-scales"
                 className="bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-2xl shadow-lg p-5 text-center hover:shadow-xl transition-all transform hover:scale-105"
               >
                 <ClipboardDocumentListIcon className="h-10 w-10 mx-auto mb-2" />
-                <span className="text-sm font-bold">Escalas</span>
+                <span className="text-sm font-bold">Minhas Escalas</span>
               </Link>
               <Link
                 to="/tesouraria/events"

@@ -26,11 +26,13 @@ export async function registerNativePush(): Promise<void> {
         const user = auth.currentUser;
         if (!user) return;
 
+        const platform = Capacitor.getPlatform() === 'ios' ? 'ios' : 'android';
+
         await setDoc(
           doc(db, 'members', user.uid),
           {
             fcm_token: token.value,
-            fcm_platform: 'android',
+            fcm_platform: platform,
             fcm_token_updated_at: new Date(),
           },
           { merge: true }

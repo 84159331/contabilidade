@@ -293,6 +293,7 @@ export const escalasAPI = {
           ministerio_id: data.ministerio_id || '',
           ministerio_nome: data.ministerio_nome || '',
           data: convertTimestamp(data.data),
+          hora: data.hora || '',
           membros: (data.membros || []).map((m: any) => ({
             ...m,
             confirmado_em: m.confirmado_em ? convertTimestamp(m.confirmado_em) : undefined,
@@ -347,6 +348,7 @@ export const escalasAPI = {
         ministerio_id: data.ministerio_id || '',
         ministerio_nome: data.ministerio_nome || '',
         data: convertTimestamp(data.data),
+        hora: data.hora || '',
         membros: (data.membros || []).map((m: any) => ({
           ...m,
           confirmado_em: m.confirmado_em ? convertTimestamp(m.confirmado_em) : undefined,
@@ -402,6 +404,7 @@ export const escalasAPI = {
         ministerio_id: data.ministerio_id,
         ministerio_nome: ministerioNome,
         data: dataTimestamp,
+        hora: String((data as any).hora || ''),
         membros: membrosComNomes,
         status: 'agendada' as const,
         observacoes: data.observacoes || '',

@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { Event } from '../types/Event';
 import SafeImage from './SafeImage';
+import { parseDateOnly } from '../utils/dateOnly';
 
 interface EventListProps {
   events: Event[];
@@ -22,7 +23,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
   const memoizedEvents = useMemo(() => events, [events]);
 
   const formatDate = useCallback((dateString: string) => {
-    const date = new Date(dateString);
+    const date = parseDateOnly(dateString);
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
@@ -35,7 +36,7 @@ const EventList: React.FC<EventListProps> = ({ events, onEdit, onDelete, onShare
   }, []);
 
   const isUpcoming = useCallback((dateString: string) => {
-    const eventDate = new Date(dateString);
+    const eventDate = parseDateOnly(dateString);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return eventDate >= today;

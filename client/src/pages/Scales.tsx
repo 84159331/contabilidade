@@ -8,6 +8,7 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ClockIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { escalasAPI, ministeriosAPI, rotacoesAPI } from '../services/scalesAPI';
 import { membersAPI } from '../services/api';
@@ -18,6 +19,25 @@ import Button from '../components/Button';
 import ScaleWhatsApp from '../components/ScaleWhatsApp';
 import ScaleSubstitution from '../components/ScaleSubstitution';
 import { toast } from 'react-toastify';
+
+const normalize = (value: string) =>
+  (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+
+const MIDIA_RES_GATE_NOME = 'midia resgate';
+
+const MIDIA_ATRIBUICOES = [
+  'Projeção',
+  'Transmissão',
+  'Fotografia',
+  'Vídeos/Instagram',
+  'Iluminação',
+  'Banners',
+  'Vídeos das células',
+];
 
 const Scales: React.FC = () => {
   const [escalas, setEscalas] = useState<Escala[]>([]);
@@ -31,9 +51,13 @@ const Scales: React.FC = () => {
   const [formData, setFormData] = useState<EscalaFormData>({
     ministerio_id: '',
     data: '',
+    hora: '',
     membros: [],
     observacoes: '',
   });
+
+  const selectedMinisterioNome = (ministerios.find(m => m.id === formData.ministerio_id)?.nome || '');
+  const isMidiaResgate = normalize(selectedMinisterioNome) === MIDIA_RES_GATE_NOME;
 
   useEffect(() => {
     loadData();
@@ -67,6 +91,14 @@ const Scales: React.FC = () => {
         return;
       }
 
+      if (normalize(ministerio.nome) === MIDIA_RES_GATE_NOME) {
+        const invalidIndex = (formData.membros || []).findIndex((m: any) => !String(m?.atribuicao || '').trim());
+        if (invalidIndex !== -1) {
+          toast.error(`Selecione a atribuição do membro ${invalidIndex + 1} (Mídia Resgate).`);
+          return;
+        }
+      }
+
       if (editingEscala) {
         await escalasAPI.updateEscala(editingEscala.id, formData);
         toast.success('Escala atualizada com sucesso!');
@@ -96,9 +128,11 @@ const Scales: React.FC = () => {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
       })(),
+      hora: String((escala as any).hora || ''),
       membros: escala.membros.map(m => ({
         membro_id: m.membro_id,
         funcao: m.funcao,
+        atribuicao: (m as any).atribuicao || '',
         status: m.status,
         observacoes: m.observacoes,
       })),
@@ -174,6 +208,7 @@ const Scales: React.FC = () => {
     setFormData({
       ministerio_id: '',
       data: '',
+      hora: '',
       membros: [],
       observacoes: '',
     });
@@ -183,6 +218,7 @@ const Scales: React.FC = () => {
     const newMember = {
       membro_id: '',
       funcao: '',
+      atribuicao: '',
       status: 'pendente' as const,
     };
     setFormData({
@@ -550,6 +586,19 @@ const Scales: React.FC = () => {
           </div>
 
           <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Horário
+            </label>
+            <input
+              type="time"
+              value={String((formData as any).hora || '')}
+              onChange={(e) => setFormData({ ...formData, hora: e.target.value })}
+              className="input w-full"
+              step={60}
+            />
+          </div>
+
+          <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Membros Escalados *
@@ -560,7 +609,7 @@ const Scales: React.FC = () => {
             </div>
             <div className="space-y-3">
               {formData.membros.map((membro, index) => (
-                <div key={index} className="flex gap-2 items-start">
+                <div key={index} className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-start">
                   {/* Seleção de Função (primeiro) */}
                   <select
                     required
@@ -568,7 +617,7 @@ const Scales: React.FC = () => {
                     onChange={(e) =>
                       updateMemberInEscala(index, 'funcao', e.target.value)
                     }
-                    className="input flex-1 min-w-[180px]"
+                    className="input w-full sm:flex-1 sm:min-w-[180px]"
                     title="Selecione a função da igreja"
                   >
                     <option value="">Selecione a função</option>
@@ -586,7 +635,7 @@ const Scales: React.FC = () => {
                     onChange={(e) =>
                       updateMemberInEscala(index, 'membro_id', e.target.value)
                     }
-                    className="input flex-1"
+                    className="input w-full sm:flex-1"
                     title="Selecione o membro"
                   >
                     <option value="">Selecione o membro</option>
@@ -596,6 +645,24 @@ const Scales: React.FC = () => {
                       </option>
                     ))}
                   </select>
+
+                  {/* Atribuição (somente Mídia Resgate) */}
+                  {!isMidiaResgate ? null : (
+                    <select
+                      required
+                      value={(membro as any).atribuicao || ''}
+                      onChange={(e) => updateMemberInEscala(index, 'atribuicao', e.target.value)}
+                      className="input w-full sm:flex-1 sm:min-w-[180px]"
+                      title="Selecione a atribuição (Mídia Resgate)"
+                    >
+                      <option value="">Atribuição</option>
+                      {MIDIA_ATRIBUICOES.map((a) => (
+                        <option key={a} value={a}>
+                          {a}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                   
                   {/* Botão Remover */}
                   <button
@@ -605,7 +672,7 @@ const Scales: React.FC = () => {
                     title="Remover membro"
                     aria-label="Remover membro"
                   >
-                    Ã—
+                    <XMarkIcon className="h-5 w-5" />
                   </button>
                 </div>
               ))}

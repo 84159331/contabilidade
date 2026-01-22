@@ -220,7 +220,7 @@ const BirthdayNotifications: React.FC = () => {
               {lastNotification && (
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span>Ãšltima notificação:</span>
+                    <span>Última notificação:</span>
                     <div className="flex items-center space-x-2">
                       {lastNotification.emailSent && (
                         <span className="flex items-center space-x-1 text-green-600 dark:text-green-400">

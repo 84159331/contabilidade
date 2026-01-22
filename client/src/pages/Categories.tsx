@@ -38,7 +38,7 @@ const Categories: React.FC = () => {
     if (lastRouteRef.current !== location.pathname) {
       hasLoadedRef.current = false;
       lastRouteRef.current = location.pathname;
-      console.log('ðŸ”„ Rota mudou em Categories, resetando estado');
+      console.log('Rota mudou em Categories, resetando estado');
     }
   }, [location.pathname]);
 
@@ -67,8 +67,8 @@ const Categories: React.FC = () => {
       // Verificar se deve usar dados mock
       const useMockData = !user;
       
-      console.log('ðŸ” Usuário logado:', user ? 'Sim' : 'Não');
-      console.log('ðŸ” Usando dados mock:', useMockData ? 'Sim' : 'Não');
+      console.log('Usuário logado:', user ? 'Sim' : 'Não');
+      console.log('Usando dados mock:', useMockData ? 'Sim' : 'Não');
       
       if (useMockData) {
         // Simular delay de API
@@ -79,11 +79,11 @@ const Categories: React.FC = () => {
         console.log('Dados mock de categorias carregados:', mockDashboardData.categories);
       } else {
         // Usar API real do Firestore
-        console.log('ðŸ”¥ Carregando categorias do Firestore...');
+        console.log('Carregando categorias do Firestore...');
         const response = await categoriesAPI.getCategories();
-        console.log('ðŸ“Š Resposta da API:', response);
+        console.log('Resposta da API:', response);
         setCategories(response.data.categories);
-        console.log('âœ… Categorias carregadas do Firestore:', response.data.categories.length);
+        console.log('Categorias carregadas do Firestore:', response.data.categories.length);
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error);
@@ -98,25 +98,25 @@ const Categories: React.FC = () => {
 
   const handleCreateCategory = async (categoryData: any) => {
     try {
-      console.log('ðŸ”„ Iniciando criação de categoria...');
-      console.log('ðŸ“ Dados da categoria:', categoryData);
-      console.log('ðŸ‘¤ Usuário logado:', user ? 'Sim' : 'Não');
+      console.log('Iniciando criação de categoria...');
+      console.log('Dados da categoria:', categoryData);
+      console.log('Usuário logado:', user ? 'Sim' : 'Não');
       
       const response = await categoriesAPI.createCategory(categoryData);
-      console.log('âœ… Categoria criada com sucesso:', response);
+      console.log('Categoria criada com sucesso:', response);
       
       toast.success('Categoria criada com sucesso!');
       setShowForm(false);
       
-      console.log('ðŸ”„ Recarregando categorias...');
+      console.log('Recarregando categorias...');
       await loadCategories();
-      console.log('âœ… Categorias recarregadas');
+      console.log('Categorias recarregadas');
       
       // Verificar se a categoria foi adicionada
-      console.log('ðŸ“Š Categorias atuais:', categories.length);
+      console.log('Categorias atuais:', categories.length);
     } catch (error: any) {
-      console.error('âŒ Erro ao criar categoria:', error);
-      console.error('âŒ Detalhes do erro:', error.message);
+      console.error('Erro ao criar categoria:', error);
+      console.error('Detalhes do erro:', error.message);
       toast.error(error.response?.data?.error || 'Erro ao criar categoria');
     }
   };
