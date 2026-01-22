@@ -115,7 +115,7 @@ exports.onEventCreatedSendNotification = functions.firestore
             },
             webpush: {
                 fcmOptions: {
-                    link: '/events',
+                    link: '/tesouraria/events',
                 },
             },
         };

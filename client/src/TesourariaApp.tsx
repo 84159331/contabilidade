@@ -37,6 +37,9 @@ const PinAccess = lazyWithRetry(() => import('./pages/PinAccess'));
 const Welcome = lazyWithRetry(() => import('./pages/Welcome'));
 const FinanceAccessAdmin = lazyWithRetry(() => import('./pages/FinanceAccessAdmin'));
 const AdminsAdmin = lazyWithRetry(() => import('./pages/AdminsAdmin'));
+const DevocionalHoje = lazyWithRetry(() => import('./pages/DevocionalHoje'));
+const DevocionalHistorico = lazyWithRetry(() => import('./pages/DevocionalHistorico'));
+const DevocionalAdmin = lazyWithRetry(() => import('./pages/DevocionalAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
@@ -131,6 +134,9 @@ function TesourariaApp() {
               <Route path="people" element={<People />} />
               <Route path="members" element={<Members />} />
               <Route path="members/new" element={<CadastroMembro />} />
+              <Route path="devocional" element={<DevocionalHoje />} />
+              <Route path="devocional/historico" element={<DevocionalHistorico />} />
+              <Route path="admin/devocional" element={<DevocionalAdmin />} />
               <Route path="admin/finance-access" element={<FinanceAccessAdmin />} />
               <Route path="admin/admins" element={<AdminsAdmin />} />
               <Route

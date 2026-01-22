@@ -231,18 +231,18 @@ const quickActions = [
     color: "bg-blue-600 hover:bg-blue-700"
   },
   {
-    title: "Fazer Contribuição",
-    description: "Apoie nossa missão e ministérios",
-    icon: GiftIcon,
-    link: "/contribua",
-    color: "bg-green-600 hover:bg-green-700"
+    title: "Devocional",
+    description: "Leitura diária e histórico",
+    icon: BookOpenIcon,
+    link: "/tesouraria/devocional",
+    color: "bg-emerald-600 hover:bg-emerald-700"
   },
   {
     title: "Conectar-se",
     description: "Encontre um grupo pequeno",
     icon: UsersIcon,
     link: "/conecte",
-    color: "bg-purple-600 hover:bg-purple-700"
+    color: "bg-sky-600 hover:bg-sky-700"
   }
 ];
 

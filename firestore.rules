@@ -2,56 +2,36 @@ rules_version='2'
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/user_profiles/$(request.auth.uid)).data.role == 'admin';
+    }
+
     // Biblioteca Digital: leitura pública para exibir no site/app
     match /biblioteca_livros/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
 
-    // Apenas usuários autenticados podem acessar o banco
+    // Devocional Diário
+    match /devotionals/{devotionalId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+    
+    // Perfis de usuário (roles)
+    match /user_profiles/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Apenas usuários autenticados podem acessar o restante do banco
     match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
-    
-    // Regras específicas para usuários
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null && 
-        request.auth.token.admin == true;
-    }
-    
-    // Regras para transações financeiras
-    match /transactions/{transactionId} {
-      allow read: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-      allow write: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-      allow create: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-    }
-    
-    // Regras para membros
-    match /members/{memberId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-      allow create: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-    }
-    
-    // Regras para categorias
-    match /categories/{categoryId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-    }
-    
-    // Regras para relatórios
-    match /reports/{reportId} {
-      allow read: if request.auth != null && 
-        (request.auth.token.admin == true || request.auth.token.tesoureiro == true);
-      allow write: if request.auth != null && 
-        request.auth.token.admin == true;
+      allow read, write: if isSignedIn();
     }
   }
 }

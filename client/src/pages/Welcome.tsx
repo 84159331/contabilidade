@@ -6,6 +6,7 @@ import {
   UsersIcon,
   ClipboardDocumentListIcon,
   CurrencyDollarIcon,
+  BookOpenIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../firebase/AuthContext';
 
@@ -173,6 +174,24 @@ export default function Welcome() {
                 <ChevronRightIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200" />
               </div>
               <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">Cadastros e gestão</div>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          to="/tesouraria/devocional"
+          className="group rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-900/40 p-4 hover:bg-white dark:hover:bg-gray-900 transition-colors shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        >
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-xl bg-sky-50 dark:bg-sky-900/30 flex items-center justify-center border border-sky-100 dark:border-sky-800">
+              <BookOpenIcon className="h-5 w-5 text-sky-700 dark:text-sky-300" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between gap-2">
+                <div className="font-semibold text-gray-900 dark:text-white">Devocional</div>
+                <ChevronRightIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200" />
+              </div>
+              <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">Leitura diária e histórico</div>
             </div>
           </div>
         </Link>
