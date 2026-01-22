@@ -341,7 +341,6 @@ const CadastroPublicoPage: React.FC = () => {
                       placeholder="Somente números"
                       disabled={isSubmitting}
                       inputMode="numeric"
-                      autoComplete="off"
                     />
                     {errors.cpf && (
                       <p className="mt-1 text-sm text-red-500 flex items-center">

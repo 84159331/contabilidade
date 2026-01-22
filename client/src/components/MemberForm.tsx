@@ -295,11 +295,10 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose, isSavi
               onChange={handleChange}
               onFocus={handleInputFocus}
               placeholder="Somente números"
-              autoComplete="off"
               inputMode="numeric"
             />
             {errors.cpf && (
-              <p className="mt-1 text-sm text-red-600">{errors.cpf}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.cpf}</p>
             )}
           </div>
 

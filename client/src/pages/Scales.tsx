@@ -552,8 +552,9 @@ const Scales: React.FC = () => {
         }}
         title={editingEscala ? 'Editar Escala' : 'Nova Escala'}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          <div className="space-y-4 pb-28">
+            <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Ministério *
             </label>
@@ -572,9 +573,9 @@ const Scales: React.FC = () => {
                   </option>
                 ))}
             </select>
-          </div>
+            </div>
 
-          <div>
+            <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Data *
             </label>
@@ -585,9 +586,9 @@ const Scales: React.FC = () => {
               onChange={(e) => setFormData((prev) => ({ ...prev, data: e.target.value }))}
               className="input w-full"
             />
-          </div>
+            </div>
 
-          <div>
+            <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Horário
             </label>
@@ -598,9 +599,9 @@ const Scales: React.FC = () => {
               className="input w-full"
               step={60}
             />
-          </div>
+            </div>
 
-          <div>
+            <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Membros Escalados *
@@ -679,9 +680,9 @@ const Scales: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
+            </div>
 
-          <div>
+            <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Observações
             </label>
@@ -693,22 +694,28 @@ const Scales: React.FC = () => {
               placeholder="Observações sobre a escala..."
             />
           </div>
+          </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button type="submit" className="flex-1">
-              {editingEscala ? 'Atualizar' : 'Criar'}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                setShowForm(false);
-                setEditingEscala(null);
-                resetForm();
-              }}
-            >
-              Cancelar
-            </Button>
+          <div
+            className="sticky bottom-0 -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 pt-3 border-t border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10"
+            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.75rem)' }}
+          >
+            <div className="flex gap-2">
+              <Button type="submit" className="flex-1">
+                {editingEscala ? 'Atualizar' : 'Criar'}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingEscala(null);
+                  resetForm();
+                }}
+              >
+                Cancelar
+              </Button>
+            </div>
           </div>
         </form>
       </Modal>
