@@ -29,6 +29,12 @@ service cloud.firestore {
       allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
     }
 
+    // Leads públicos para célula (Conecte-se)
+    match /cell_group_leads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
     // Apenas usuários autenticados podem acessar o restante do banco
     match /{document=**} {
       allow read, write: if isSignedIn();

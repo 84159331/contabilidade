@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import SafeImage from '../../components/SafeImage';
 import PerfectFillImage from '../../components/PerfectFillImage';
+import Modal from '../../components/Modal';
+import Button from '../../components/Button';
 import {
   UserGroupIcon,
   HeartIcon,
@@ -20,6 +22,8 @@ import {
   BookOpenIcon
 } from '@heroicons/react/24/outline';
 import storage from '../../utils/storage';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 
 interface PublicCellGroup {
   id: string;
@@ -43,6 +47,14 @@ const ConnectPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [cellGroups, setCellGroups] = useState<PublicCellGroup[]>([]);
+
+  const [showJoinForm, setShowJoinForm] = useState(false);
+  const [joinSubmitting, setJoinSubmitting] = useState(false);
+  const [joinGroupId, setJoinGroupId] = useState<string | null>(null);
+  const [joinName, setJoinName] = useState('');
+  const [joinWhatsApp, setJoinWhatsApp] = useState('');
+  const [joinNeighborhood, setJoinNeighborhood] = useState('');
+  const [joinMessage, setJoinMessage] = useState('');
 
   // Carregar grupos celulares do armazenamento local (sincronizado com a tesouraria)
   useEffect(() => {
@@ -190,6 +202,85 @@ const ConnectPage: React.FC = () => {
       }
     };
     return colors[color as keyof typeof colors] || colors.blue;
+  };
+
+  const openJoinForm = (groupId?: string) => {
+    setJoinGroupId(groupId || null);
+    setJoinName('');
+    setJoinWhatsApp('');
+    setJoinNeighborhood('');
+    setJoinMessage('');
+    setShowJoinForm(true);
+  };
+
+  const closeJoinForm = () => {
+    if (joinSubmitting) return;
+    setShowJoinForm(false);
+  };
+
+  const normalizePhone = (v: string) => {
+    return v.replace(/\D/g, '');
+  };
+
+  const openWhatsApp = (group: PublicCellGroup) => {
+    const msg =
+      `Olá! Gostaria de participar de uma célula.\n\n` +
+      `Célula: ${group.title}\n` +
+      `Reunião: ${group.meetings}\n` +
+      `Local: ${group.location || 'a confirmar'}\n\n` +
+      `Pode me orientar, por favor?`;
+    const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const openMaps = (group: PublicCellGroup) => {
+    const q = (group.location || '').trim();
+    if (!q) {
+      toast.info('Local ainda não informado para esta célula.');
+      return;
+    }
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const submitJoinLead = async () => {
+    const name = joinName.trim();
+    const phone = joinWhatsApp.trim();
+
+    if (!name) {
+      toast.error('Informe seu nome');
+      return;
+    }
+
+    if (!phone) {
+      toast.error('Informe seu WhatsApp');
+      return;
+    }
+
+    setJoinSubmitting(true);
+    try {
+      const group = joinGroupId ? cellGroups.find((g) => g.id === joinGroupId) : null;
+
+      await addDoc(collection(db, 'cell_group_leads'), {
+        name,
+        whatsapp: phone,
+        neighborhood: joinNeighborhood.trim() || null,
+        message: joinMessage.trim() || null,
+        groupId: group?.id || null,
+        groupTitle: group?.title || null,
+        createdAt: serverTimestamp(),
+        status: 'new',
+        source: 'public_connect',
+      });
+
+      toast.success('Pedido enviado! Em breve entraremos em contato.');
+      setShowJoinForm(false);
+    } catch (e) {
+      console.error('Erro ao enviar lead de célula:', e);
+      toast.error('Erro ao enviar. Tente novamente.');
+    } finally {
+      setJoinSubmitting(false);
+    }
   };
 
   const handleJoinGroup = (groupId: string) => {
@@ -342,6 +433,30 @@ const ConnectPage: React.FC = () => {
                       )}
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openWhatsApp(group)}
+                      className="w-full px-4 py-2 min-h-[44px] rounded-lg font-semibold text-white bg-green-600 hover:bg-green-700 transition-colors flex items-center justify-center"
+                    >
+                      WhatsApp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openMaps(group)}
+                      className="w-full px-4 py-2 min-h-[44px] rounded-lg font-semibold border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                    >
+                      Como chegar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openJoinForm(group.id)}
+                      className="w-full sm:col-span-2 px-4 py-2 min-h-[44px] rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center"
+                    >
+                      Quero participar
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -359,18 +474,97 @@ const ConnectPage: React.FC = () => {
                        Entre em contato conosco e vamos conversar sobre suas necessidades.
                      </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => openJoinForm()}
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
+              >
                 <PhoneIcon className="h-5 w-5 mr-2" />
-                Falar Conosco
+                Quero uma célula
               </button>
-              <button className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => openJoinForm()}
+                className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+              >
                 <EnvelopeIcon className="h-5 w-5 mr-2" />
-                Enviar Mensagem
+                Enviar pedido
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={showJoinForm}
+        onClose={closeJoinForm}
+        title={joinGroupId ? 'Quero participar' : 'Quero uma célula'}
+      >
+        <div className="space-y-4">
+          {joinGroupId ? (
+            <div className="text-sm text-gray-600 dark:text-gray-300">
+              {(() => {
+                const g = cellGroups.find((x) => x.id === joinGroupId);
+                return g ? `Célula: ${g.title}` : '';
+              })()}
+            </div>
+          ) : null}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome</label>
+            <input
+              value={joinName}
+              onChange={(e) => setJoinName(e.target.value)}
+              className="input w-full"
+              placeholder="Seu nome"
+              autoComplete="name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">WhatsApp</label>
+            <input
+              value={joinWhatsApp}
+              onChange={(e) => setJoinWhatsApp(e.target.value)}
+              className="input w-full"
+              placeholder="(61) 99999-9999"
+              inputMode="tel"
+              autoComplete="tel"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Região/Bairro (opcional)</label>
+            <input
+              value={joinNeighborhood}
+              onChange={(e) => setJoinNeighborhood(e.target.value)}
+              className="input w-full"
+              placeholder="Ex: Ceilândia, Taguatinga..."
+              autoComplete="address-level2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mensagem (opcional)</label>
+            <textarea
+              value={joinMessage}
+              onChange={(e) => setJoinMessage(e.target.value)}
+              className="input w-full"
+              rows={4}
+              placeholder="Conte rapidamente sua preferência de dia/horário e se vai com família, jovens, etc."
+            />
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button type="button" variant="secondary" className="flex-1" onClick={closeJoinForm} disabled={joinSubmitting}>
+              Cancelar
+            </Button>
+            <Button type="button" className="flex-1" onClick={submitJoinLead} loading={joinSubmitting}>
+              Enviar
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

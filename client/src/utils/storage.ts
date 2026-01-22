@@ -1,3 +1,5 @@
+import { fixUtf8MojibakeDeep } from './textEncoding';
+
 const hasWindow = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
 const storageAvailable = () => {
@@ -52,7 +54,16 @@ const storage = {
     if (!raw) return defaultValue;
 
     try {
-      return JSON.parse(raw) as T;
+      const parsed = JSON.parse(raw) as T;
+      const fixed = fixUtf8MojibakeDeep(parsed);
+      try {
+        if (JSON.stringify(fixed) !== JSON.stringify(parsed)) {
+          safeStorage.setRaw(key, JSON.stringify(fixed));
+        }
+      } catch {
+        // ignore
+      }
+      return fixed;
     } catch {
       safeStorage.remove(key);
       return defaultValue;
