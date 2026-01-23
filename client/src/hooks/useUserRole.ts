@@ -12,6 +12,9 @@ interface UseUserRoleReturn {
   isAdmin: boolean;
   isLider: boolean;
   isMembro: boolean;
+  isSecretaria: boolean;
+  isTesouraria: boolean;
+  isMidia: boolean;
   updateRole: (newRole: UserRole, ministerioId?: string) => Promise<void>;
 }
 
@@ -126,6 +129,9 @@ export const useUserRole = (): UseUserRoleReturn => {
     isAdmin: role === 'admin',
     isLider: role === 'lider',
     isMembro: role === 'membro',
+    isSecretaria: role === 'secretaria',
+    isTesouraria: role === 'tesouraria',
+    isMidia: role === 'midia',
     updateRole,
   };
 };

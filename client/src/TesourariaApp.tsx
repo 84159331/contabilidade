@@ -13,6 +13,7 @@ import { lazyWithRetry } from './utils/lazyWithRetry';
 import { PinProvider } from './contexts/PinContext';
 import PinProtectedRoute from './components/PinProtectedRoute';
 import { EventsAlertsProvider } from './contexts/EventsAlertsContext';
+import { useUserRole } from './hooks/useUserRole';
 
 // Lazy loading com retry para componentes pesados (previne páginas brancas)
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
@@ -43,6 +44,7 @@ const DevocionalAdmin = lazyWithRetry(() => import('./pages/DevocionalAdmin'));
 
 function TesourariaApp() {
   const { user, loading } = useAuth();
+  const { role, loading: roleLoading, isAdmin, isLider, isSecretaria, isTesouraria, isMidia } = useUserRole();
   
   // Invalidar cache quando a rota muda
   useCacheInvalidation();
@@ -82,7 +84,7 @@ function TesourariaApp() {
     }
   }, [user]);
 
-  if (loading) {
+  if (loading || roleLoading) {
     return <LoadingSpinner />;
   }
 
@@ -105,6 +107,19 @@ function TesourariaApp() {
     }
   }
   
+  const RoleProtectedRoute: React.FC<{ allow: Array<string>; children: React.ReactNode }> = ({ allow, children }) => {
+    if (isAdmin) return <>{children}</>;
+    if (allow.includes(role)) return <>{children}</>;
+    return <Navigate to="/tesouraria/welcome" replace />;
+  };
+
+  const canSeeFinance = isAdmin || isLider || isTesouraria;
+  const canSeePeople = isAdmin || isLider || isSecretaria;
+  const canSeeMembers = isAdmin || isLider || isSecretaria;
+  const canSeeEvents = isAdmin || isLider || isMidia;
+  const canSeeScales = isAdmin || isLider || isSecretaria || isMidia;
+  const canSeePastorsVacations = isAdmin || isSecretaria;
+
   return (
     <EventsAlertsProvider>
       <PinProvider>
@@ -126,14 +141,37 @@ function TesourariaApp() {
               <Route
                 path="dashboard"
                 element={
-                  <PinProtectedRoute>
-                    <Dashboard />
-                  </PinProtectedRoute>
+                  <RoleProtectedRoute allow={canSeeFinance ? ['admin', 'lider', 'tesouraria'] : ['admin']}>
+                    <PinProtectedRoute>
+                      <Dashboard />
+                    </PinProtectedRoute>
+                  </RoleProtectedRoute>
                 }
               />
-              <Route path="people" element={<People />} />
-              <Route path="members" element={<Members />} />
-              <Route path="members/new" element={<CadastroMembro />} />
+              <Route
+                path="people"
+                element={
+                  <RoleProtectedRoute allow={canSeePeople ? ['admin', 'lider', 'secretaria'] : ['admin']}>
+                    <People />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="members"
+                element={
+                  <RoleProtectedRoute allow={canSeeMembers ? ['admin', 'lider', 'secretaria'] : ['admin']}>
+                    <Members />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="members/new"
+                element={
+                  <RoleProtectedRoute allow={canSeeMembers ? ['admin', 'lider', 'secretaria'] : ['admin']}>
+                    <CadastroMembro />
+                  </RoleProtectedRoute>
+                }
+              />
               <Route path="devocional" element={<DevocionalHoje />} />
               <Route path="devocional/historico" element={<DevocionalHistorico />} />
               <Route path="admin/devocional" element={<DevocionalAdmin />} />
@@ -142,31 +180,98 @@ function TesourariaApp() {
               <Route
                 path="transactions"
                 element={
-                  <PinProtectedRoute>
-                    <Transactions />
-                  </PinProtectedRoute>
+                  <RoleProtectedRoute allow={canSeeFinance ? ['admin', 'lider', 'tesouraria'] : ['admin']}>
+                    <PinProtectedRoute>
+                      <Transactions />
+                    </PinProtectedRoute>
+                  </RoleProtectedRoute>
                 }
               />
               <Route
                 path="reports"
                 element={
-                  <PinProtectedRoute>
-                    <Reports />
-                  </PinProtectedRoute>
+                  <RoleProtectedRoute allow={canSeeFinance ? ['admin', 'lider', 'tesouraria'] : ['admin']}>
+                    <PinProtectedRoute>
+                      <Reports />
+                    </PinProtectedRoute>
+                  </RoleProtectedRoute>
                 }
               />
-              <Route path="categories" element={<Categories />} />
-              <Route path="cell-groups" element={<CellGroupsAdmin />} />
+              <Route
+                path="categories"
+                element={
+                  <RoleProtectedRoute allow={['admin']}>
+                    <Categories />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="cell-groups"
+                element={
+                  <RoleProtectedRoute allow={['admin']}>
+                    <CellGroupsAdmin />
+                  </RoleProtectedRoute>
+                }
+              />
               <Route path="whatsapp" element={<WhatsAppPage />} />
-              <Route path="books" element={<BooksManagement />} />
-              <Route path="events" element={<Events />} />
-              <Route path="esbocos" element={<EsbocosAdminPage />} />
-              <Route path="ferias-pastores" element={<FeriasPastores />} />
-              <Route path="ministries" element={<Ministries />} />
-              <Route path="scales" element={<Scales />} />
+              <Route
+                path="books"
+                element={
+                  <RoleProtectedRoute allow={['admin']}>
+                    <BooksManagement />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="events"
+                element={
+                  <RoleProtectedRoute allow={canSeeEvents ? ['admin', 'lider', 'midia'] : ['admin']}>
+                    <Events />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="esbocos"
+                element={
+                  <RoleProtectedRoute allow={['admin']}>
+                    <EsbocosAdminPage />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="ferias-pastores"
+                element={
+                  <RoleProtectedRoute allow={canSeePastorsVacations ? ['admin', 'secretaria'] : ['admin']}>
+                    <FeriasPastores />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="ministries"
+                element={
+                  <RoleProtectedRoute allow={canSeeScales ? ['admin', 'lider', 'secretaria', 'midia'] : ['admin']}>
+                    <Ministries />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="scales"
+                element={
+                  <RoleProtectedRoute allow={canSeeScales ? ['admin', 'lider', 'secretaria', 'midia'] : ['admin']}>
+                    <Scales />
+                  </RoleProtectedRoute>
+                }
+              />
               <Route path="my-scales" element={<MyScales />} />
               <Route path="notifications" element={<NotificationsPage />} />
-              <Route path="scale-reports" element={<ScaleReports />} />
+              <Route
+                path="scale-reports"
+                element={
+                  <RoleProtectedRoute allow={canSeeScales ? ['admin', 'lider', 'secretaria', 'midia'] : ['admin']}>
+                    <ScaleReports />
+                  </RoleProtectedRoute>
+                }
+              />
               <Route path="*" element={<Navigate to="/tesouraria/welcome" replace />} />
               </Routes>
             </SmartLoading>

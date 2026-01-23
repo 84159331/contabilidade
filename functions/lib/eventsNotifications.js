@@ -33,10 +33,11 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanupPastEvents = exports.onEventCreatedSendNotification = exports.onMemberFcmTokenWrite = void 0;
+exports.resubscribeFcmTopicsDaily = exports.cleanupPastEvents = exports.onEventCreatedSendNotification = exports.onMemberFcmTokenWrite = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const TOPIC_EVENTS = 'events';
+const TOPIC_DEVOTIONALS = 'devotionals';
 function toDateString(value) {
     if (!value)
         return null;
@@ -79,9 +80,11 @@ exports.onMemberFcmTokenWrite = functions.firestore
     try {
         if (beforeToken && typeof beforeToken === 'string') {
             await admin.messaging().unsubscribeFromTopic([beforeToken], TOPIC_EVENTS);
+            await admin.messaging().unsubscribeFromTopic([beforeToken], TOPIC_DEVOTIONALS);
         }
         if (afterToken && typeof afterToken === 'string') {
             await admin.messaging().subscribeToTopic([afterToken], TOPIC_EVENTS);
+            await admin.messaging().subscribeToTopic([afterToken], TOPIC_DEVOTIONALS);
         }
         return null;
     }
@@ -172,6 +175,43 @@ exports.cleanupPastEvents = functions.pubsub
     }
     catch (error) {
         console.error('❌ cleanupPastEvents: erro ao remover eventos vencidos:', error);
+        return null;
+    }
+});
+exports.resubscribeFcmTopicsDaily = functions.pubsub
+    .schedule('55 4 * * *')
+    .timeZone('America/Sao_Paulo')
+    .onRun(async () => {
+    const db = admin.firestore();
+    try {
+        const snapshot = await db.collection('members').where('fcm_token', '!=', null).limit(2000).get();
+        const tokens = snapshot.docs
+            .map((d) => d.data()?.fcm_token)
+            .filter((t) => typeof t === 'string' && t.trim().length > 0)
+            .map((t) => String(t).trim());
+        if (!tokens.length) {
+            console.log('resubscribeFcmTopicsDaily: nenhum token encontrado.');
+            return null;
+        }
+        // FCM topic subscribe accepts up to 1000 tokens per call
+        const chunks = [];
+        for (let i = 0; i < tokens.length; i += 1000)
+            chunks.push(tokens.slice(i, i + 1000));
+        let ok = 0;
+        let fail = 0;
+        for (const chunk of chunks) {
+            const r1 = await admin.messaging().subscribeToTopic(chunk, TOPIC_EVENTS);
+            ok += r1.successCount;
+            fail += r1.failureCount;
+            const r2 = await admin.messaging().subscribeToTopic(chunk, TOPIC_DEVOTIONALS);
+            ok += r2.successCount;
+            fail += r2.failureCount;
+        }
+        console.log(`resubscribeFcmTopicsDaily: tokens=${tokens.length} ok=${ok} fail=${fail}`);
+        return null;
+    }
+    catch (error) {
+        console.error('resubscribeFcmTopicsDaily: erro ao re-sincronizar tópicos:', error);
         return null;
     }
 });

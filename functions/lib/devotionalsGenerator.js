@@ -33,11 +33,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateDailyDevotional = void 0;
+exports.onDevotionalCreatedSendNotification = exports.generateDailyDevotional = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const params_1 = require("firebase-functions/params");
 const GEMINI_API_KEY = (0, params_1.defineSecret)('GEMINI_API_KEY');
+const TOPIC_DEVOTIONALS = 'devotionals';
 function getSaoPauloDateId(now = new Date()) {
     const fmt = new Intl.DateTimeFormat('en-CA', {
         timeZone: 'America/Sao_Paulo',
@@ -128,7 +129,7 @@ exports.generateDailyDevotional = functions
     const ref = db.collection('devotionals').doc(dateId);
     const existing = await ref.get();
     if (existing.exists) {
-        console.log(`ℹ️ Devocional já existe para ${dateId}. Pulando...`);
+        console.log(`Devocional já existe para ${dateId}. Pulando...`);
         return null;
     }
     try {
@@ -144,17 +145,69 @@ exports.generateDailyDevotional = functions
             updatedAt: admin.firestore.FieldValue.serverTimestamp(),
             updatedBy: 'system:gemini',
         });
-        console.log(`✅ Devocional gerado e salvo: ${dateId}`);
+        await db.collection('devotionals_generation_logs').add({
+            date: dateId,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            status: 'success',
+            source: 'schedule',
+        });
+        console.log(`Devocional gerado e salvo: ${dateId}`);
         return null;
     }
     catch (error) {
-        console.error(`❌ Erro ao gerar devocional (${dateId}):`, error);
+        console.error(`Erro ao gerar devocional (${dateId}):`, error);
         await db.collection('devotionals_generation_logs').add({
             date: dateId,
             timestamp: admin.firestore.FieldValue.serverTimestamp(),
             status: 'error',
             error: String(error?.message || error),
+            source: 'schedule',
         });
+        return null;
+    }
+});
+exports.onDevotionalCreatedSendNotification = functions.firestore
+    .document('devotionals/{dateId}')
+    .onCreate(async (snap, context) => {
+    const data = snap.data() || {};
+    const dateId = String(context.params.dateId || '').trim();
+    const title = typeof data.title === 'string' && data.title.trim() ? data.title.trim() : 'Devocional Diário';
+    const verseRef = typeof data.verseRef === 'string' ? data.verseRef.trim() : '';
+    const body = verseRef ? `${verseRef}` : 'Abra o app e leia o devocional de hoje.';
+    try {
+        const message = {
+            topic: TOPIC_DEVOTIONALS,
+            notification: {
+                title: `Devocional de hoje: ${title}`,
+                body,
+            },
+            data: {
+                type: 'devotional',
+                date: dateId,
+            },
+            webpush: {
+                fcmOptions: {
+                    link: '/devocional',
+                },
+            },
+        };
+        const res = await admin.messaging().send(message);
+        console.log('Push de devocional enviado:', res);
+        return null;
+    }
+    catch (error) {
+        console.error('Erro ao enviar push de devocional:', error);
+        try {
+            await admin.firestore().collection('devotionals_push_logs').add({
+                date: dateId,
+                timestamp: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'error',
+                error: String(error?.message || error),
+            });
+        }
+        catch {
+            // ignore
+        }
         return null;
     }
 });

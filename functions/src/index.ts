@@ -313,7 +313,7 @@ export { checkBirthdays, testBirthdayCheck } from './birthdayNotifications';
 export { addMembro } from './membros';
 
 // Exportar funções de eventos (notificação e limpeza automática)
-export { onMemberFcmTokenWrite, onEventCreatedSendNotification, cleanupPastEvents } from './eventsNotifications';
+export { onMemberFcmTokenWrite, onEventCreatedSendNotification, cleanupPastEvents, resubscribeFcmTopicsDaily } from './eventsNotifications';
 
 // Exportar função agendada de devocional (Gemini)
-export { generateDailyDevotional } from './devotionalsGenerator';
+export { generateDailyDevotional, onDevotionalCreatedSendNotification } from './devotionalsGenerator';

@@ -48,7 +48,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { role, isAdmin, isLider, isMembro } = useUserRole();
+  const { role, isAdmin, isLider, isMembro, isSecretaria, isTesouraria, isMidia } = useUserRole();
   const location = useLocation();
   const { unreadCount: unreadEvents } = useEventsAlerts();
   
@@ -57,26 +57,42 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const showScalesBottomNav = /^\/tesouraria\/(ministries|scales|scale-reports)(\/|$)/.test(location.pathname);
 
-  // Menu completo para todos os usuários
+  const canSeeFinance = isAdmin || isLider || isTesouraria;
+  const canSeePeople = isAdmin || isLider || isSecretaria;
+  const canSeeMembers = isAdmin || isLider || isSecretaria;
+  const canSeeEvents = isAdmin || isLider || isMidia;
+  const canSeeScales = isAdmin || isLider || isSecretaria || isMidia;
+  const canSeePastorsVacations = isAdmin || isSecretaria;
+
   const navigation: NavItem[] = [
-    { type: 'link', name: 'Dashboard', href: '/tesouraria/dashboard', icon: HomeIcon },
-    { type: 'heading', name: 'Gerenciar' },
-    { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
-    { type: 'link', name: 'Pessoas', href: '/tesouraria/people', icon: UsersIcon },
-    { type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon },
-    { type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon },
-    { type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon },
-    { type: 'link', name: 'Eventos', href: '/tesouraria/events', icon: CalendarIcon },
-    { type: 'link', name: 'Esboços', href: '/tesouraria/esbocos', icon: DocumentTextIcon },
-    { type: 'heading', name: 'Escalas' },
-    { type: 'link', name: 'Ministérios', href: '/tesouraria/ministries', icon: MusicalNoteIcon },
-    { type: 'link', name: 'Escalas', href: '/tesouraria/scales', icon: ClipboardDocumentListIcon },
-    { type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon },
-    { type: 'heading', name: 'Analisar' },
-    { type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon },
-    { type: 'heading', name: 'Administração' },
-    { type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon },
-    { type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon },
+    ...(canSeeFinance ? ([{ type: 'link', name: 'Finanças Resgate', href: '/tesouraria/dashboard', icon: HomeIcon }] as NavItem[]) : ([] as NavItem[])),
+
+    ...(canSeeFinance || canSeePeople || canSeeMembers || isAdmin ? ([{ type: 'heading', name: 'Gerenciar' }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeFinance
+      ? ([
+          { type: 'link', name: 'Transações', href: '/tesouraria/transactions', icon: CurrencyDollarIcon },
+        ] as NavItem[])
+      : ([] as NavItem[])),
+    ...(canSeePeople ? ([{ type: 'link', name: 'Pessoas', href: '/tesouraria/people', icon: UsersIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeMembers ? ([{ type: 'link', name: 'Membros', href: '/tesouraria/members', icon: UsersIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(isAdmin ? ([{ type: 'link', name: 'Categorias', href: '/tesouraria/categories', icon: TagIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(isAdmin ? ([{ type: 'link', name: 'Biblioteca', href: '/tesouraria/books', icon: BookOpenIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeEvents ? ([{ type: 'link', name: 'Eventos', href: '/tesouraria/events', icon: CalendarIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(isAdmin ? ([{ type: 'link', name: 'Esboços', href: '/tesouraria/esbocos', icon: DocumentTextIcon }] as NavItem[]) : ([] as NavItem[])),
+
+    ...(canSeeScales ? ([{ type: 'heading', name: 'Escalas' }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeScales ? ([{ type: 'link', name: 'Ministérios', href: '/tesouraria/ministries', icon: MusicalNoteIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeScales ? ([{ type: 'link', name: 'Escalas', href: '/tesouraria/scales', icon: ClipboardDocumentListIcon }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeScales ? ([{ type: 'link', name: 'Relatórios Escalas', href: '/tesouraria/scale-reports', icon: ChartBarIcon }] as NavItem[]) : ([] as NavItem[])),
+
+    ...(canSeeFinance ? ([{ type: 'heading', name: 'Analisar' }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeeFinance ? ([{ type: 'link', name: 'Relatórios', href: '/tesouraria/reports', icon: ChartBarIcon }] as NavItem[]) : ([] as NavItem[])),
+
+    ...(canSeePastorsVacations || isAdmin ? ([{ type: 'heading', name: 'Administração' }] as NavItem[]) : ([] as NavItem[])),
+    ...(canSeePastorsVacations
+      ? ([{ type: 'link', name: 'Férias Pastores', href: '/tesouraria/ferias-pastores', icon: CalendarIcon }] as NavItem[])
+      : ([] as NavItem[])),
+    ...(isAdmin ? ([{ type: 'link', name: 'Células Resgate', href: '/tesouraria/cell-groups', icon: UserGroupIcon }] as NavItem[]) : ([] as NavItem[])),
     ...(isAdmin
       ? ([
           { type: 'link', name: 'Acesso ao Financeiro', href: '/tesouraria/admin/finance-access', icon: CurrencyDollarIcon },

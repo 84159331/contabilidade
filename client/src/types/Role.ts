@@ -1,6 +1,6 @@
 // Tipos para sistema de roles e permissões
 
-export type UserRole = 'membro' | 'lider' | 'admin';
+export type UserRole = 'membro' | 'lider' | 'admin' | 'secretaria' | 'tesouraria' | 'midia';
 
 export interface UserProfile {
   id: string;
@@ -78,6 +78,48 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     {
       resource: 'configuracoes',
       actions: ['read', 'write', 'manage']
+    }
+  ],
+  secretaria: [
+    {
+      resource: 'membros',
+      actions: ['read', 'write']
+    },
+    {
+      resource: 'pessoas',
+      actions: ['read', 'write']
+    },
+    {
+      resource: 'escalas',
+      actions: ['read', 'write']
+    },
+    {
+      resource: 'relatorios_escalas',
+      actions: ['read']
+    },
+    {
+      resource: 'ferias_pastores',
+      actions: ['read', 'write']
+    }
+  ],
+  tesouraria: [
+    {
+      resource: 'financeiro',
+      actions: ['read', 'write']
+    },
+    {
+      resource: 'relatorios',
+      actions: ['read']
+    }
+  ],
+  midia: [
+    {
+      resource: 'escalas',
+      actions: ['read', 'write']
+    },
+    {
+      resource: 'eventos',
+      actions: ['read', 'write']
     }
   ]
 };

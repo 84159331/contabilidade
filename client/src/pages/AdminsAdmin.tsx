@@ -10,7 +10,7 @@ type UserRow = {
   id: string;
   name: string;
   email: string;
-  role: 'membro' | 'lider' | 'admin' | string;
+  role: 'membro' | 'lider' | 'admin' | 'secretaria' | 'tesouraria' | 'midia' | string;
 };
 
 export default function AdminsAdmin() {
@@ -66,7 +66,7 @@ export default function AdminsAdmin() {
 
   const adminCount = useMemo(() => users.filter((u) => u.role === 'admin').length, [users]);
 
-  const setUserRole = async (userId: string, newRole: 'membro' | 'lider' | 'admin') => {
+  const setUserRole = async (userId: string, newRole: 'membro' | 'lider' | 'admin' | 'secretaria' | 'tesouraria' | 'midia') => {
     setSavingIds((p) => ({ ...p, [userId]: true }));
     try {
       const current = users.find((u) => u.id === userId);
@@ -160,6 +160,9 @@ export default function AdminsAdmin() {
                         >
                           <option value="membro">membro</option>
                           <option value="lider">lider</option>
+                          <option value="secretaria">secretaria</option>
+                          <option value="tesouraria">tesouraria</option>
+                          <option value="midia">midia</option>
                           <option value="admin">admin</option>
                         </select>
                         {isRowLastAdmin && (

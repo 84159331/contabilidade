@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateDailyDevotional = exports.cleanupPastEvents = exports.onEventCreatedSendNotification = exports.onMemberFcmTokenWrite = exports.addMembro = exports.testBirthdayCheck = exports.checkBirthdays = exports.sendContactEmail = exports.verifyToken = exports.login = exports.health = void 0;
+exports.onDevotionalCreatedSendNotification = exports.generateDailyDevotional = exports.resubscribeFcmTopicsDaily = exports.cleanupPastEvents = exports.onEventCreatedSendNotification = exports.onMemberFcmTokenWrite = exports.addMembro = exports.testBirthdayCheck = exports.checkBirthdays = exports.sendContactEmail = exports.verifyToken = exports.login = exports.health = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const cors_1 = __importDefault(require("cors"));
@@ -321,7 +321,9 @@ var eventsNotifications_1 = require("./eventsNotifications");
 Object.defineProperty(exports, "onMemberFcmTokenWrite", { enumerable: true, get: function () { return eventsNotifications_1.onMemberFcmTokenWrite; } });
 Object.defineProperty(exports, "onEventCreatedSendNotification", { enumerable: true, get: function () { return eventsNotifications_1.onEventCreatedSendNotification; } });
 Object.defineProperty(exports, "cleanupPastEvents", { enumerable: true, get: function () { return eventsNotifications_1.cleanupPastEvents; } });
+Object.defineProperty(exports, "resubscribeFcmTopicsDaily", { enumerable: true, get: function () { return eventsNotifications_1.resubscribeFcmTopicsDaily; } });
 // Exportar função agendada de devocional (Gemini)
 var devotionalsGenerator_1 = require("./devotionalsGenerator");
 Object.defineProperty(exports, "generateDailyDevotional", { enumerable: true, get: function () { return devotionalsGenerator_1.generateDailyDevotional; } });
+Object.defineProperty(exports, "onDevotionalCreatedSendNotification", { enumerable: true, get: function () { return devotionalsGenerator_1.onDevotionalCreatedSendNotification; } });
 //# sourceMappingURL=index.js.map
