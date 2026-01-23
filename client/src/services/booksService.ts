@@ -138,13 +138,6 @@ export const booksService = {
   },
 
   async create(input: LivroCreateInput, pdfFile: File, coverFile: File): Promise<Livro> {
-    const bucket = (firebaseStorage as any)?.app?.options?.storageBucket as string | undefined;
-    if (bucket && bucket.endsWith('.firebasestorage.app')) {
-      throw new Error(
-        `Storage bucket inválido para Web SDK (${bucket}). Use *.appspot.com e reinicie o servidor de desenvolvimento.`
-      );
-    }
-
     console.log('BooksService.create - iniciando criação do livro');
     const baseDoc: Partial<LivroDoc> = {
       titulo: input.titulo,

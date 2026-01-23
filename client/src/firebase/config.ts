@@ -16,12 +16,6 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-// Normalizar storageBucket: o SDK do Firebase Storage espera o bucket no formato *.appspot.com
-// (alguns painéis/SDKs mostram *.firebasestorage.app, que pode causar falhas de CORS/404 no upload via web)
-if (firebaseConfig.storageBucket && firebaseConfig.storageBucket.endsWith('.firebasestorage.app')) {
-  firebaseConfig.storageBucket = firebaseConfig.storageBucket.replace('.firebasestorage.app', '.appspot.com');
-}
-
 // Validar configuração obrigatória
 const requiredConfig: (keyof typeof firebaseConfig)[] = ['apiKey', 'authDomain', 'projectId', 'appId'];
 let missingConfig = requiredConfig.filter(key => !firebaseConfig[key]);
@@ -37,10 +31,6 @@ if (missingConfig.length > 0) {
   firebaseConfig.messagingSenderId = firebaseConfig.messagingSenderId || '587928941365';
   firebaseConfig.appId = firebaseConfig.appId || '1:587928941365:web:b788b8c9acf0a20992d27c';
   firebaseConfig.measurementId = firebaseConfig.measurementId || 'G-485FKRFYHE';
-
-  if (firebaseConfig.storageBucket && firebaseConfig.storageBucket.endsWith('.firebasestorage.app')) {
-    firebaseConfig.storageBucket = firebaseConfig.storageBucket.replace('.firebasestorage.app', '.appspot.com');
-  }
   missingConfig = requiredConfig.filter(key => !firebaseConfig[key]);
 
   if (process.env.NODE_ENV === 'development') {
